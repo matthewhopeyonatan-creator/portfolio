@@ -1,0 +1,31 @@
+/* Figma: hero band between the rules at y130 and y1093 → 961 design px tall */
+.hero {
+  --hu: var(--u);
+  position: relative;
+  height: calc(961 * var(--hu));
+  overflow: hidden;
+  border-bottom: var(--rule);
+}
+
+/* Fixed 1728-wide artboard, scaled by --hu and centred horizontally */
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(1728 * var(--hu));
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.tomato {
+  position: absolute;
+  left: calc(var(--x) * var(--hu));
+  top: calc(var(--y) * var(--hu));
+  width: calc(var(--w) * var(--hu));
+  height: calc(var(--h) * var(--hu));
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Phones show the full composition scaled to width — no extra cropping, so every sticker stays visible. */

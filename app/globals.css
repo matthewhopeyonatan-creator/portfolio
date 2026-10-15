@@ -1,0 +1,67 @@
+/* Design tokens — from Figma "Matthew Hope Portfolio 2", frame "MacBook Pro 16' - 1" (1728px wide) */
+:root {
+  --color-bg: #edece9;
+  --color-ink: #282828;
+  --color-black: #000;
+  --rule: 2px solid var(--color-ink);
+
+  /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */
+  --u: calc(100vw / 1728);
+
+  --font-sans-stack: var(--font-sans), "Host Grotesk", system-ui, sans-serif;
+  /* Atelier Fleur has no curly apostrophe; the browser falls back to Georgia for it, like Figma does */
+  --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans-stack);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+p,
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

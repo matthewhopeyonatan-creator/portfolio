@@ -1,0 +1,52 @@
+/* Figma: title row between rules y1093–y1222 · "SEASONAL PICKS" 40px Bold · 2-col grid split by a 2px rule at x864 */
+.sectionTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(127 * var(--u));
+  min-height: 72px;
+  border-bottom: var(--rule);
+}
+
+.sectionTitle {
+  font-size: max(24px, calc(40 * var(--u)));
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  border-bottom: var(--rule);
+}
+
+.cell:nth-child(odd) {
+  border-right: var(--rule);
+}
+
+/* Empty space below the grid, as in the frame (row 2 ends ~y2650, frame ends y3090) */
+.footerSpace {
+  height: calc(440 * var(--u));
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cell:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .footerSpace {
+    height: 120px;
+  }
+}

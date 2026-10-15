@@ -1,0 +1,112 @@
+/* Figma: cell 864×714 · image 681×466, 58 from top · text block 40 from left, 40 below image
+   title 32 SemiBold · subtitle 24 Regular (-4 overlap) · gap 8 · pills 16px, 1px border, r24, 4/8 pad, gap 4 */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: calc(712 * var(--u));
+  padding: calc(58 * var(--u)) calc(40 * var(--u)) calc(50 * var(--u));
+  color: var(--color-black);
+}
+
+.media {
+  display: flex;
+  justify-content: center;
+}
+
+.image {
+  width: calc(681 * var(--u));
+  height: auto;
+  transition: transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover .image {
+  transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: calc(40 * var(--u));
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  text-transform: uppercase;
+  line-height: normal;
+}
+
+.title {
+  font-size: max(20px, calc(32 * var(--u)));
+  font-weight: 600;
+  margin-bottom: -4px;
+}
+
+.card:hover .title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.subtitle {
+  font-size: max(15px, calc(24 * var(--u)));
+  font-weight: 400;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 4px 8px;
+  border: 1px solid var(--color-black);
+  border-radius: 24px;
+  font-size: max(11px, calc(16 * var(--u)));
+  line-height: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .card {
+    min-height: 0;
+    padding: 32px 16px 36px;
+  }
+
+  .image {
+    width: 88%;
+  }
+
+  .info {
+    margin-top: 24px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: -2px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .tag {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+  .card:hover .image {
+    transform: none;
+  }
+}
