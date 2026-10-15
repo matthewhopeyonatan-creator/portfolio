@@ -1,10 +1,47 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { cartLink, navLinks } from "@/data/site";
 import styles from "./SiteHeader.module.css";
 
+/** Hide on scroll down, show on scroll up — always visible near the top of the page. */
+function useHideOnScroll(threshold = 8) {
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const ticking = useRef(false);
+
+  useEffect(() => {
+    lastY.current = window.scrollY;
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        const y = Math.max(window.scrollY, 0);
+        const delta = y - lastY.current;
+        if (y < 80) setHidden(false);
+        else if (delta > threshold) setHidden(true);
+        else if (delta < -threshold) setHidden(false);
+        if (Math.abs(delta) > threshold || y < 80) lastY.current = y;
+        ticking.current = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [threshold]);
+
+  return [hidden, setHidden] as const;
+}
+
 export default function SiteHeader() {
+  const [hidden, setHidden] = useHideOnScroll();
+
   return (
-    <header className={styles.header}>
+    <header
+      className={`${styles.header} ${hidden ? styles.hidden : ""}`}
+      // keyboard users tabbing into the bar should always see it
+      onFocusCapture={() => setHidden(false)}
+    >
       <nav className={styles.nav} aria-label="Main">
         {navLinks.map((link) => (
           <Link key={link.label} href={link.href} className={styles.navLink}>
