@@ -4,8 +4,7 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  height: calc(131 * var(--u));
-  min-height: 72px;
+  height: var(--header-h);
   padding: calc(24 * var(--u)) calc(40 * var(--u)) 0;
   border-bottom: var(--rule);
 }

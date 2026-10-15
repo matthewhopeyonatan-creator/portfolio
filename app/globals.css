@@ -8,6 +8,9 @@
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */
   --u: calc(100vw / 1728);
 
+  /* desktop header height (Figma: 130 + 2px rule) */
+  --header-h: max(72px, calc(131 * var(--u)));
+
   --font-sans-stack: var(--font-sans), "Host Grotesk", system-ui, sans-serif;
   /* Atelier Fleur has no curly apostrophe; the browser falls back to Georgia for it, like Figma does */
   --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;

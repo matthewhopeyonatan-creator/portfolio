@@ -1,19 +1,29 @@
-/* Figma: hero band between the rules at y130 and y1093 → 961 design px tall */
+/* Figma: hero band between the rules at y130 and y1093 → 961 design px tall.
+   On screens shorter than the design's 16:10 artboard, the band shrinks so the rule under it
+   (and a sliver of "Seasonal picks") peeks above the fold, like the Figma frame. */
 .hero {
   --hu: var(--u);
+  --art-h: calc(961 * var(--hu));
+  --peek: 24px;
+  --hero-h: clamp(
+    calc(var(--art-h) * 0.62),
+    calc(100svh - var(--header-h) - var(--peek)),
+    var(--art-h)
+  );
   position: relative;
-  height: calc(961 * var(--hu));
+  height: var(--hero-h);
   overflow: hidden;
   border-bottom: var(--rule);
 }
 
-/* Fixed 1728-wide artboard, scaled by --hu and centred horizontally */
+/* Fixed 1728-wide artboard, scaled by --hu and centred. When the band is shorter than the
+   artboard, the overflow is trimmed 60% from the top (empty space) and 40% from the bottom. */
 .canvas {
   position: absolute;
-  top: 0;
+  top: calc((var(--hero-h) - var(--art-h)) * 0.6);
   left: 50%;
   width: calc(1728 * var(--hu));
-  height: 100%;
+  height: var(--art-h);
   transform: translateX(-50%);
 }
 
@@ -28,4 +38,4 @@
   pointer-events: none;
 }
 
-/* Phones show the full composition scaled to width — no extra cropping, so every sticker stays visible. */
+/* Phones: full composition scaled to width — it's short enough that nothing is cropped. */
