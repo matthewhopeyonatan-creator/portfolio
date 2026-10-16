@@ -108,6 +108,7 @@ const stickers: Record<
       story:
         "I grew up in the bustling metropolis of Jakarta, Indonesia. This city is where I found my love for food and the arts, supported by the culture I am surrounded with. Jakarta and its people are what I built my values on. Warmth, humility, curiosity, and diligence are just some to mention. I’ve been moving around a lot, building my versatility, finding my footing wherever I am, but Jakarta will always be my home.",
       lessons: ["Warmth", "Curiosity", "Humility"],
+      photos: [1, 2, 3, 4, 5, 6, 7].map((n) => `/cards/jakarta-${n}.webp`),
     },
     {
       src: "/home/sticker-cornell.webp",

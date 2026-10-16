@@ -59,7 +59,7 @@ function withLinks(text: string) {
 
 /**
  * The card's photo box: each photo fills it (cropped, never stretched). With several, a new one
- * slides in from the right every 1.5 seconds, the old one sliding out to the left, on a loop.
+ * slides in from the right every 1.7 seconds, the old one sliding out to the left, on a loop.
  */
 function Photos({
   srcs,
@@ -71,7 +71,7 @@ function Photos({
     if (srcs.length < 2) return;
     const id = window.setInterval(
       () => setAt((i) => (i + 1) % srcs.length),
-      1500,
+      1700,
     );
     return () => window.clearInterval(id);
   }, [srcs.length]);
