@@ -19,6 +19,10 @@
   --text-delay: 3500ms;
   --cue-delay: 4400ms;
 
+  /* The title + "Matthew is" group is centred in the *viewport*, not just the band under the
+     navbar: lift it by half the navbar, plus 15 for where its visible letters sit in the artboard. */
+  --text-shift: calc(var(--header-h) / -2 - 15 * var(--hu));
+
   position: relative;
   height: var(--hero-h);
   /* clip sideways only — the tomatoes' blurred edges fade down past the band, behind
@@ -90,7 +94,7 @@
 /* Figma: "hope’s grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
 .name {
   left: 50%;
-  top: calc(365 * var(--hu));
+  top: calc(365 * var(--hu) + var(--text-shift));
   margin: 0;
   font-family: var(--font-display-stack);
   font-weight: 400;
@@ -115,7 +119,7 @@
    centre line is y585.5. Anchored on the left so the line stays put while the pill resizes. */
 .tagline {
   left: calc(656 * var(--hu));
-  top: calc(585.5 * var(--hu));
+  top: calc(585.5 * var(--hu) + var(--text-shift));
   display: flex;
   align-items: center;
   gap: max(8px, calc(30 * var(--hu)));
@@ -303,9 +307,6 @@
   left: 50%;
   bottom: 24px;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: max(6px, calc(11 * var(--hu)));
   padding: 0 4px;
   font-size: max(13px, calc(18 * var(--hu)));
   line-height: normal;
@@ -313,6 +314,22 @@
   white-space: nowrap;
   opacity: 0;
   transform: translateX(-50%);
+}
+
+.cueInner {
+  display: flex;
+  align-items: center;
+  gap: max(6px, calc(11 * var(--hu)));
+  transition: opacity 400ms ease;
+}
+
+/* fades out whenever "Seasonal picks" is on screen */
+.cueAway {
+  pointer-events: none;
+}
+
+.cueAway .cueInner {
+  opacity: 0;
 }
 
 .cueArrow {
@@ -328,12 +345,44 @@
   animation-delay: var(--cue-delay);
 }
 
-.play .cueArrow {
+.play .cueInner {
+  display: flex;
+  align-items: center;
+  gap: max(6px, calc(11 * var(--hu)));
+  transition: opacity 400ms ease;
+}
+
+/* fades out whenever "Seasonal picks" is on screen */
+.cueAway {
+  pointer-events: none;
+}
+
+.cueAway .cueInner {
+  opacity: 0;
+}
+
+.cueArrow {
   animation: cueBob 1800ms ease-in-out infinite;
   animation-delay: calc(var(--cue-delay) + 900ms);
 }
 
-.cue:hover .cueArrow {
+.cue:hover .cueInner {
+  display: flex;
+  align-items: center;
+  gap: max(6px, calc(11 * var(--hu)));
+  transition: opacity 400ms ease;
+}
+
+/* fades out whenever "Seasonal picks" is on screen */
+.cueAway {
+  pointer-events: none;
+}
+
+.cueAway .cueInner {
+  opacity: 0;
+}
+
+.cueArrow {
   animation-play-state: paused;
   transform: translateY(4px);
 }
@@ -359,6 +408,7 @@
 @media (max-width: 767px), (orientation: portrait) {
   .hero {
     --hero-h: var(--art-h);
+    --text-shift: 0px; /* the band hugs the artwork here, so centre within it */
   }
   /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
   .cue {
@@ -389,7 +439,23 @@
   .pillWindow {
     transition: none;
   }
-  .play .cueArrow {
+  .play .cueInner {
+  display: flex;
+  align-items: center;
+  gap: max(6px, calc(11 * var(--hu)));
+  transition: opacity 400ms ease;
+}
+
+/* fades out whenever "Seasonal picks" is on screen */
+.cueAway {
+  pointer-events: none;
+}
+
+.cueAway .cueInner {
+  opacity: 0;
+}
+
+.cueArrow {
     animation: none;
   }
 }

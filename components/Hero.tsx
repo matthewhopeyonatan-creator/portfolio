@@ -156,6 +156,19 @@ export default function Hero() {
     if (ready) window.dispatchEvent(new Event("hero:intro"));
   }, [ready]);
 
+  // Hide the "start shopping" cue whenever the Seasonal picks section is on screen.
+  const [picksInView, setPicksInView] = useState(false);
+  useEffect(() => {
+    const picks = document.getElementById("seasonal-picks");
+    if (!picks || !("IntersectionObserver" in window)) return;
+    // the section starts right at the fold, so require it to come 10% into view first
+    const io = new IntersectionObserver(([entry]) => setPicksInView(entry.isIntersecting), {
+      rootMargin: "0px 0px -10% 0px",
+    });
+    io.observe(picks);
+    return () => io.disconnect();
+  }, []);
+
   const onLoad = () => setLoaded((n) => n + 1);
 
   return (
@@ -189,11 +202,17 @@ export default function Hero() {
       </div>
 
       {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
-      <a href="#seasonal-picks" className={styles.cue}>
-        <span>start shopping</span>
-        <svg className={styles.cueArrow} width="25" height="14" viewBox="0 0 25 14" fill="none" aria-hidden="true">
-          <path d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985" stroke="currentColor" strokeWidth="2" />
-        </svg>
+      <a
+        href="#seasonal-picks"
+        className={`${styles.cue} ${picksInView ? styles.cueAway : ""}`}
+        tabIndex={picksInView ? -1 : undefined}
+      >
+        <span className={styles.cueInner}>
+          <span>start shopping</span>
+          <svg className={styles.cueArrow} width="25" height="14" viewBox="0 0 25 14" fill="none" aria-hidden="true">
+            <path d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        </span>
       </a>
     </section>
   );
