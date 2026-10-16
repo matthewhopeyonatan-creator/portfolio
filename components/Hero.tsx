@@ -116,7 +116,10 @@ const stickers: Record<
       peel: 57,
       label: "Cornell Agriculture #2025",
       inset: [22, 20], // its tilted corner otherwise touches the photo's corner
-      title: "Cornell",
+      title: "Shaping My Youth",
+      story:
+        "I did my bachelor’s degree in agricultural sciences in hopes of understanding the entire process behind the food system. Although not explicitly related to my career path as a designer, Cornell was an integral experience to my personal growth. As a transfer student, I had to learn how to adapt quickly and put myself out there. In a short time of 2 years, I am proud to say that I have made myself at home there. My involvement in dance, design, research, and the sciences speaks to my current existence as a whole.",
+      lessons: ["Research", "Adaptability", "Sociability"],
     },
   ],
   right: [
