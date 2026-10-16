@@ -9,7 +9,7 @@ import styles from "./Hero.module.css";
  * Positions are Figma render bounds so each layer lands exactly where it sits in the frame.
  * Paint order matches Figma: small tomato → right tomato → Open sign → title → tagline → left tomato.
  *
- * Load sequence: the Open sign drops in big at the centre and shrinks into place, then the
+ * Load sequence: the Open sign drops in big at the centre, swings, and is pulled back out; then the
  * tomatoes drop in largest → smallest, then the title + tagline (then the navbar and cue).
  */
 const tomatoes = {
@@ -102,8 +102,8 @@ export default function Hero() {
   const [pillActive, setPillActive] = useState(false);
   const total = Object.keys(tomatoes).length;
 
-  // The sign's intro starts big and centred: measure where it will end up, and hand CSS the
-  // offset + scale that put its pivot in the middle of the screen at ~60% of the viewport.
+  // The sign's intro happens big and centred: measure its resting box, and hand CSS the offset +
+  // scale that put its pivot in the middle of the screen at ~60% of the viewport.
   const signRef = useRef<HTMLDivElement>(null);
   const [introRunning, setIntroRunning] = useState(false);
   const started = useRef(false);
@@ -156,23 +156,11 @@ export default function Hero() {
     if (ready) window.dispatchEvent(new Event("hero:intro"));
   }, [ready]);
 
-  // Pause the sign's sway while the hero is scrolled out of view.
-  const heroRef = useRef<HTMLElement>(null);
-  const [offscreen, setOffscreen] = useState(false);
-  useEffect(() => {
-    const el = heroRef.current;
-    if (!el || !("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   const onLoad = () => setLoaded((n) => n + 1);
 
   return (
     <section
-      ref={heroRef}
-      className={`${styles.hero} ${ready ? styles.play : ""} ${offscreen ? styles.offscreen : ""} ${introRunning ? styles.introRunning : ""}`}
+      className={`${styles.hero} ${ready ? styles.play : ""} ${introRunning ? styles.introRunning : ""}`}
       aria-label="Intro"
     >
       <noscript>

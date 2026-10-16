@@ -7,7 +7,7 @@
   --art-h: calc(961 * var(--hu));
 
   /* load sequence timing (all measured from when the sequence starts)
-     1. Open sign drops in big at the centre, swings, then shrinks into place   0 → 2.6s
+     1. Open sign drops in big at the centre, swings, then is pulled back up      0 → 2.6s
      2. tomatoes drop in, largest → smallest                                     2.35s →
      3. title, then the "Matthew is" line                                        3.5s →
      4. navbar (SiteHeader) and the "start shopping" cue                        ~4.1s → */
@@ -33,11 +33,10 @@
   z-index: 4;
 }
 
-/* Artboard centred both ways. On short screens it's never pulled up so far that the Open sign's
-   string (artboard y176) would slide under the navbar — the bottom gets trimmed instead. */
+/* Artboard centred both ways (overflow trimmed evenly top and bottom on short screens). */
 .canvas {
   position: absolute;
-  top: max(calc((var(--hero-h) - var(--art-h)) * 0.5), calc(20px - 176 * var(--hu)));
+  top: calc((var(--hero-h) - var(--art-h)) * 0.5);
   left: 50%;
   width: calc(1728 * var(--hu));
   height: var(--art-h);
@@ -253,22 +252,16 @@
   height: auto;
 }
 
-/* Intro: the sign starts big in the middle of the screen (--ix/--iy/--is are measured in JS so the
-   pivot lands centred and the sign fills ~60% of the viewport), drops in from above, swings at a
-   steady tempo, then shrinks down into its spot — ending on the −3° peak that the endless sway
-   picks up from, so the motion never stops. Paused while the hero is off-screen. */
+/* Intro only: the sign drops in big at the middle of the screen (--ix/--iy/--is are measured in JS
+   so its pivot lands centred and it fills ~60% of the viewport), swings, then is pulled back up
+   out of view. It doesn't stay on the page. */
 .sign {
   z-index: 3;
+  pointer-events: none;
 }
 
 .play .sign {
-  animation:
-    signIntro var(--intro-dur) both,
-    signSway 2000ms var(--intro-dur) infinite;
-}
-
-.offscreen .sign {
-  animation-play-state: paused;
+  animation: signIntro var(--intro-dur) both;
 }
 
 @keyframes signIntro {
@@ -290,24 +283,17 @@
   }
   64% {
     transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(1.5deg);
-    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  100% {
+  72% {
     opacity: 1;
-    transform: translate(0px, 0px) scale(1) rotate(-3deg);
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) + 2vh)) scale(var(--is, 1)) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.2);
   }
-}
-
-/* starts at the −3° peak where the entrance hands off, so the motion never stops */
-@keyframes signSway {
-  0%,
   100% {
-    transform: rotate(-3deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  50% {
-    transform: rotate(3deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 85vh)) scale(var(--is, 1)) rotate(0deg);
   }
 }
 
@@ -382,9 +368,12 @@
 
 /* Reduced motion: no drops or swings — everything simply fades in together. */
 @media (prefers-reduced-motion: reduce) {
+  .play .sign {
+    animation: none;
+    visibility: hidden;
+  }
   .play .name,
   .play .tagline,
-  .play .sign,
   .play .cue {
     animation: fadeIn 400ms ease both;
   }
