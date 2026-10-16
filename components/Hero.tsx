@@ -76,6 +76,8 @@ const stickers: Record<
     peel: number;
     label: string;
     title: string;
+    story?: string;
+    lessons?: string[];
   }[]
 > = {
   left: [
@@ -97,7 +99,10 @@ const stickers: Record<
       y: 463.77,
       peel: 154,
       label: "Born and raised Jakarta 0717",
-      title: "Jakarta",
+      title: "Jakarta is my forever home",
+      story:
+        "I grew up in the bustling metropolis of Jakarta, Indonesia. This city is where I found my love for food and the arts, supported by the culture I am surrounded with. Jakarta and its people are what I built my values on. Warmth, humility, curiosity, and diligence are just some to mention. I’ve been moving around a lot, building my versatility, finding my footing wherever I am, but Jakarta will always be my home.",
+      lessons: ["Warmth", "Curiosity", "Humility"],
     },
     {
       src: "/home/sticker-cornell.webp",
