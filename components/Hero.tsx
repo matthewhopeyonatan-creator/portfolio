@@ -25,17 +25,17 @@ const tomatoes = {
  * render bounds). `peel` = how far the lower-right fold travels on hover, tuned per shape so it
  * cuts ~27px into each sticker.
  */
-const stickers: Record<string, { src: string; w: number; h: number; x: number; y: number; peel: number; label: string }[]> = {
+const stickers: Record<string, { src: string; w: number; h: number; x: number; y: number; peel: number; label: string; title: string }[]> = {
   left: [
-    { src: "/home/sticker-crowdvolt.webp", w: 225.3, h: 192.3, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #2627" },
-    { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717" },
-    { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025" },
+    { src: "/home/sticker-crowdvolt.webp", w: 225.3, h: 192.3, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #2627", title: "CrowdVolt" },
+    { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717", title: "Jakarta" },
+    { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025", title: "Cornell" },
   ],
   right: [
-    { src: "/home/sticker-fatboy.webp", w: 213.5, h: 203.5, x: 314.18, y: 363.16, peel: 116, label: "Fatboy supperclub NYC" },
-    { src: "/home/sticker-25madison.webp", w: 280.5, h: 280.5, x: 383.18, y: 213.16, peel: 175, label: "25madison design fellow" },
+    { src: "/home/sticker-fatboy.webp", w: 213.5, h: 203.5, x: 314.18, y: 363.16, peel: 116, label: "Fatboy supperclub NYC", title: "Fatboy" },
+    { src: "/home/sticker-25madison.webp", w: 280.5, h: 280.5, x: 383.18, y: 213.16, peel: 175, label: "25madison design fellow", title: "25madison" },
   ],
-  mid: [{ src: "/home/sticker-nyu-2.webp", w: 223, h: 235, x: 397.07, y: 184.87, peel: 128, label: "NYU design YR 2027" }],
+  mid: [{ src: "/home/sticker-nyu-2.webp", w: 223, h: 235, x: 397.07, y: 184.87, peel: 128, label: "NYU design YR 2027", title: "NYU" }],
 };
 
 type StickerData = (typeof stickers)["left"][number];

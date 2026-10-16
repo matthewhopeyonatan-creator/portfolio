@@ -1,6 +1,8 @@
 /* Sticker story card — Figma 45:95: 998 × 607 #91230A card · white image placeholder 447 × 562
-   at (22, 22) · sticker in its upper-left corner at (37, 32) · copy Host Grotesk Regular 24 white,
-   487 wide at (489, 22). Sizes are in card units (--c = 1 design px at the card's current width). */
+   at (22, 22) · sticker in its upper-left corner at (37, 32) · right column at x489, 487 wide:
+   title SemiBold 36 at y22, copy Light 24/25 at y95, three lessons along the bottom ("[n]" Light
+   Italic 15 at y534 over Light 20 at y559, centred on x537.5 / 737.5 / 937.5). Shown ~14% smaller
+   than Figma. Sizes are in card units (--c = 1 design px at the card's current width). */
 .overlay {
   position: fixed;
   inset: 0;
@@ -18,7 +20,7 @@
 }
 
 .frame {
-  --c: calc(min(998px, 92vw, (100svh - 96px) * 998 / 607) / 998);
+  --c: calc(min(860px, 84vw, (100svh - 120px) * 998 / 607) / 998);
   position: relative;
 }
 
@@ -62,16 +64,56 @@
   user-select: none;
 }
 
-.text {
+.title {
   position: absolute;
   left: calc(489 * var(--c));
   top: calc(22 * var(--c));
+  margin: 0;
+  font-size: max(18px, calc(36 * var(--c)));
+  font-weight: 600;
+  line-height: normal;
+  animation: fadeIn 500ms ease 220ms both;
+}
+
+.text {
+  position: absolute;
+  left: calc(489 * var(--c));
+  top: calc(95 * var(--c));
   width: calc(487 * var(--c));
   margin: 0;
-  font-size: max(13px, calc(24 * var(--c)));
-  font-weight: 400;
-  line-height: normal;
-  animation: fadeIn 500ms ease 260ms both;
+  font-size: max(12px, calc(24 * var(--c)));
+  font-weight: 300;
+  line-height: 1.0417; /* 25 / 24 */
+  letter-spacing: -0.04em;
+  animation: fadeIn 500ms ease 300ms both;
+}
+
+.lessons {
+  position: absolute;
+  left: calc(437.5 * var(--c));
+  top: calc(534 * var(--c));
+  display: grid;
+  grid-template-columns: repeat(3, calc(200 * var(--c)));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: fadeIn 500ms ease 380ms both;
+}
+
+.lesson {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: max(11px, calc(20 * var(--c)));
+  font-weight: 300;
+  line-height: calc(25 * var(--c));
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.lessonNum {
+  font-size: max(9px, calc(15 * var(--c)));
+  font-style: italic;
 }
 
 /* sits just above the card's top-right corner, on the backdrop */
@@ -136,14 +178,14 @@
 /* Phones: stack the image and the copy */
 @media (max-width: 767px) {
   .frame {
-    --c: calc(92vw / 998);
+    --c: calc(86vw / 998);
   }
   .card {
     display: flex;
     flex-direction: column;
     gap: 16px;
     height: auto;
-    max-height: calc(100svh - 96px);
+    max-height: calc(100svh - 140px);
     padding: 12px 12px 20px;
     overflow-y: auto;
   }
@@ -153,25 +195,45 @@
     width: 100%;
     height: auto;
     aspect-ratio: 447 / 562;
-    max-height: 48svh;
+    max-height: 38svh;
   }
   .slot {
     --c: calc(92vw / 640); /* a little bigger on small screens */
     left: 20px;
     top: 20px;
   }
+  .title {
+    position: static;
+    padding: 0 4px;
+    font-size: 22px;
+  }
   .text {
     position: static;
     width: auto;
     padding: 0 4px;
     font-size: 16px;
+    line-height: 1.25;
+  }
+  .lessons {
+    position: static;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 14px;
+  }
+  .lesson {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .lessonNum {
+    font-size: 12px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .backdrop,
   .card,
-  .text {
+  .title,
+  .text,
+  .lessons {
     animation-duration: 1ms;
   }
 }

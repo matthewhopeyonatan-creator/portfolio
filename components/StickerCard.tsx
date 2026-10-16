@@ -16,7 +16,11 @@ export type CardSticker = {
   w: number;
   h: number;
   label: string;
+  /** card heading (placeholder until the real copy is in) */
+  title?: string;
   story?: string;
+  /** the three notes along the bottom of the card */
+  lessons?: string[];
 };
 
 // Figma 45:95: the Jakarta sticker is 256 wide on the tomato and 162 on the card
@@ -164,7 +168,16 @@ export default function StickerCard({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={sticker.src} alt="" draggable={false} />
           </div>
+          <h2 className={styles.title}>{sticker.title ?? "Title"}</h2>
           <p className={styles.text}>{sticker.story ?? PLACEHOLDER}</p>
+          <ol className={styles.lessons}>
+            {(sticker.lessons ?? ["Lesson 1", "Lesson 2", "Lesson 3"]).map((lesson, i) => (
+              <li key={i} className={styles.lesson}>
+                <span className={styles.lessonNum}>[{i + 1}]</span>
+                <span>{lesson}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
       {/* the copy that flies between the tomato and the card */}
