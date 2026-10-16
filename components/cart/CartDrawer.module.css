@@ -214,7 +214,7 @@
 .checkout {
   display: grid;
   place-items: center;
-  height: max(56px, calc(113 * var(--cu)));
+  height: max(44px, calc(72 * var(--cu))); /* shorter than Figma's 113 */
   border: 2px solid var(--color-paper);
   font-size: max(17px, calc(32 * var(--cu)));
   font-weight: 500;
