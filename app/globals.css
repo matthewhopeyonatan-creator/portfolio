@@ -41,13 +41,7 @@ body {
 
 html {
   scroll-padding-top: var(--header-h);
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  /* smooth scrolling is handled by Lenis (components/SmoothScroll) — CSS smoothing would fight it */
 }
 
 body {

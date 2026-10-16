@@ -90,7 +90,7 @@ export default function CartDrawer() {
           </header>
 
           {lines.length ? (
-            <ul className={styles.list}>
+            <ul className={styles.list} data-lenis-prevent>
               {lines.map(({ project, qty }) => (
                 <li key={project.slug} className={styles.row}>
                   <div className={styles.thumb}>
