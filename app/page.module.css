@@ -9,7 +9,7 @@
 
 .sectionTitle {
   font-size: max(24px, calc(40 * var(--u)));
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   /* trim the font's built-in leading so the 12px is measured from the letters themselves */
   text-box: trim-both cap alphabetic;

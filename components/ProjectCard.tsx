@@ -3,6 +3,35 @@ import Link from "next/link";
 import type { Project } from "@/data/site";
 import styles from "./ProjectCard.module.css";
 
+/** Figma "… image": foam tray → project shot (or red placeholder) → plastic wrap on top. */
+function WrappedTray({ cover }: { cover?: Project["cover"] }) {
+  return (
+    <div className={styles.tray}>
+      <Image
+        src="/home/tray.webp"
+        alt=""
+        width={1362}
+        height={932}
+        sizes="(max-width: 767px) 88vw, 40vw"
+        className={styles.trayBase}
+      />
+      <div className={styles.content}>
+        {cover ? (
+          <Image src={cover.src} alt={cover.alt} fill sizes="(max-width: 767px) 64vw, 29vw" className={styles.coverImage} />
+        ) : null}
+      </div>
+      <Image
+        src="/home/plastic-wrap.webp"
+        alt=""
+        width={1348}
+        height={914}
+        sizes="(max-width: 767px) 88vw, 40vw"
+        className={styles.wrap}
+      />
+    </div>
+  );
+}
+
 export default function ProjectCard({ project }: { project: Project }) {
   const external = project.href.startsWith("http");
   return (
@@ -12,14 +41,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       <div className={styles.media}>
-        <Image
-          src={project.image.src}
-          alt={project.image.alt}
-          width={project.image.width}
-          height={project.image.height}
-          sizes="(max-width: 767px) 90vw, 40vw"
-          className={styles.image}
-        />
+        <WrappedTray cover={project.cover} />
       </div>
       <div className={styles.info}>
         <div className={styles.heading}>

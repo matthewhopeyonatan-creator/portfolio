@@ -1,5 +1,4 @@
-/* Hero band. On desktop/tablet it fills the screen below the header (the rule under it sits just
-   past the fold), and the tomato artwork scales to cover the band — like background-size: cover.
+/* Hero band. On desktop/tablet it fills the screen below the header, and the tomato artwork scales to cover the band — like background-size: cover.
    Artboard = the Figma hero area, 1728 × 961 design px. */
 .hero {
   --hero-h: calc(100svh - var(--header-h));
@@ -7,10 +6,8 @@
   --hu: max(var(--u), calc(var(--hero-h) / 961));
   --art-h: calc(961 * var(--hu));
   position: relative;
-  box-sizing: content-box; /* the 2px rule sits below the band, just out of view */
   height: var(--hero-h);
   overflow: hidden;
-  border-bottom: var(--rule);
 }
 
 /* Artboard centred horizontally; any vertical overflow is trimmed 60% from the top (empty space)

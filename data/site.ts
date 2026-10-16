@@ -18,44 +18,41 @@ export type Project = {
   subtitle: string;
   tags: string[];
   href: string;
-  image: { src: string; width: number; height: number; alt: string };
+  /**
+   * Project screenshot shown on the tray, under the plastic wrap (Figma: "content placeholder",
+   * 487×274). Leave it out to show the red placeholder from the design.
+   */
+  cover?: { src: string; alt: string };
 };
 
-const tray = { src: "/home/tray.webp", width: 1362, height: 932 };
-
 // Order = grid order (left→right, top→bottom).
-// The design repeats CrowdVolt + Inquirer in row 2 as placeholders — swap those for new projects.
 export const projects: Project[] = [
   {
     slug: "crowdvolt",
     title: "CrowdVolt",
     subtitle: "Multi-role design",
-    tags: ["Consumer product", "Startup", "Front end code", "Graphics"],
+    tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
     href: "https://matthew-hope.com/crowdvolt",
-    image: { ...tray, alt: "Blue foam grocery tray" },
   },
   {
     slug: "inquirer",
     title: "The Philadelphia Inquirer",
     subtitle: "News media personalization",
-    tags: ["Consumer product", "Personalization", "User research", "Feature creation"],
+    tags: ["Consumer product", "Personalization", "User research", "Mobile app"],
     href: "https://matthew-hope.com/inky",
-    image: { ...tray, alt: "Blue foam grocery tray" },
   },
   {
-    slug: "crowdvolt-2",
-    title: "CrowdVolt",
-    subtitle: "Multi-role design",
-    tags: ["Consumer product", "Startup", "Front end code", "Graphics"],
-    href: "https://matthew-hope.com/crowdvolt",
-    image: { ...tray, alt: "Blue foam grocery tray" },
+    slug: "shmood",
+    title: "Shmood",
+    subtitle: "Onboarding and dashboard for creatives",
+    tags: ["Consumer product", "Startup", "AI product", "Web"],
+    href: "https://matthew-hope.com/shmood",
   },
   {
-    slug: "inquirer-2",
-    title: "The Philadelphia Inquirer",
-    subtitle: "News media personalization",
-    tags: ["Consumer product", "Personalization", "User research", "Feature creation"],
-    href: "https://matthew-hope.com/inky",
-    image: { ...tray, alt: "Blue foam grocery tray" },
+    slug: "crave",
+    title: "Crave",
+    subtitle: "Redefining the dining experience",
+    tags: ["Consumer product", "0 → 1", "Personal project", "Mobile app"],
+    href: "https://matthew-hope.com/crave",
   },
 ];

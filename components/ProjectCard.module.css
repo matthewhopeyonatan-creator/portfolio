@@ -14,14 +14,53 @@
   justify-content: center;
 }
 
-.image {
+/* Tray stack — Figma 681×466 artboard; children positioned in % of it.
+   Container units (cqw) keep radius/shadow proportional at every size. */
+.tray {
+  position: relative;
+  container-type: inline-size;
   width: calc(681 * var(--u));
-  height: auto;
+  aspect-ratio: 681 / 466;
   transition: transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.card:hover .image {
+.card:hover .tray {
   transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg);
+}
+
+.trayBase {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Figma "content placeholder": 487×274 at (92, 96), r24, shadow 4 4 12 3 rgba(0,0,0,.25) */
+.content {
+  position: absolute;
+  left: calc(92 / 681 * 100%);
+  top: calc(96 / 466 * 100%);
+  width: calc(487.111 / 681 * 100%);
+  height: calc(274 / 466 * 100%);
+  overflow: hidden;
+  border-radius: calc(24 / 681 * 100cqw);
+  background: #f90000;
+  box-shadow: calc(4 / 681 * 100cqw) calc(4 / 681 * 100cqw) calc(12 / 681 * 100cqw)
+    calc(3 / 681 * 100cqw) rgba(0, 0, 0, 0.25);
+}
+
+.coverImage {
+  object-fit: cover;
+}
+
+/* Figma "PLASTIC TEXTURE - 10": 674×457 at (0, 4), r64, 80% (opacity baked into the render) */
+.wrap {
+  position: absolute;
+  left: 0;
+  top: calc(4 / 466 * 100%);
+  width: calc(674 / 681 * 100%);
+  height: calc(457 / 466 * 100%);
+  pointer-events: none;
 }
 
 .info {
@@ -80,7 +119,7 @@
     padding: 32px 16px 36px;
   }
 
-  .image {
+  .tray {
     width: 88%;
   }
 
@@ -103,10 +142,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .image {
+  .tray {
     transition: none;
   }
-  .card:hover .image {
+  .card:hover .tray {
     transform: none;
   }
 }
