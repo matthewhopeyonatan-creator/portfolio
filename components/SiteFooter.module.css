@@ -34,7 +34,7 @@
 
 .word {
   flex: none;
-  padding-right: 0.135em; /* 27px at 200px */
+  white-space: pre;
   font-size: max(64px, calc(200 * var(--u)));
   font-weight: 400;
   font-style: italic;

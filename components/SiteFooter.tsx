@@ -13,8 +13,9 @@ export default function SiteFooter() {
         <div className={styles.track}>
           {[0, 1].map((run) => (
             <span key={run} className={styles.run}>
-              <span className={styles.word}>{SIGN}</span>
-              <span className={styles.word}>{SIGN}</span>
+              {/* each copy ends in a space, so the gap between copies = the gap inside the name */}
+              <span className={styles.word}>{SIGN}&nbsp;</span>
+              <span className={styles.word}>{SIGN}&nbsp;</span>
             </span>
           ))}
         </div>
