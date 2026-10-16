@@ -87,7 +87,7 @@
 }
 
 /* ── Title + "Matthew is [pill]" ────────────────────────────────────────────────────── */
-/* Figma: "hope’s Grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
+/* Figma: "hope’s grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
 .name {
   left: 50%;
   top: calc(365 * var(--hu));

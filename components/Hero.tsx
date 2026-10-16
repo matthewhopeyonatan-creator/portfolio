@@ -176,7 +176,7 @@ export default function Hero() {
         </div>
 
         <h1 className={`${styles.layer} ${styles.name}`}>
-          hope<span className={styles.apostrophe}>’</span>s Grocer
+          hope<span className={styles.apostrophe}>’</span>s grocer
           <span className="visually-hidden"> — the portfolio of Matthew Hope, product designer</span>
         </h1>
         <p className={`${styles.layer} ${styles.tagline}`}>
