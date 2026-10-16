@@ -102,7 +102,7 @@ const stickers: Record<
       y: 463.77,
       peel: 154,
       label: "Born and raised Jakarta 0717",
-      title: "Jakarta is my forever home",
+      title: "My Forever Home",
       story:
         "I grew up in the bustling metropolis of Jakarta, Indonesia. This city is where I found my love for food and the arts, supported by the culture I am surrounded with. Jakarta and its people are what I built my values on. Warmth, humility, curiosity, and diligence are just some to mention. I’ve been moving around a lot, building my versatility, finding my footing wherever I am, but Jakarta will always be my home.",
       lessons: ["Warmth", "Curiosity", "Humility"],
@@ -128,7 +128,7 @@ const stickers: Record<
       y: 363.16,
       peel: 116,
       label: "Fatboy supperclub NYC",
-      title: "Fighting Sunday scaries",
+      title: "Fighting Sunday Scaries",
       story:
         "Having a life-long interest in food and a thirst for perfecting user experience, I find that running front of house at a supper club touches on both. Every month, my friends and I host a 24-person dinner, serving 5 courses and emulating the dining experience of eating at a friend’s house. This has allowed me to hone my skills in guest experience and hospitality, but at the end of the day, it is something I do for the sake of food and human connection.\n\nYou can be a guest too! More information [here](https://www.instagram.com/fatboy.supperclub/) :)",
       lessons: ["Guest experience", "Hospitality", "Food"],
