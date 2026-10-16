@@ -76,9 +76,7 @@ function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
         } as React.CSSProperties
       }
     >
-      {/* unoptimized: the grain below is masked by this same file, so the browser fetches it once */}
-      <Image src={t.src} alt="" width={t.w} height={t.h} priority unoptimized onLoad={onLoad} className={styles.tomatoImg} />
-      <span className={styles.grain} style={{ "--mask": `url(${t.src})` } as React.CSSProperties} aria-hidden="true" />
+      <Image src={t.src} alt="" width={t.w} height={t.h} priority sizes="52vw" onLoad={onLoad} className={styles.tomatoImg} />
       {stickers[id]?.map((s) => <Sticker key={s.src} s={s} />)}
     </div>
   );
