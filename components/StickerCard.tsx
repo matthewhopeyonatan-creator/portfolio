@@ -174,7 +174,12 @@ export default function StickerCard({
           </div>
           <div className={styles.copy}>
             <h2 className={styles.title}>{sticker.title ?? "Title"}</h2>
-            <p className={styles.text}>{sticker.story ?? PLACEHOLDER}</p>
+            <div className={styles.text}>
+              {/* a blank line in the story starts a new paragraph */}
+              {(sticker.story ?? PLACEHOLDER).split(/\n\s*\n/).map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
           </div>
           <ol className={styles.lessons}>
             {(sticker.lessons ?? ["Lesson 1", "Lesson 2", "Lesson 3"]).map(

@@ -99,6 +99,14 @@
   animation: fadeIn 500ms ease 300ms both;
 }
 
+.text p {
+  margin: 0;
+}
+
+.text p + p {
+  margin-top: 0.8em;
+}
+
 .lessons {
   position: absolute;
   left: calc(24px + 447 * var(--c) + 24px);

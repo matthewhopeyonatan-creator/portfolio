@@ -79,6 +79,8 @@ const stickers: Record<
     story?: string;
     lessons?: string[];
     inset?: [number, number];
+    /** clickable outline (CSS polygon points, % of the image) for stickers that overlap others */
+    hit?: string;
   }[]
 > = {
   left: [
@@ -126,7 +128,10 @@ const stickers: Record<
       y: 363.16,
       peel: 116,
       label: "Fatboy supperclub NYC",
-      title: "Fatboy",
+      title: "Fighting Sunday scaries",
+      story:
+        "Having a life-long interest in food and a thirst for perfecting user experience, I find that running front of house at a supper club touches on both. Every month, my friends and I host a 24-person dinner, serving 5 courses and emulating the dining experience of eating at a friend’s house. This has allowed me to hone my skills in guest experience and hospitality, but at the end of the day, it is something I do for the sake of food and human connection.\n\nYou can be a guest too! More information here :)",
+      lessons: ["Guest experience", "Hospitality", "Food"],
     },
     {
       src: "/home/sticker-25madison.webp",
@@ -136,6 +141,8 @@ const stickers: Record<
       y: 213.16,
       peel: 175,
       label: "25madison design fellow",
+      // the triangle only — its empty corners sit over the Fatboy sticker
+      hit: "20.7% 72%, 24.2% 59%, 36.2% 24.2%, 38.7% 17.1%, 42.2% 13.5%, 46.9% 14.3%, 70.4% 41%, 83.6% 56.1%, 85.2% 61.5%, 82.4% 65.1%, 77.9% 66.1%, 38.7% 73.8%, 28.5% 75.8%, 22.8% 74.9%",
       title: "25madison",
     },
   ],
@@ -180,6 +187,7 @@ function Sticker({
           "--sw": s.w,
           "--sh": s.h,
           "--pd": s.peel,
+          ...(s.hit ? { "--hit": `polygon(${s.hit})` } : {}),
         } as React.CSSProperties
       }
     >
@@ -199,6 +207,8 @@ function Sticker({
           draggable={false}
         />
       </span>
+      {/* the clickable area — trimmed to the sticker's shape where neighbours overlap */}
+      <span className={styles.stickerHit} aria-hidden="true" />
     </button>
   );
 }
