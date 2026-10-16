@@ -9,7 +9,7 @@ import styles from "./Hero.module.css";
  * Positions are Figma render bounds so each layer lands exactly where it sits in the frame.
  * Paint order matches Figma: small tomato → right tomato → Open sign → title → tagline → left tomato.
  *
- * Load sequence: the Open sign drops in big at the centre, swings, and is pulled back out; then the
+ * Load sequence: the Open sign drops in big at the centre, swings, and falls away; then the
  * tomatoes drop in largest → smallest, then the title + tagline (then the navbar and cue).
  */
 const tomatoes = {
@@ -131,7 +131,7 @@ export default function Hero() {
         setIntroRunning(false);
         document.documentElement.dataset.intro = "done"; // reveals the rest of the page
       },
-      reduce ? 0 : 2400,
+      reduce ? 0 : 2600,
     );
   };
 
@@ -176,7 +176,7 @@ export default function Hero() {
         </div>
 
         <h1 className={`${styles.layer} ${styles.name}`}>
-          Hope<span className={styles.apostrophe}>’</span>s Grocer
+          hope<span className={styles.apostrophe}>’</span>s Grocer
           <span className="visually-hidden"> — the portfolio of Matthew Hope, product designer</span>
         </h1>
         <p className={`${styles.layer} ${styles.tagline}`}>

@@ -7,7 +7,7 @@
   --art-h: calc(961 * var(--hu));
 
   /* load sequence timing (all measured from when the sequence starts)
-     1. Open sign drops in big at the centre, swings, then is pulled back up      0 → 2.6s
+     1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.6s
      2. tomatoes drop in, largest → smallest                                     2.35s →
      3. title, then the "Matthew is" line                                        3.5s →
      4. navbar (SiteHeader) and the "start shopping" cue                        ~4.1s → */
@@ -87,7 +87,7 @@
 }
 
 /* ── Title + "Matthew is [pill]" ────────────────────────────────────────────────────── */
-/* Figma: "Hope's Grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
+/* Figma: "hope’s Grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
 .name {
   left: 50%;
   top: calc(365 * var(--hu));
@@ -253,8 +253,8 @@
 }
 
 /* Intro only: the sign drops in big at the middle of the screen (--ix/--iy/--is are measured in JS
-   so its pivot lands centred and it fills ~60% of the viewport), swings, then is pulled back up
-   out of view. It doesn't stay on the page. */
+   so its pivot lands centred and it fills ~60% of the viewport), swings, then lifts a touch and
+   drops down out of view. It doesn't stay on the page. */
 .sign {
   z-index: 3;
   pointer-events: none;
@@ -287,13 +287,13 @@
   }
   72% {
     opacity: 1;
-    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) + 2vh)) scale(var(--is, 1)) rotate(0deg);
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 2vh)) scale(var(--is, 1)) rotate(0deg);
     animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.2);
   }
   100% {
     opacity: 0;
     visibility: hidden;
-    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 85vh)) scale(var(--is, 1)) rotate(0deg);
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) + 90vh)) scale(var(--is, 1)) rotate(-4deg);
   }
 }
 
