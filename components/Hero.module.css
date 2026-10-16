@@ -228,9 +228,10 @@
 /* 256×232 (Figma render). Hung centred above the name: the string's apex (47.1% across) sits on
    the artboard's centre line, and it swings from that point. */
 .sign {
-  left: calc((864 - 256 * 0.471) * var(--hu));
-  top: calc(141 * var(--hu)); /* hangs ~26 above the name's letters */
-  width: calc(256 * var(--hu));
+  --sign-w: 205; /* Figma 256, scaled to 80% */
+  left: calc((864 - var(--sign-w) * 0.471) * var(--hu));
+  top: calc(141 * var(--hu));
+  width: calc(var(--sign-w) * var(--hu));
   transform-origin: 47.1% 0.6%;
 }
 
