@@ -1,16 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Hero.module.css";
 
 /**
  * Hero artboard = Figma frame area below the header (1728 × 961 design px; frame y − 131).
  * Positions are Figma render bounds so each layer lands exactly where it sits in the frame.
- * Paint order matches Figma: small tomato → right tomato → Open sign → title → tagline → left tomato.
+ * Paint order matches Figma: small tomato → right tomato → Open sign → "(matthew is)" list → left tomato.
  *
  * Load sequence: the Open sign drops in big at the centre, swings, and falls away; then the
- * tomatoes drop in largest → smallest, then the title + tagline (then the navbar and cue).
+ * tomatoes drop in largest → smallest, then the traits type in (then the navbar and cue).
  */
 const tomatoes = {
   small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 948.68, y: 87.74, dw: 621.5, dh: 645, opacity: 0.7, order: 2 },
@@ -49,15 +49,17 @@ function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
   );
 }
 
-export const taglines = [
-  "Research-driven",
-  "Consumer-focused",
+// Figma "Frame 43": the five traits under "(matthew is)"
+export const traits = [
+  "Consumer focused",
+  "Research Driven",
   "Visually expressive",
   "Startup trained",
-  "Versatile",
-  "Brand minded",
-  "Culturally fluent",
+  "Agile and versatile",
 ];
+
+/** ms after the sequence starts — matches --text-delay in Hero.module.css */
+const TEXT_DELAY = 3500;
 
 type TomatoKey = keyof typeof tomatoes;
 
@@ -83,55 +85,114 @@ function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
   );
 }
 
-/** Pill that cycles through the taglines every second: words roll upward, width eases to fit. */
-function RotatingPill({ active }: { active: boolean }) {
-  const [{ index, prev }, setWords] = useState<{ index: number; prev: number | null }>({
-    index: 0,
-    prev: null,
-  });
-  const [width, setWidth] = useState<number | undefined>(undefined);
-  const measureRef = useRef<HTMLSpanElement>(null);
+/** Text split into letters the typewriter can flip: hidden → serif → sans. */
+function Letters({ text }: { text: string }) {
+  return (
+    <>
+      {Array.from(text).map((c, i) => (
+        // the demo cut of Atelier Fleur has no square brackets — those letters use a fallback serif
+        <span key={i} className={`${styles.ch} ${c === "[" || c === "]" ? styles.chAlt : ""}`} data-ch="">
+          {c}
+        </span>
+      ))}
+    </>
+  );
+}
+
+/**
+ * "(matthew is)" + the traits. Intro: each line's letters type in in random order as serif, then
+ * each one settles into the sans. Hovering a trait flips its letters back to serif (and leaving
+ * flips them back), each letter at a slightly random moment.
+ */
+function TypeIntro({ play, delay }: { play: boolean; delay: number }) {
+  const root = useRef<HTMLDivElement>(null);
+  const timers = useRef(new Map<HTMLElement, number>());
+  const interactive = useRef(false);
+
+  // set a letter's face after `ms`, replacing anything still pending for that letter
+  const flip = (el: HTMLElement, f: string, ms: number, then?: () => void) => {
+    const t = timers.current;
+    const pending = t.get(el);
+    if (pending) window.clearTimeout(pending);
+    t.set(
+      el,
+      window.setTimeout(() => {
+        t.delete(el);
+        el.dataset.f = f;
+        then?.();
+      }, ms),
+    );
+  };
 
   useEffect(() => {
-    if (!active) return;
-    const id = window.setInterval(
-      () => setWords((w) => ({ prev: w.index, index: (w.index + 1) % taglines.length })),
-      1000,
-    );
-    return () => window.clearInterval(id);
-  }, [active]);
+    const el = root.current;
+    if (!play || !el) return;
+    const lines = Array.from(el.querySelectorAll<HTMLElement>("[data-line]"));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.querySelectorAll<HTMLElement>("[data-ch]").forEach((c) => (c.dataset.f = "sans"));
+      interactive.current = true;
+      return;
+    }
+    let last = 0;
+    lines.forEach((line, li) => {
+      const start = delay + li * 150;
+      line.querySelectorAll<HTMLElement>("[data-ch]").forEach((c) => {
+        const typed = start + Math.random() * 650; // random-order typing
+        const settled = 280 + Math.random() * 520; // how long it stays serif
+        last = Math.max(last, typed + settled);
+        flip(c, "serif", typed, () => flip(c, "sans", settled));
+      });
+    });
+    const t = window.setTimeout(() => (interactive.current = true), last + 50);
+    const pending = timers.current;
+    return () => {
+      window.clearTimeout(t);
+      pending.forEach((id) => window.clearTimeout(id));
+      pending.clear();
+    };
+  }, [play, delay]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useLayoutEffect(() => {
-    const measure = () => measureRef.current && setWidth(measureRef.current.offsetWidth);
-    measure();
-    document.fonts?.ready.then(measure);
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [index]);
+  const hover = (f: "serif" | "sans") => (e: React.MouseEvent<HTMLElement>) => {
+    if (!interactive.current) return;
+    e.currentTarget
+      .querySelectorAll<HTMLElement>("[data-ch]")
+      .forEach((c) => flip(c, f, Math.random() * 220));
+  };
 
   return (
-    <span className={styles.pill} aria-hidden="true">
-      <span className={styles.pillWindow} style={{ width }}>
-        {prev !== null && (
-          <span key={`out-${index}`} className={styles.pillWordOut}>
-            {taglines[prev]}
-          </span>
-        )}
-        <span key={`in-${index}`} className={styles.pillWord}>
-          {taglines[index]}
+    <div ref={root} className={styles.intro}>
+      <p className={styles.label} data-line="">
+        <span className="visually-hidden">Matthew is:</span>
+        <span aria-hidden="true">
+          <Letters text="(matthew is)" />
         </span>
-      </span>
-      <span ref={measureRef} className={styles.pillMeasure}>
-        {taglines[index]}
-      </span>
-    </span>
+      </p>
+      <ol className={styles.traits}>
+        {traits.map((trait, i) => (
+          <li
+            key={trait}
+            className={styles.trait}
+            data-line=""
+            onMouseEnter={hover("serif")}
+            onMouseLeave={hover("sans")}
+          >
+            <span className="visually-hidden">{trait}</span>
+            <span className={styles.num} aria-hidden="true">
+              <Letters text={`[${String(i + 1).padStart(2, "0")}]`} />
+            </span>
+            <span className={styles.word} aria-hidden="true">
+              <Letters text={trait} />
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 
 export default function Hero() {
   const [loaded, setLoaded] = useState(0);
   const [ready, setReady] = useState(false);
-  const [pillActive, setPillActive] = useState(false);
   const total = Object.keys(tomatoes).length;
 
   // The sign's intro happens big and centred: measure its resting box, and hand CSS the offset +
@@ -175,14 +236,6 @@ export default function Hero() {
     const t = window.setTimeout(start, 1600);
     return () => window.clearTimeout(t);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // Start cycling the pill after it has animated in.
-  useEffect(() => {
-    if (!ready) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = window.setTimeout(() => setPillActive(true), reduce ? 1000 : 4800);
-    return () => window.clearTimeout(t);
-  }, [ready]);
-
   // Let the header know the intro has started, so it can slide in after the hero has landed.
   useEffect(() => {
     if (ready) window.dispatchEvent(new Event("hero:intro"));
@@ -209,7 +262,7 @@ export default function Hero() {
       aria-label="Intro"
     >
       <noscript>
-        <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}#seasonal-picks,.page-after-hero{opacity:1!important}`}</style>
+        <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}.${styles.ch}{visibility:visible!important}#seasonal-picks,.page-after-hero{opacity:1!important}`}</style>
       </noscript>
       <div className={styles.canvas}>
         <Tomato id="small" onLoad={onLoad} />
@@ -220,15 +273,8 @@ export default function Hero() {
           <img src="/home/open-sign.png" alt="" width={768} height={696} />
         </div>
 
-        <h1 className={`${styles.layer} ${styles.name}`}>
-          hope<span className={styles.apostrophe}>’</span>s grocer
-          <span className="visually-hidden"> — the portfolio of Matthew Hope, product designer</span>
-        </h1>
-        <p className={`${styles.layer} ${styles.tagline}`}>
-          <span className={styles.lead}>Matthew is</span>
-          <span className="visually-hidden"> {taglines.join(", ").toLowerCase()}</span>
-          <RotatingPill active={pillActive} />
-        </p>
+        <h1 className="visually-hidden">hope’s grocer — the portfolio of Matthew Hope, product designer</h1>
+        <TypeIntro play={ready} delay={TEXT_DELAY} />
 
         <Tomato id="left" onLoad={onLoad} />
       </div>

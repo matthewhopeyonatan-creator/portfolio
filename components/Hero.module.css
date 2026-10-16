@@ -9,7 +9,7 @@
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.6s
      2. tomatoes drop in, largest → smallest                                     2.35s →
-     3. title, then the "Matthew is" line                                        3.5s →
+     3. "(matthew is)" + traits type in, serif → sans (Hero.tsx)                 3.5s →
      4. navbar (SiteHeader) and the "start shopping" cue                        ~4.1s → */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --intro-dur: 2600ms;
@@ -20,9 +20,9 @@
   --cue-delay: 4400ms;
   --peel-hint-delay: 5100ms; /* after the navbar (4.1s + 0.9s) has landed */
 
-  /* The title + "Matthew is" group is centred in the *viewport*, not just the band under the
-     navbar: lift it by half the navbar, plus 15 for where its visible letters sit in the artboard. */
-  --text-shift: calc(var(--header-h) / -2 - 15 * var(--hu));
+  /* The text sits where Figma has it relative to the *viewport*, not just the band under the
+     navbar: lift it by half the navbar. */
+  --text-shift: calc(var(--header-h) / -2);
 
   position: relative;
   height: var(--hero-h);
@@ -167,153 +167,76 @@
   }
 }
 
-/* ── Title + "Matthew is [pill]" ────────────────────────────────────────────────────── */
-/* Figma: "hope’s grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
-.name {
-  left: 50%;
-  top: calc(365 * var(--hu) + var(--text-shift));
-  margin: 0;
-  font-family: var(--font-display-stack);
-  font-weight: 400;
-  font-size: calc(175.616 * var(--hu));
-  line-height: 1.099;
-  white-space: nowrap;
+/* ── "(matthew is)" + the five traits ─────────────────────────────────────────────── */
+/* Figma: "(matthew is)" Host Grotesk Light Italic 20, -1.2 tracking, at (670, 407 − 131).
+   List at (701, 454 − 131): rows 12 apart, "[01]  " Regular 20 then 8 gap, then Light 32.
+   Every letter starts hidden, types in (random order) as serif, then settles into sans. */
+.intro {
+  position: absolute;
+  left: calc(670 * var(--hu));
+  top: calc(276 * var(--hu) + var(--text-shift));
   color: var(--color-ink);
-  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
-/* Atelier Fleur has no curly apostrophe — use the fallback serif, tuned like the logo's */
-.apostrophe {
-  font-family: "Times New Roman", Times, serif;
-  font-size: 1.15em;
-  line-height: 0; /* don't let the fallback glyph grow the line box */
-  position: relative;
-  top: -0.06em;
-  margin: 0 -0.09em 0 -0.07em;
+.label {
+  margin: 0;
+  font-size: max(11px, calc(20 * var(--hu)));
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: -0.06em;
+  line-height: normal;
 }
 
-/* Figma: "Matthew is" (Host Grotesk Light 32) at x656, then a 30px gap, then the pill; the row's
-   centre line is y585.5. Anchored on the left so the line stays put while the pill resizes. */
-.tagline {
-  left: calc(656 * var(--hu));
-  top: calc(585.5 * var(--hu) + var(--text-shift));
+.traits {
   display: flex;
-  align-items: center;
-  gap: max(8px, calc(30 * var(--hu)));
-  margin: 0;
-  white-space: nowrap;
-  color: var(--color-ink);
-  transform: translateY(-50%);
+  flex-direction: column;
+  gap: calc(12 * var(--hu));
+  margin: calc(20 * var(--hu)) 0 0 calc(31 * var(--hu));
+  padding: 0;
+  list-style: none;
 }
 
-.lead {
-  font-size: max(13px, calc(32 * var(--hu)));
+.trait {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(8 * var(--hu));
+  cursor: default;
+}
+
+.num {
+  font-size: max(9px, calc(20 * var(--hu)));
+  font-weight: 400;
+  line-height: normal;
+  white-space: pre;
+}
+
+.word {
+  font-size: max(14px, calc(32 * var(--hu)));
   font-weight: 300;
   line-height: normal;
 }
 
-/* Figma: pill 2px border, 8/24 padding, Host Grotesk Light 24px */
-.pill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.3333em 1em;
-  border: max(1px, calc(2 * var(--hu))) solid var(--color-accent);
-  border-radius: 999px;
-  font-size: max(11px, calc(24 * var(--hu)));
-  font-weight: 300;
-  line-height: 1.3333;
-  color: var(--color-accent);
-  white-space: nowrap;
-}
-
-/* the visible word window; its width eases between words */
-.pillWindow {
-  position: relative;
-  display: block;
-  height: 1.3333em;
-  overflow: hidden;
-  transition: width 380ms var(--ease-out);
-}
-
-.pillWord {
-  display: block;
-  text-align: center;
-  animation: wordIn 460ms var(--ease-out) both;
-}
-
-/* the outgoing word, laid over the window and rolled up and out */
-.pillWordOut {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  white-space: nowrap;
-  transform: translateX(-50%);
-  animation: wordOut 460ms var(--ease-out) both;
-}
-
-.pillMeasure {
-  position: absolute;
+/* one letter: hidden → serif → sans (data-f is flipped from JS) */
+.ch {
   visibility: hidden;
-  pointer-events: none;
+  white-space: pre;
 }
 
-@keyframes wordIn {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.ch[data-f="serif"],
+.ch[data-f="sans"] {
+  visibility: visible;
 }
 
-@keyframes wordOut {
-  from {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-100%);
-  }
+.ch[data-f="serif"] {
+  font-family: var(--font-display-stack);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0;
 }
 
-.play .name {
-  animation: textIn 1000ms var(--ease-out) both;
-  animation-delay: var(--text-delay);
-}
-
-.play .tagline {
-  animation: taglineIn 1000ms var(--ease-out) both;
-  animation-delay: calc(var(--text-delay) + 180ms);
-}
-
-@keyframes taglineIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) translateY(calc(28 * var(--hu)));
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-50%);
-    filter: none;
-  }
-}
-
-@keyframes textIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(calc(28 * var(--hu)));
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%);
-    filter: none;
-  }
+.chAlt[data-f="serif"] {
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 /* ── Open sign — drops in, then swings left/right and settles ─────────────────────── */
@@ -422,44 +345,12 @@
   animation-delay: var(--cue-delay);
 }
 
-.play .cueInner {
-  display: flex;
-  align-items: center;
-  gap: max(6px, calc(11 * var(--hu)));
-  transition: opacity 400ms ease;
-}
-
-/* fades out whenever "Seasonal picks" is on screen */
-.cueAway {
-  pointer-events: none;
-}
-
-.cueAway .cueInner {
-  opacity: 0;
-}
-
-.cueArrow {
+.play .cueArrow {
   animation: cueBob 1800ms ease-in-out infinite;
   animation-delay: calc(var(--cue-delay) + 900ms);
 }
 
-.cue:hover .cueInner {
-  display: flex;
-  align-items: center;
-  gap: max(6px, calc(11 * var(--hu)));
-  transition: opacity 400ms ease;
-}
-
-/* fades out whenever "Seasonal picks" is on screen */
-.cueAway {
-  pointer-events: none;
-}
-
-.cueAway .cueInner {
-  opacity: 0;
-}
-
-.cueArrow {
+.cue:hover .cueArrow {
   animation-play-state: paused;
   transform: translateY(4px);
 }
@@ -499,43 +390,16 @@
     animation: none;
     visibility: hidden;
   }
-  .play .name,
-  .play .tagline,
   .play .cue {
     animation: fadeIn 400ms ease both;
   }
   .play .tomato {
     animation: fadeInTomato 400ms ease both;
   }
-  .pillWord {
-    animation: none;
-  }
-  .pillWordOut {
-    display: none;
-  }
-  .pillWindow {
-    transition: none;
-  }
   .play .sticker {
     animation: none;
   }
-  .play .cueInner {
-  display: flex;
-  align-items: center;
-  gap: max(6px, calc(11 * var(--hu)));
-  transition: opacity 400ms ease;
-}
-
-/* fades out whenever "Seasonal picks" is on screen */
-.cueAway {
-  pointer-events: none;
-}
-
-.cueAway .cueInner {
-  opacity: 0;
-}
-
-.cueArrow {
+  .play .cueArrow {
     animation: none;
   }
 }
