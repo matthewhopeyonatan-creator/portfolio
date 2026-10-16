@@ -147,6 +147,7 @@ const stickers: Record<
       story:
         "Having a life-long interest in food and a thirst for perfecting user experience, I find that running front of house at a supper club touches on both. Every month, my friends and I host a 24-person dinner, serving 5 courses and emulating the dining experience of eating at a friend’s house. This has allowed me to hone my skills in guest experience and hospitality, but at the end of the day, it is something I do for the sake of food and human connection.\n\nYou can be a guest too! More information [here](https://www.instagram.com/fatboy.supperclub/) :)",
       lessons: ["Guest experience", "Hospitality", "Food"],
+      photos: [1, 2, 3, 4, 5, 6].map((n) => `/cards/fatboy-${n}.webp`),
     },
     {
       src: "/home/sticker-25madison.webp",
