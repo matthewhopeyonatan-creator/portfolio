@@ -1,10 +1,18 @@
-/* Hero band. On desktop/tablet it fills the screen below the header, and the tomato artwork scales to cover the band — like background-size: cover.
-   Artboard = the Figma hero area, 1728 × 961 design px. */
+/* Hero band. On desktop it fills the screen below the header. The artboard (the Figma hero area,
+   1728 × 961 design px) always spans the screen width — never zoomed past it, so the Open sign and
+   stickers near the edges stay fully on screen. */
 .hero {
   --hero-h: calc(100svh - var(--header-h));
-  /* cover: scale so the artboard is at least as wide as the screen and as tall as the band */
-  --hu: max(var(--u), calc(var(--hero-h) / 961));
+  --hu: var(--u);
   --art-h: calc(961 * var(--hu));
+
+  /* load sequence timing */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --tomato-dur: 1250ms;
+  --tomato-stagger: 200ms;
+  --text-delay: 1150ms;
+  --sign-delay: 1950ms;
+
   position: relative;
   height: var(--hero-h);
   /* clip sideways only — the tomatoes' blurred edges fade down past the band, behind
@@ -13,33 +21,235 @@
   overflow-y: visible;
 }
 
-/* Artboard centred horizontally; any vertical overflow is trimmed 60% from the top (empty space)
-   and 40% from the bottom. */
+/* Artboard centred. Taller screen → centred vertically; shorter screen → the overflow is trimmed
+   60% from the top (mostly empty space) and 40% from the bottom. */
 .canvas {
   position: absolute;
-  top: calc((var(--hero-h) - var(--art-h)) * 0.6);
+  top: min(calc((var(--hero-h) - var(--art-h)) * 0.5), calc((var(--hero-h) - var(--art-h)) * 0.6));
   left: 50%;
   width: calc(1728 * var(--hu));
   height: var(--art-h);
   transform: translateX(-50%);
 }
 
-.tomato {
+/* Every layer starts hidden and plays its entrance once .play is set (after the images load). */
+.layer {
   position: absolute;
+  opacity: 0;
+}
+
+/* ── Tomatoes (stickers are part of each tomato image) ─────────────────────────────── */
+.tomato {
   left: calc(var(--x) * var(--hu));
   top: calc(var(--y) * var(--hu));
   width: calc(var(--w) * var(--hu));
   height: calc(var(--h) * var(--hu));
-  max-width: none;
   user-select: none;
   pointer-events: none;
 }
 
-/* Phones and portrait screens: a full-screen cover crop would only show the empty gap between
-   the tomatoes, so show the whole composition scaled to the screen width instead. */
+.tomato img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+/* Drop in from above, largest first (--i = 0 largest … 2 smallest) */
+.play .tomato {
+  animation: tomatoDrop var(--tomato-dur) var(--ease-out) both;
+  animation-delay: calc(var(--i) * var(--tomato-stagger));
+}
+
+@keyframes tomatoDrop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-180 * var(--hu))) scale(0.97);
+  }
+  35% {
+    opacity: var(--o);
+  }
+  to {
+    opacity: var(--o);
+    transform: none;
+  }
+}
+
+/* ── Name + pill ───────────────────────────────────────────────────────────────────── */
+/* Figma: "Matthew Hope" Atelier Fleur 175.6px, box 889×193 centred at y365 */
+.name {
+  left: 50%;
+  top: calc(365 * var(--hu));
+  margin: 0;
+  font-family: var(--font-display-stack);
+  font-weight: 400;
+  font-size: calc(175.616 * var(--hu));
+  line-height: 1.099;
+  white-space: nowrap;
+  color: var(--color-ink);
+  transform: translateX(-50%);
+}
+
+/* Figma: pill 2px border, 8/24 padding, Host Grotesk Light 24px, centred at y563 */
+.pill {
+  left: 50%;
+  top: calc(563.11 * var(--hu));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3333em 1em;
+  border: max(1px, calc(2 * var(--hu))) solid var(--color-ink);
+  border-radius: 999px;
+  font-size: max(11px, calc(24 * var(--hu)));
+  font-weight: 300;
+  line-height: 1.3333;
+  color: var(--color-ink);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+/* the visible word window; its width eases between words */
+.pillWindow {
+  position: relative;
+  display: block;
+  height: 1.3333em;
+  overflow: hidden;
+  transition: width 380ms var(--ease-out);
+}
+
+.pillWord {
+  display: block;
+  text-align: center;
+  animation: wordIn 420ms var(--ease-out) both;
+}
+
+.pillMeasure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes wordIn {
+  from {
+    opacity: 0;
+    transform: translateY(70%);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.play .name,
+.play .pill {
+  animation: textIn 1000ms var(--ease-out) both;
+  animation-delay: var(--text-delay);
+}
+
+.play .pill {
+  animation-delay: calc(var(--text-delay) + 180ms);
+}
+
+@keyframes textIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(calc(28 * var(--hu)));
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+    filter: none;
+  }
+}
+
+/* ── Open sign — drops in, then swings left/right and settles ─────────────────────── */
+/* Figma render bounds 256×232 at (1430, 49); pivot = where the string meets (47% across, top) */
+.sign {
+  left: calc(1430 * var(--hu));
+  top: calc(49.35 * var(--hu));
+  width: calc(256 * var(--hu));
+  transform-origin: 47.1% 0.6%;
+}
+
+.sign img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.play .sign {
+  animation: signSwing 2400ms both;
+  animation-delay: var(--sign-delay);
+}
+
+@keyframes signSwing {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(-60 * var(--hu))) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(0) rotate(9deg);
+    animation-timing-function: ease-in-out;
+  }
+  42% {
+    transform: rotate(-6.5deg);
+    animation-timing-function: ease-in-out;
+  }
+  60% {
+    transform: rotate(4deg);
+    animation-timing-function: ease-in-out;
+  }
+  75% {
+    transform: rotate(-2.2deg);
+    animation-timing-function: ease-in-out;
+  }
+  88% {
+    transform: rotate(0.9deg);
+    animation-timing-function: ease-in-out;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+}
+
+/* Phones and portrait screens: a full-height band would mostly be empty space around the
+   composition, so the band hugs the artwork instead. */
 @media (max-width: 767px), (orientation: portrait) {
   .hero {
-    --hu: var(--u);
     --hero-h: var(--art-h);
   }
+}
+
+/* Reduced motion: no drops or swings — everything simply fades in together. */
+@media (prefers-reduced-motion: reduce) {
+  .play .name,
+  .play .pill,
+  .play .sign {
+    animation: fadeIn 400ms ease both;
+  }
+  .play .tomato {
+    animation: fadeInTomato 400ms ease both;
+  }
+  .pillWord {
+    animation: none;
+  }
+  .pillWindow {
+    transition: none;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInTomato {
+  from { opacity: 0; }
+  to { opacity: var(--o); }
 }
