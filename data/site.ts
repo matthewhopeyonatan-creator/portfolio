@@ -5,12 +5,6 @@ export const navLinks = [
   { label: "graphics", href: "https://matthew-hope.com/#pantry" },
 ];
 
-// "your cart" — wired to email for now.
-export const cartLink = {
-  label: "your cart",
-  href: "mailto:matthew.hope.yonatan@gmail.com",
-  ariaLabel: "Get in touch by email",
-};
 
 // Footer social links. TODO: add the X handle.
 export const socialLinks = [

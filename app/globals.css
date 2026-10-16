@@ -106,3 +106,8 @@ html:not([data-intro="done"]) #seasonal-picks {
     --gutter: 16px;
   }
 }
+
+/* page doesn't scroll behind the open cart */
+html.cart-open {
+  overflow: hidden;
+}

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { cartLink, navLinks } from "@/data/site";
+import { useCart } from "@/components/cart/CartContext";
+import { navLinks } from "@/data/site";
 import styles from "./SiteHeader.module.css";
 
 /** Hide on scroll down, show on scroll up — always visible near the top of the page. */
@@ -54,6 +55,31 @@ function useIntro(enabled: boolean) {
   return [phase, () => setPhase("done")] as const;
 }
 
+function CartButton() {
+  const { open, count, addedTick } = useCart();
+  return (
+    <button
+      type="button"
+      className={styles.cart}
+      onClick={open}
+      aria-label={count ? `Open your cart, ${count} item${count > 1 ? "s" : ""}` : "Open your cart"}
+    >
+      <span className={styles.navLink}>
+        your cart{count ? <span className={styles.cartCount}> ({count})</span> : null}
+      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={addedTick}
+        src="/home/cart.png"
+        alt=""
+        width={57}
+        height={37}
+        className={`${styles.cartIcon} ${addedTick ? styles.cartHop : ""}`}
+      />
+    </button>
+  );
+}
+
 export default function SiteHeader({ intro = false }: { intro?: boolean }) {
   const [hidden, setHidden] = useHideOnScroll();
   const [introPhase, finishIntro] = useIntro(intro);
@@ -88,11 +114,7 @@ export default function SiteHeader({ intro = false }: { intro?: boolean }) {
         <span className={styles.logoBold}>s grocer</span>
       </Link>
 
-      <a href={cartLink.href} className={styles.cart} aria-label={cartLink.ariaLabel}>
-        <span className={styles.navLink}>{cartLink.label}</span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/home/cart.png" alt="" width={57} height={37} className={styles.cartIcon} />
-      </a>
+      <CartButton />
     </header>
   );
 }

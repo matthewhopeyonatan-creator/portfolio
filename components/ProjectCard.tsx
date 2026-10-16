@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/site";
+import { useCart } from "@/components/cart/CartContext";
 import styles from "./ProjectCard.module.css";
 
 /** Figma "… image": foam tray → project shot (or red placeholder) → plastic wrap on top. */
@@ -34,9 +37,11 @@ function WrappedTray({ cover }: { cover?: Project["cover"] }) {
 
 export default function ProjectCard({ project }: { project: Project }) {
   const external = project.href.startsWith("http");
+  const { add } = useCart();
   return (
     <Link
       href={project.href}
+      onClick={() => add(project.slug)}
       className={styles.card}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >

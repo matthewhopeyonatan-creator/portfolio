@@ -1,0 +1,247 @@
+/* Figma "Frame 25" — the cart. Visible panel 686 × 1222 design px, #91230A, white type and rules.
+   The panel is ~1/3 of the screen wide; inside, 1 design px = --cu (the panel's width / 686), so
+   it keeps Figma's proportions at any size. */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 560ms;
+}
+
+.open {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 40, 40, 0.35);
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+.open .backdrop {
+  opacity: 1;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: clamp(360px, 33.333vw, 640px);
+  container-type: inline-size;
+  background: var(--color-accent);
+  border-left: 2px solid var(--color-paper);
+  color: var(--color-paper);
+  transform: translate3d(100%, 0, 0);
+  transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.open .panel {
+  transform: translate3d(0, 0, 0);
+}
+
+.inner {
+  --cu: calc(100cqw / 686);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── head: "Your Cart" (Atelier Fleur 48) + close ─────────────────────────────────── */
+.head {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(142 * var(--cu));
+  padding: 0 calc(36 * var(--cu)) 0 calc(48 * var(--cu));
+  border-bottom: 2px solid var(--color-paper);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display-stack);
+  font-size: max(26px, calc(48 * var(--cu)));
+  font-weight: 400;
+  line-height: normal;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: max(36px, calc(48 * var(--cu)));
+  height: max(36px, calc(48 * var(--cu)));
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.close svg {
+  width: 80%;
+  height: 80%;
+}
+
+.close:hover {
+  transform: rotate(90deg);
+}
+
+/* ── rows: 192 tall + 2px rule; thumb 127×125 r12 at (49, 34); title 32 at x214; controls 36 ── */
+.list {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  overscroll-behavior: contain;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: calc(38 * var(--cu));
+  min-height: calc(192 * var(--cu));
+  padding: calc(16 * var(--cu)) calc(48 * var(--cu)) calc(16 * var(--cu)) calc(49 * var(--cu));
+  border-bottom: 2px solid var(--color-paper);
+  animation: rowIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+.thumb {
+  flex: none;
+  width: calc(127 * var(--cu));
+  height: calc(125 * var(--cu));
+  overflow: hidden;
+  border-radius: calc(12 * var(--cu));
+  background: #717171;
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: calc(-2 * var(--cu));
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: max(17px, calc(32 * var(--cu)));
+  line-height: normal;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: calc(33 * var(--cu));
+  margin-left: calc(-6 * var(--cu));
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  width: max(28px, calc(36 * var(--cu)));
+  height: max(28px, calc(36 * var(--cu)));
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.step svg {
+  width: 100%;
+  height: 100%;
+}
+
+.step:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.count {
+  min-width: 1ch;
+  font-size: max(14px, calc(24 * var(--cu)));
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ── empty ─────────────────────────────────────────────────────────────────────────── */
+.empty {
+  flex: 1;
+  padding: calc(48 * var(--cu));
+  font-size: max(17px, calc(32 * var(--cu)));
+}
+
+.empty p {
+  margin: 0;
+}
+
+.emptyHint {
+  margin-top: 8px !important;
+  font-size: max(14px, calc(22 * var(--cu)));
+  opacity: 0.8;
+}
+
+/* ── checkout: 576×113 at (48, 1071), 2px border, Medium 32 ────────────────────────── */
+.foot {
+  flex: none;
+  padding: calc(24 * var(--cu)) calc(62 * var(--cu)) calc(38 * var(--cu)) calc(48 * var(--cu));
+}
+
+.checkout {
+  display: grid;
+  place-items: center;
+  height: max(56px, calc(113 * var(--cu)));
+  border: 2px solid var(--color-paper);
+  font-size: max(17px, calc(32 * var(--cu)));
+  font-weight: 500;
+  color: inherit;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.checkout:hover {
+  background: var(--color-paper);
+  color: var(--color-accent);
+}
+
+@media (max-width: 767px) {
+  .panel {
+    width: 100vw;
+    border-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .backdrop {
+    transition-duration: 1ms;
+  }
+  .row {
+    animation: none;
+  }
+}
