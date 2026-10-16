@@ -69,13 +69,23 @@ export default function CartDrawer() {
       >
         <div className={styles.inner}>
           <header className={styles.head}>
-            <h2 id="cart-title" className={styles.title}>
-              Your Cart
+            <h2 id="cart-title" className="visually-hidden">
+              Your cart
             </h2>
-            <button ref={closeRef} type="button" className={styles.close} onClick={close} aria-label="Close cart">
-              <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                <path d="M6 6L34 34M34 6L6 34" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
+            {/* LED-style sign, like the footer: two identical runs slid left by one run, forever */}
+            <div className={styles.marquee} aria-hidden="true">
+              <div className={styles.track}>
+                {[0, 1].map((run) => (
+                  <span key={run} className={styles.run}>
+                    <span className={styles.word}>your cart</span>
+                    <span className={styles.word}>your cart</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+            {/* no visible close in the design — Esc / clicking outside close it; this shows on keyboard focus */}
+            <button ref={closeRef} type="button" className={styles.close} onClick={close}>
+              close
             </button>
           </header>
 

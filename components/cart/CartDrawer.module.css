@@ -36,7 +36,6 @@
   width: clamp(360px, 33.333vw, 640px);
   container-type: inline-size;
   background: var(--color-accent);
-  border-left: 2px solid var(--color-paper);
   color: var(--color-paper);
   transform: translate3d(100%, 0, 0);
   transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -53,53 +52,77 @@
   height: 100%;
 }
 
-/* ── head: "Your Cart" (Atelier Fleur 48) + close ─────────────────────────────────── */
+/* ── head: "YOUR CART" — Host Grotesk Medium 196.7px, caps running off the top, scrolling ── */
 .head {
   position: relative;
   flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: calc(142 * var(--cu));
-  padding: 0 calc(36 * var(--cu)) 0 calc(48 * var(--cu));
-  border-bottom: 2px solid var(--color-paper);
+  padding-top: calc(4 * var(--cu));
 }
 
-.title {
-  margin: 0;
-  font-family: var(--font-display-stack);
-  font-size: max(26px, calc(48 * var(--cu)));
-  font-weight: 400;
-  line-height: normal;
+.marquee {
+  overflow-x: clip;
+  overflow-y: visible;
+  white-space: nowrap;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 9s linear infinite;
+}
+
+.run {
+  display: flex;
+  flex: none;
+}
+
+.word {
+  flex: none;
+  padding-right: 0.28em;
+  font-size: calc(196.656 * var(--cu));
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  text-box: trim-both cap alphabetic;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .close {
-  display: grid;
-  place-items: center;
-  width: max(36px, calc(48 * var(--cu)));
-  height: max(36px, calc(48 * var(--cu)));
-  padding: 0;
-  border: 0;
-  background: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 8px 14px;
+  border: 2px solid var(--color-paper);
+  background: var(--color-accent);
   color: inherit;
+  font: inherit;
+  font-size: 15px;
   cursor: pointer;
-  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.close svg {
-  width: 80%;
-  height: 80%;
+.close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.close:hover {
-  transform: rotate(90deg);
-}
-
-/* ── rows: 192 tall + 2px rule; thumb 127×125 r12 at (49, 34); title 32 at x214; controls 36 ── */
+/* ── rows: start at y201, 125 tall, 24 apart, no rules; thumb 127×125 r12; title 32 at x156 ── */
 .list {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: calc(24 * var(--cu));
   margin: 0;
-  padding: 0;
+  padding: calc(62 * var(--cu)) calc(48 * var(--cu)) calc(24 * var(--cu));
   overflow-y: auto;
   list-style: none;
   overscroll-behavior: contain;
@@ -107,11 +130,9 @@
 
 .row {
   display: flex;
-  align-items: center;
-  gap: calc(38 * var(--cu));
-  min-height: calc(192 * var(--cu));
-  padding: calc(16 * var(--cu)) calc(48 * var(--cu)) calc(16 * var(--cu)) calc(49 * var(--cu));
-  border-bottom: 2px solid var(--color-paper);
+  align-items: flex-start;
+  gap: calc(29 * var(--cu));
+  min-height: calc(125 * var(--cu));
   animation: rowIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -143,6 +164,7 @@
   flex-direction: column;
   gap: calc(-2 * var(--cu));
   min-width: 0;
+  padding-top: calc(24 * var(--cu));
 }
 
 .name {
@@ -208,13 +230,13 @@
 /* ── checkout: 576×113 at (48, 1071), 2px border, Medium 32 ────────────────────────── */
 .foot {
   flex: none;
-  padding: calc(24 * var(--cu)) calc(62 * var(--cu)) calc(38 * var(--cu)) calc(48 * var(--cu));
+  padding: calc(16 * var(--cu)) calc(62 * var(--cu)) calc(38 * var(--cu)) calc(48 * var(--cu));
 }
 
 .checkout {
   display: grid;
   place-items: center;
-  height: max(44px, calc(72 * var(--cu))); /* shorter than Figma's 113 */
+  height: max(44px, calc(78 * var(--cu)));
   border: 2px solid var(--color-paper);
   font-size: max(17px, calc(32 * var(--cu)));
   font-weight: 500;
@@ -231,8 +253,7 @@
 
 @media (max-width: 767px) {
   .panel {
-    width: 100vw;
-    border-left: 0;
+    width: 88vw; /* leaves a strip of the page to tap to close */
   }
 }
 
@@ -241,7 +262,8 @@
   .backdrop {
     transition-duration: 1ms;
   }
-  .row {
+  .row,
+  .track {
     animation: none;
   }
 }
