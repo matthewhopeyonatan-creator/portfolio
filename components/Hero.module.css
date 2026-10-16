@@ -241,65 +241,56 @@
   height: auto;
 }
 
-/* entrance swing, then a gentle endless sway (paused while the hero is off-screen) */
+/* One continuous pendulum: it drops in, swings at a constant tempo (1s per swing, like a real
+   pendulum) with each swing a little smaller, and hands off at a peak to an endless ±3° sway —
+   no pause between them. Paused while the hero is off-screen. */
 .play .sign {
+  --swing: 1000ms; /* one swing, peak to peak */
   animation:
-    signSwing 2400ms var(--sign-delay) both,
-    signSway 3400ms calc(var(--sign-delay) + 2400ms) infinite;
+    signSwing calc(var(--swing) * 3.55) var(--sign-delay) both,
+    signSway calc(var(--swing) * 2) calc(var(--sign-delay) + var(--swing) * 3.55) infinite;
 }
 
 .offscreen .sign {
   animation-play-state: paused;
 }
 
-/* starts and ends at 0° so it picks up seamlessly where the entrance settles */
-@keyframes signSway {
-  0%,
-  50%,
-  100% {
-    transform: rotate(0deg);
-    animation-timing-function: ease-in-out;
-  }
-  25% {
-    transform: rotate(3deg);
-    animation-timing-function: ease-in-out;
-  }
-  75% {
-    transform: rotate(-3deg);
-    animation-timing-function: ease-in-out;
-  }
-}
-
+/* peaks: +8° (lands) → −5.5° → +4° → −3° (hand-off) */
 @keyframes signSwing {
   0% {
     opacity: 0;
     transform: translateY(calc(-60 * var(--hu))) rotate(0deg);
-    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.35, 1);
   }
-  22% {
+  15.5% {
     opacity: 1;
-    transform: translateY(0) rotate(9deg);
-    animation-timing-function: ease-in-out;
+    transform: translateY(0) rotate(8deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  42% {
-    transform: rotate(-6.5deg);
-    animation-timing-function: ease-in-out;
+  43.7% {
+    transform: rotate(-5.5deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  60% {
+  71.8% {
     transform: rotate(4deg);
-    animation-timing-function: ease-in-out;
-  }
-  75% {
-    transform: rotate(-2.2deg);
-    animation-timing-function: ease-in-out;
-  }
-  88% {
-    transform: rotate(0.9deg);
-    animation-timing-function: ease-in-out;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
   100% {
     opacity: 1;
-    transform: rotate(0deg);
+    transform: rotate(-3deg);
+  }
+}
+
+/* starts at the −3° peak where the entrance hands off, so the motion never stops */
+@keyframes signSway {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  50% {
+    transform: rotate(3deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
 }
 
