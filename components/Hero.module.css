@@ -2,9 +2,12 @@
    1728 × 961 design px) always spans the screen width — never zoomed past it, so the Open sign and
    stickers near the edges stay fully on screen. */
 .hero {
+  /* The whole composition — every tomato and sticker, Figma visible bounds x −157…1804,
+     y −79…1044 — is scaled to fit on screen under the navbar, with room for the cue below. */
+  --comp-w: 1961;
+  --comp-h: 1123;
   --hero-h: calc(100svh - var(--header-h));
-  --hu: var(--u);
-  --art-h: calc(961 * var(--hu));
+  --hu: min(100vw / var(--comp-w), (var(--hero-h) - 44px) / var(--comp-h));
 
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.6s
@@ -37,15 +40,14 @@
   z-index: 4;
 }
 
-/* Artboard pinned to the top of the band (the headline sits just under the navbar, like Figma);
-   on short screens the bottoms of the tomatoes run on under "Seasonal picks". */
+/* The Figma artboard (1728 × 961, coordinates below are artboard px), placed so the composition's
+   visible bounds sit centred across the screen and just under the navbar. */
 .canvas {
   position: absolute;
-  top: 0;
-  left: 50%;
+  top: calc(79 * var(--hu));
+  left: calc(50% + (157 - var(--comp-w) / 2) * var(--hu));
   width: calc(1728 * var(--hu));
-  height: var(--art-h);
-  transform: translateX(-50%);
+  height: calc(961 * var(--hu));
 }
 
 /* Every layer starts hidden and plays its entrance once .play is set (after the images load). */
@@ -167,12 +169,13 @@
   }
 }
 
-/* ── Headline — Figma 21:168: Host Grotesk Regular 64 / 60, -1.28 tracking, at (45, 168 − 131).
-   "Consumer driven," in full ink; the rest at 50%. Each line rises in after the tomatoes. ── */
+/* ── Headline — Figma 21:168: Host Grotesk Regular 64 / 60, -1.28 tracking, 37 below the navbar
+   rule. On the page margin; each line rises in after the tomatoes, then the full-ink highlight
+   steps through the phrases. ── */
 .headline {
   position: absolute;
-  left: calc(var(--gutter) + 5 * var(--hu));
-  top: calc(37 * var(--hu));
+  left: var(--gutter);
+  top: calc((37 + 79) * var(--hu));
   z-index: 2;
   margin: 0;
   font-size: max(20px, calc(64 * var(--hu)));
@@ -180,7 +183,6 @@
   line-height: 0.9375; /* 60 / 64 */
   letter-spacing: -0.02em;
   white-space: nowrap;
-  color: var(--color-ink);
 }
 
 .line {
@@ -188,8 +190,13 @@
   opacity: 0;
 }
 
-.dim {
+.phrase {
   color: rgba(40, 40, 40, 0.5);
+  transition: color 450ms ease;
+}
+
+.phraseOn {
+  color: var(--color-ink);
 }
 
 .play .line {
@@ -354,7 +361,12 @@
    composition, so the band hugs the artwork instead. */
 @media (max-width: 767px), (orientation: portrait) {
   .hero {
-    --hero-h: var(--art-h);
+    --hu: calc(100vw / var(--comp-w));
+    --stack: 64px; /* the headline gets its own band above the tomatoes on small screens */
+    --hero-h: calc((var(--comp-h) + 24) * var(--hu) + var(--stack));
+  }
+  .canvas {
+    top: calc(79 * var(--hu) + var(--stack));
   }
   /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
   .cue {

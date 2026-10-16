@@ -50,6 +50,10 @@ function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
   );
 }
 
+// the headline's phrases, and which ones sit on each of its three lines (Figma line breaks)
+const phrases = ["Consumer driven,", "research driven,", "visually expressive,", "startup trained,", "agile and versatile"];
+const headlineLines = [[0, 1], [2, 3], [4]];
+
 type TomatoKey = keyof typeof tomatoes;
 
 function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
@@ -120,6 +124,21 @@ export default function Hero() {
     const t = window.setTimeout(start, 1600);
     return () => window.clearTimeout(t);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Headline: once its lines have risen in, the full-ink highlight steps through the phrases every 0.5s.
+  const [activePhrase, setActivePhrase] = useState(0);
+  useEffect(() => {
+    if (!ready) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let interval = 0;
+    const startAt = window.setTimeout(() => {
+      interval = window.setInterval(() => setActivePhrase((i) => (i + 1) % phrases.length), 500);
+    }, 4200);
+    return () => {
+      window.clearTimeout(startAt);
+      window.clearInterval(interval);
+    };
+  }, [ready]);
+
   // Let the header know the intro has started, so it can slide in after the hero has landed.
   useEffect(() => {
     if (ready) window.dispatchEvent(new Event("hero:intro"));
@@ -159,17 +178,23 @@ export default function Hero() {
           <img src="/home/open-sign.png" alt="" width={768} height={696} />
         </div>
 
-        <h1 className="visually-hidden">hope’s grocer — the portfolio of Matthew Hope, product designer</h1>
-        {/* Figma 21:168 — 64px Regular, 60 leading; the first phrase in full ink, the rest at 50% */}
-        <p className={styles.headline}>
-          <span className={styles.line}>
-            Consumer driven, <span className={styles.dim}>research driven,</span>
-          </span>
-          <span className={`${styles.line} ${styles.dim}`}>visually expressive, startup trained,</span>
-          <span className={`${styles.line} ${styles.dim}`}>agile and versatile</span>
-        </p>
-
       </div>
+
+      <h1 className="visually-hidden">hope’s grocer — the portfolio of Matthew Hope, product designer</h1>
+      {/* Figma 21:168 — 64px Regular, 60 leading. One phrase at a time is in full ink, the rest at 50%;
+          the highlight moves on every 0.5s. */}
+      <p className={styles.headline}>
+        {headlineLines.map((line, li) => (
+          <span key={li} className={styles.line}>
+            {line.map((pi, j) => (
+              <span key={pi} className={`${styles.phrase} ${pi === activePhrase ? styles.phraseOn : ""}`}>
+                {phrases[pi]}
+                {j < line.length - 1 ? " " : ""}
+              </span>
+            ))}
+          </span>
+        ))}
+      </p>
 
       {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
       <a
