@@ -9,9 +9,11 @@
   border-bottom: var(--rule);
 }
 
+/* set in the display serif (Atelier Fleur Bold), like the logo */
 .sectionTitle {
+  font-family: var(--font-display-stack);
   font-size: max(24px, calc(40 * var(--u)));
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   /* trim the font's built-in leading so the 24px is measured from the letters themselves */
   text-box: trim-both cap alphabetic;

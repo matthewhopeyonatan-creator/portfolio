@@ -10,27 +10,49 @@ import styles from "./ProjectCard.module.css";
 function WrappedTray({ cover }: { cover?: Project["cover"] }) {
   return (
     <div className={styles.tray}>
-      <Image
-        src="/home/tray.webp"
-        alt=""
-        width={1362}
-        height={932}
-        sizes="(max-width: 767px) 88vw, 40vw"
-        className={styles.trayBase}
-      />
-      <div className={styles.content}>
-        {cover ? (
-          <Image src={cover.src} alt={cover.alt} fill sizes="(max-width: 767px) 64vw, 29vw" className={styles.coverImage} />
-        ) : null}
+      {/* foam tray + shot: grow a touch on hover */}
+      <div className={styles.goods}>
+        <Image
+          src="/home/tray.webp"
+          alt=""
+          width={1362}
+          height={932}
+          sizes="(max-width: 767px) 88vw, 40vw"
+          className={styles.trayBase}
+        />
+        <div className={styles.content}>
+          {cover ? (
+            <Image
+              src={cover.src}
+              alt={cover.alt}
+              fill
+              sizes="(max-width: 767px) 64vw, 29vw"
+              className={styles.coverImage}
+            />
+          ) : null}
+        </div>
       </div>
-      <Image
-        src="/home/plastic-wrap.webp"
-        alt=""
-        width={1348}
-        height={914}
-        sizes="(max-width: 767px) 88vw, 40vw"
-        className={styles.wrap}
-      />
+      {/* plastic wrap: on hover it peels back from the lower-right corner, folding over itself */}
+      <div className={styles.wrap} aria-hidden="true">
+        <Image
+          src="/home/plastic-wrap.webp"
+          alt=""
+          width={1348}
+          height={914}
+          sizes="(max-width: 767px) 88vw, 40vw"
+          className={styles.wrapFace}
+        />
+        <span className={styles.wrapFold}>
+          <Image
+            src="/home/plastic-wrap.webp"
+            alt=""
+            width={1348}
+            height={914}
+            sizes="(max-width: 767px) 88vw, 40vw"
+            className={styles.wrapFlap}
+          />
+        </span>
+      </div>
     </div>
   );
 }

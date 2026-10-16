@@ -6,6 +6,13 @@
   initial-value: 0px;
 }
 
+/* animatable fold distance for the plastic wrap peeling back on the project trays */
+@property --wpeel {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;

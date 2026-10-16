@@ -28,6 +28,17 @@
   transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg);
 }
 
+/* the foam tray and the shot in it grow a little as the plastic comes off */
+.goods {
+  position: absolute;
+  inset: 0;
+  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover .goods {
+  transform: scale(1.035);
+}
+
 .trayBase {
   position: absolute;
   inset: 0;
@@ -53,14 +64,58 @@
   object-fit: cover;
 }
 
-/* Figma "PLASTIC TEXTURE - 10": 674×457 at (0, 4), r64, 80% (opacity baked into the render) */
+/* Figma "PLASTIC TEXTURE - 10": 674×457 at (0, 4), r64, 80% (opacity baked into the render).
+   Unwrap on hover: the sheet is cut along a 45° fold line that travels in from the lower-right
+   corner (--wpeel), and the cut-off corner is mirrored back over the sheet as the folded flap —
+   the same fold as the hero stickers. */
 .wrap {
+  --wpeel: 0px;
   position: absolute;
   left: 0;
   top: calc(4 / 466 * 100%);
   width: calc(674 / 681 * 100%);
   height: calc(457 / 466 * 100%);
   pointer-events: none;
+  transition: --wpeel 520ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .wrap {
+  --wpeel: 58cqw;
+  transition-duration: 900ms;
+  transition-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.wrapFace,
+.wrapFlap {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.wrapFace {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--wpeel)),
+    calc(100% - var(--wpeel)) 100%,
+    0 100%
+  );
+}
+
+.wrapFold {
+  position: absolute;
+  inset: 0;
+  transform-origin: 100% calc(100% - var(--wpeel));
+  transform: rotate(-45deg) scaleY(-1) rotate(45deg);
+  /* the folded-over plastic: a bit brighter where it catches the light, soft shadow under it */
+  filter: brightness(1.12) drop-shadow(2px 3px 5px rgba(40, 40, 40, 0.22));
+}
+
+.wrapFlap {
+  clip-path: polygon(100% calc(100% - var(--wpeel)), 100% 100%, calc(100% - var(--wpeel)) 100%);
 }
 
 .info {
@@ -81,12 +136,6 @@
   font-size: max(20px, calc(32 * var(--u)));
   font-weight: 600;
   margin-bottom: -4px;
-}
-
-.card:hover .title {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
 }
 
 .subtitle {
@@ -142,10 +191,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tray {
+  .tray,
+  .goods,
+  .wrap {
     transition: none;
   }
-  .card:hover .tray {
+  .card:hover .tray,
+  .card:hover .goods {
     transform: none;
+  }
+  .card:hover .wrap {
+    --wpeel: 0px;
   }
 }
