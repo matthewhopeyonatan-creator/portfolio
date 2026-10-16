@@ -14,6 +14,13 @@ export default function SmoothScroll() {
   const lenisRef = useRef<Lenis | null>(null);
   const { isOpen } = useCart();
 
+  // A refresh always starts back on the landing screen (browsers otherwise restore the old
+  // scroll position). Links to a section (#…) still land on that section.
+  useEffect(() => {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (!window.location.hash) window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({
