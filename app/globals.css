@@ -2,7 +2,6 @@
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;
-  --color-black: #000;
   --rule: 2px solid var(--color-ink);
 
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */

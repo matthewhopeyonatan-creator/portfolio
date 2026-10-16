@@ -1,4 +1,4 @@
-/* Figma: title row between rules y1093–y1222 · "SEASONAL PICKS" 40px Bold · 2-col grid split by a 2px rule at x864 */
+/* Figma: title row between rules y1093–y1222 · "SEASONAL PICKS" 40px SemiBold · 2-col grid split by a 2px rule at x864 */
 .sectionTitleRow {
   position: relative;
   z-index: 1; /* sits above the tomatoes' overflow */
@@ -13,10 +13,10 @@
   font-size: max(24px, calc(40 * var(--u)));
   font-weight: 600;
   line-height: 1;
-  /* trim the font's built-in leading so the 12px is measured from the letters themselves */
+  /* trim the font's built-in leading so the 24px is measured from the letters themselves */
   text-box: trim-both cap alphabetic;
   text-transform: uppercase;
-  color: var(--color-black);
+  color: var(--color-ink);
 }
 
 .grid {

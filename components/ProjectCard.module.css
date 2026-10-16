@@ -6,7 +6,7 @@
   height: 100%;
   min-height: calc(712 * var(--u));
   padding: calc(58 * var(--u)) calc(40 * var(--u)) calc(50 * var(--u));
-  color: var(--color-black);
+  color: var(--color-ink);
 }
 
 .media {
@@ -35,7 +35,7 @@
   height: 100%;
 }
 
-/* Figma "content placeholder": 487×274 at (92, 96), r24, shadow 4 4 12 3 rgba(0,0,0,.25) */
+/* Figma "content placeholder": 487×274 at (92, 96), r24, shadow 4 4 12 3 rgba(40,40,40,.25) — ink-tinted, no pure black */
 .content {
   position: absolute;
   left: calc(92 / 681 * 100%);
@@ -46,7 +46,7 @@
   border-radius: calc(24 / 681 * 100cqw);
   background: #f90000;
   box-shadow: calc(4 / 681 * 100cqw) calc(4 / 681 * 100cqw) calc(12 / 681 * 100cqw)
-    calc(3 / 681 * 100cqw) rgba(0, 0, 0, 0.25);
+    calc(3 / 681 * 100cqw) rgba(40, 40, 40, 0.25);
 }
 
 .coverImage {
@@ -105,7 +105,7 @@
 
 .tag {
   padding: 4px 8px;
-  border: 1px solid var(--color-black);
+  border: 1px solid var(--color-ink);
   border-radius: 24px;
   font-size: max(11px, calc(16 * var(--u)));
   line-height: normal;
