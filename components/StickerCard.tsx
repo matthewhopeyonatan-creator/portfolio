@@ -168,15 +168,19 @@ export default function StickerCard({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={sticker.src} alt="" draggable={false} />
           </div>
-          <h2 className={styles.title}>{sticker.title ?? "Title"}</h2>
-          <p className={styles.text}>{sticker.story ?? PLACEHOLDER}</p>
+          <div className={styles.copy}>
+            <h2 className={styles.title}>{sticker.title ?? "Title"}</h2>
+            <p className={styles.text}>{sticker.story ?? PLACEHOLDER}</p>
+          </div>
           <ol className={styles.lessons}>
-            {(sticker.lessons ?? ["Lesson 1", "Lesson 2", "Lesson 3"]).map((lesson, i) => (
-              <li key={i} className={styles.lesson}>
-                <span className={styles.lessonNum}>[{i + 1}]</span>
-                <span>{lesson}</span>
-              </li>
-            ))}
+            {(sticker.lessons ?? ["Lesson 1", "Lesson 2", "Lesson 3"]).map(
+              (lesson, i) => (
+                <li key={i} className={styles.lesson}>
+                  <span className={styles.lessonNum}>[{i + 1}]</span>
+                  <span>{lesson}</span>
+                </li>
+              ),
+            )}
           </ol>
         </div>
       </div>

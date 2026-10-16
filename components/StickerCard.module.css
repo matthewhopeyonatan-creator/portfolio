@@ -44,10 +44,11 @@
   background: #a0a0a0;
 }
 
+/* tucked into the photo's top-left corner (Figma has it at 37, 32 — nudged closer) */
 .slot {
   position: absolute;
-  left: calc(37 * var(--c));
-  top: calc(32 * var(--c));
+  left: calc(27 * var(--c));
+  top: calc(25 * var(--c));
   width: calc(var(--sw) * var(--c));
   height: calc(var(--sh) * var(--c));
   visibility: hidden;
@@ -66,23 +67,27 @@
   user-select: none;
 }
 
-.title {
+/* right column: title then copy, stacked so a long title pushes the copy down instead of
+   running into it (Figma: title at y22, copy at y95) */
+.copy {
   position: absolute;
   left: calc(489 * var(--c));
   top: calc(22 * var(--c));
-  max-width: calc(487 * var(--c));
+  width: calc(440 * var(--c)); /* leaves a wider margin on the right than Figma's 22 */
+  display: flex;
+  flex-direction: column;
+  gap: calc(28 * var(--c));
+}
+
+.title {
   margin: 0;
   font-size: max(18px, calc(36 * var(--c)));
   font-weight: 600;
-  line-height: normal;
+  line-height: 1.25;
   animation: fadeIn 500ms ease 220ms both;
 }
 
 .text {
-  position: absolute;
-  left: calc(489 * var(--c));
-  top: calc(95 * var(--c));
-  width: calc(487 * var(--c));
   margin: 0;
   font-size: max(12px, calc(24 * var(--c)));
   font-weight: 300;
@@ -93,10 +98,10 @@
 
 .lessons {
   position: absolute;
-  left: calc(437.5 * var(--c));
+  left: calc(489 * var(--c));
   top: calc(534 * var(--c));
   display: grid;
-  grid-template-columns: repeat(3, calc(200 * var(--c)));
+  grid-template-columns: repeat(3, calc(440 * var(--c) / 3));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -202,18 +207,19 @@
   }
   .slot {
     --c: calc(92vw / 640); /* a little bigger on small screens */
-    left: 20px;
-    top: 20px;
+    left: 15px;
+    top: 15px;
+  }
+  .copy {
+    position: static;
+    width: auto;
+    gap: 12px;
+    padding: 0 4px;
   }
   .title {
-    position: static;
-    padding: 0 4px;
     font-size: 22px;
   }
   .text {
-    position: static;
-    width: auto;
-    padding: 0 4px;
     font-size: 16px;
     line-height: 1.25;
   }
