@@ -11,12 +11,16 @@
   padding: 0 clamp(16px, 2.3vw, 40px);
   background: var(--color-bg);
   border-bottom: var(--rule);
-  transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: translate3d(0, 0, 0);
+  /* reveal: gentle ease-out so it glides in and settles */
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 
 .hidden {
-  transform: translateY(-100%);
+  transform: translate3d(0, -100%, 0);
+  /* hide: smooth ease-in-out, slightly quicker so it gets out of the way */
+  transition: transform 420ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .nav {

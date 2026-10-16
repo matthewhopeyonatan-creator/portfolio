@@ -6,7 +6,7 @@ import { cartLink, navLinks } from "@/data/site";
 import styles from "./SiteHeader.module.css";
 
 /** Hide on scroll down, show on scroll up — always visible near the top of the page. */
-function useHideOnScroll(threshold = 8) {
+function useHideOnScroll(threshold = 14) {
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
   const ticking = useRef(false);

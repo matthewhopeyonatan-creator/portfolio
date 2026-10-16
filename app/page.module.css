@@ -3,15 +3,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(127 * var(--u));
-  min-height: 72px;
+  padding: 12px 0; /* 12px between the text and each rule */
   border-bottom: var(--rule);
 }
 
 .sectionTitle {
   font-size: max(24px, calc(40 * var(--u)));
   font-weight: 700;
-  line-height: normal;
+  line-height: 1;
+  /* trim the font's built-in leading so the 12px is measured from the letters themselves */
+  text-box: trim-both cap alphabetic;
   text-transform: uppercase;
   color: var(--color-black);
 }

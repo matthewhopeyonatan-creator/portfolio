@@ -4,7 +4,8 @@
 .hero {
   --hu: var(--u);
   --art-h: calc(961 * var(--hu));
-  --peek: 24px;
+  /* show the whole "Seasonal picks" bar: 12px + text + 12px + 2px rule */
+  --peek: calc(26px + max(24px, calc(40 * var(--u))));
   --hero-h: clamp(
     calc(var(--art-h) * 0.62),
     calc(100svh - var(--header-h) - var(--peek)),
