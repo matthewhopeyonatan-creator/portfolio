@@ -122,7 +122,7 @@ const stickers: Record<
       story:
         "I did my bachelor’s degree in agricultural sciences in hopes of understanding the entire process behind the food system. Although not explicitly related to my career path as a designer, Cornell was an integral experience to my personal growth. As a transfer student, I had to learn how to adapt quickly and put myself out there. In a short time of 2 years, I am proud to say that I have made myself at home there. My involvement in dance, design, research, and the sciences speaks to my current existence as a whole.",
       lessons: ["Research", "Adaptability", "Sociability"],
-      photos: [1, 2, 3, 4, 5, 6].map((n) => `/cards/cornell-${n}.webp`),
+      photos: [4, 1, 2, 3, 5, 6].map((n) => `/cards/cornell-${n}.webp`),
     },
   ],
   right: [
