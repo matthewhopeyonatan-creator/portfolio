@@ -75,6 +75,19 @@
   max-width: none;
 }
 
+/* Film grain on the tomato only: a noise tile, cut to the tomato's own shape (masked by its
+   image) and blended into it. Sits under the stickers. */
+.grain {
+  position: absolute;
+  inset: 0;
+  background: url("/home/grain.png") 0 0 / 160px 160px repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  -webkit-mask: var(--mask) center / 100% 100% no-repeat;
+  mask: var(--mask) center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
 /* ── Fruit stickers: on hover the lower-right corner peels back ────────────────────────
    The face is clipped along a 45° fold line; the cut-off corner is mirrored across that line
    as the sticker's pale backing, with a soft shadow. --peel (registered in globals.css so it can
