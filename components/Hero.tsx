@@ -27,7 +27,7 @@ const tomatoes = {
  */
 const stickers: Record<string, { src: string; w: number; h: number; x: number; y: number; peel: number; label: string; title: string }[]> = {
   left: [
-    { src: "/home/sticker-crowdvolt.webp", w: 225.3, h: 192.3, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #2627", title: "CrowdVolt" },
+    { src: "/home/sticker-crowdvolt-ycw24.webp", w: 225.1, h: 192.1, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #YCW24", title: "CrowdVolt" },
     { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717", title: "Jakarta" },
     { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025", title: "Cornell" },
   ],
