@@ -90,7 +90,7 @@
    so visitors know they can be played with. */
 .play .sticker {
   /* no fill: once it ends, the hover peel takes over again */
-  animation: peelHint 1300ms cubic-bezier(0.45, 0, 0.55, 1) var(--peel-hint-delay) 1 none;
+  animation: peelHint 1700ms cubic-bezier(0.45, 0, 0.55, 1) var(--peel-hint-delay) 1 none;
 }
 
 @keyframes peelHint {
@@ -98,9 +98,9 @@
   100% {
     --peel: 0px;
   }
-  40%,
-  55% {
-    --peel: calc(var(--pd) * var(--hu) * 0.85);
+  30%,
+  65% {
+    --peel: calc(var(--pd) * var(--hu)); /* same as the hover peel */
   }
 }
 
