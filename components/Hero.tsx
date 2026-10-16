@@ -16,7 +16,7 @@ const tomatoes = {
   small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 1047.68, y: -145.26, dw: 621.5, dh: 645, opacity: 0.7, order: 3 },
   right: { src: "/home/tomato-right-base.webp", w: 1438, h: 1347, x: 1108.82, y: 145.84, dw: 719, dh: 673.5, opacity: 0.9, order: 2 },
   mid: { src: "/home/tomato-mid-base.webp", w: 1501, h: 1579, x: 644.75, y: 275.77, dw: 750.5, dh: 789.5, opacity: 1, order: 1 },
-  left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 246.44, dw: 891, dh: 848.5, opacity: 1, order: 0 },
+  left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 136.44, /* Figma 246.44, raised so the Jakarta sticker stays on screen */ dw: 891, dh: 848.5, opacity: 1, order: 0 },
 };
 
 /**
@@ -29,6 +29,10 @@ const stickers: Record<string, { src: string; w: number; h: number; x: number; y
     { src: "/home/sticker-crowdvolt.webp", w: 225.3, h: 192.3, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #2627" },
     { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717" },
     { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025" },
+  ],
+  right: [
+    { src: "/home/sticker-fatboy.webp", w: 213.5, h: 203.5, x: 314.18, y: 363.16, peel: 116, label: "Fatboy supperclub NYC" },
+    { src: "/home/sticker-25madison.webp", w: 280.5, h: 280.5, x: 383.18, y: 213.16, peel: 175, label: "25madison design fellow" },
   ],
   mid: [{ src: "/home/sticker-nyu-2.webp", w: 223, h: 235, x: 397.07, y: 184.87, peel: 128, label: "NYU design YR 2027" }],
 };
