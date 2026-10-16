@@ -123,10 +123,25 @@ export default function Hero() {
     if (ready) window.dispatchEvent(new Event("hero:intro"));
   }, [ready]);
 
+  // Pause the sign's sway while the hero is scrolled out of view.
+  const heroRef = useRef<HTMLElement>(null);
+  const [offscreen, setOffscreen] = useState(false);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const onLoad = () => setLoaded((n) => n + 1);
 
   return (
-    <section className={`${styles.hero} ${ready ? styles.play : ""}`} aria-label="Intro">
+    <section
+      ref={heroRef}
+      className={`${styles.hero} ${ready ? styles.play : ""} ${offscreen ? styles.offscreen : ""}`}
+      aria-label="Intro"
+    >
       <noscript>
         <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}`}</style>
       </noscript>

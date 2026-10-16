@@ -22,10 +22,10 @@
 }
 
 /* Artboard centred both ways. On short screens it's never pulled up so far that the Open sign's
-   string (artboard y141) would slide under the navbar — the bottom gets trimmed instead. */
+   string (artboard y176) would slide under the navbar — the bottom gets trimmed instead. */
 .canvas {
   position: absolute;
-  top: max(calc((var(--hero-h) - var(--art-h)) * 0.5), calc(20px - 141 * var(--hu)));
+  top: max(calc((var(--hero-h) - var(--art-h)) * 0.5), calc(20px - 176 * var(--hu)));
   left: 50%;
   width: calc(1728 * var(--hu));
   height: var(--art-h);
@@ -228,9 +228,9 @@
 /* 256×232 (Figma render). Hung centred above the name: the string's apex (47.1% across) sits on
    the artboard's centre line, and it swings from that point. */
 .sign {
-  --sign-w: 205; /* Figma 256, scaled to 80% */
+  --sign-w: 166; /* Figma 256, scaled to 65% */
   left: calc((864 - var(--sign-w) * 0.471) * var(--hu));
-  top: calc(141 * var(--hu));
+  top: calc(176 * var(--hu)); /* keeps the same gap above the title at this size */
   width: calc(var(--sign-w) * var(--hu));
   transform-origin: 47.1% 0.6%;
 }
@@ -241,9 +241,33 @@
   height: auto;
 }
 
+/* entrance swing, then a gentle endless sway (paused while the hero is off-screen) */
 .play .sign {
-  animation: signSwing 2400ms both;
-  animation-delay: var(--sign-delay);
+  animation:
+    signSwing 2400ms var(--sign-delay) both,
+    signSway 3400ms calc(var(--sign-delay) + 2400ms) infinite;
+}
+
+.offscreen .sign {
+  animation-play-state: paused;
+}
+
+/* starts and ends at 0° so it picks up seamlessly where the entrance settles */
+@keyframes signSway {
+  0%,
+  50%,
+  100% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-in-out;
+  }
+  25% {
+    transform: rotate(3deg);
+    animation-timing-function: ease-in-out;
+  }
+  75% {
+    transform: rotate(-3deg);
+    animation-timing-function: ease-in-out;
+  }
 }
 
 @keyframes signSwing {
