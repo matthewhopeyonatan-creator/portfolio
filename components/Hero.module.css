@@ -75,8 +75,8 @@
   }
 }
 
-/* ── Name + pill ───────────────────────────────────────────────────────────────────── */
-/* Figma: "Matthew Hope" Atelier Fleur 175.6px, box 889×193 at y365 (left "M" tucked behind the tomato) */
+/* ── Title + "Matthew is [pill]" ────────────────────────────────────────────────────── */
+/* Figma: "Hope's Grocer" Atelier Fleur 175.6px, box 815×193 centred, at y365 */
 .name {
   left: 50%;
   top: calc(365 * var(--hu));
@@ -90,10 +90,38 @@
   transform: translateX(-50%);
 }
 
-/* Figma: pill 2px border, 8/24 padding, Host Grotesk Light 24px, centred at y563 */
+/* Atelier Fleur has no curly apostrophe — use the fallback serif, tuned like the logo's */
+.apostrophe {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.15em;
+  line-height: 0; /* don't let the fallback glyph grow the line box */
+  position: relative;
+  top: -0.06em;
+  margin: 0 -0.09em 0 -0.07em;
+}
+
+/* Figma: "Matthew is" (Host Grotesk Light 32) at x656, then a 30px gap, then the pill; the row's
+   centre line is y585.5. Anchored on the left so the line stays put while the pill resizes. */
+.tagline {
+  left: calc(656 * var(--hu));
+  top: calc(585.5 * var(--hu));
+  display: flex;
+  align-items: center;
+  gap: max(8px, calc(30 * var(--hu)));
+  margin: 0;
+  white-space: nowrap;
+  color: var(--color-ink);
+  transform: translateY(-50%);
+}
+
+.lead {
+  font-size: max(13px, calc(32 * var(--hu)));
+  font-weight: 300;
+  line-height: normal;
+}
+
+/* Figma: pill 2px border, 8/24 padding, Host Grotesk Light 24px */
 .pill {
-  left: 50%;
-  top: calc(563.11 * var(--hu));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +133,6 @@
   line-height: 1.3333;
   color: var(--color-ink);
   white-space: nowrap;
-  transform: translateX(-50%);
 }
 
 /* the visible word window; its width eases between words */
@@ -161,14 +188,27 @@
   }
 }
 
-.play .name,
-.play .pill {
+.play .name {
   animation: textIn 1000ms var(--ease-out) both;
   animation-delay: var(--text-delay);
 }
 
-.play .pill {
+.play .tagline {
+  animation: taglineIn 1000ms var(--ease-out) both;
   animation-delay: calc(var(--text-delay) + 180ms);
+}
+
+@keyframes taglineIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateY(calc(28 * var(--hu)));
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%);
+    filter: none;
+  }
 }
 
 @keyframes textIn {
@@ -249,7 +289,7 @@
 /* Reduced motion: no drops or swings — everything simply fades in together. */
 @media (prefers-reduced-motion: reduce) {
   .play .name,
-  .play .pill,
+  .play .tagline,
   .play .sign {
     animation: fadeIn 400ms ease both;
   }

@@ -7,9 +7,9 @@ import styles from "./Hero.module.css";
 /**
  * Hero artboard = Figma frame area below the header (1728 × 961 design px; frame y − 131).
  * Positions are Figma render bounds so each layer lands exactly where it sits in the frame.
- * Paint order matches Figma: small tomato → right tomato → Open sign → name → pill → left tomato.
+ * Paint order matches Figma: small tomato → right tomato → Open sign → title → tagline → left tomato.
  *
- * Load sequence: tomatoes drop in largest → smallest, then the name + pill, then the Open sign
+ * Load sequence: tomatoes drop in largest → smallest, then the title + tagline, then the Open sign
  * swings in last.
  */
 const tomatoes = {
@@ -76,7 +76,7 @@ function RotatingPill({ active }: { active: boolean }) {
   }, [index]);
 
   return (
-    <div className={`${styles.layer} ${styles.pill}`} aria-hidden="true">
+    <span className={styles.pill} aria-hidden="true">
       <span className={styles.pillWindow} style={{ width }}>
         {prev !== null && (
           <span key={`out-${index}`} className={styles.pillWordOut}>
@@ -90,7 +90,7 @@ function RotatingPill({ active }: { active: boolean }) {
       <span ref={measureRef} className={styles.pillMeasure}>
         {taglines[index]}
       </span>
-    </div>
+    </span>
   );
 }
 
@@ -138,10 +138,14 @@ export default function Hero() {
         </div>
 
         <h1 className={`${styles.layer} ${styles.name}`}>
-          Matthew Hope
-          <span className="visually-hidden">, product designer — {taglines.join(", ")}</span>
+          Hope<span className={styles.apostrophe}>’</span>s Grocer
+          <span className="visually-hidden"> — the portfolio of Matthew Hope, product designer</span>
         </h1>
-        <RotatingPill active={pillActive} />
+        <p className={`${styles.layer} ${styles.tagline}`}>
+          <span className={styles.lead}>Matthew is</span>
+          <span className="visually-hidden"> {taglines.join(", ").toLowerCase()}</span>
+          <RotatingPill active={pillActive} />
+        </p>
 
         <Tomato id="left" onLoad={onLoad} />
       </div>
