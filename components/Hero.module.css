@@ -2,12 +2,12 @@
    1728 × 961 design px) always spans the screen width — never zoomed past it, so the Open sign and
    stickers near the edges stay fully on screen. */
 .hero {
-  /* The whole composition — every tomato and sticker, Figma visible bounds x −157…1804,
-     y −79…1044 — is scaled to fit on screen under the navbar, with room for the cue below. */
-  --comp-w: 1961;
-  --comp-h: 1123;
-  --hero-h: calc(100svh - var(--header-h));
-  --hu: min(100vw / var(--comp-w), (var(--hero-h) - 44px) / var(--comp-h));
+  /* Full Figma scale: the 1728px artboard spans the screen. The band is at least a screen tall,
+     and always tall enough to hold the tomatoes' bottoms (visible to artboard y≈1044), so
+     "Seasonal picks" starts below them instead of covering them. */
+  --hu: var(--u);
+  --screen-h: calc(100svh - var(--header-h));
+  --hero-h: max(var(--screen-h), calc(1060 * var(--hu)));
 
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.6s
@@ -40,12 +40,12 @@
   z-index: 4;
 }
 
-/* The Figma artboard (1728 × 961, coordinates below are artboard px), placed so the composition's
-   visible bounds sit centred across the screen and just under the navbar. */
+/* The Figma artboard (1728 × 961; coordinates below are artboard px = Figma y − 131), placed
+   exactly as in the frame: full width, right under the navbar. */
 .canvas {
   position: absolute;
-  top: calc(79 * var(--hu));
-  left: calc(50% + (157 - var(--comp-w) / 2) * var(--hu));
+  top: 0;
+  left: 0;
   width: calc(1728 * var(--hu));
   height: calc(961 * var(--hu));
 }
@@ -175,7 +175,7 @@
 .headline {
   position: absolute;
   left: var(--gutter);
-  top: calc((37 + 79) * var(--hu));
+  top: calc(37 * var(--hu));
   z-index: 2;
   margin: 0;
   font-size: max(20px, calc(64 * var(--hu)));
@@ -288,10 +288,11 @@
 }
 
 /* ── "start shopping" cue — bottom-centre of the screen, 24px up ── */
+/* stays 24px above the bottom of the first screen, even when the band runs taller */
 .cue {
   position: absolute;
   left: 50%;
-  bottom: 24px;
+  bottom: calc(var(--hero-h) - var(--screen-h) + 24px);
   z-index: 2;
   padding: 0 4px;
   font-size: max(13px, calc(18 * var(--hu)));
@@ -361,12 +362,11 @@
    composition, so the band hugs the artwork instead. */
 @media (max-width: 767px), (orientation: portrait) {
   .hero {
-    --hu: calc(100vw / var(--comp-w));
-    --stack: 64px; /* the headline gets its own band above the tomatoes on small screens */
-    --hero-h: calc((var(--comp-h) + 24) * var(--hu) + var(--stack));
+    --stack: 48px; /* the headline gets its own band above the tomatoes on small screens */
+    --hero-h: calc(1060 * var(--hu) + var(--stack));
   }
   .canvas {
-    top: calc(79 * var(--hu) + var(--stack));
+    top: var(--stack);
   }
   /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
   .cue {
