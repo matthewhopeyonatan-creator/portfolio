@@ -2,7 +2,7 @@
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;
-  --color-accent: #ff5a1f; /* logo orange */
+  --color-accent: #e13c00; /* tomato orange — the hero pill */
   --rule: 2px solid var(--color-ink);
 
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */
