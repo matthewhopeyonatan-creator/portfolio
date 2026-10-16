@@ -78,6 +78,7 @@ export default function StickerCard({
   const flyRef = useRef<HTMLImageElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   // animate the flying copy from one box to another (centre to centre, scaled to fit)
@@ -120,7 +121,7 @@ export default function StickerCard({
     const to = slotRef.current!.getBoundingClientRect();
     let alive = true;
     fly(from, to, false).then(() => alive && setPhase("open"));
-    closeRef.current?.focus({ preventScroll: true });
+    frameRef.current?.focus({ preventScroll: true });
     return () => {
       alive = false;
     };
@@ -165,6 +166,8 @@ export default function StickerCard({
     >
       <div className={styles.backdrop} onClick={close} aria-hidden="true" />
       <div
+        ref={frameRef}
+        tabIndex={-1}
         className={styles.frame}
         role="dialog"
         aria-modal="true"

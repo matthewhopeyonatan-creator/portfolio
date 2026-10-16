@@ -148,6 +148,17 @@
 }
 
 /* sits just above the card's top-right corner, on the backdrop */
+/* No visible close control — click outside the card (or press Esc) to leave. The button stays
+   for keyboard and screen-reader users and only shows when tabbed to. */
+.frame:focus {
+  outline: none;
+}
+
+.close:not(:focus-visible) {
+  clip-path: inset(50%);
+  opacity: 0;
+}
+
 .close {
   position: absolute;
   right: 0;
