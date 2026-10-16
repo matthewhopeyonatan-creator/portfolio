@@ -63,7 +63,7 @@ function Sticker({ s, onOpen, away }: { s: StickerData; onOpen: OpenSticker; awa
 }
 
 // the headline's phrases, and which ones sit on each of its three lines (Figma line breaks)
-const phrases = ["Consumer driven,", "research driven,", "visually expressive,", "startup trained,", "agile and versatile"];
+const phrases = ["Consumer focused,", "research driven,", "visually expressive,", "startup trained,", "agile and versatile"];
 const headlineLines = [[0, 1], [2, 3], [4]];
 
 type TomatoKey = keyof typeof tomatoes;
