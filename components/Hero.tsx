@@ -79,7 +79,7 @@ const stickers: Record<
     story?: string;
     lessons?: string[];
     /** photos for the card's image box (a carousel when there's more than one) */
-    photos?: string[];
+    photos?: (string | { src: string; focus: string })[];
     inset?: [number, number];
     /** clickable outline (CSS polygon points, % of the image) for stickers that overlap others */
     hit?: string;
@@ -122,7 +122,15 @@ const stickers: Record<
       story:
         "I did my bachelor’s degree in agricultural sciences in hopes of understanding the entire process behind the food system. Although not explicitly related to my career path as a designer, Cornell was an integral experience to my personal growth. As a transfer student, I had to learn how to adapt quickly and put myself out there. In a short time of 2 years, I am proud to say that I have made myself at home there. My involvement in dance, design, research, and the sciences speaks to my current existence as a whole.",
       lessons: ["Research", "Adaptability", "Sociability"],
-      photos: [4, 1, 2, 3, 5, 6].map((n) => `/cards/cornell-${n}.webp`),
+      photos: [
+        "/cards/cornell-4.webp",
+        "/cards/cornell-1.webp",
+        "/cards/cornell-2.webp",
+        "/cards/cornell-3.webp",
+        "/cards/cornell-5.webp",
+        // film shot: crop toward its left so the six people sit in the middle
+        { src: "/cards/cornell-6.webp", focus: "36% 50%" },
+      ],
     },
   ],
   right: [

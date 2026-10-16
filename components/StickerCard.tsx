@@ -24,7 +24,7 @@ export type CardSticker = {
   /** the three notes along the bottom of the card */
   lessons?: string[];
   /** photos for the image box; more than one becomes a carousel */
-  photos?: string[];
+  photos?: (string | { src: string; focus: string })[];
 };
 
 // Figma 45:95: the Jakarta sticker is 256 wide on the tomato and 162 on the card
@@ -59,31 +59,43 @@ function withLinks(text: string) {
 
 /**
  * The card's photo box: each photo fills it (cropped, never stretched). With several, a new one
- * slides in from the right every second, the old one sliding out to the left, on a loop.
+ * slides in from the right every 2 seconds, the old one sliding out to the left, on a loop.
  */
-function Photos({ srcs }: { srcs: string[] }) {
+function Photos({
+  srcs,
+}: {
+  srcs: (string | { src: string; focus: string })[];
+}) {
   const [at, setAt] = useState(0);
   useEffect(() => {
     if (srcs.length < 2) return;
     const id = window.setInterval(
       () => setAt((i) => (i + 1) % srcs.length),
-      1000,
+      2000,
     );
     return () => window.clearInterval(id);
   }, [srcs.length]);
   const prev = (at - 1 + srcs.length) % srcs.length;
   return (
     <>
-      {srcs.map((src, i) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          key={src}
-          src={src}
-          alt=""
-          draggable={false}
-          className={`${styles.photo} ${i === at ? styles.photoOn : i === prev && srcs.length > 1 ? styles.photoOff : ""}`}
-        />
-      ))}
+      {srcs.map((photo, i) => {
+        const src = typeof photo === "string" ? photo : photo.src;
+        return (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={src}
+            src={src}
+            alt=""
+            draggable={false}
+            style={
+              typeof photo === "string"
+                ? undefined
+                : { objectPosition: photo.focus }
+            }
+            className={`${styles.photo} ${i === at ? styles.photoOn : i === prev && srcs.length > 1 ? styles.photoOff : ""}`}
+          />
+        );
+      })}
     </>
   );
 }
