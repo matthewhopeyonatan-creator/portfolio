@@ -80,7 +80,7 @@
   font-size: clamp(24px, 1.9vw, 32px);
   line-height: 1.1;
   white-space: nowrap;
-  color: var(--color-accent);
+  color: var(--color-ink);
 }
 
 .logoBold {

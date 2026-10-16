@@ -22,10 +22,10 @@
 }
 
 /* Artboard centred both ways. On short screens it's never pulled up so far that the Open sign's
-   string (artboard y109) would slide under the navbar — the bottom gets trimmed instead. */
+   string (artboard y141) would slide under the navbar — the bottom gets trimmed instead. */
 .canvas {
   position: absolute;
-  top: max(calc((var(--hero-h) - var(--art-h)) * 0.5), calc(20px - 109 * var(--hu)));
+  top: max(calc((var(--hero-h) - var(--art-h)) * 0.5), calc(20px - 141 * var(--hu)));
   left: 50%;
   width: calc(1728 * var(--hu));
   height: var(--art-h);
@@ -189,7 +189,7 @@
    the artboard's centre line, and it swings from that point. */
 .sign {
   left: calc((864 - 256 * 0.471) * var(--hu));
-  top: calc(109 * var(--hu)); /* 24 above the name: 365 − 24 − 232 */
+  top: calc(141 * var(--hu)); /* hangs ~26 above the name's letters */
   width: calc(256 * var(--hu));
   transform-origin: 47.1% 0.6%;
 }
