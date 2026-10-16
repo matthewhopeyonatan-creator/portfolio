@@ -40,11 +40,13 @@
   z-index: 4;
 }
 
-/* The Figma artboard (1728 × 961; coordinates below are artboard px = Figma y − 131), placed
-   exactly as in the frame: full width, right under the navbar. */
+/* The Figma artboard (1728 × 961; coordinates below are artboard px = Figma y − 131), full width.
+   Anchored to the bottom of the screen: the tomatoes' visible bottom (artboard y≈1045) sits on the
+   bottom edge, so tall screens get the space above them instead of below. Never higher than the
+   Figma position (short screens grow the band instead). */
 .canvas {
   position: absolute;
-  top: 0;
+  top: max(0px, calc(var(--screen-h) - 1045 * var(--hu)));
   left: 0;
   width: calc(1728 * var(--hu));
   height: calc(961 * var(--hu));
