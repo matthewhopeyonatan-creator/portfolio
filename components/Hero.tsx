@@ -124,14 +124,14 @@ export default function Hero() {
     const t = window.setTimeout(start, 1600);
     return () => window.clearTimeout(t);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // Headline: once its lines have risen in, the full-ink highlight steps through the phrases every 0.5s.
+  // Headline: once its lines have risen in, the full-ink highlight steps through the phrases every 1s.
   const [activePhrase, setActivePhrase] = useState(0);
   useEffect(() => {
     if (!ready) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let interval = 0;
     const startAt = window.setTimeout(() => {
-      interval = window.setInterval(() => setActivePhrase((i) => (i + 1) % phrases.length), 500);
+      interval = window.setInterval(() => setActivePhrase((i) => (i + 1) % phrases.length), 1000);
     }, 4200);
     return () => {
       window.clearTimeout(startAt);
@@ -182,7 +182,7 @@ export default function Hero() {
 
       <h1 className="visually-hidden">hope’s grocer — the portfolio of Matthew Hope, product designer</h1>
       {/* Figma 21:168 — 64px Regular, 60 leading. One phrase at a time is in full ink, the rest at 50%;
-          the highlight moves on every 0.5s. */}
+          the highlight moves on every 1s. */}
       <p className={styles.headline}>
         {headlineLines.map((line, li) => (
           <span key={li} className={styles.line}>
