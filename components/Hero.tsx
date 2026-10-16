@@ -19,11 +19,13 @@ const tomatoes = {
 };
 
 export const taglines = [
-  "Science backed",
-  "Consumer products",
-  "Visual storyteller",
-  "Fast learner",
+  "Research-driven",
+  "Consumer-focused",
+  "Visually expressive",
+  "Startup trained",
   "Versatile",
+  "Brand minded",
+  "Culturally fluent",
 ];
 
 type TomatoKey = keyof typeof tomatoes;
