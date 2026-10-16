@@ -104,8 +104,9 @@
   left: calc(24px + 447 * var(--c) + 24px);
   right: 24px;
   bottom: 24px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* first and last lessons sit right on the column's edges (24px in from the photo / the card) */
+  display: flex;
+  justify-content: space-between;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -227,7 +228,6 @@
   }
   .lessons {
     position: static;
-    grid-template-columns: repeat(3, 1fr);
     font-size: 14px;
   }
   .lesson {
