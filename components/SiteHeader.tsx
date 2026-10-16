@@ -33,15 +33,47 @@ function useHideOnScroll(threshold = 14) {
   return [hidden, setHidden] as const;
 }
 
-export default function SiteHeader() {
+/**
+ * Intro: on the home page the bar waits off-screen, then slides down once the hero's load
+ * sequence has landed (Hero fires "hero:intro" when it starts; the delay lives in CSS).
+ */
+function useIntro(enabled: boolean) {
+  const [phase, setPhase] = useState<"off" | "waiting" | "playing" | "done">(enabled ? "waiting" : "off");
+
+  useEffect(() => {
+    if (!enabled) return;
+    const start = () => setPhase((p) => (p === "waiting" ? "playing" : p));
+    window.addEventListener("hero:intro", start);
+    const fallback = window.setTimeout(start, 2500); // never leave the nav hidden
+    return () => {
+      window.removeEventListener("hero:intro", start);
+      window.clearTimeout(fallback);
+    };
+  }, [enabled]);
+
+  return [phase, () => setPhase("done")] as const;
+}
+
+export default function SiteHeader({ intro = false }: { intro?: boolean }) {
   const [hidden, setHidden] = useHideOnScroll();
+  const [introPhase, finishIntro] = useIntro(intro);
+  const introClass =
+    introPhase === "waiting" ? styles.introWaiting : introPhase === "playing" ? styles.introPlaying : "";
 
   return (
     <header
-      className={`${styles.header} ${hidden ? styles.hidden : ""}`}
+      className={`${styles.header} ${hidden ? styles.hidden : ""} ${introClass}`}
+      onAnimationEnd={(e) => {
+        if (e.target === e.currentTarget && introPhase === "playing") finishIntro();
+      }}
       // keyboard users tabbing into the bar should always see it
       onFocusCapture={() => setHidden(false)}
     >
+      {intro && (
+        <noscript>
+          <style>{`.${styles.introWaiting}{transform:none!important;opacity:1!important}`}</style>
+        </noscript>
+      )}
       <nav className={styles.nav} aria-label="Main">
         {navLinks.map((link) => (
           <Link key={link.label} href={link.href} className={styles.navLink}>

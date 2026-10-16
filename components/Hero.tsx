@@ -15,7 +15,7 @@ import styles from "./Hero.module.css";
 const tomatoes = {
   small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 948.68, y: 87.74, dw: 621.5, dh: 645, opacity: 0.7, order: 2 },
   right: { src: "/home/tomato-right.webp", w: 1239, h: 1347, x: 1108.82, y: 299.84, dw: 619.5, dh: 673.5, opacity: 1, order: 1 },
-  left: { src: "/home/tomato-left.webp", w: 1392, h: 1697, x: -22, y: 192.44, dw: 696, dh: 848.5, opacity: 1, order: 0 },
+  left: { src: "/home/tomato-left-v2.webp", w: 1392, h: 1697, x: 0, y: 192.44, dw: 696, dh: 848.5, opacity: 1, order: 0 },
 };
 
 export const taglines = [
@@ -49,15 +49,21 @@ function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
   );
 }
 
-/** Pill that cycles through the taglines every second, easing its width between words. */
+/** Pill that cycles through the taglines every second: words roll upward, width eases to fit. */
 function RotatingPill({ active }: { active: boolean }) {
-  const [index, setIndex] = useState(0);
+  const [{ index, prev }, setWords] = useState<{ index: number; prev: number | null }>({
+    index: 0,
+    prev: null,
+  });
   const [width, setWidth] = useState<number | undefined>(undefined);
   const measureRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (!active) return;
-    const id = window.setInterval(() => setIndex((i) => (i + 1) % taglines.length), 1000);
+    const id = window.setInterval(
+      () => setWords((w) => ({ prev: w.index, index: (w.index + 1) % taglines.length })),
+      1000,
+    );
     return () => window.clearInterval(id);
   }, [active]);
 
@@ -72,7 +78,12 @@ function RotatingPill({ active }: { active: boolean }) {
   return (
     <div className={`${styles.layer} ${styles.pill}`} aria-hidden="true">
       <span className={styles.pillWindow} style={{ width }}>
-        <span key={index} className={styles.pillWord}>
+        {prev !== null && (
+          <span key={`out-${index}`} className={styles.pillWordOut}>
+            {taglines[prev]}
+          </span>
+        )}
+        <span key={`in-${index}`} className={styles.pillWord}>
           {taglines[index]}
         </span>
       </span>
@@ -103,6 +114,11 @@ export default function Hero() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const t = window.setTimeout(() => setPillActive(true), reduce ? 1000 : 2600);
     return () => window.clearTimeout(t);
+  }, [ready]);
+
+  // Let the header know the intro has started, so it can slide in after the hero has landed.
+  useEffect(() => {
+    if (ready) window.dispatchEvent(new Event("hero:intro"));
   }, [ready]);
 
   const onLoad = () => setLoaded((n) => n + 1);

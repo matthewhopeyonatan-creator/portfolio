@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <>
-      <SiteHeader />
+      <SiteHeader intro />
       <main>
         <Hero />
         <section id="seasonal-picks" aria-labelledby="seasonal-picks-title">

@@ -17,6 +17,26 @@
   will-change: transform;
 }
 
+/* Home-page intro: wait above the screen, then glide down after the hero has landed.
+   (The delay is measured from when the hero's sequence starts — sign lands at ~2.5s.) */
+.introWaiting {
+  transform: translate3d(0, -100%, 0);
+  transition: none;
+}
+
+.introPlaying {
+  animation: headerIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 2450ms both;
+}
+
+@keyframes headerIn {
+  from {
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 .hidden {
   transform: translate3d(0, -100%, 0);
   /* hide: smooth ease-in-out, slightly quicker so it gets out of the way */
@@ -129,5 +149,16 @@
   .navLink::after,
   .header {
     transition: none;
+  }
+  .introWaiting {
+    transform: none;
+    opacity: 0;
+  }
+  .introPlaying {
+    animation: headerFade 300ms ease 200ms both;
+  }
+  @keyframes headerFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 }
