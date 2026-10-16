@@ -8,7 +8,7 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   height: var(--header-h);
-  padding: 0 clamp(16px, 2.3vw, 40px);
+  padding: 0 var(--gutter);
   background: var(--color-bg);
   border-bottom: var(--rule);
   transform: translate3d(0, 0, 0);
@@ -118,7 +118,7 @@
       "nav nav";
     row-gap: 2px;
     height: auto;
-    padding: 10px 16px 8px;
+    padding: 10px var(--gutter) 8px;
   }
 
   .logo {

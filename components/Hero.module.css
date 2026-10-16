@@ -18,6 +18,7 @@
   --tomato-stagger: 200ms;
   --text-delay: 3500ms;
   --cue-delay: 4400ms;
+  --peel-hint-delay: 5100ms; /* after the navbar (4.1s + 0.9s) has landed */
 
   /* The title + "Matthew is" group is centred in the *viewport*, not just the band under the
      navbar: lift it by half the navbar, plus 15 for where its visible letters sit in the artboard. */
@@ -83,6 +84,24 @@
   pointer-events: auto;
   --peel: 0px;
   transition: --peel 420ms cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+/* Intro hint: once the navbar has slid in, every sticker peels a little and settles back,
+   so visitors know they can be played with. */
+.play .sticker {
+  /* no fill: once it ends, the hover peel takes over again */
+  animation: peelHint 1300ms cubic-bezier(0.45, 0, 0.55, 1) var(--peel-hint-delay) 1 none;
+}
+
+@keyframes peelHint {
+  0%,
+  100% {
+    --peel: 0px;
+  }
+  40%,
+  55% {
+    --peel: calc(var(--pd) * var(--hu) * 0.85);
+  }
 }
 
 @media (hover: hover) {
@@ -496,6 +515,9 @@
   }
   .pillWindow {
     transition: none;
+  }
+  .play .sticker {
+    animation: none;
   }
   .play .cueInner {
   display: flex;

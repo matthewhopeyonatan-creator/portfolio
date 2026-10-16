@@ -19,6 +19,9 @@
   /* compact desktop header height, incl. 2px rule */
   --header-h: clamp(60px, 4.4vw, 76px);
 
+  /* page side margins — everything lines up on these */
+  --gutter: 40px;
+
   --font-sans-stack: var(--font-sans), "Host Grotesk", system-ui, sans-serif;
   /* Atelier Fleur has no curly apostrophe; the browser falls back to Georgia for it, like Figma does */
   --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
@@ -96,4 +99,10 @@ h3 {
 
 html:not([data-intro="done"]) #seasonal-picks {
   opacity: 0;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --gutter: 16px;
+  }
 }
