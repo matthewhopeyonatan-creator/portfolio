@@ -19,8 +19,8 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --intro-dur: 2000ms;
   --tomato-start: 1750ms; /* 4 tomatoes, largest → smallest */
-  --tomato-dur: 1250ms;
-  --tomato-stagger: 200ms;
+  --tomato-dur: 1700ms;
+  --tomato-stagger: 180ms;
   --text-delay: 2700ms;
   --peel-hint-delay: 4500ms; /* after the navbar (3.5s + 0.9s) has landed */
   --cue-delay: 5100ms; /* last: after the sticker hint */
@@ -162,22 +162,32 @@
 }
 
 /* Drop in from above, largest first (--i = 0 largest … 2 smallest) */
+/* Drop in from above, largest first (--i = 0 largest … 3 smallest). The fall and the fade run as
+   two separate animations so each keeps its own easing: a long, soft settle for the motion, and a
+   quicker fade that's done well before the tomato lands. */
 .play .tomato {
-  animation: tomatoDrop var(--tomato-dur) var(--ease-out) both;
-  animation-delay: calc(var(--tomato-start) + var(--i) * var(--tomato-stagger));
+  --tomato-delay: calc(var(--tomato-start) + var(--i) * var(--tomato-stagger));
+  animation:
+    tomatoDrop var(--tomato-dur) cubic-bezier(0.22, 1, 0.32, 1) var(--tomato-delay) both,
+    tomatoFade 800ms cubic-bezier(0.33, 0, 0.2, 1) var(--tomato-delay) both;
+  will-change: transform, opacity;
 }
 
 @keyframes tomatoDrop {
   from {
-    opacity: 0;
-    transform: translateY(calc(-180 * var(--hu))) scale(0.97);
+    transform: translate3d(0, calc(-120 * var(--hu)), 0) scale(0.985);
   }
-  35% {
-    opacity: var(--o);
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes tomatoFade {
+  from {
+    opacity: 0;
   }
   to {
     opacity: var(--o);
-    transform: none;
   }
 }
 
@@ -190,7 +200,7 @@
   top: calc(37 * var(--hu));
   z-index: 2;
   margin: 0;
-  font-size: max(18px, calc(56 * var(--hu)));
+  font-size: max(20px, calc(64 * var(--hu)));
   font-weight: 400;
   line-height: 0.9375; /* 60 / 64 */
   letter-spacing: -0.02em;

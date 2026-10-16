@@ -14,10 +14,50 @@ import styles from "./Hero.module.css";
  * tomatoes drop in largest → smallest, then the headline lines rise in, then the navbar, the sticker peel hint and the cue.
  */
 const tomatoes = {
-  small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 1047.68, y: -20, /* Figma −145.26, lowered so the navbar never crops it */ dw: 621.5, dh: 645, opacity: 0.7, order: 3 },
-  right: { src: "/home/tomato-right-base.webp", w: 1438, h: 1347, x: 1108.82, y: 145.84, dw: 719, dh: 673.5, opacity: 0.9, order: 2 },
-  mid: { src: "/home/tomato-mid-base.webp", w: 1501, h: 1579, x: 644.75, y: 275.77, dw: 750.5, dh: 789.5, opacity: 1, order: 1 },
-  left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 136.44, /* Figma 246.44, raised so the Jakarta sticker stays on screen */ dw: 891, dh: 848.5, opacity: 1, order: 0 },
+  small: {
+    src: "/home/tomato-small.webp",
+    w: 1243,
+    h: 1290,
+    x: 1047.68,
+    y: -20,
+    /* Figma −145.26, lowered so the navbar never crops it */ dw: 621.5,
+    dh: 645,
+    opacity: 0.7,
+    order: 3,
+  },
+  right: {
+    src: "/home/tomato-right-base.webp",
+    w: 1438,
+    h: 1347,
+    x: 1108.82,
+    y: 145.84,
+    dw: 719,
+    dh: 673.5,
+    opacity: 0.9,
+    order: 2,
+  },
+  mid: {
+    src: "/home/tomato-mid-base.webp",
+    w: 1501,
+    h: 1579,
+    x: 644.75,
+    y: 275.77,
+    dw: 750.5,
+    dh: 789.5,
+    opacity: 1,
+    order: 1,
+  },
+  left: {
+    src: "/home/tomato-left-base.webp",
+    w: 1782,
+    h: 1697,
+    x: -195,
+    y: 136.44,
+    /* Figma 246.44, raised so the Jakarta sticker stays on screen */ dw: 891,
+    dh: 848.5,
+    opacity: 1,
+    order: 0,
+  },
 };
 
 /**
@@ -25,24 +65,100 @@ const tomatoes = {
  * render bounds). `peel` = how far the lower-right fold travels on hover, tuned per shape so it
  * cuts ~27px into each sticker.
  */
-const stickers: Record<string, { src: string; w: number; h: number; x: number; y: number; peel: number; label: string; title: string }[]> = {
+const stickers: Record<
+  string,
+  {
+    src: string;
+    w: number;
+    h: number;
+    x: number;
+    y: number;
+    peel: number;
+    label: string;
+    title: string;
+  }[]
+> = {
   left: [
-    { src: "/home/sticker-crowdvolt-ycw24.webp", w: 225.1, h: 192.1, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #YCW24", title: "CrowdVolt" },
-    { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717", title: "Jakarta" },
-    { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025", title: "Cornell" },
+    {
+      src: "/home/sticker-crowdvolt-ycw24.webp",
+      w: 225.1,
+      h: 192.1,
+      x: 200,
+      y: 258.56,
+      peel: 106,
+      label: "CrowdVolt #YCW24",
+      title: "CrowdVolt",
+    },
+    {
+      src: "/home/sticker-jakarta.webp",
+      w: 256.3,
+      h: 250,
+      x: 438,
+      y: 463.77,
+      peel: 154,
+      label: "Born and raised Jakarta 0717",
+      title: "Jakarta",
+    },
+    {
+      src: "/home/sticker-cornell.webp",
+      w: 140,
+      h: 176.7,
+      x: 599,
+      y: 377.56,
+      peel: 57,
+      label: "Cornell Agriculture #2025",
+      title: "Cornell",
+    },
   ],
   right: [
-    { src: "/home/sticker-fatboy.webp", w: 213.5, h: 203.5, x: 314.18, y: 363.16, peel: 116, label: "Fatboy supperclub NYC", title: "Fatboy" },
-    { src: "/home/sticker-25madison.webp", w: 280.5, h: 280.5, x: 383.18, y: 213.16, peel: 175, label: "25madison design fellow", title: "25madison" },
+    {
+      src: "/home/sticker-fatboy.webp",
+      w: 213.5,
+      h: 203.5,
+      x: 314.18,
+      y: 363.16,
+      peel: 116,
+      label: "Fatboy supperclub NYC",
+      title: "Fatboy",
+    },
+    {
+      src: "/home/sticker-25madison.webp",
+      w: 280.5,
+      h: 280.5,
+      x: 383.18,
+      y: 213.16,
+      peel: 175,
+      label: "25madison design fellow",
+      title: "25madison",
+    },
   ],
-  mid: [{ src: "/home/sticker-nyu-2.webp", w: 223, h: 235, x: 397.07, y: 184.87, peel: 128, label: "NYU design YR 2027", title: "NYU" }],
+  mid: [
+    {
+      src: "/home/sticker-nyu-2.webp",
+      w: 223,
+      h: 235,
+      x: 397.07,
+      y: 184.87,
+      peel: 128,
+      label: "NYU design YR 2027",
+      title: "NYU",
+    },
+  ],
 };
 
 type StickerData = (typeof stickers)["left"][number];
 type OpenSticker = (s: StickerData, el: HTMLElement) => void;
 
 /** A sticker on a tomato: peels on hover; click opens its story card (StickerCard). */
-function Sticker({ s, onOpen, away }: { s: StickerData; onOpen: OpenSticker; away: boolean }) {
+function Sticker({
+  s,
+  onOpen,
+  away,
+}: {
+  s: StickerData;
+  onOpen: OpenSticker;
+  away: boolean;
+}) {
   return (
     <button
       type="button"
@@ -50,20 +166,44 @@ function Sticker({ s, onOpen, away }: { s: StickerData; onOpen: OpenSticker; awa
       aria-label={`${s.label} — open`}
       aria-haspopup="dialog"
       onClick={(e) => onOpen(s, e.currentTarget)}
-      style={{ "--sx": s.x, "--sy": s.y, "--sw": s.w, "--sh": s.h, "--pd": s.peel } as React.CSSProperties}
+      style={
+        {
+          "--sx": s.x,
+          "--sy": s.y,
+          "--sw": s.w,
+          "--sh": s.h,
+          "--pd": s.peel,
+        } as React.CSSProperties
+      }
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className={styles.stickerFace} src={s.src} alt="" draggable={false} />
+      <img
+        className={styles.stickerFace}
+        src={s.src}
+        alt=""
+        draggable={false}
+      />
       <span className={styles.stickerFlapWrap} aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.stickerFlap} src={s.src} alt="" draggable={false} />
+        <img
+          className={styles.stickerFlap}
+          src={s.src}
+          alt=""
+          draggable={false}
+        />
       </span>
     </button>
   );
 }
 
 // the headline's phrases, and which ones sit on each of its three lines (Figma line breaks)
-const phrases = ["Consumer focused,", "research driven,", "visually expressive,", "startup trained,", "agile and versatile"];
+const phrases = [
+  "Consumer focused,",
+  "research driven,",
+  "visually expressive,",
+  "startup trained,",
+  "agile and versatile",
+];
 const headlineLines = [[0, 1], [2, 3], [4]];
 
 type TomatoKey = keyof typeof tomatoes;
@@ -94,7 +234,22 @@ function Tomato({
         } as React.CSSProperties
       }
     >
-      <Image src={t.src} alt="" width={t.w} height={t.h} priority sizes="52vw" onLoad={onLoad} className={styles.tomatoImg} />
+      <Image
+        src={t.src}
+        alt=""
+        width={t.w}
+        height={t.h}
+        priority
+        sizes="52vw"
+        onLoad={(e) => {
+          // wait until the image is decoded too, so nothing stutters once the drop starts
+          const img = e.currentTarget;
+          (img.decode ? img.decode() : Promise.resolve())
+            .catch(() => {})
+            .then(onLoad);
+        }}
+        className={styles.tomatoImg}
+      />
       {stickers[id]?.map((s) => (
         <Sticker key={s.src} s={s} onOpen={onOpen} away={activeSrc === s.src} />
       ))}
@@ -125,12 +280,17 @@ export default function Hero() {
       const pivotY = r.top + r.height * 0.006;
       el.style.setProperty("--is", String(scale));
       el.style.setProperty("--ix", `${vw / 2 - pivotX}px`);
-      el.style.setProperty("--iy", `${vh / 2 - (r.height * scale) / 2 - pivotY}px`);
+      el.style.setProperty(
+        "--iy",
+        `${vh / 2 - (r.height * scale) / 2 - pivotY}px`,
+      );
     }
     setReady(true);
     // lift the hero above the page while the big sign is on screen, then drop it back
     setIntroRunning(true);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     window.setTimeout(
       () => {
         setIntroRunning(false);
@@ -155,7 +315,10 @@ export default function Hero() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let interval = 0;
     const startAt = window.setTimeout(() => {
-      interval = window.setInterval(() => setActivePhrase((i) => (i + 1) % phrases.length), 1000);
+      interval = window.setInterval(
+        () => setActivePhrase((i) => (i + 1) % phrases.length),
+        1000,
+      );
     }, 3600);
     return () => {
       window.clearTimeout(startAt);
@@ -174,9 +337,12 @@ export default function Hero() {
     const picks = document.getElementById("seasonal-picks");
     if (!picks || !("IntersectionObserver" in window)) return;
     // the section starts right at the fold, so require it to come 10% into view first
-    const io = new IntersectionObserver(([entry]) => setPicksInView(entry.isIntersecting), {
-      rootMargin: "0px 0px -10% 0px",
-    });
+    const io = new IntersectionObserver(
+      ([entry]) => setPicksInView(entry.isIntersecting),
+      {
+        rootMargin: "0px 0px -10% 0px",
+      },
+    );
     io.observe(picks);
     return () => io.disconnect();
   }, []);
@@ -184,7 +350,9 @@ export default function Hero() {
   const onLoad = () => setLoaded((n) => n + 1);
 
   // the sticker whose story card is open (its tomato copy hides while the card has it)
-  const [card, setCard] = useState<{ s: StickerData; el: HTMLElement } | null>(null);
+  const [card, setCard] = useState<{ s: StickerData; el: HTMLElement } | null>(
+    null,
+  );
   const openCard: OpenSticker = (s, el) => setCard((c) => c ?? { s, el });
   const tomatoProps = { onLoad, onOpen: openCard, activeSrc: card?.s.src };
   // after a card closes, focus goes back to the sticker that opened it (once it's visible again)
@@ -211,21 +379,29 @@ export default function Hero() {
         <Tomato id="mid" {...tomatoProps} />
         <Tomato id="left" {...tomatoProps} />
 
-        <div ref={signRef} className={`${styles.layer} ${styles.sign}`} aria-hidden="true">
+        <div
+          ref={signRef}
+          className={`${styles.layer} ${styles.sign}`}
+          aria-hidden="true"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/home/open-sign.png" alt="" width={768} height={696} />
         </div>
-
       </div>
 
-      <h1 className="visually-hidden">hope’s grocer — the portfolio of Matthew Hope, product designer</h1>
+      <h1 className="visually-hidden">
+        hope’s grocer — the portfolio of Matthew Hope, product designer
+      </h1>
       {/* Figma 21:168 — 64px Regular, 60 leading. One phrase at a time is in full ink, the rest at 50%;
           the highlight moves on every 1s. */}
       <p className={styles.headline}>
         {headlineLines.map((line, li) => (
           <span key={li} className={styles.line}>
             {line.map((pi, j) => (
-              <span key={pi} className={`${styles.phrase} ${pi === activePhrase ? styles.phraseOn : ""}`}>
+              <span
+                key={pi}
+                className={`${styles.phrase} ${pi === activePhrase ? styles.phraseOn : ""}`}
+              >
                 {phrases[pi]}
                 {j < line.length - 1 ? " " : ""}
               </span>
@@ -234,7 +410,13 @@ export default function Hero() {
         ))}
       </p>
 
-      {card && <StickerCard sticker={card.s} origin={card.el} onClosed={() => setCard(null)} />}
+      {card && (
+        <StickerCard
+          sticker={card.s}
+          origin={card.el}
+          onClosed={() => setCard(null)}
+        />
+      )}
 
       {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
       <a
@@ -244,8 +426,19 @@ export default function Hero() {
       >
         <span className={styles.cueInner}>
           <span>start shopping</span>
-          <svg className={styles.cueArrow} width="25" height="14" viewBox="0 0 25 14" fill="none" aria-hidden="true">
-            <path d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985" stroke="currentColor" strokeWidth="2" />
+          <svg
+            className={styles.cueArrow}
+            width="25"
+            height="14"
+            viewBox="0 0 25 14"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
           </svg>
         </span>
       </a>
