@@ -108,7 +108,20 @@ export default function SiteHeader({ intro = false }: { intro?: boolean }) {
         ))}
       </nav>
 
-      <Link href="/" className={styles.logo} aria-label="hope's grocer — home">
+      <Link
+        href="/"
+        className={styles.logo}
+        aria-label="hope's grocer — back to top"
+        onClick={(e) => {
+          // already home: glide back to the top instead of reloading the page
+          if (window.location.pathname !== "/" || e.metaKey || e.ctrlKey || e.shiftKey) return;
+          e.preventDefault();
+          const ask = new CustomEvent("scroll-to-top", { detail: { handled: false } });
+          window.dispatchEvent(ask);
+          if (!ask.detail.handled) window.scrollTo({ top: 0, behavior: "smooth" });
+          if (window.location.hash) history.replaceState(null, "", "/");
+        }}
+      >
         <span className={styles.logoBold}>hope</span>
         <span className={styles.logoApostrophe}>’</span>
         <span className={styles.logoBold}>s grocer</span>

@@ -40,9 +40,17 @@ export default function SmoothScroll() {
     const onLock = (e: Event) => ((e as CustomEvent<boolean>).detail ? lenis.stop() : lenis.start());
     window.addEventListener("scroll-lock", onLock);
 
+    // the logo asks to go back to the top of the page
+    const onTop = (e: Event) => {
+      (e as CustomEvent<{ handled: boolean }>).detail.handled = true;
+      lenis.scrollTo(0, { duration: 1.4, force: true });
+    };
+    window.addEventListener("scroll-to-top", onTop);
+
     return () => {
       document.removeEventListener("click", onClick, true);
       window.removeEventListener("scroll-lock", onLock);
+      window.removeEventListener("scroll-to-top", onTop);
       lenis.destroy();
       lenisRef.current = null;
     };
