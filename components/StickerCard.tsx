@@ -23,6 +23,8 @@ export type CardSticker = {
   inset?: [number, number];
   /** the three notes along the bottom of the card */
   lessons?: string[];
+  /** photos for the image box; more than one becomes a carousel */
+  photos?: string[];
 };
 
 // Figma 45:95: the Jakarta sticker is 256 wide on the tomato and 162 on the card
@@ -53,6 +55,37 @@ function withLinks(text: string) {
   }
   parts.push(text.slice(last));
   return parts;
+}
+
+/**
+ * The card's photo box: each photo fills it (cropped, never stretched). With several, a new one
+ * slides in from the right every second, the old one sliding out to the left, on a loop.
+ */
+function Photos({ srcs }: { srcs: string[] }) {
+  const [at, setAt] = useState(0);
+  useEffect(() => {
+    if (srcs.length < 2) return;
+    const id = window.setInterval(
+      () => setAt((i) => (i + 1) % srcs.length),
+      1000,
+    );
+    return () => window.clearInterval(id);
+  }, [srcs.length]);
+  const prev = (at - 1 + srcs.length) % srcs.length;
+  return (
+    <>
+      {srcs.map((src, i) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          key={src}
+          src={src}
+          alt=""
+          draggable={false}
+          className={`${styles.photo} ${i === at ? styles.photoOn : i === prev && srcs.length > 1 ? styles.photoOff : ""}`}
+        />
+      ))}
+    </>
+  );
 }
 
 /** Tells SmoothScroll to pause / resume the page while the card is up. */
@@ -197,7 +230,9 @@ export default function StickerCard({
           </svg>
         </button>
         <div ref={cardRef} className={styles.card}>
-          <div className={styles.media} aria-hidden="true" />
+          <div className={styles.media} aria-hidden="true">
+            {sticker.photos?.length ? <Photos srcs={sticker.photos} /> : null}
+          </div>
           {/* the sticker's resting place on the card */}
           <div
             ref={slotRef}
