@@ -6,12 +6,18 @@
   --hu: var(--u);
   --art-h: calc(961 * var(--hu));
 
-  /* load sequence timing */
+  /* load sequence timing (all measured from when the sequence starts)
+     1. Open sign drops in big at the centre, swings, then shrinks into place   0 → 2.6s
+     2. tomatoes drop in, largest → smallest                                     2.35s →
+     3. title, then the "Matthew is" line                                        3.5s →
+     4. navbar (SiteHeader) and the "start shopping" cue                        ~4.1s → */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --intro-dur: 2600ms;
+  --tomato-start: 2350ms;
   --tomato-dur: 1250ms;
   --tomato-stagger: 200ms;
-  --text-delay: 1150ms;
-  --sign-delay: 1950ms;
+  --text-delay: 3500ms;
+  --cue-delay: 4400ms;
 
   position: relative;
   height: var(--hero-h);
@@ -19,6 +25,12 @@
      "Seasonal picks", like the Figma frame (no hard edge at the bottom) */
   overflow-x: clip;
   overflow-y: visible;
+}
+
+/* While the big sign intro plays, sit above the project grid (which otherwise covers the hero's
+   overflow) so the sign is never hidden on short, phone-sized hero bands. */
+.introRunning {
+  z-index: 4;
 }
 
 /* Artboard centred both ways. On short screens it's never pulled up so far that the Open sign's
@@ -58,7 +70,7 @@
 /* Drop in from above, largest first (--i = 0 largest … 2 smallest) */
 .play .tomato {
   animation: tomatoDrop var(--tomato-dur) var(--ease-out) both;
-  animation-delay: calc(var(--i) * var(--tomato-stagger));
+  animation-delay: calc(var(--tomato-start) + var(--i) * var(--tomato-stagger));
 }
 
 @keyframes tomatoDrop {
@@ -241,43 +253,48 @@
   height: auto;
 }
 
-/* One continuous pendulum: it drops in, swings at a constant tempo (1s per swing, like a real
-   pendulum) with each swing a little smaller, and hands off at a peak to an endless ±3° sway —
-   no pause between them. Paused while the hero is off-screen. */
+/* Intro: the sign starts big in the middle of the screen (--ix/--iy/--is are measured in JS so the
+   pivot lands centred and the sign fills ~60% of the viewport), drops in from above, swings at a
+   steady tempo, then shrinks down into its spot — ending on the −3° peak that the endless sway
+   picks up from, so the motion never stops. Paused while the hero is off-screen. */
+.sign {
+  z-index: 3;
+}
+
 .play .sign {
-  --swing: 1000ms; /* one swing, peak to peak */
   animation:
-    signSwing calc(var(--swing) * 3.55) var(--sign-delay) both,
-    signSway calc(var(--swing) * 2) calc(var(--sign-delay) + var(--swing) * 3.55) infinite;
+    signIntro var(--intro-dur) both,
+    signSway 2000ms var(--intro-dur) infinite;
 }
 
 .offscreen .sign {
   animation-play-state: paused;
 }
 
-/* peaks: +8° (lands) → −5.5° → +4° → −3° (hand-off) */
-@keyframes signSwing {
+@keyframes signIntro {
   0% {
     opacity: 0;
-    transform: translateY(calc(-60 * var(--hu))) rotate(0deg);
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.35, 1);
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 70vh)) scale(var(--is, 1)) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
-  15.5% {
+  8% {
     opacity: 1;
-    transform: translateY(0) rotate(8deg);
+  }
+  30% {
+    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(5deg);
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  43.7% {
-    transform: rotate(-5.5deg);
+  48% {
+    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(-3.5deg);
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  71.8% {
-    transform: rotate(4deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  64% {
+    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(1.5deg);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
   }
   100% {
     opacity: 1;
-    transform: rotate(-3deg);
+    transform: translate(0px, 0px) scale(1) rotate(-3deg);
   }
 }
 
@@ -322,12 +339,12 @@
 /* fades up with the end of the sequence, then the arrow gently bobs */
 .play .cue {
   animation: cueIn 900ms var(--ease-out) both;
-  animation-delay: calc(var(--sign-delay) + 500ms);
+  animation-delay: var(--cue-delay);
 }
 
 .play .cueArrow {
   animation: cueBob 1800ms ease-in-out infinite;
-  animation-delay: calc(var(--sign-delay) + 1400ms);
+  animation-delay: calc(var(--cue-delay) + 900ms);
 }
 
 .cue:hover .cueArrow {

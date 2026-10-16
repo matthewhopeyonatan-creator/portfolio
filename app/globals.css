@@ -79,3 +79,13 @@ h3 {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Home intro: the projects stay hidden while the Open sign does its big entrance, then fade in
+   as the tomatoes drop (Hero sets <html data-intro="done">). */
+#seasonal-picks {
+  transition: opacity 700ms ease;
+}
+
+html:not([data-intro="done"]) #seasonal-picks {
+  opacity: 0;
+}

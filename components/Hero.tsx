@@ -9,8 +9,8 @@ import styles from "./Hero.module.css";
  * Positions are Figma render bounds so each layer lands exactly where it sits in the frame.
  * Paint order matches Figma: small tomato → right tomato → Open sign → title → tagline → left tomato.
  *
- * Load sequence: tomatoes drop in largest → smallest, then the title + tagline, then the Open sign
- * swings in last.
+ * Load sequence: the Open sign drops in big at the centre and shrinks into place, then the
+ * tomatoes drop in largest → smallest, then the title + tagline (then the navbar and cue).
  */
 const tomatoes = {
   small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 948.68, y: 87.74, dw: 621.5, dh: 645, opacity: 0.7, order: 2 },
@@ -102,19 +102,52 @@ export default function Hero() {
   const [pillActive, setPillActive] = useState(false);
   const total = Object.keys(tomatoes).length;
 
+  // The sign's intro starts big and centred: measure where it will end up, and hand CSS the
+  // offset + scale that put its pivot in the middle of the screen at ~60% of the viewport.
+  const signRef = useRef<HTMLDivElement>(null);
+  const [introRunning, setIntroRunning] = useState(false);
+  const started = useRef(false);
+  const start = () => {
+    if (started.current) return;
+    started.current = true;
+    const el = signRef.current;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const scale = Math.min((vw * 0.6) / r.width, (vh * 0.6) / r.height);
+      const pivotX = r.left + r.width * 0.471;
+      const pivotY = r.top + r.height * 0.006;
+      el.style.setProperty("--is", String(scale));
+      el.style.setProperty("--ix", `${vw / 2 - pivotX}px`);
+      el.style.setProperty("--iy", `${vh / 2 - (r.height * scale) / 2 - pivotY}px`);
+    }
+    setReady(true);
+    // lift the hero above the page while the big sign is on screen, then drop it back
+    setIntroRunning(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.setTimeout(
+      () => {
+        setIntroRunning(false);
+        document.documentElement.dataset.intro = "done"; // reveals the rest of the page
+      },
+      reduce ? 0 : 2400,
+    );
+  };
+
   // Start once the tomato images are in (so they don't pop in mid-animation); never wait > 1.6s.
   useEffect(() => {
-    if (loaded >= total) setReady(true);
-  }, [loaded, total]);
+    if (loaded >= total) start();
+  }, [loaded, total]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    const t = window.setTimeout(() => setReady(true), 1600);
+    const t = window.setTimeout(start, 1600);
     return () => window.clearTimeout(t);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // Start cycling the pill after it has animated in.
   useEffect(() => {
     if (!ready) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = window.setTimeout(() => setPillActive(true), reduce ? 1000 : 2600);
+    const t = window.setTimeout(() => setPillActive(true), reduce ? 1000 : 4800);
     return () => window.clearTimeout(t);
   }, [ready]);
 
@@ -139,17 +172,17 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className={`${styles.hero} ${ready ? styles.play : ""} ${offscreen ? styles.offscreen : ""}`}
+      className={`${styles.hero} ${ready ? styles.play : ""} ${offscreen ? styles.offscreen : ""} ${introRunning ? styles.introRunning : ""}`}
       aria-label="Intro"
     >
       <noscript>
-        <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}`}</style>
+        <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}#seasonal-picks,.page-after-hero{opacity:1!important}`}</style>
       </noscript>
       <div className={styles.canvas}>
         <Tomato id="small" onLoad={onLoad} />
         <Tomato id="right" onLoad={onLoad} />
 
-        <div className={`${styles.layer} ${styles.sign}`} aria-hidden="true">
+        <div ref={signRef} className={`${styles.layer} ${styles.sign}`} aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/home/open-sign.png" alt="" width={768} height={696} />
         </div>
