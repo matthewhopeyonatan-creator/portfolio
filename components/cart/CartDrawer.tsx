@@ -123,7 +123,7 @@ export default function CartDrawer() {
           ) : (
             <div className={styles.empty}>
               <p>Your cart is empty.</p>
-              <p className={styles.emptyHint}>Open a project from Seasonal picks and it’ll land here.</p>
+              <p className={styles.emptyHint}>Start viewing projects</p>
             </div>
           )}
 
