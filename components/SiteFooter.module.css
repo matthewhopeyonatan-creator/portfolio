@@ -1,14 +1,13 @@
 /* Figma "Frame 35" (footer): 512 tall, #91230A, white type.
-   Sign: Host Grotesk ExtraBold Italic 200px (239 line box) 135 from the top, copies 27 apart.
+   Sign: Host Grotesk ExtraBold Italic 200px, copies 27 apart; the band starts ~18 above its caps.
    Nav: 24px Bold caps, gap 4 · Socials: 20px SemiBold caps, gap 52 · both on the 40px gutters,
    nav ending 34 and socials 29 above the bottom. */
 .footer {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: calc(512 * var(--u));
-  padding-top: calc(135 * var(--u));
+  /* the red starts just above the sign's capitals */
+  padding-top: max(10px, calc(18 * var(--u)));
   background: var(--color-accent);
   color: var(--color-paper);
   overflow: hidden;
@@ -16,7 +15,9 @@
 
 /* ── LED-style sign ─────────────────────────────────────────────────────────────── */
 .marquee {
-  overflow: hidden;
+  /* clip sideways only, so round letters and the italic overhang aren't shaved at the baseline */
+  overflow-x: clip;
+  overflow-y: visible;
   white-space: nowrap;
 }
 
@@ -37,7 +38,9 @@
   font-size: max(64px, calc(200 * var(--u)));
   font-weight: 800;
   font-style: italic;
-  line-height: 1.195; /* 239 / 200 */
+  line-height: 1;
+  /* measure from the capitals themselves, not the font's built-in leading */
+  text-box: trim-both cap alphabetic;
   text-transform: uppercase;
   letter-spacing: 0;
 }
@@ -58,6 +61,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 32px;
+  margin-top: max(24px, calc(50 * var(--u)));
   padding: 0 var(--gutter) calc(29 * var(--u));
 }
 
@@ -117,15 +121,14 @@ a.social:hover::after {
 
 @media (max-width: 767px) {
   .footer {
-    min-height: 0;
-    padding-top: 24px;
+    padding-top: 12px;
   }
 
   .bottom {
     flex-direction: column;
     align-items: flex-start;
     gap: 28px;
-    padding: 40px var(--gutter) 32px;
+    padding: 0 var(--gutter) 28px;
   }
 }
 
