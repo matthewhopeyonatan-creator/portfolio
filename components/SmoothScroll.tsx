@@ -36,8 +36,13 @@ export default function SmoothScroll() {
     };
     document.addEventListener("click", onClick, true); // capture: before React/Next handlers
 
+    // overlays (e.g. the sticker story card) pause the page while they're up
+    const onLock = (e: Event) => ((e as CustomEvent<boolean>).detail ? lenis.stop() : lenis.start());
+    window.addEventListener("scroll-lock", onLock);
+
     return () => {
       document.removeEventListener("click", onClick, true);
+      window.removeEventListener("scroll-lock", onLock);
       lenis.destroy();
       lenisRef.current = null;
     };

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import StickerCard from "@/components/StickerCard";
 import styles from "./Hero.module.css";
 
 /**
@@ -37,11 +38,18 @@ const stickers: Record<string, { src: string; w: number; h: number; x: number; y
   mid: [{ src: "/home/sticker-nyu-2.webp", w: 223, h: 235, x: 397.07, y: 184.87, peel: 128, label: "NYU design YR 2027" }],
 };
 
-function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
+type StickerData = (typeof stickers)["left"][number];
+type OpenSticker = (s: StickerData, el: HTMLElement) => void;
+
+/** A sticker on a tomato: peels on hover; click opens its story card (StickerCard). */
+function Sticker({ s, onOpen, away }: { s: StickerData; onOpen: OpenSticker; away: boolean }) {
   return (
-    <div
-      className={styles.sticker}
-      title={s.label}
+    <button
+      type="button"
+      className={`${styles.sticker} ${away ? styles.stickerAway : ""}`}
+      aria-label={`${s.label} — open`}
+      aria-haspopup="dialog"
+      onClick={(e) => onOpen(s, e.currentTarget)}
       style={{ "--sx": s.x, "--sy": s.y, "--sw": s.w, "--sh": s.h, "--pd": s.peel } as React.CSSProperties}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -50,7 +58,7 @@ function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={styles.stickerFlap} src={s.src} alt="" draggable={false} />
       </span>
-    </div>
+    </button>
   );
 }
 
@@ -60,7 +68,17 @@ const headlineLines = [[0, 1], [2, 3], [4]];
 
 type TomatoKey = keyof typeof tomatoes;
 
-function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
+function Tomato({
+  id,
+  onLoad,
+  onOpen,
+  activeSrc,
+}: {
+  id: TomatoKey;
+  onLoad: () => void;
+  onOpen: OpenSticker;
+  activeSrc?: string;
+}) {
   const t = tomatoes[id];
   return (
     <div
@@ -77,7 +95,9 @@ function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
       }
     >
       <Image src={t.src} alt="" width={t.w} height={t.h} priority sizes="52vw" onLoad={onLoad} className={styles.tomatoImg} />
-      {stickers[id]?.map((s) => <Sticker key={s.src} s={s} />)}
+      {stickers[id]?.map((s) => (
+        <Sticker key={s.src} s={s} onOpen={onOpen} away={activeSrc === s.src} />
+      ))}
     </div>
   );
 }
@@ -163,6 +183,20 @@ export default function Hero() {
 
   const onLoad = () => setLoaded((n) => n + 1);
 
+  // the sticker whose story card is open (its tomato copy hides while the card has it)
+  const [card, setCard] = useState<{ s: StickerData; el: HTMLElement } | null>(null);
+  const openCard: OpenSticker = (s, el) => setCard((c) => c ?? { s, el });
+  const tomatoProps = { onLoad, onOpen: openCard, activeSrc: card?.s.src };
+  // after a card closes, focus goes back to the sticker that opened it (once it's visible again)
+  const lastOrigin = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (card) lastOrigin.current = card.el;
+    else if (lastOrigin.current) {
+      lastOrigin.current.focus({ preventScroll: true });
+      lastOrigin.current = null;
+    }
+  }, [card]);
+
   return (
     <section
       className={`${styles.hero} ${ready ? styles.play : ""} ${introRunning ? styles.introRunning : ""}`}
@@ -172,10 +206,10 @@ export default function Hero() {
         <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}#seasonal-picks,.page-after-hero{opacity:1!important}`}</style>
       </noscript>
       <div className={styles.canvas}>
-        <Tomato id="small" onLoad={onLoad} />
-        <Tomato id="right" onLoad={onLoad} />
-        <Tomato id="mid" onLoad={onLoad} />
-        <Tomato id="left" onLoad={onLoad} />
+        <Tomato id="small" {...tomatoProps} />
+        <Tomato id="right" {...tomatoProps} />
+        <Tomato id="mid" {...tomatoProps} />
+        <Tomato id="left" {...tomatoProps} />
 
         <div ref={signRef} className={`${styles.layer} ${styles.sign}`} aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -199,6 +233,8 @@ export default function Hero() {
           </span>
         ))}
       </p>
+
+      {card && <StickerCard sticker={card.s} origin={card.el} onClosed={() => setCard(null)} />}
 
       {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
       <a

@@ -102,6 +102,7 @@ html:not([data-intro="done"]) #seasonal-picks {
 }
 
 /* page doesn't scroll behind the open cart */
-html.cart-open {
+html.cart-open,
+html.modal-open {
   overflow: hidden;
 }
