@@ -103,6 +103,16 @@
   margin: 0;
 }
 
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.link:hover {
+  text-decoration-thickness: 2px;
+}
+
 .text p + p {
   margin-top: 0.8em;
 }

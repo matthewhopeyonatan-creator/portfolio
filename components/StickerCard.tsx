@@ -31,6 +31,30 @@ const CARD_SCALE = 162.47 / 256.16;
 const PLACEHOLDER =
   "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.”";
 
+/** Story text: "[words](https://…)" becomes a link (opens in a new tab). */
+function withLinks(text: string) {
+  const parts: React.ReactNode[] = [];
+  const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+  let last = 0;
+  for (const m of text.matchAll(re)) {
+    parts.push(text.slice(last, m.index));
+    parts.push(
+      <a
+        key={m.index}
+        href={m[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.link}
+      >
+        {m[1]}
+      </a>,
+    );
+    last = (m.index ?? 0) + m[0].length;
+  }
+  parts.push(text.slice(last));
+  return parts;
+}
+
 /** Tells SmoothScroll to pause / resume the page while the card is up. */
 const lockScroll = (on: boolean) => {
   document.documentElement.classList.toggle("modal-open", on);
@@ -118,8 +142,15 @@ export default function StickerCard({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
       if (e.key === "Tab") {
+        // cycle between the close button and any links in the story
         e.preventDefault();
-        closeRef.current?.focus();
+        const stops = [
+          closeRef.current,
+          ...(cardRef.current?.querySelectorAll<HTMLElement>("a[href]") ?? []),
+        ].filter(Boolean) as HTMLElement[];
+        const at = stops.indexOf(document.activeElement as HTMLElement);
+        const next = (at + (e.shiftKey ? -1 : 1) + stops.length) % stops.length;
+        stops[next]?.focus();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -176,9 +207,11 @@ export default function StickerCard({
             <h2 className={styles.title}>{sticker.title ?? "Title"}</h2>
             <div className={styles.text}>
               {/* a blank line in the story starts a new paragraph */}
-              {(sticker.story ?? PLACEHOLDER).split(/\n\s*\n/).map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
+              {(sticker.story ?? PLACEHOLDER)
+                .split(/\n\s*\n/)
+                .map((para, i) => (
+                  <p key={i}>{withLinks(para)}</p>
+                ))}
             </div>
           </div>
           <ol className={styles.lessons}>
