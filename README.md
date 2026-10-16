@@ -13,3 +13,5 @@ npm run dev      # http://localhost:3000
 - `app/fonts/` — Host Grotesk + Atelier Fleur (**Fontspring demo** — replace with licensed files before launch)
 
 Layout is measured against the 1728px Figma frame; `--u` in `app/globals.css` is one design pixel scaled to the viewport.
+
+Last deploy check: 2026-10-16
