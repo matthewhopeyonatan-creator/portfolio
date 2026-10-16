@@ -300,16 +300,17 @@
 }
 
 /* ── "start shopping" cue — bottom-centre of the screen, 24px up ── */
-/* stays 24px above the bottom of the first screen, even when the band runs taller */
+/* White, so it's placed on the tomato rather than the screen: centred on the solid middle of the
+   centre tomato (artboard x≈1010, y≈870), which moves with the tomatoes. */
 .cue {
   position: absolute;
-  left: 50%;
-  bottom: calc(var(--hero-h) - var(--screen-h) + 24px);
+  left: calc(1010 * var(--hu));
+  top: calc(870 * var(--hu));
   z-index: 2;
   padding: 0 4px;
   font-size: max(13px, calc(18 * var(--hu)));
   line-height: normal;
-  color: var(--color-ink);
+  color: var(--color-paper);
   white-space: nowrap;
   opacity: 0;
   transform: translateX(-50%);

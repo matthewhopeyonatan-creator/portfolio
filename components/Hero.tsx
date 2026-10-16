@@ -211,6 +211,20 @@ export default function Hero() {
         <Tomato id="mid" {...tomatoProps} />
         <Tomato id="left" {...tomatoProps} />
 
+        {/* "start shopping" cue — white, sitting on the solid middle of the centre tomato; scrolls to the projects */}
+        <a
+          href="#seasonal-picks"
+          className={`${styles.cue} ${picksInView ? styles.cueAway : ""}`}
+          tabIndex={picksInView ? -1 : undefined}
+        >
+          <span className={styles.cueInner}>
+            <span>start shopping</span>
+            <svg className={styles.cueArrow} width="25" height="14" viewBox="0 0 25 14" fill="none" aria-hidden="true">
+              <path d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985" stroke="currentColor" strokeWidth="2" />
+            </svg>
+          </span>
+        </a>
+
         <div ref={signRef} className={`${styles.layer} ${styles.sign}`} aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/home/open-sign.png" alt="" width={768} height={696} />
@@ -236,19 +250,6 @@ export default function Hero() {
 
       {card && <StickerCard sticker={card.s} origin={card.el} onClosed={() => setCard(null)} />}
 
-      {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
-      <a
-        href="#seasonal-picks"
-        className={`${styles.cue} ${picksInView ? styles.cueAway : ""}`}
-        tabIndex={picksInView ? -1 : undefined}
-      >
-        <span className={styles.cueInner}>
-          <span>start shopping</span>
-          <svg className={styles.cueArrow} width="25" height="14" viewBox="0 0 25 14" fill="none" aria-hidden="true">
-            <path d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        </span>
-      </a>
     </section>
   );
 }
