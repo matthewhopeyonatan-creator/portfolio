@@ -12,6 +12,13 @@ export const cartLink = {
   ariaLabel: "Get in touch by email",
 };
 
+// Footer social links. TODO: add the X handle.
+export const socialLinks = [
+  { label: "Email", href: "mailto:matthew.hope.yonatan@gmail.com" },
+  { label: "Instagram", href: "https://www.instagram.com/hoepey.ai" },
+  { label: "X", href: "" },
+];
+
 export type Project = {
   slug: string;
   title: string;

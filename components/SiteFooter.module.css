@@ -1,0 +1,139 @@
+/* Figma "Frame 35" (footer): 512 tall, #91230A, white type.
+   Sign: Host Grotesk ExtraBold Italic 254.8px / 238.8 line, 30 from the top.
+   Nav: 36px Bold caps, gap 4, at x53 · Socials: 24px SemiBold caps, gap 52, right edge 69 in;
+   both rows end 54 above the bottom. */
+.footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(512 * var(--u));
+  padding-top: calc(30 * var(--u));
+  background: var(--color-accent);
+  color: var(--color-paper);
+  overflow: hidden;
+}
+
+/* ── LED-style sign ─────────────────────────────────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 18s linear infinite;
+}
+
+.run {
+  display: flex;
+  flex: none;
+}
+
+.word {
+  flex: none;
+  padding-right: 0.35em;
+  font-size: max(72px, calc(254.773 * var(--u)));
+  font-weight: 800;
+  font-style: italic;
+  line-height: 0.9375; /* 238.85 / 254.77 */
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+/* one run = two signs; moving left by exactly one run makes the loop seamless */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Links ──────────────────────────────────────────────────────────────────────── */
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 0 calc(69 * var(--u)) calc(54 * var(--u)) calc(53 * var(--u));
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navLink,
+.social {
+  position: relative;
+  width: fit-content;
+  line-height: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.navLink {
+  font-size: max(20px, calc(36 * var(--u)));
+  font-weight: 700;
+}
+
+.socials {
+  display: flex;
+  gap: max(24px, calc(52 * var(--u)));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social {
+  display: block;
+  font-size: max(14px, calc(24 * var(--u)));
+  font-weight: 600;
+}
+
+.navLink::after,
+a.social::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.navLink:hover::after,
+a.social:hover::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 767px) {
+  .footer {
+    min-height: 0;
+    padding-top: 24px;
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 40px 16px 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+  .navLink::after,
+  a.social::after {
+    transition: none;
+  }
+}

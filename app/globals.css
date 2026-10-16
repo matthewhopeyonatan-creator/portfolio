@@ -9,7 +9,8 @@
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;
-  --color-accent: #e13c00; /* tomato orange — the hero pill */
+  --color-accent: #91230a; /* deep tomato red — hero pill + footer */
+  --color-paper: #fff;
   --rule: 2px solid var(--color-ink);
 
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */

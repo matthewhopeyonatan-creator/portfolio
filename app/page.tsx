@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import SiteFooter from "@/components/SiteFooter";
 import ProjectCard from "@/components/ProjectCard";
 import SiteHeader from "@/components/SiteHeader";
 import { projects } from "@/data/site";
@@ -26,6 +27,7 @@ export default function Home() {
         </section>
         <div className={styles.footerSpace} />
       </main>
+      <SiteFooter />
     </>
   );
 }
