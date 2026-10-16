@@ -13,7 +13,7 @@ import styles from "./Hero.module.css";
  * tomatoes drop in largest → smallest, then the headline lines rise in, then the navbar, the sticker peel hint and the cue.
  */
 const tomatoes = {
-  small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 1047.68, y: -145.26, dw: 621.5, dh: 645, opacity: 0.7, order: 3 },
+  small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 1047.68, y: -20, /* Figma −145.26, lowered so the navbar never crops it */ dw: 621.5, dh: 645, opacity: 0.7, order: 3 },
   right: { src: "/home/tomato-right-base.webp", w: 1438, h: 1347, x: 1108.82, y: 145.84, dw: 719, dh: 673.5, opacity: 0.9, order: 2 },
   mid: { src: "/home/tomato-mid-base.webp", w: 1501, h: 1579, x: 644.75, y: 275.77, dw: 750.5, dh: 789.5, opacity: 1, order: 1 },
   left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 136.44, /* Figma 246.44, raised so the Jakarta sticker stays on screen */ dw: 891, dh: 848.5, opacity: 1, order: 0 },
