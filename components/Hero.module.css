@@ -9,20 +9,19 @@
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.6s
      2. tomatoes drop in, largest → smallest                                     2.35s →
-     3. "(matthew is)" + traits type in, serif → sans (Hero.tsx)                 3.5s →
-     4. navbar (SiteHeader) and the "start shopping" cue                        ~4.1s → */
+     3. headline, line by line                                                  3.3s →
+     4. navbar (SiteHeader)                                                     4.1s →
+     5. sticker peel hint                                                       5.1s →
+     6. "start shopping" cue                                                    5.7s → */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --intro-dur: 2600ms;
-  --tomato-start: 2350ms;
+  --tomato-start: 2350ms; /* 4 tomatoes, largest → smallest */
   --tomato-dur: 1250ms;
   --tomato-stagger: 200ms;
-  --text-delay: 3500ms;
-  --cue-delay: 4400ms;
+  --text-delay: 3300ms;
   --peel-hint-delay: 5100ms; /* after the navbar (4.1s + 0.9s) has landed */
+  --cue-delay: 5700ms; /* last: after the sticker hint */
 
-  /* The text sits where Figma has it relative to the *viewport*, not just the band under the
-     navbar: lift it by half the navbar. */
-  --text-shift: calc(var(--header-h) / -2);
 
   position: relative;
   height: var(--hero-h);
@@ -38,10 +37,11 @@
   z-index: 4;
 }
 
-/* Artboard centred both ways (overflow trimmed evenly top and bottom on short screens). */
+/* Artboard pinned to the top of the band (the headline sits just under the navbar, like Figma);
+   on short screens the bottoms of the tomatoes run on under "Seasonal picks". */
 .canvas {
   position: absolute;
-  top: calc((var(--hero-h) - var(--art-h)) * 0.5);
+  top: 0;
   left: 50%;
   width: calc(1728 * var(--hu));
   height: var(--art-h);
@@ -167,76 +167,55 @@
   }
 }
 
-/* ── "(matthew is)" + the five traits ─────────────────────────────────────────────── */
-/* Figma: "(matthew is)" Host Grotesk Light Italic 20, -1.2 tracking, at (670, 407 − 131).
-   List at (701, 454 − 131): rows 12 apart, "[01]  " Regular 20 then 8 gap, then Light 32.
-   Every letter starts hidden, types in (random order) as serif, then settles into sans. */
-.intro {
+/* ── Headline — Figma 21:168: Host Grotesk Regular 64 / 60, -1.28 tracking, at (45, 168 − 131).
+   "Consumer driven," in full ink; the rest at 50%. Each line rises in after the tomatoes. ── */
+.headline {
   position: absolute;
-  left: calc(670 * var(--hu));
-  top: calc(276 * var(--hu) + var(--text-shift));
-  color: var(--color-ink);
-  white-space: nowrap;
-}
-
-.label {
+  left: calc(var(--gutter) + 5 * var(--hu));
+  top: calc(37 * var(--hu));
+  z-index: 2;
   margin: 0;
-  font-size: max(11px, calc(20 * var(--hu)));
-  font-weight: 300;
-  font-style: italic;
-  letter-spacing: -0.06em;
-  line-height: normal;
-}
-
-.traits {
-  display: flex;
-  flex-direction: column;
-  gap: calc(12 * var(--hu));
-  margin: calc(20 * var(--hu)) 0 0 calc(31 * var(--hu));
-  padding: 0;
-  list-style: none;
-}
-
-.trait {
-  display: flex;
-  align-items: flex-start;
-  gap: calc(8 * var(--hu));
-  cursor: default;
-}
-
-.num {
-  font-size: max(9px, calc(20 * var(--hu)));
+  font-size: max(20px, calc(64 * var(--hu)));
   font-weight: 400;
-  line-height: normal;
-  white-space: pre;
+  line-height: 0.9375; /* 60 / 64 */
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--color-ink);
 }
 
-.word {
-  font-size: max(14px, calc(32 * var(--hu)));
-  font-weight: 300;
-  line-height: normal;
+.line {
+  display: block;
+  opacity: 0;
 }
 
-/* one letter: hidden → serif → sans (data-f is flipped from JS) */
-.ch {
-  visibility: hidden;
-  white-space: pre;
+.dim {
+  color: rgba(40, 40, 40, 0.5);
 }
 
-.ch[data-f="serif"],
-.ch[data-f="sans"] {
-  visibility: visible;
+.play .line {
+  animation: lineIn 1100ms var(--ease-out) both;
+  animation-delay: var(--text-delay);
 }
 
-.ch[data-f="serif"] {
-  font-family: var(--font-display-stack);
-  font-weight: 400;
-  font-style: normal;
-  letter-spacing: 0;
+.play .line:nth-child(2) {
+  animation-delay: calc(var(--text-delay) + 140ms);
 }
 
-.chAlt[data-f="serif"] {
-  font-family: Georgia, "Times New Roman", serif;
+.play .line:nth-child(3) {
+  animation-delay: calc(var(--text-delay) + 280ms);
+}
+
+@keyframes lineIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 /* ── Open sign — drops in, then swings left/right and settles ─────────────────────── */
@@ -376,7 +355,6 @@
 @media (max-width: 767px), (orientation: portrait) {
   .hero {
     --hero-h: var(--art-h);
-    --text-shift: 0px; /* the band hugs the artwork here, so centre within it */
   }
   /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
   .cue {
@@ -390,7 +368,8 @@
     animation: none;
     visibility: hidden;
   }
-  .play .cue {
+  .play .cue,
+  .play .line {
     animation: fadeIn 400ms ease both;
   }
   .play .tomato {

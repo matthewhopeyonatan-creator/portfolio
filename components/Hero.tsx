@@ -7,15 +7,16 @@ import styles from "./Hero.module.css";
 /**
  * Hero artboard = Figma frame area below the header (1728 × 961 design px; frame y − 131).
  * Positions are Figma render bounds so each layer lands exactly where it sits in the frame.
- * Paint order matches Figma: small tomato → right tomato → Open sign → "(matthew is)" list → left tomato.
+ * Paint order matches Figma: small → right → middle → left tomato, then the headline on top.
  *
  * Load sequence: the Open sign drops in big at the centre, swings, and falls away; then the
- * tomatoes drop in largest → smallest, then the traits type in (then the navbar and cue).
+ * tomatoes drop in largest → smallest, then the headline lines rise in, then the navbar, the sticker peel hint and the cue.
  */
 const tomatoes = {
-  small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 948.68, y: 87.74, dw: 621.5, dh: 645, opacity: 0.7, order: 2 },
-  right: { src: "/home/tomato-right-base.webp", w: 1438, h: 1347, x: 1108.82, y: 299.84, dw: 719, dh: 673.5, opacity: 1, order: 1 },
-  left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 192.44, dw: 891, dh: 848.5, opacity: 1, order: 0 },
+  small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 1047.68, y: -145.26, dw: 621.5, dh: 645, opacity: 0.7, order: 3 },
+  right: { src: "/home/tomato-right-base.webp", w: 1438, h: 1347, x: 1108.82, y: 145.84, dw: 719, dh: 673.5, opacity: 0.9, order: 2 },
+  mid: { src: "/home/tomato-mid-base.webp", w: 1501, h: 1579, x: 644.75, y: 275.77, dw: 750.5, dh: 789.5, opacity: 1, order: 1 },
+  left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 246.44, dw: 891, dh: 848.5, opacity: 1, order: 0 },
 };
 
 /**
@@ -29,7 +30,7 @@ const stickers: Record<string, { src: string; w: number; h: number; x: number; y
     { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717" },
     { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025" },
   ],
-  right: [{ src: "/home/sticker-nyu.webp", w: 185.7, h: 202.3, x: 398.18, y: 319.16, peel: 111, label: "NYU design YR 2027" }],
+  mid: [{ src: "/home/sticker-nyu-2.webp", w: 223, h: 235, x: 397.07, y: 184.87, peel: 128, label: "NYU design YR 2027" }],
 };
 
 function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
@@ -48,18 +49,6 @@ function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
     </div>
   );
 }
-
-// Figma "Frame 43": the five traits under "(matthew is)"
-export const traits = [
-  "Consumer focused",
-  "Research Driven",
-  "Visually expressive",
-  "Startup trained",
-  "Agile and versatile",
-];
-
-/** ms after the sequence starts — matches --text-delay in Hero.module.css */
-const TEXT_DELAY = 3500;
 
 type TomatoKey = keyof typeof tomatoes;
 
@@ -81,111 +70,6 @@ function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
     >
       <Image src={t.src} alt="" width={t.w} height={t.h} priority sizes="52vw" onLoad={onLoad} className={styles.tomatoImg} />
       {stickers[id]?.map((s) => <Sticker key={s.src} s={s} />)}
-    </div>
-  );
-}
-
-/** Text split into letters the typewriter can flip: hidden → serif → sans. */
-function Letters({ text }: { text: string }) {
-  return (
-    <>
-      {Array.from(text).map((c, i) => (
-        // the demo cut of Atelier Fleur has no square brackets — those letters use a fallback serif
-        <span key={i} className={`${styles.ch} ${c === "[" || c === "]" ? styles.chAlt : ""}`} data-ch="">
-          {c}
-        </span>
-      ))}
-    </>
-  );
-}
-
-/**
- * "(matthew is)" + the traits. Intro: each line's letters type in in random order as serif, then
- * each one settles into the sans. Hovering a trait flips its letters back to serif (and leaving
- * flips them back), each letter at a slightly random moment.
- */
-function TypeIntro({ play, delay }: { play: boolean; delay: number }) {
-  const root = useRef<HTMLDivElement>(null);
-  const timers = useRef(new Map<HTMLElement, number>());
-  const interactive = useRef(false);
-
-  // set a letter's face after `ms`, replacing anything still pending for that letter
-  const flip = (el: HTMLElement, f: string, ms: number, then?: () => void) => {
-    const t = timers.current;
-    const pending = t.get(el);
-    if (pending) window.clearTimeout(pending);
-    t.set(
-      el,
-      window.setTimeout(() => {
-        t.delete(el);
-        el.dataset.f = f;
-        then?.();
-      }, ms),
-    );
-  };
-
-  useEffect(() => {
-    const el = root.current;
-    if (!play || !el) return;
-    const lines = Array.from(el.querySelectorAll<HTMLElement>("[data-line]"));
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.querySelectorAll<HTMLElement>("[data-ch]").forEach((c) => (c.dataset.f = "sans"));
-      interactive.current = true;
-      return;
-    }
-    let last = 0;
-    lines.forEach((line, li) => {
-      const start = delay + li * 150;
-      line.querySelectorAll<HTMLElement>("[data-ch]").forEach((c) => {
-        const typed = start + Math.random() * 650; // random-order typing
-        const settled = 280 + Math.random() * 520; // how long it stays serif
-        last = Math.max(last, typed + settled);
-        flip(c, "serif", typed, () => flip(c, "sans", settled));
-      });
-    });
-    const t = window.setTimeout(() => (interactive.current = true), last + 50);
-    const pending = timers.current;
-    return () => {
-      window.clearTimeout(t);
-      pending.forEach((id) => window.clearTimeout(id));
-      pending.clear();
-    };
-  }, [play, delay]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const hover = (f: "serif" | "sans") => (e: React.MouseEvent<HTMLElement>) => {
-    if (!interactive.current) return;
-    e.currentTarget
-      .querySelectorAll<HTMLElement>("[data-ch]")
-      .forEach((c) => flip(c, f, Math.random() * 220));
-  };
-
-  return (
-    <div ref={root} className={styles.intro}>
-      <p className={styles.label} data-line="">
-        <span className="visually-hidden">Matthew is:</span>
-        <span aria-hidden="true">
-          <Letters text="(matthew is)" />
-        </span>
-      </p>
-      <ol className={styles.traits}>
-        {traits.map((trait, i) => (
-          <li
-            key={trait}
-            className={styles.trait}
-            data-line=""
-            onMouseEnter={hover("serif")}
-            onMouseLeave={hover("sans")}
-          >
-            <span className="visually-hidden">{trait}</span>
-            <span className={styles.num} aria-hidden="true">
-              <Letters text={`[${String(i + 1).padStart(2, "0")}]`} />
-            </span>
-            <span className={styles.word} aria-hidden="true">
-              <Letters text={trait} />
-            </span>
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }
@@ -262,11 +146,13 @@ export default function Hero() {
       aria-label="Intro"
     >
       <noscript>
-        <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}.${styles.ch}{visibility:visible!important}#seasonal-picks,.page-after-hero{opacity:1!important}`}</style>
+        <style>{`.${styles.hero} .${styles.layer}{opacity:1!important;animation:none!important}#seasonal-picks,.page-after-hero{opacity:1!important}`}</style>
       </noscript>
       <div className={styles.canvas}>
         <Tomato id="small" onLoad={onLoad} />
         <Tomato id="right" onLoad={onLoad} />
+        <Tomato id="mid" onLoad={onLoad} />
+        <Tomato id="left" onLoad={onLoad} />
 
         <div ref={signRef} className={`${styles.layer} ${styles.sign}`} aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -274,9 +160,15 @@ export default function Hero() {
         </div>
 
         <h1 className="visually-hidden">hope’s grocer — the portfolio of Matthew Hope, product designer</h1>
-        <TypeIntro play={ready} delay={TEXT_DELAY} />
+        {/* Figma 21:168 — 64px Regular, 60 leading; the first phrase in full ink, the rest at 50% */}
+        <p className={styles.headline}>
+          <span className={styles.line}>
+            Consumer driven, <span className={styles.dim}>research driven,</span>
+          </span>
+          <span className={`${styles.line} ${styles.dim}`}>visually expressive, startup trained,</span>
+          <span className={`${styles.line} ${styles.dim}`}>agile and versatile</span>
+        </p>
 
-        <Tomato id="left" onLoad={onLoad} />
       </div>
 
       {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
