@@ -63,11 +63,69 @@
   pointer-events: none;
 }
 
-.tomato img {
+.tomatoImg {
   display: block;
   width: 100%;
   height: 100%;
   max-width: none;
+}
+
+/* ── Fruit stickers: on hover the lower-right corner peels back ────────────────────────
+   The face is clipped along a 45° fold line; the cut-off corner is mirrored across that line
+   as the sticker's pale backing, with a soft shadow. --peel (registered in globals.css so it can
+   animate) is how far the fold has travelled from the corner. */
+.sticker {
+  position: absolute;
+  left: calc(var(--sx) * var(--hu));
+  top: calc(var(--sy) * var(--hu));
+  width: calc(var(--sw) * var(--hu));
+  height: calc(var(--sh) * var(--hu));
+  pointer-events: auto;
+  --peel: 0px;
+  transition: --peel 420ms cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .sticker:hover {
+    --peel: calc(var(--pd) * var(--hu));
+    transition-duration: 520ms;
+  }
+}
+
+.stickerFace,
+.stickerFlap {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  user-select: none;
+}
+
+.stickerFace {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--peel)),
+    calc(100% - var(--peel)) 100%,
+    0 100%
+  );
+}
+
+/* the folded-back corner: reflected across the fold line, shadow falls onto the sticker */
+.stickerFlapWrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: 100% calc(100% - var(--peel));
+  transform: rotate(-45deg) scaleY(-1) rotate(45deg);
+  filter: drop-shadow(1.5px 1.5px 2px rgba(40, 40, 40, 0.35));
+}
+
+.stickerFlap {
+  clip-path: polygon(100% calc(100% - var(--peel)), 100% 100%, calc(100% - var(--peel)) 100%);
+  filter: brightness(0) invert(0.95);
 }
 
 /* Drop in from above, largest first (--i = 0 largest … 2 smallest) */

@@ -1,4 +1,11 @@
 /* Design tokens — from Figma "Matthew Hope Portfolio 2", frame "MacBook Pro 16' - 1" (1728px wide) */
+/* animatable fold distance for the hero's sticker peel */
+@property --peel {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;

@@ -14,9 +14,40 @@ import styles from "./Hero.module.css";
  */
 const tomatoes = {
   small: { src: "/home/tomato-small.webp", w: 1243, h: 1290, x: 948.68, y: 87.74, dw: 621.5, dh: 645, opacity: 0.7, order: 2 },
-  right: { src: "/home/tomato-right.webp", w: 1239, h: 1347, x: 1108.82, y: 299.84, dw: 619.5, dh: 673.5, opacity: 1, order: 1 },
-  left: { src: "/home/tomato-left-v2.webp", w: 1392, h: 1697, x: 0, y: 192.44, dw: 696, dh: 848.5, opacity: 1, order: 0 },
+  right: { src: "/home/tomato-right-base.webp", w: 1438, h: 1347, x: 1108.82, y: 299.84, dw: 719, dh: 673.5, opacity: 1, order: 1 },
+  left: { src: "/home/tomato-left-base.webp", w: 1782, h: 1697, x: -195, y: 192.44, dw: 891, dh: 848.5, opacity: 1, order: 0 },
 };
+
+/**
+ * Fruit stickers, positioned on their tomato (design px from the tomato image's top-left; Figma
+ * render bounds). `peel` = how far the lower-right fold travels on hover, tuned per shape so it
+ * cuts ~27px into each sticker.
+ */
+const stickers: Record<string, { src: string; w: number; h: number; x: number; y: number; peel: number; label: string }[]> = {
+  left: [
+    { src: "/home/sticker-crowdvolt.webp", w: 225.3, h: 192.3, x: 200, y: 258.56, peel: 106, label: "CrowdVolt #2627" },
+    { src: "/home/sticker-jakarta.webp", w: 256.3, h: 250, x: 438, y: 463.77, peel: 154, label: "Born and raised Jakarta 0717" },
+    { src: "/home/sticker-cornell.webp", w: 140, h: 176.7, x: 599, y: 377.56, peel: 57, label: "Cornell Agriculture #2025" },
+  ],
+  right: [{ src: "/home/sticker-nyu.webp", w: 185.7, h: 202.3, x: 398.18, y: 319.16, peel: 111, label: "NYU design YR 2027" }],
+};
+
+function Sticker({ s }: { s: (typeof stickers)["left"][number] }) {
+  return (
+    <div
+      className={styles.sticker}
+      title={s.label}
+      style={{ "--sx": s.x, "--sy": s.y, "--sw": s.w, "--sh": s.h, "--pd": s.peel } as React.CSSProperties}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className={styles.stickerFace} src={s.src} alt="" draggable={false} />
+      <span className={styles.stickerFlapWrap} aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.stickerFlap} src={s.src} alt="" draggable={false} />
+      </span>
+    </div>
+  );
+}
 
 export const taglines = [
   "Research-driven",
@@ -46,7 +77,8 @@ function Tomato({ id, onLoad }: { id: TomatoKey; onLoad: () => void }) {
         } as React.CSSProperties
       }
     >
-      <Image src={t.src} alt="" width={t.w} height={t.h} priority sizes="42vw" onLoad={onLoad} />
+      <Image src={t.src} alt="" width={t.w} height={t.h} priority sizes="52vw" onLoad={onLoad} className={styles.tomatoImg} />
+      {stickers[id]?.map((s) => <Sticker key={s.src} s={s} />)}
     </div>
   );
 }
