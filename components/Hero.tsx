@@ -78,6 +78,7 @@ const stickers: Record<
     title: string;
     story?: string;
     lessons?: string[];
+    inset?: [number, number];
   }[]
 > = {
   left: [
@@ -112,6 +113,7 @@ const stickers: Record<
       y: 377.56,
       peel: 57,
       label: "Cornell Agriculture #2025",
+      inset: [22, 20], // its tilted corner otherwise touches the photo's corner
       title: "Cornell",
     },
   ],

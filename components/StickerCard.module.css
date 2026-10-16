@@ -35,20 +35,23 @@
   animation: cardIn 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
+/* 24px margin on every edge of the card; the photo keeps Figma's width */
 .media {
+  --edge: 24px;
   position: absolute;
-  left: calc(22 * var(--c));
-  top: calc(22 * var(--c));
+  left: var(--edge);
+  top: var(--edge);
+  bottom: var(--edge);
   width: calc(447 * var(--c));
-  height: calc(562 * var(--c));
   background: #a0a0a0;
 }
 
 /* tucked into the photo's top-left corner (Figma has it at 37, 32 — nudged closer) */
 .slot {
   position: absolute;
-  left: calc(27 * var(--c));
-  top: calc(25 * var(--c));
+  /* --ox/--oy: per-sticker extra room from the photo's corner (design px) */
+  left: calc(24px + var(--ox, 5) * var(--c));
+  top: calc(24px + var(--oy, 3) * var(--c));
   width: calc(var(--sw) * var(--c));
   height: calc(var(--sh) * var(--c));
   visibility: hidden;
@@ -71,9 +74,9 @@
    running into it (Figma: title at y22, copy at y95) */
 .copy {
   position: absolute;
-  left: calc(489 * var(--c));
-  top: calc(22 * var(--c));
-  width: calc(440 * var(--c)); /* leaves a wider margin on the right than Figma's 22 */
+  left: calc(24px + 447 * var(--c) + 24px);
+  right: 24px;
+  top: 24px;
   display: flex;
   flex-direction: column;
   gap: calc(28 * var(--c));
@@ -98,10 +101,11 @@
 
 .lessons {
   position: absolute;
-  left: calc(489 * var(--c));
-  top: calc(534 * var(--c));
+  left: calc(24px + 447 * var(--c) + 24px);
+  right: 24px;
+  bottom: 24px;
   display: grid;
-  grid-template-columns: repeat(3, calc(440 * var(--c) / 3));
+  grid-template-columns: repeat(3, 1fr);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -194,7 +198,7 @@
     gap: 16px;
     height: auto;
     max-height: calc(100svh - 140px);
-    padding: 12px 12px 20px;
+    padding: 24px;
     overflow-y: auto;
   }
   .media {
@@ -207,14 +211,12 @@
   }
   .slot {
     --c: calc(92vw / 640); /* a little bigger on small screens */
-    left: 15px;
-    top: 15px;
+    left: 30px;
+    top: 30px;
   }
   .copy {
     position: static;
-    width: auto;
     gap: 12px;
-    padding: 0 4px;
   }
   .title {
     font-size: 22px;

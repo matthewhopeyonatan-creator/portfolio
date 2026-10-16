@@ -19,6 +19,8 @@ export type CardSticker = {
   /** card heading (placeholder until the real copy is in) */
   title?: string;
   story?: string;
+  /** extra room from the photo's top-left corner on the card, design px (default 5, 3) */
+  inset?: [number, number];
   /** the three notes along the bottom of the card */
   lessons?: string[];
 };
@@ -140,6 +142,8 @@ export default function StickerCard({
           {
             "--sw": sticker.w * CARD_SCALE,
             "--sh": sticker.h * CARD_SCALE,
+            "--ox": sticker.inset?.[0],
+            "--oy": sticker.inset?.[1],
           } as React.CSSProperties
         }
       >
