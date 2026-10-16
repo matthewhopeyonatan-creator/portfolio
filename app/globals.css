@@ -17,7 +17,7 @@
   --u: calc(100vw / 1728);
 
   /* compact desktop header height, incl. 2px rule */
-  --header-h: clamp(60px, 4.4vw, 76px);
+  --header-h: clamp(52px, 3.7vw, 64px);
 
   /* page side margins — everything lines up on these */
   --gutter: 40px;

@@ -10,20 +10,20 @@
   --hero-h: max(var(--screen-h), calc(1060 * var(--hu)));
 
   /* load sequence timing (all measured from when the sequence starts)
-     1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.6s
-     2. tomatoes drop in, largest → smallest                                     2.35s →
-     3. headline, line by line                                                  3.3s →
-     4. navbar (SiteHeader)                                                     4.1s →
-     5. sticker peel hint                                                       5.1s →
-     6. "start shopping" cue                                                    5.7s → */
+     1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.0s
+     2. tomatoes drop in, largest → smallest                                     1.75s →
+     3. headline, line by line                                                  2.7s →
+     4. navbar (SiteHeader)                                                     3.5s →
+     5. sticker peel hint                                                       4.5s →
+     6. "start shopping" cue                                                    5.1s → */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --intro-dur: 2600ms;
-  --tomato-start: 2350ms; /* 4 tomatoes, largest → smallest */
+  --intro-dur: 2000ms;
+  --tomato-start: 1750ms; /* 4 tomatoes, largest → smallest */
   --tomato-dur: 1250ms;
   --tomato-stagger: 200ms;
-  --text-delay: 3300ms;
-  --peel-hint-delay: 5100ms; /* after the navbar (4.1s + 0.9s) has landed */
-  --cue-delay: 5700ms; /* last: after the sticker hint */
+  --text-delay: 2700ms;
+  --peel-hint-delay: 4500ms; /* after the navbar (3.5s + 0.9s) has landed */
+  --cue-delay: 5100ms; /* last: after the sticker hint */
 
 
   position: relative;
@@ -190,7 +190,7 @@
   top: calc(37 * var(--hu));
   z-index: 2;
   margin: 0;
-  font-size: max(20px, calc(64 * var(--hu)));
+  font-size: max(18px, calc(56 * var(--hu)));
   font-weight: 400;
   line-height: 0.9375; /* 60 / 64 */
   letter-spacing: -0.02em;

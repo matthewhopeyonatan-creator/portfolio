@@ -136,7 +136,7 @@ export default function Hero() {
         setIntroRunning(false);
         document.documentElement.dataset.intro = "done"; // reveals the rest of the page
       },
-      reduce ? 0 : 2600,
+      reduce ? 0 : 2000,
     );
   };
 
@@ -156,7 +156,7 @@ export default function Hero() {
     let interval = 0;
     const startAt = window.setTimeout(() => {
       interval = window.setInterval(() => setActivePhrase((i) => (i + 1) % phrases.length), 1000);
-    }, 4200);
+    }, 3600);
     return () => {
       window.clearTimeout(startAt);
       window.clearInterval(interval);
