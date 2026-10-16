@@ -10,20 +10,20 @@
   --hero-h: max(var(--screen-h), calc(1060 * var(--hu)));
 
   /* load sequence timing (all measured from when the sequence starts)
-     1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.0s
-     2. tomatoes drop in, largest → smallest                                     1.75s →
-     3. headline, line by line                                                  2.7s →
-     4. navbar (SiteHeader)                                                     3.5s →
-     5. sticker peel hint                                                       4.5s →
-     6. "start shopping" cue                                                    5.1s → */
+     1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.8s
+     2. tomatoes drop in, largest → smallest                                     2.35s →
+     3. headline, line by line                                                  3.3s →
+     4. navbar (SiteHeader)                                                     4.1s →
+     5. sticker peel hint                                                       5.1s →
+     6. "start shopping" cue                                                    5.7s → */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --intro-dur: 2000ms;
-  --tomato-start: 1750ms; /* 4 tomatoes, largest → smallest */
+  --intro-dur: 2800ms;
+  --tomato-start: 2350ms; /* 4 tomatoes, largest → smallest */
   --tomato-dur: 1700ms;
   --tomato-stagger: 180ms;
-  --text-delay: 2700ms;
-  --peel-hint-delay: 4500ms; /* after the navbar (3.5s + 0.9s) has landed */
-  --cue-delay: 5100ms; /* last: after the sticker hint */
+  --text-delay: 3300ms;
+  --peel-hint-delay: 5100ms; /* after the navbar (4.1s + 0.9s) has landed */
+  --cue-delay: 5700ms; /* last: after the sticker hint */
 
 
   position: relative;
@@ -80,12 +80,14 @@
    The face is clipped along a 45° fold line; the cut-off corner is mirrored across that line
    as the sticker's pale backing, with a soft shadow. --peel (registered in globals.css so it can
    animate) is how far the fold has travelled from the corner. */
+/* --ss shrinks every sticker a touch from its Figma size, around its own centre */
 .sticker {
+  --ss: 0.88;
   position: absolute;
-  left: calc(var(--sx) * var(--hu));
-  top: calc(var(--sy) * var(--hu));
-  width: calc(var(--sw) * var(--hu));
-  height: calc(var(--sh) * var(--hu));
+  left: calc((var(--sx) + var(--sw) * (1 - var(--ss)) / 2) * var(--hu));
+  top: calc((var(--sy) + var(--sh) * (1 - var(--ss)) / 2) * var(--hu));
+  width: calc(var(--sw) * var(--ss) * var(--hu));
+  height: calc(var(--sh) * var(--ss) * var(--hu));
   pointer-events: auto;
   padding: 0;
   border: 0;
@@ -114,13 +116,13 @@
   }
   30%,
   65% {
-    --peel: calc(var(--pd) * var(--hu)); /* same as the hover peel */
+    --peel: calc(var(--pd) * var(--ss) * var(--hu)); /* same as the hover peel */
   }
 }
 
 @media (hover: hover) {
   .sticker:hover {
-    --peel: calc(var(--pd) * var(--hu));
+    --peel: calc(var(--pd) * var(--ss) * var(--hu));
     transition-duration: 520ms;
   }
 }
@@ -272,40 +274,51 @@
   pointer-events: none;
 }
 
+/* Movement and fade are separate animations so each keeps its own easing. The swing uses
+   sine-like easing between turns, so it reads as a pendulum settling rather than hard stops. */
 .play .sign {
-  animation: signIntro var(--intro-dur) both;
+  animation:
+    signMove var(--intro-dur) both,
+    signFade var(--intro-dur) linear both;
 }
 
-@keyframes signIntro {
+@keyframes signMove {
   0% {
-    opacity: 0;
-    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 70vh)) scale(var(--is, 1)) rotate(0deg);
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 65vh)) scale(var(--is, 1)) rotate(-5deg);
+    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* long, soft landing */
   }
-  8% {
-    opacity: 1;
-  }
-  30% {
-    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(5deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  32% {
+    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(4deg);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
   }
   48% {
-    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(-3.5deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(-2.5deg);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
   }
-  64% {
-    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(1.5deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  62% {
+    transform: translate(var(--ix, 0px), var(--iy, 0px)) scale(var(--is, 1)) rotate(1.2deg);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
   }
-  72% {
+  73% {
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 1.5vh)) scale(var(--is, 1)) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0); /* gathers speed as it drops away */
+  }
+  100% {
+    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) + 95vh)) scale(var(--is, 1)) rotate(-3deg);
+  }
+}
+
+@keyframes signFade {
+  0% {
+    opacity: 0;
+  }
+  10%,
+  88% {
     opacity: 1;
-    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) - 2vh)) scale(var(--is, 1)) rotate(0deg);
-    animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.2);
   }
   100% {
     opacity: 0;
     visibility: hidden;
-    transform: translate(var(--ix, 0px), calc(var(--iy, 0px) + 90vh)) scale(var(--is, 1)) rotate(-4deg);
   }
 }
 

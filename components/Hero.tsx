@@ -296,7 +296,7 @@ export default function Hero() {
         setIntroRunning(false);
         document.documentElement.dataset.intro = "done"; // reveals the rest of the page
       },
-      reduce ? 0 : 2000,
+      reduce ? 0 : 2800,
     );
   };
 
@@ -319,7 +319,7 @@ export default function Hero() {
         () => setActivePhrase((i) => (i + 1) % phrases.length),
         1000,
       );
-    }, 3600);
+    }, 4200);
     return () => {
       window.clearTimeout(startAt);
       window.clearInterval(interval);

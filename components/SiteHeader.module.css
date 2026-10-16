@@ -25,7 +25,7 @@
 }
 
 .introPlaying {
-  animation: headerIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 3500ms both;
+  animation: headerIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 4100ms both;
 }
 
 @keyframes headerIn {
