@@ -1,15 +1,15 @@
-/* Figma "Frame 35" (footer): 512 tall, #91230A, white type.
-   Sign: Host Grotesk ExtraBold Italic 200px, copies 27 apart; the band starts ~18 above its caps.
+/* Figma "Frame 35" (footer): page colour with a 2px ink rule on top, ink type.
+   Sign: Host Grotesk Italic 200px, copies 27 apart; the rule sits ~50 above its caps.
    Nav: 24px Bold caps, gap 4 · Socials: 20px SemiBold caps, gap 52 · both on the 40px gutters,
    nav ending 34 and socials 29 above the bottom. */
 .footer {
   position: relative;
   display: flex;
   flex-direction: column;
-  /* the red starts just above the sign's capitals */
-  padding-top: max(10px, calc(18 * var(--u)));
-  background: var(--color-accent);
-  color: var(--color-paper);
+  /* the rule sits a little above the sign's capitals */
+  padding-top: max(20px, calc(50 * var(--u)));
+  border-top: var(--rule);
+  color: var(--color-ink);
   overflow: hidden;
 }
 
@@ -36,7 +36,7 @@
   flex: none;
   padding-right: 0.135em; /* 27px at 200px */
   font-size: max(64px, calc(200 * var(--u)));
-  font-weight: 800;
+  font-weight: 400;
   font-style: italic;
   line-height: 1;
   /* measure from the capitals themselves, not the font's built-in leading */
@@ -121,7 +121,7 @@ a.social:hover::after {
 
 @media (max-width: 767px) {
   .footer {
-    padding-top: 12px;
+    padding-top: 20px;
   }
 
   .bottom {

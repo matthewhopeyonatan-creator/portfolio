@@ -4,7 +4,7 @@ import styles from "./SiteFooter.module.css";
 
 const SIGN = "hope’s grocer";
 
-/** Figma "Frame 35": red band, a scrolling LED-style "HOPE'S GROCER" sign, nav + socials. */
+/** Figma "Frame 35": a 2px rule on the page colour, a scrolling LED-style "HOPE'S GROCER" sign, nav + socials. */
 export default function SiteFooter() {
   return (
     <footer className={styles.footer}>
