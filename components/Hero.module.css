@@ -279,11 +279,72 @@
   }
 }
 
+/* ── "start shopping" cue — bottom-centre of the screen (Figma: 56px above the band's end) ── */
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: max(24px, calc(56 * var(--hu)));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: max(8px, calc(15 * var(--hu)));
+  padding: 8px 4px;
+  font-size: max(15px, calc(24 * var(--hu)));
+  line-height: normal;
+  color: var(--color-ink);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+.cueArrow {
+  width: max(16px, calc(25 * var(--hu)));
+  height: auto;
+  overflow: visible;
+  transition: transform 300ms var(--ease-out);
+}
+
+/* fades up with the end of the sequence, then the arrow gently bobs */
+.play .cue {
+  animation: cueIn 900ms var(--ease-out) both;
+  animation-delay: calc(var(--sign-delay) + 500ms);
+}
+
+.play .cueArrow {
+  animation: cueBob 1800ms ease-in-out infinite;
+  animation-delay: calc(var(--sign-delay) + 1400ms);
+}
+
+.cue:hover .cueArrow {
+  animation-play-state: paused;
+  transform: translateY(4px);
+}
+
+@keyframes cueIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes cueBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
 /* Phones and portrait screens: a full-height band would mostly be empty space around the
    composition, so the band hugs the artwork instead. */
 @media (max-width: 767px), (orientation: portrait) {
   .hero {
     --hero-h: var(--art-h);
+  }
+  /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
+  .cue {
+    display: none;
   }
 }
 
@@ -291,7 +352,8 @@
 @media (prefers-reduced-motion: reduce) {
   .play .name,
   .play .tagline,
-  .play .sign {
+  .play .sign,
+  .play .cue {
     animation: fadeIn 400ms ease both;
   }
   .play .tomato {
@@ -305,6 +367,9 @@
   }
   .pillWindow {
     transition: none;
+  }
+  .play .cueArrow {
+    animation: none;
   }
 }
 

@@ -151,6 +151,14 @@ export default function Hero() {
 
         <Tomato id="left" onLoad={onLoad} />
       </div>
+
+      {/* Figma "start shopping" cue — pinned to the bottom of the screen, scrolls to the projects */}
+      <a href="#seasonal-picks" className={styles.cue}>
+        <span>start shopping</span>
+        <svg className={styles.cueArrow} width="25" height="14" viewBox="0 0 25 14" fill="none" aria-hidden="true">
+          <path d="M0.707092 0.721985L12.2071 12.222L24.2071 0.721985" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      </a>
     </section>
   );
 }
