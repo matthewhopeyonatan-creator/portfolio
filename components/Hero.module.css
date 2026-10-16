@@ -1,24 +1,20 @@
-/* Figma: hero band between the rules at y130 and y1093 → 961 design px tall.
-   On screens shorter than the design's 16:10 artboard, the band shrinks so the rule under it
-   (and a sliver of "Seasonal picks") peeks above the fold, like the Figma frame. */
+/* Hero band. On desktop/tablet it fills the screen below the header (the rule under it sits just
+   past the fold), and the tomato artwork scales to cover the band — like background-size: cover.
+   Artboard = the Figma hero area, 1728 × 961 design px. */
 .hero {
-  --hu: var(--u);
+  --hero-h: calc(100svh - var(--header-h));
+  /* cover: scale so the artboard is at least as wide as the screen and as tall as the band */
+  --hu: max(var(--u), calc(var(--hero-h) / 961));
   --art-h: calc(961 * var(--hu));
-  /* show the whole "Seasonal picks" bar: 12px + text + 12px + 2px rule */
-  --peek: calc(26px + max(24px, calc(40 * var(--u))));
-  --hero-h: clamp(
-    calc(var(--art-h) * 0.62),
-    calc(100svh - var(--header-h) - var(--peek)),
-    var(--art-h)
-  );
   position: relative;
+  box-sizing: content-box; /* the 2px rule sits below the band, just out of view */
   height: var(--hero-h);
   overflow: hidden;
   border-bottom: var(--rule);
 }
 
-/* Fixed 1728-wide artboard, scaled by --hu and centred. When the band is shorter than the
-   artboard, the overflow is trimmed 60% from the top (empty space) and 40% from the bottom. */
+/* Artboard centred horizontally; any vertical overflow is trimmed 60% from the top (empty space)
+   and 40% from the bottom. */
 .canvas {
   position: absolute;
   top: calc((var(--hero-h) - var(--art-h)) * 0.6);
@@ -39,4 +35,11 @@
   pointer-events: none;
 }
 
-/* Phones: full composition scaled to width — it's short enough that nothing is cropped. */
+/* Phones and portrait screens: a full-screen cover crop would only show the empty gap between
+   the tomatoes, so show the whole composition scaled to the screen width instead. */
+@media (max-width: 767px), (orientation: portrait) {
+  .hero {
+    --hu: var(--u);
+    --hero-h: var(--art-h);
+  }
+}
