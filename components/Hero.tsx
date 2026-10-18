@@ -150,16 +150,16 @@ const stickers: Record<
       photos: [1, 2, 3, 4, 5, 6].map((n) => `/cards/fatboy-${n}.webp`),
     },
     {
-      src: "/home/sticker-25madison.webp",
+      src: "/home/sticker-design-meetup.webp",
       w: 280.5,
       h: 280.5,
       x: 383.18,
       y: 213.16,
       peel: 175,
-      label: "25madison design fellow",
+      label: "Design meetup",
       // the triangle only — its empty corners sit over the Fatboy sticker
       hit: "20.7% 72%, 24.2% 59%, 36.2% 24.2%, 38.7% 17.1%, 42.2% 13.5%, 46.9% 14.3%, 70.4% 41%, 83.6% 56.1%, 85.2% 61.5%, 82.4% 65.1%, 77.9% 66.1%, 38.7% 73.8%, 28.5% 75.8%, 22.8% 74.9%",
-      title: "25madison",
+      title: "Design Meetup",
     },
   ],
   mid: [
