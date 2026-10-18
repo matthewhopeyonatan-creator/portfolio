@@ -98,6 +98,7 @@ const stickers: Record<
       story:
         "Being my first in-person design internship made CrowdVolt a very special place to me, more so since I spent 9 months and 104 cups of coffee there. Working at a startup has taught me how to wear multiple hats and not to shy away when something is unfamiliar to me. Learning is always possible, and I owe it big time to a team so supportive of my growth. Whether I was creating event graphics or new product flows, no two days were the same. Truly a pivotal experience for me as a designer, and one that solidified my confidence in this industry.",
       lessons: ["Versatility", "Growth Mindset", "Ownership"],
+      photos: [1, 2, 3, 4, 5, 6].map((n) => `/cards/crowdvolt-${n}.webp`),
     },
     {
       src: "/home/sticker-jakarta.webp",
