@@ -94,7 +94,10 @@ const stickers: Record<
       y: 258.56,
       peel: 106,
       label: "CrowdVolt #YCW24",
-      title: "CrowdVolt",
+      title: "Shaping My Path",
+      story:
+        "Being my first in-person design internship made CrowdVolt a very special place to me, more so since I spent 9 months and 104 cups of coffee there. Working at a startup has taught me how to wear multiple hats and not to shy away when something is unfamiliar to me. Learning is always possible, and I owe it big time to a team so supportive of my growth. Whether I was creating event graphics or new product flows, no two days were the same. Truly a pivotal experience for me as a designer, and one that solidified my confidence in this industry.",
+      lessons: ["Versatility", "Growth Mindset", "Ownership"],
     },
     {
       src: "/home/sticker-jakarta.webp",
