@@ -175,6 +175,14 @@ const stickers: Record<
       story:
         "After a series of existential crises and feeling a gap in my career, I decided to pursue my master’s degree in Integrated Design and Media at NYU to delve deeper into multimedia design. Being in a completely different field than I was for the past 21 years of my life was difficult, but I know that design is where I am meant to be. I got to meet the brightest minds in design, work on meaningful products in the startup space, and challenge myself in learning things I had never touched before. Most importantly, living in New York City has allowed me to unlock inhumane amounts of frozen yogurt.",
       lessons: ["Agility", "Initiative", "Collaboration"],
+      photos: [
+        "/cards/nyu-1.webp",
+        "/cards/nyu-2.webp",
+        // tall shot: keep the people on stage in view
+        { src: "/cards/nyu-3.webp", focus: "50% 62%" },
+        "/cards/nyu-4.webp",
+        "/cards/nyu-5.webp",
+      ],
     },
   ],
 };
