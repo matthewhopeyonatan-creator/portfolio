@@ -171,7 +171,10 @@ const stickers: Record<
       y: 184.87,
       peel: 128,
       label: "NYU design YR 2027",
-      title: "NYU",
+      title: "Quarter Life Pivot",
+      story:
+        "After a series of existential crises and feeling a gap in my career, I decided to pursue my master’s degree in Integrated Design and Media at NYU to delve deeper into multimedia design. Being in a completely different field than I was for the past 21 years of my life was difficult, but I know that design is where I am meant to be. I got to meet the brightest minds in design, work on meaningful products in the startup space, and challenge myself in learning things I had never touched before.",
+      lessons: ["Agility", "Initiative", "Collaboration"],
     },
   ],
 };
