@@ -32,7 +32,8 @@
   top: calc((100svh - var(--w) * 903 / 1526) / 2);
   width: var(--w);
   height: calc(var(--w) * 903 / 1526);
-  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border: 2px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
@@ -193,12 +194,21 @@
 }
 
 /* ── full case study (expanded only) ────────────────────────────────────────────── */
+/* in the card: one column under the title section */
 .study {
   display: grid;
-  grid-template-columns: calc(380 * var(--pu)) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: calc(40 * var(--pu));
   padding: calc(40 * var(--pu)) calc(38 * var(--pu)) calc(160 * var(--pu));
   border-top: 2px solid var(--color-ink);
+}
+
+/* full screen: the tracker joins on the left */
+.expanded .study {
+  grid-template-columns: calc(380 * var(--pu)) minmax(0, 1fr);
+}
+
+.toc {
   animation: fadeUp 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 300ms both;
 }
 

@@ -105,7 +105,12 @@ export default function ProjectOverlay({
     if (!root || !el) return;
     const header =
       root.querySelector<HTMLElement>(`.${styles.header}`)?.offsetHeight ?? 0;
-    const top = root.scrollTop + el.getBoundingClientRect().top - root.getBoundingClientRect().top - header - 24;
+    const top =
+      root.scrollTop +
+      el.getBoundingClientRect().top -
+      root.getBoundingClientRect().top -
+      header -
+      24;
     root.scrollTo({ top, behavior: "smooth" });
   };
 
@@ -168,9 +173,9 @@ export default function ProjectOverlay({
           <div className={styles.hero} aria-hidden="true" />
         </section>
 
-        {/* full case study — only shown when expanded */}
-        {expanded && (
-          <div className={styles.study}>
+        {/* full case study — scrolls in the card too; the tracker only shows full screen */}
+        <div className={styles.study}>
+          {expanded && (
             <nav className={styles.toc} aria-label="On this page">
               <p className={styles.tocLabel}>On this page</p>
               <ol>
@@ -188,33 +193,33 @@ export default function ProjectOverlay({
                 ))}
               </ol>
             </nav>
-            <div className={styles.sections}>
-              {caseStudySections.map((name, i) => (
-                <section
-                  key={name}
-                  id={`${project.slug}-${slugify(name)}`}
-                  ref={(el) => {
-                    sectionRefs.current[i] = el;
-                  }}
-                  className={styles.section}
-                >
-                  <h3 className={styles.sectionTitle}>{name}</h3>
-                  <p>{LOREM}</p>
-                  <div className={styles.shot} aria-hidden="true" />
-                  <p>{LOREM}</p>
-                </section>
-              ))}
-              <a
-                className={styles.more}
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
+          )}
+          <div className={styles.sections}>
+            {caseStudySections.map((name, i) => (
+              <section
+                key={name}
+                id={`${project.slug}-${slugify(name)}`}
+                ref={(el) => {
+                  sectionRefs.current[i] = el;
+                }}
+                className={styles.section}
               >
-                Read the current case study ↗
-              </a>
-            </div>
+                <h3 className={styles.sectionTitle}>{name}</h3>
+                <p>{LOREM}</p>
+                <div className={styles.shot} aria-hidden="true" />
+                <p>{LOREM}</p>
+              </section>
+            ))}
+            <a
+              className={styles.more}
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read the current case study ↗
+            </a>
           </div>
-        )}
+        </div>
       </div>
     </div>,
     document.body,
