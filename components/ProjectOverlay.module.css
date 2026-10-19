@@ -303,6 +303,12 @@
   gap: calc(120 * var(--pu));
 }
 
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: calc(20 * var(--pu));
+}
+
 .section p {
   margin: 0;
   font-size: max(15px, calc(24 * var(--pu)));
@@ -316,6 +322,131 @@
   font-size: max(22px, calc(40 * var(--pu)));
   font-weight: 600;
   line-height: normal;
+}
+
+/* ── real case studies (data/caseStudies.ts) ─────────────────────────────────────── */
+.sectionLabel {
+  font-size: 16px !important;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.sectionLabel span {
+  font-size: 13px;
+}
+
+.section .sectionTitle {
+  margin: calc(28 * var(--pu)) 0 0;
+}
+
+.section .sectionTitle:first-of-type {
+  margin-top: 0;
+}
+
+.csSub {
+  margin: calc(20 * var(--pu)) 0 0;
+  font-size: max(18px, calc(28 * var(--pu)));
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.csKicker {
+  font-size: max(13px, calc(18 * var(--pu))) !important;
+  font-style: italic;
+}
+
+.section .csLead {
+  font-size: max(20px, calc(34 * var(--pu)));
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.csList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: max(15px, calc(24 * var(--pu)));
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.csChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.csChips li {
+  padding: 4px 12px;
+  border: 1px solid var(--color-ink);
+  border-radius: 24px;
+  font-size: max(13px, calc(18 * var(--pu)));
+  text-transform: uppercase;
+}
+
+.csFigure {
+  margin: calc(8 * var(--pu)) 0;
+}
+
+.csImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(16 * var(--pu));
+}
+
+.csRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(24 * var(--pu));
+}
+
+.csRow .csFigure {
+  margin: 0;
+}
+
+.csLogos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(16 * var(--pu));
+}
+
+.csLogos img {
+  width: auto;
+  height: max(40px, calc(64 * var(--pu)));
+  border-radius: calc(8 * var(--pu));
+}
+
+.csCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: calc(24 * var(--pu));
+}
+
+.csCard {
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 * var(--pu));
+  padding: calc(24 * var(--pu));
+  border: 1px solid var(--color-ink);
+  border-radius: calc(16 * var(--pu));
+}
+
+.csCard .csImg {
+  border-radius: calc(8 * var(--pu));
+}
+
+.section .csCardTitle {
+  font-weight: 600;
 }
 
 .shot {
@@ -413,6 +544,9 @@
   }
   .toc {
     display: none;
+  }
+  .csRow {
+    grid-template-columns: 1fr;
   }
 }
 

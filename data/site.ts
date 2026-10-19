@@ -66,27 +66,6 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "inquirer",
-    title: "The Philadelphia Inquirer",
-    subtitle: "News media personalization",
-    tags: [
-      "Consumer product",
-      "Personalization",
-      "User research",
-      "Mobile app",
-    ],
-    href: "https://matthew-hope.com/inky",
-    video: "/projects/inquirer.mp4",
-  },
-  {
-    slug: "shmood",
-    title: "Shmood",
-    subtitle: "Onboarding and dashboard for creatives",
-    tags: ["Consumer product", "Startup", "AI product", "Web"],
-    href: "https://matthew-hope.com/shmood",
-    video: "/projects/shmood.mp4",
-  },
-  {
     slug: "25madison",
     title: "25madison",
     subtitle: "Internal tool for streamlining branding",
@@ -110,6 +89,35 @@ export const projects: Project[] = [
       },
     ],
     soldOut: true,
+  },
+  {
+    slug: "shmood",
+    title: "Shmood",
+    subtitle: "Onboarding and dashboard for creatives",
+    tags: ["Consumer product", "Startup", "AI product", "Web"],
+    href: "https://www.behance.net/gallery/217571883/Shmood-x-DCC-FA24",
+    video: "/projects/shmood.mp4",
+    intro:
+      "Shmood is an AI-powered creative management tool: a project management platform that bridges the gap between designers and clients through centralized resources, smart communication, and AI-powered feedback synthesis. I owned its onboarding experience and user dashboard.",
+    facts: {
+      timeline: "Aug 2024 – Dec 2024",
+      role: "Product Designer",
+      type: "Professional",
+      team: "2 PMs, 5 Product Designers",
+    },
+  },
+  {
+    slug: "inquirer",
+    title: "The Philadelphia Inquirer",
+    subtitle: "News media personalization",
+    tags: [
+      "Consumer product",
+      "Personalization",
+      "User research",
+      "Mobile app",
+    ],
+    href: "https://matthew-hope.com/inky",
+    video: "/projects/inquirer.mp4",
   },
 ];
 

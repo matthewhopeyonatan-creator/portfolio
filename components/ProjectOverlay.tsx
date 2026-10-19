@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Lenis from "lenis";
 import { caseStudySections, type Project } from "@/data/site";
+import { caseStudies, type CaseBlock } from "@/data/caseStudies";
 import SiteHeader from "@/components/SiteHeader";
 import styles from "./ProjectOverlay.module.css";
 
@@ -17,6 +18,100 @@ const lockScroll = (on: boolean) => {
   document.documentElement.classList.toggle("modal-open", on);
   window.dispatchEvent(new CustomEvent("scroll-lock", { detail: on }));
 };
+
+/** One piece of a case study (see data/caseStudies.ts). */
+function Block({ b }: { b: CaseBlock }) {
+  const pic = (im: { src: string; w: number; h: number; alt: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={im.src}
+      alt={im.alt}
+      width={im.w}
+      height={im.h}
+      loading="lazy"
+      decoding="async"
+      className={styles.csImg}
+    />
+  );
+  switch (b.type) {
+    case "h":
+      return <h3 className={styles.sectionTitle}>{b.text}</h3>;
+    case "sub":
+      return <h4 className={styles.csSub}>{b.text}</h4>;
+    case "kicker":
+      return <p className={styles.csKicker}>{b.text}</p>;
+    case "lead":
+      return <p className={styles.csLead}>{b.text}</p>;
+    case "p":
+      return <p>{b.text}</p>;
+    case "list":
+      return (
+        <ul className={styles.csList}>
+          {b.items.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+      );
+    case "chips":
+      return (
+        <ul className={styles.csChips}>
+          {b.items.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+      );
+    case "img":
+      return <figure className={styles.csFigure}>{pic(b.image)}</figure>;
+    case "row":
+      return (
+        <div className={styles.csRow}>
+          {b.images.map((im) => (
+            <figure key={im.src} className={styles.csFigure}>
+              {pic(im)}
+            </figure>
+          ))}
+        </div>
+      );
+    case "logos":
+      return (
+        <div className={styles.csLogos}>
+          {b.images.map((im) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={im.src}
+              src={im.src}
+              alt={im.alt}
+              width={im.w}
+              height={im.h}
+            />
+          ))}
+        </div>
+      );
+    case "cards":
+      return (
+        <div className={styles.csCards}>
+          {b.items.map((c) => (
+            <div key={c.title} className={styles.csCard}>
+              {c.image ? pic(c.image) : null}
+              <p className={styles.csCardTitle}>{c.title}</p>
+              <p>{c.text}</p>
+            </div>
+          ))}
+        </div>
+      );
+    case "link":
+      return (
+        <a
+          className={styles.more}
+          href={b.href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {b.text}
+        </a>
+      );
+  }
+}
 
 function ExpandIcon({ expanded }: { expanded: boolean }) {
   // four corner arrows: pointing out to expand, pointing in to shrink back
@@ -137,7 +232,7 @@ export default function ProjectOverlay({
       });
       // at the very bottom, the last section wins
       if (root.scrollTop + root.clientHeight >= root.scrollHeight - 4)
-        at = caseStudySections.length - 1;
+        at = sectionRefs.current.length - 1;
       setActive(at);
     };
     onScroll();
@@ -167,6 +262,10 @@ export default function ProjectOverlay({
     if (lenisRef.current) lenisRef.current.scrollTo(top, { duration: 1.2 });
     else root.scrollTo({ top, behavior: "smooth" });
   };
+
+  // the project's real case study when there is one, otherwise placeholder sections
+  const study = caseStudies[project.slug];
+  const sectionNames = study ? study.map((sec) => sec.name) : caseStudySections;
 
   const f = project.facts;
   const facts: [string, string][] = [
@@ -199,7 +298,7 @@ export default function ProjectOverlay({
             // of its links leaves the case study; the cart opens over it.
             <div
               className={styles.siteNav}
-            data-overlay-nav
+              data-overlay-nav
               onClickCapture={(e) => {
                 const a = (e.target as HTMLElement).closest("a");
                 if (!a) return;
@@ -297,7 +396,7 @@ export default function ProjectOverlay({
                 {/* Figma 64:591 "Aisle Directory": [n] markers, serif names, the current one larger in red */}
                 <p className={styles.tocLabel}>Aisle Directory</p>
                 <ol>
-                  {caseStudySections.map((name, i) => (
+                  {sectionNames.map((name, i) => (
                     <li key={name} className={styles.tocRow}>
                       <span className={styles.tocNum} aria-hidden="true">
                         [{i + 1}]
@@ -316,7 +415,7 @@ export default function ProjectOverlay({
               </nav>
             )}
             <div className={styles.sections}>
-              {caseStudySections.map((name, i) => (
+              {sectionNames.map((name, i) => (
                 <section
                   key={name}
                   id={`${project.slug}-${slugify(name)}`}
@@ -325,20 +424,33 @@ export default function ProjectOverlay({
                   }}
                   className={styles.section}
                 >
-                  <h3 className={styles.sectionTitle}>{name}</h3>
-                  <p>{LOREM}</p>
-                  <div className={styles.shot} aria-hidden="true" />
-                  <p>{LOREM}</p>
+                  {study && (
+                    <p className={styles.sectionLabel}>
+                      <span aria-hidden="true">[{i + 1}]</span> {name}
+                    </p>
+                  )}
+                  {study ? (
+                    study[i].blocks.map((b, j) => <Block key={j} b={b} />)
+                  ) : (
+                    <>
+                      <h3 className={styles.sectionTitle}>{name}</h3>
+                      <p>{LOREM}</p>
+                      <div className={styles.shot} aria-hidden="true" />
+                      <p>{LOREM}</p>
+                    </>
+                  )}
                 </section>
               ))}
-              <a
-                className={styles.more}
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Read the current case study ↗
-              </a>
+              {!study && (
+                <a
+                  className={styles.more}
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read the current case study ↗
+                </a>
+              )}
             </div>
           </div>
         </div>
