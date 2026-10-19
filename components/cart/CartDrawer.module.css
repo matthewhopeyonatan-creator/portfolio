@@ -58,7 +58,7 @@
 .head {
   position: relative;
   flex: none;
-  padding-top: calc(4 * var(--cu));
+  padding-top: 0; /* the capitals sit right on the top edge of the screen */
 }
 
 .marquee {
