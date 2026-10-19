@@ -110,7 +110,7 @@ export const stickerItems = [
   },
 ];
 
-/** Everything the cart can hold, in the order it lists them: project packs, then stickers. */
+/** Everything the cart can hold, in the order it lists them: projects, then stickers. */
 export const cartCatalog: {
   key: string;
   name: string;
@@ -119,7 +119,7 @@ export const cartCatalog: {
 }[] = [
   ...projects.map((p) => ({
     key: p.slug,
-    name: `${p.title} Pack`,
+    name: p.title,
     image: p.cover?.src,
   })),
   ...stickerItems.map((s) => ({
