@@ -50,7 +50,6 @@ export const projects: Project[] = [
     tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
     href: "https://matthew-hope.com/crowdvolt",
     video: "/projects/crowdvolt.mp4",
-    badge: "/projects/crowdvolt-logo.webp",
     intro:
       "CrowdVolt is an electronic music ticket marketplace. Over nine months, I worked across product, graphics, social media, and event planning. Being at an early-stage company meant I got to own pieces of a lot of different flows and jump between roles, and this page covers the highlights.",
     facts: {
