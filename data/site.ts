@@ -27,6 +27,8 @@ export type Project = {
   video?: string;
   /** colour of the shot when there's no cover or video (default: the design's red) */
   shot?: string;
+  /** artwork laid on the shot, in Figma px of the 487 × 274 shot */
+  shotArt?: { src: string; left: number; top: number; width: number }[];
   /** red "SOLD OUT · on sale soon" banner slapped across the package (case study not out yet) */
   soldOut?: boolean;
   /** logo sitting on the shot, bottom right, inside the plastic wrap */
@@ -89,7 +91,22 @@ export const projects: Project[] = [
     tags: ["B2B", "AI tool", "Internal tool", "Startup incubation"],
     href: "https://matthew-hope.com",
     // Figma 21:136 / 78:2301: dark shot under the wrap, "sold out" banner across the pack
-    shot: "#282828",
+    shot: "#111",
+    // Figma 80:2345: the 25m mark at (62, 67) and the arcs from x200 on the 487 × 274 shot
+    shotArt: [
+      {
+        src: "/projects/25madison-mark.svg",
+        left: 62.014,
+        top: 67,
+        width: 100.988,
+      },
+      {
+        src: "/projects/25madison-arcs.svg",
+        left: 200.008,
+        top: 0,
+        width: 288,
+      },
+    ],
     soldOut: true,
   },
 ];

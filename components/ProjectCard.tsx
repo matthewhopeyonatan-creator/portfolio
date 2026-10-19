@@ -14,12 +14,14 @@ function WrappedTray({
   video,
   badge,
   shot,
+  shotArt,
   soldOut,
 }: {
   cover?: Project["cover"];
   video?: string;
   badge?: string;
   shot?: string;
+  shotArt?: Project["shotArt"];
   soldOut?: boolean;
 }) {
   return (
@@ -63,6 +65,21 @@ function WrappedTray({
               className={styles.coverImage}
             />
           ) : null}
+          {shotArt?.map((art) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={art.src}
+              src={art.src}
+              alt=""
+              draggable={false}
+              className={styles.shotArt}
+              style={{
+                left: `${(art.left / 487.111) * 100}%`,
+                top: `${(art.top / 274) * 100}%`,
+                width: `${(art.width / 487.111) * 100}%`,
+              }}
+            />
+          ))}
         </div>
         {/* the logo: its own item in the tray, lying across the shot's corner, under the wrap */}
         {badge ? (
@@ -134,6 +151,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             video={project.video}
             badge={project.badge}
             shot={project.shot}
+            shotArt={project.shotArt}
             soldOut={project.soldOut}
           />
         </div>
