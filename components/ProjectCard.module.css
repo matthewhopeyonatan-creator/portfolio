@@ -56,12 +56,27 @@
   overflow: hidden;
   border-radius: calc(24 / 681 * 100cqw);
   background: #f90000;
-  box-shadow: calc(4 / 681 * 100cqw) calc(4 / 681 * 100cqw) calc(12 / 681 * 100cqw)
-    calc(3 / 681 * 100cqw) rgba(40, 40, 40, 0.25);
+  box-shadow: calc(4 / 681 * 100cqw) calc(4 / 681 * 100cqw)
+    calc(12 / 681 * 100cqw) calc(3 / 681 * 100cqw) rgba(40, 40, 40, 0.25);
 }
 
 .coverImage {
   object-fit: cover;
+}
+
+/* logo on the shot, bottom right: a soft contact shadow plus a wider, fainter one, so it
+   reads as an object lying in the tray under the plastic */
+.badge {
+  position: absolute;
+  right: 5%;
+  bottom: 7%;
+  width: auto;
+  height: 30%;
+  max-width: none;
+  user-select: none;
+  filter: drop-shadow(0 1px 1px rgba(40, 40, 40, 0.28))
+    drop-shadow(0 6px 10px rgba(40, 40, 40, 0.22));
+  transform: rotate(-4deg);
 }
 
 /* looping project video: fills the shot, cropped */
@@ -124,7 +139,11 @@
 }
 
 .wrapFlap {
-  clip-path: polygon(100% calc(100% - var(--wpeel)), 100% 100%, calc(100% - var(--wpeel)) 100%);
+  clip-path: polygon(
+    100% calc(100% - var(--wpeel)),
+    100% 100%,
+    calc(100% - var(--wpeel)) 100%
+  );
 }
 
 .info {

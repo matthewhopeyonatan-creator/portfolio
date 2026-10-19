@@ -12,9 +12,11 @@ import styles from "./ProjectCard.module.css";
 function WrappedTray({
   cover,
   video,
+  badge,
 }: {
   cover?: Project["cover"];
   video?: string;
+  badge?: string;
 }) {
   return (
     <div className={styles.tray}>
@@ -52,6 +54,16 @@ function WrappedTray({
               fill
               sizes="(max-width: 767px) 64vw, 29vw"
               className={styles.coverImage}
+            />
+          ) : null}
+          {/* the logo rests on the shot like a label on the food, under the wrap */}
+          {badge ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={badge}
+              alt=""
+              className={styles.badge}
+              draggable={false}
             />
           ) : null}
         </div>
@@ -101,7 +113,11 @@ export default function ProjectCard({ project }: { project: Project }) {
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         <div className={styles.media}>
-          <WrappedTray cover={project.cover} video={project.video} />
+          <WrappedTray
+            cover={project.cover}
+            video={project.video}
+            badge={project.badge}
+          />
         </div>
         <div className={styles.info}>
           <div className={styles.heading}>
