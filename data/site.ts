@@ -76,6 +76,7 @@ export const projects: Project[] = [
       "Mobile app",
     ],
     href: "https://matthew-hope.com/inky",
+    video: "/projects/inquirer.mp4",
   },
   {
     slug: "shmood",
