@@ -75,7 +75,7 @@
   height: 24%;
   max-width: none;
   user-select: none;
-  transform: rotate(28deg);
+  transform: rotate(18deg);
   filter: drop-shadow(0 1.5px 1.5px rgba(40, 40, 40, 0.3))
     drop-shadow(0 8px 14px rgba(40, 40, 40, 0.25));
 }
