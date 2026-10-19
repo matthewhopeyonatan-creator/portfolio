@@ -300,7 +300,7 @@
 .sections {
   display: flex;
   flex-direction: column;
-  gap: calc(120 * var(--pu));
+  gap: calc(220 * var(--pu)); /* between Context / Research / Design / Reflecting */
 }
 
 .section {
@@ -337,7 +337,7 @@
 }
 
 .section .sectionTitle {
-  margin: calc(28 * var(--pu)) 0 0;
+  margin: calc(64 * var(--pu)) 0 0; /* between the headed parts inside a section */
 }
 
 .section .sectionTitle:first-of-type {
@@ -345,7 +345,7 @@
 }
 
 .csSub {
-  margin: calc(20 * var(--pu)) 0 0;
+  margin: calc(36 * var(--pu)) 0 0;
   font-size: max(18px, calc(28 * var(--pu)));
   font-weight: 600;
   line-height: 1.2;
