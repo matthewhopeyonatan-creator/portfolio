@@ -64,19 +64,20 @@
   object-fit: cover;
 }
 
-/* logo on the shot, bottom right: a soft contact shadow plus a wider, fainter one, so it
-   reads as an object lying in the tray under the plastic */
+/* logo: a separate item in the tray, lying diagonally across the shot's lower-right corner
+   (shot edge: right 15%, bottom 20.6% of the tray), under the wrap. Two soft shadows — a
+   tight contact one and a wider fainter one — lift it off the shot. */
 .badge {
   position: absolute;
-  right: 5%;
-  bottom: 7%;
+  right: calc(15% - 5%);
+  bottom: calc(20.6% - 9%);
   width: auto;
-  height: 30%;
+  height: 24%;
   max-width: none;
   user-select: none;
-  filter: drop-shadow(0 1px 1px rgba(40, 40, 40, 0.28))
-    drop-shadow(0 6px 10px rgba(40, 40, 40, 0.22));
-  transform: rotate(-4deg);
+  transform: rotate(28deg);
+  filter: drop-shadow(0 1.5px 1.5px rgba(40, 40, 40, 0.3))
+    drop-shadow(0 8px 14px rgba(40, 40, 40, 0.25));
 }
 
 /* looping project video: fills the shot, cropped */

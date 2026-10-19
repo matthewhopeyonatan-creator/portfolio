@@ -56,17 +56,12 @@ function WrappedTray({
               className={styles.coverImage}
             />
           ) : null}
-          {/* the logo rests on the shot like a label on the food, under the wrap */}
-          {badge ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={badge}
-              alt=""
-              className={styles.badge}
-              draggable={false}
-            />
-          ) : null}
         </div>
+        {/* the logo: its own item in the tray, lying across the shot's corner, under the wrap */}
+        {badge ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={badge} alt="" className={styles.badge} draggable={false} />
+        ) : null}
       </div>
       {/* plastic wrap: on hover it peels back from the lower-right corner, folding over itself */}
       <div className={styles.wrap} aria-hidden="true">
