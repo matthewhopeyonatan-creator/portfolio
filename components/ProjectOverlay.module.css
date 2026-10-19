@@ -33,7 +33,9 @@
   width: var(--w);
   height: calc(var(--w) * 903 / 1526);
   overflow-y: auto;
-  overscroll-behavior: contain;
+  /* keep vertical scroll inside, but let sideways overscroll through so the trackpad
+     two-finger swipe (browser back) still works */
+  overscroll-behavior: auto contain;
   border: 2px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
@@ -57,7 +59,15 @@
   height: 100svh;
   border-width: 0;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  /* keep vertical scroll inside, but let sideways overscroll through so the trackpad
+     two-finger swipe (browser back) still works */
+  overscroll-behavior: auto contain;
+}
+
+/* Lenis sets overscroll-behavior: contain on [data-lenis-prevent], which also blocks the
+   swipe-back gesture — allow it sideways again */
+:global(.lenis) .frame[data-lenis-prevent] {
+  overscroll-behavior: auto contain;
 }
 
 /* full screen: the site navbar (sticky inside the scrolling page) */

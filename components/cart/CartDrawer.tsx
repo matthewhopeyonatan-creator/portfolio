@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { projects } from "@/data/site";
+import { cartCatalog } from "@/data/site";
 import { useCart } from "./CartContext";
 import styles from "./CartDrawer.module.css";
 
@@ -14,7 +14,9 @@ export default function CartDrawer() {
   const closeRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
 
-  const lines = projects.filter((p) => items[p.slug]).map((p) => ({ project: p, qty: items[p.slug] }));
+  const lines = cartCatalog
+    .filter((c) => items[c.key])
+    .map((c) => ({ item: c, qty: items[c.key] }));
 
   // focus in/out, Esc to close, lock the page scroll while open
   useEffect(() => {
@@ -25,7 +27,9 @@ export default function CartDrawer() {
       if (e.key === "Escape") close();
       if (e.key === "Tab" && panelRef.current) {
         // keep Tab inside the drawer
-        const f = panelRef.current.querySelectorAll<HTMLElement>("button:not([disabled]), a[href]");
+        const f = panelRef.current.querySelectorAll<HTMLElement>(
+          "button:not([disabled]), a[href]",
+        );
         if (!f.length) return;
         const first = f[0];
         const last = f[f.length - 1];
@@ -52,12 +56,17 @@ export default function CartDrawer() {
     `mailto:${CONTACT}?subject=${encodeURIComponent("Checking out at hope’s grocer")}` +
     `&body=${encodeURIComponent(
       "Hi Matthew,\n\nI picked up:\n" +
-        lines.map((l) => `• ${l.project.title}${l.qty > 1 ? ` × ${l.qty}` : ""}`).join("\n") +
+        lines
+          .map((l) => `• ${l.item.name}${l.qty > 1 ? ` × ${l.qty}` : ""}`)
+          .join("\n") +
         "\n\nLet's talk!",
     )}`;
 
   return (
-    <div className={`${styles.root} ${isOpen ? styles.open : ""}`} aria-hidden={!isOpen}>
+    <div
+      className={`${styles.root} ${isOpen ? styles.open : ""}`}
+      aria-hidden={!isOpen}
+    >
       <div className={styles.backdrop} onClick={close} />
       <div
         ref={panelRef}
@@ -84,45 +93,69 @@ export default function CartDrawer() {
               </div>
             </div>
             {/* no visible close in the design — Esc / clicking outside close it; this shows on keyboard focus */}
-            <button ref={closeRef} type="button" className={styles.close} onClick={close}>
+            <button
+              ref={closeRef}
+              type="button"
+              className={styles.close}
+              onClick={close}
+            >
               close
             </button>
           </header>
 
           {lines.length ? (
             <ul className={styles.list} data-lenis-prevent>
-              {lines.map(({ project, qty }) => (
-                <li key={project.slug} className={styles.row}>
-                  <div className={styles.thumb}>
-                    {project.cover ? (
+              {lines.map(({ item, qty }) => (
+                <li key={item.key} className={styles.row}>
+                  <div
+                    className={`${styles.thumb} ${item.sticker ? styles.thumbSticker : ""}`}
+                  >
+                    {item.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={project.cover.src} alt="" />
+                      <img src={item.image} alt="" />
                     ) : null}
                   </div>
                   <div className={styles.details}>
-                    <p className={styles.name}>{project.title}</p>
+                    <p className={styles.name}>{item.name}</p>
                     <div className={styles.qty}>
                       <button
                         type="button"
                         className={styles.step}
-                        onClick={() => setQty(project.slug, qty - 1)}
-                        aria-label={qty > 1 ? `One less ${project.title}` : `Remove ${project.title}`}
+                        onClick={() => setQty(item.key, qty - 1)}
+                        aria-label={
+                          qty > 1
+                            ? `One less ${item.name}`
+                            : `Remove ${item.name}`
+                        }
                       >
                         <svg viewBox="0 0 36 36" fill="none" aria-hidden="true">
-                          <path d="M9 18H27" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                          <path
+                            d="M9 18H27"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
                         </svg>
                       </button>
-                      <span className={styles.count} aria-label={`Quantity ${qty}`}>
+                      <span
+                        className={styles.count}
+                        aria-label={`Quantity ${qty}`}
+                      >
                         {qty}
                       </span>
                       <button
                         type="button"
                         className={styles.step}
-                        onClick={() => setQty(project.slug, qty + 1)}
-                        aria-label={`One more ${project.title}`}
+                        onClick={() => setQty(item.key, qty + 1)}
+                        aria-label={`One more ${item.name}`}
                       >
                         <svg viewBox="0 0 36 36" fill="none" aria-hidden="true">
-                          <path d="M9 18H27M18 27V9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                          <path
+                            d="M9 18H27M18 27V9"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -143,7 +176,11 @@ export default function CartDrawer() {
                 checkout
               </a>
             ) : (
-              <a className={styles.checkout} href="#seasonal-picks" onClick={close}>
+              <a
+                className={styles.checkout}
+                href="#seasonal-picks"
+                onClick={close}
+              >
                 start shopping
               </a>
             )}

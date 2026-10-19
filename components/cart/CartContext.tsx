@@ -25,16 +25,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [addedTick, setAddedTick] = useState(0);
 
-  // remember the cart between visits (best effort — storage can be unavailable)
+  // keep the cart through refreshes in the same tab; a new tab starts empty (sessionStorage)
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
+      const saved = window.sessionStorage.getItem(STORAGE_KEY);
       if (saved) setItems(JSON.parse(saved));
     } catch {}
   }, []);
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch {}
   }, [items]);
 

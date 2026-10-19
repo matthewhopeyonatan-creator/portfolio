@@ -5,7 +5,6 @@ export const navLinks = [
   { label: "graphics", href: "https://matthew-hope.com/#pantry" },
 ];
 
-
 // Footer social links. TODO: add the X handle.
 export const socialLinks = [
   { label: "Email", href: "mailto:matthew.hope.yonatan@gmail.com" },
@@ -30,7 +29,13 @@ export type Project = {
 };
 
 /** Sections of the full-screen case study, in order (also the "On this page" tracker). */
-export const caseStudySections = ["The Challenge", "Solution", "Research Process", "Design Process", "Results"];
+export const caseStudySections = [
+  "The Challenge",
+  "Solution",
+  "Research Process",
+  "Design Process",
+  "Results",
+];
 
 // Order = grid order (left→right, top→bottom).
 export const projects: Project[] = [
@@ -40,13 +45,23 @@ export const projects: Project[] = [
     subtitle: "Multi-role design",
     tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
     href: "https://matthew-hope.com/crowdvolt",
-    facts: { timeline: "Dec 2025 – Aug 2026", role: "Product Design Intern", type: "Professional", team: "Individual" },
+    facts: {
+      timeline: "Dec 2025 – Aug 2026",
+      role: "Product Design Intern",
+      type: "Professional",
+      team: "Individual",
+    },
   },
   {
     slug: "inquirer",
     title: "The Philadelphia Inquirer",
     subtitle: "News media personalization",
-    tags: ["Consumer product", "Personalization", "User research", "Mobile app"],
+    tags: [
+      "Consumer product",
+      "Personalization",
+      "User research",
+      "Mobile app",
+    ],
     href: "https://matthew-hope.com/inky",
   },
   {
@@ -63,4 +78,54 @@ export const projects: Project[] = [
     tags: ["Consumer product", "0 → 1", "Personal project", "Mobile app"],
     href: "https://matthew-hope.com/crave",
   },
+];
+
+/** Stickers that go in the cart when their story card is opened (keyed by their hero image). */
+export const stickerItems = [
+  {
+    key: "sticker-crowdvolt",
+    name: "Crowdvolt Sticker",
+    src: "/home/sticker-crowdvolt-ycw24.webp",
+  },
+  {
+    key: "sticker-jakarta",
+    name: "Jakarta Sticker",
+    src: "/home/sticker-jakarta.webp",
+  },
+  { key: "sticker-nyu", name: "NYU Sticker", src: "/home/sticker-nyu-2.webp" },
+  {
+    key: "sticker-cornell",
+    name: "Cornell Sticker",
+    src: "/home/sticker-cornell.webp",
+  },
+  {
+    key: "sticker-design-meetup",
+    name: "Design Meetup Sticker",
+    src: "/home/sticker-design-meetup.webp",
+  },
+  {
+    key: "sticker-fatboy",
+    name: "Fatboy Sticker",
+    src: "/home/sticker-fatboy.webp",
+  },
+];
+
+/** Everything the cart can hold, in the order it lists them: project packs, then stickers. */
+export const cartCatalog: {
+  key: string;
+  name: string;
+  image?: string;
+  sticker?: boolean;
+}[] = [
+  ...projects.map((p) => ({
+    key: p.slug,
+    name: `${p.title} Pack`,
+    image: p.cover?.src,
+  })),
+  ...stickerItems.map((s) => ({
+    key: s.key,
+    name: s.name,
+    image: s.src,
+    sticker: true,
+  })),
 ];

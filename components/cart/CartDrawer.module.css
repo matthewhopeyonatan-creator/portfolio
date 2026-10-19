@@ -154,6 +154,19 @@
   background: #717171;
 }
 
+/* stickers sit whole on a plain tile instead of filling it */
+.thumbSticker {
+  display: grid;
+  place-items: center;
+  background: var(--color-paper);
+}
+
+.thumbSticker img {
+  width: 78% !important;
+  height: 78% !important;
+  object-fit: contain !important;
+}
+
 .thumb img {
   display: block;
   width: 100%;

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
+import { useCart } from "@/components/cart/CartContext";
+import { stickerItems } from "@/data/site";
 import styles from "./Hero.module.css";
 
 /**
@@ -401,7 +403,13 @@ export default function Hero() {
   const [card, setCard] = useState<{ s: StickerData; el: HTMLElement } | null>(
     null,
   );
-  const openCard: OpenSticker = (s, el) => setCard((c) => c ?? { s, el });
+  const { add } = useCart();
+  const openCard: OpenSticker = (s, el) => {
+    // opening a sticker's story puts that sticker in the cart
+    const item = stickerItems.find((i) => i.src === s.src);
+    if (item) add(item.key);
+    setCard((c) => c ?? { s, el });
+  };
   const tomatoProps = { onLoad, onOpen: openCard, activeSrc: card?.s.src };
   // after a card closes, focus goes back to the sticker that opened it (once it's visible again)
   const lastOrigin = useRef<HTMLElement | null>(null);
