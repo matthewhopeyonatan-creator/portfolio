@@ -8,19 +8,22 @@
   --hu: var(--u);
   --screen-h: calc(100svh - var(--header-h));
   /* Tomato scale (--tu): normally the width scale, but on a window that's tall for its width
-     the tomatoes grow to fill the same share of the screen as in Figma (artboard height 1045 =
-     one screen), still sitting on the bottom edge. Capped so the left tomato's dome (visible
-     top at artboard y≈221, i.e. 824 above the bottom) stays 16px clear of the headline; the
+     the tomatoes grow to fill the same share of the screen as in Figma (artboard y 961 = the
+     screen's bottom edge), up to 1.25× so the stickers don't crowd the sides. Capped so the left tomato's dome (visible
+     top at artboard y≈221, i.e. 740 above the bottom) stays 16px clear of the headline; the
      small tomato's top (y≈72) then always clears the navbar too. */
   --hl-bottom: calc(37 * var(--u) + 2.8125 * max(20px, 64 * var(--u)));
   --tu: max(
     var(--u),
     min(
-      var(--screen-h) / 1045,
-      (var(--screen-h) - var(--hl-bottom) - 16px) / 824
+      var(--u) * 1.25,
+      var(--screen-h) / 961,
+      (var(--screen-h) - var(--hl-bottom) - 16px) / 740
     )
   );
-  --hero-h: max(var(--screen-h), calc(1060 * var(--tu)));
+  /* the tomatoes run off the bottom of the screen like in Figma; the band carries on just far
+     enough below it for their faded bottoms (to artboard y≈1060) before "Seasonal picks" */
+  --hero-h: max(var(--screen-h), calc(var(--screen-h) + 99 * var(--tu)), calc(1060 * var(--tu)));
 
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.8s
@@ -54,13 +57,13 @@
 }
 
 /* The Figma artboard (1728 × 961; coordinates below are artboard px = Figma y − 131), full width.
-   Anchored to the bottom of the screen: the tomatoes' visible bottom (artboard y≈1045) sits on the
+   Anchored to the bottom of the screen: Figma's screen bottom (artboard y 961) sits on the
    bottom edge, so tall screens get the space above them instead of below. Never higher than the
    Figma position (short screens grow the band instead). */
 .canvas {
   --hu: var(--tu); /* everything in the artboard uses the tomato scale */
   position: absolute;
-  top: max(0px, calc(var(--screen-h) - 1045 * var(--hu)));
+  top: max(0px, calc(var(--screen-h) - 961 * var(--hu)));
   /* centred: when the artboard is scaled past the window width it trims evenly at both sides */
   left: calc(864 * (var(--u) - var(--tu)));
   width: calc(1728 * var(--hu));
@@ -98,22 +101,26 @@
 /* --ss shrinks every sticker a touch from its Figma size, around its own centre */
 .sticker {
   --ss: 0.88;
-  /* --sk: the stickers' own size, which stays on the width scale. When the tomatoes are scaled
-     up past the window width (tall windows), each sticker keeps its size and its Figma spacing
-     across the window (so none slide off the edges), and still rides its tomato vertically.
-     Centre on the artboard: (x + sx + sw/2, y + sy + sh/2); the shift terms are 0 at normal scale. */
-  --sk: var(--u);
+  /* Stickers scale with their tomato (same size and spot relative to it as in Figma). If the
+     tomatoes are scaled up past the window width, a sticker that would run off a side edge is
+     slid inward along its tomato only as far as needed to stay on screen (allowed edge
+     overhang = what it has in Figma). Artboard left/right: --a / --b. Canvas left = 864(u − hu). */
+  --a: calc(var(--x) + var(--sx) + var(--sw) * (1 - var(--ss)) / 2);
+  --b: calc(var(--a) + var(--sw) * var(--ss));
   position: absolute;
-  left: calc(
-    (var(--sx) + var(--sw) / 2) * var(--hu) +
-      (var(--x) + var(--sx) + var(--sw) / 2 - 864) * (var(--u) - var(--hu)) -
-      var(--sw) * var(--ss) * var(--sk) / 2
+  left: clamp(
+    calc(
+      min(var(--a), 16) * var(--u) - 864 * (var(--u) - var(--hu)) - var(--x) * var(--hu)
+    ),
+    calc((var(--sx) + var(--sw) * (1 - var(--ss)) / 2) * var(--hu)),
+    calc(
+      max(var(--b), 1712) * var(--u) - var(--sw) * var(--ss) * var(--hu) -
+        864 * (var(--u) - var(--hu)) - var(--x) * var(--hu)
+    )
   );
-  top: calc(
-    (var(--sy) + var(--sh) / 2) * var(--hu) - var(--sh) * var(--ss) * var(--sk) / 2
-  );
-  width: calc(var(--sw) * var(--ss) * var(--sk));
-  height: calc(var(--sh) * var(--ss) * var(--sk));
+  top: calc((var(--sy) + var(--sh) * (1 - var(--ss)) / 2) * var(--hu));
+  width: calc(var(--sw) * var(--ss) * var(--hu));
+  height: calc(var(--sh) * var(--ss) * var(--hu));
   pointer-events: auto;
   padding: 0;
   border: 0;
@@ -155,13 +162,13 @@
   }
   30%,
   65% {
-    --peel: calc(var(--pd) * var(--ss) * var(--sk)); /* same as the hover peel */
+    --peel: calc(var(--pd) * var(--ss) * var(--hu)); /* same as the hover peel */
   }
 }
 
 @media (hover: hover) {
   .sticker:hover {
-    --peel: calc(var(--pd) * var(--ss) * var(--sk));
+    --peel: calc(var(--pd) * var(--ss) * var(--hu));
     transition-duration: 520ms;
   }
 }
