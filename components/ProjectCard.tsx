@@ -9,7 +9,13 @@ import ProjectOverlay from "@/components/ProjectOverlay";
 import styles from "./ProjectCard.module.css";
 
 /** Figma "… image": foam tray → project shot (or red placeholder) → plastic wrap on top. */
-function WrappedTray({ cover }: { cover?: Project["cover"] }) {
+function WrappedTray({
+  cover,
+  video,
+}: {
+  cover?: Project["cover"];
+  video?: string;
+}) {
   return (
     <div className={styles.tray}>
       {/* foam tray + shot: grow a touch on hover */}
@@ -23,7 +29,23 @@ function WrappedTray({ cover }: { cover?: Project["cover"] }) {
           className={styles.trayBase}
         />
         <div className={styles.content}>
-          {cover ? (
+          {video ? (
+            <video
+              className={styles.coverVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+            >
+              <source
+                src={video.replace(/\.mp4$/, ".webm")}
+                type="video/webm"
+              />
+              <source src={video} type="video/mp4" />
+            </video>
+          ) : cover ? (
             <Image
               src={cover.src}
               alt={cover.alt}
@@ -79,7 +101,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         <div className={styles.media}>
-          <WrappedTray cover={project.cover} />
+          <WrappedTray cover={project.cover} video={project.video} />
         </div>
         <div className={styles.info}>
           <div className={styles.heading}>

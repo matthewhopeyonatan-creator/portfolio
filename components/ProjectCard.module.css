@@ -64,6 +64,15 @@
   object-fit: cover;
 }
 
+/* looping project video: fills the shot, cropped */
+.coverVideo {
+  position: absolute;
+  inset: -1px; /* a hair past the edges so the red placeholder never peeks out */
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  object-fit: cover;
+}
+
 /* Figma "PLASTIC TEXTURE - 10": 674×457 at (0, 4), r64, 80% (opacity baked into the render).
    Unwrap on hover: the sheet is cut along a 45° fold line that travels in from the lower-right
    corner (--wpeel), and the cut-off corner is mirrored back over the sheet as the folded flap —

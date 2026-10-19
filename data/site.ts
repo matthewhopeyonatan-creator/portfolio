@@ -23,6 +23,8 @@ export type Project = {
    * 487×274). Leave it out to show the red placeholder from the design.
    */
   cover?: { src: string; alt: string };
+  /** looping, muted video: fills the tray on the homepage and the popup's header image */
+  video?: string;
   /** project popup (Figma "project overlay"): intro paragraph + the four facts under it */
   intro?: string;
   facts?: { timeline: string; role: string; type: string; team: string };
@@ -45,6 +47,7 @@ export const projects: Project[] = [
     subtitle: "Multi-role design",
     tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
     href: "https://matthew-hope.com/crowdvolt",
+    video: "/projects/crowdvolt.mp4",
     intro:
       "CrowdVolt is an electronic music ticket marketplace. Over nine months, I worked across product, graphics, social media, and event planning. Being at an early-stage company meant I got to own pieces of a lot of different flows and jump between roles, and this page covers the highlights.",
     facts: {
@@ -127,7 +130,8 @@ export const cartCatalog: {
   ...stickerItems.map((s) => ({
     key: s.key,
     name: s.name,
-    image: s.src,
+    // same art trimmed to its edges, so every sticker fills its cart square
+    image: s.src.replace("/home/", "/cart/"),
     sticker: true,
   })),
 ];

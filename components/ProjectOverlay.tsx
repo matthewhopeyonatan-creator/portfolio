@@ -239,10 +239,8 @@ export default function ProjectOverlay({
             </div>
           ) : (
             <header className={styles.header}>
-              <span className={styles.logo} aria-hidden="true">
-                <b>hope</b>
-                <span className={styles.apos}>’</span>
-                <b>s grocer</b>
+              <span className={styles.logo}>
+                <b>Nutrition Facts</b>
               </span>
               <button
                 type="button"
@@ -279,7 +277,17 @@ export default function ProjectOverlay({
                 ))}
               </dl>
             </div>
-            <div className={styles.hero} aria-hidden="true" />
+            <div className={styles.hero} aria-hidden="true">
+              {project.video ? (
+                <video autoPlay muted loop playsInline preload="auto">
+                  <source
+                    src={project.video.replace(/\.mp4$/, ".webm")}
+                    type="video/webm"
+                  />
+                  <source src={project.video} type="video/mp4" />
+                </video>
+              ) : null}
+            </div>
           </section>
 
           {/* full case study — scrolls in the card too; the tracker only shows full screen */}

@@ -107,13 +107,6 @@
   font-weight: 700;
 }
 
-.apos {
-  font-family: "Times New Roman", Times, serif;
-  font-size: 1.15em;
-  position: relative;
-  top: -0.06em;
-  margin: 0 -0.05em 0 -0.03em;
-}
 
 .expand {
   display: grid;
@@ -212,6 +205,15 @@
   height: calc(532 * var(--pu));
   border-radius: calc(24 * var(--pu));
   background: #d9d9d9;
+  overflow: hidden;
+}
+
+/* looping project video: fills the box, cropped */
+.hero video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ── full case study (expanded only) ────────────────────────────────────────────── */
