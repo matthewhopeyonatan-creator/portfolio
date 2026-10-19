@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { caseStudySections, type Project } from "@/data/site";
+import SiteHeader from "@/components/SiteHeader";
 import styles from "./ProjectOverlay.module.css";
 
 const LOREM =
@@ -52,8 +53,16 @@ export default function ProjectOverlay({
   const frameRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
+  // Full screen counts as its own page: it gets a history entry, so the browser's back button
+  // returns to the main page. `pushed` = that entry is ours and still on top.
+  const pushed = useRef(false);
+
   const close = useCallback(() => {
     if (leaving) return;
+    if (pushed.current) {
+      pushed.current = false;
+      history.back(); // drop our "page" too; popstate is ignored now that pushed is false
+    }
     setLeaving(true);
     window.setTimeout(() => {
       lockScroll(false);
@@ -72,6 +81,26 @@ export default function ProjectOverlay({
       window.removeEventListener("keydown", onKey);
       lockScroll(false);
     };
+  }, [close]);
+
+  useEffect(() => {
+    if (!expanded || pushed.current) return;
+    history.pushState(
+      { ...(history.state ?? {}), projectPage: project.slug },
+      "",
+      `?project=${project.slug}`,
+    );
+    pushed.current = true;
+  }, [expanded, project.slug]);
+
+  useEffect(() => {
+    const onPop = () => {
+      if (!pushed.current) return;
+      pushed.current = false; // the browser already left our entry
+      close();
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, [close]);
 
   // tracker: the section nearest the top of the view is the active one
@@ -103,8 +132,7 @@ export default function ProjectOverlay({
     const root = frameRef.current;
     const el = sectionRefs.current[i];
     if (!root || !el) return;
-    const header =
-      root.querySelector<HTMLElement>(`.${styles.header}`)?.offsetHeight ?? 0;
+    const header = root.querySelector<HTMLElement>("header")?.offsetHeight ?? 0;
     const top =
       root.scrollTop +
       el.getBoundingClientRect().top -
@@ -134,27 +162,40 @@ export default function ProjectOverlay({
         tabIndex={-1}
         data-lenis-prevent
       >
-        <header className={styles.header}>
-          <span className={styles.logo} aria-hidden="true">
-            <b>hope</b>
-            <span className={styles.apos}>’</span>
-            <b>s grocer</b>
-          </span>
-          <button
-            type="button"
-            className={styles.expand}
-            onClick={toggle}
-            aria-label={
-              expanded ? "Shrink back to a card" : "Expand to full screen"
-            }
-            aria-pressed={expanded}
+        {expanded ? (
+          // full screen reads as the next page: the site's own navbar sits on top. Following any
+          // of its links leaves the case study; the cart opens over it.
+          <div
+            className={styles.siteNav}
+            onClickCapture={(e) => {
+              if ((e.target as HTMLElement).closest("a")) close();
+            }}
           >
-            <ExpandIcon expanded={expanded} />
-          </button>
-          <button type="button" className={styles.close} onClick={close}>
-            Close
-          </button>
-        </header>
+            <SiteHeader />
+          </div>
+        ) : (
+          <header className={styles.header}>
+            <span className={styles.logo} aria-hidden="true">
+              <b>hope</b>
+              <span className={styles.apos}>’</span>
+              <b>s grocer</b>
+            </span>
+            <button
+              type="button"
+              className={styles.expand}
+              onClick={toggle}
+              aria-label={
+                expanded ? "Shrink back to a card" : "Expand to full screen"
+              }
+              aria-pressed={expanded}
+            >
+              <ExpandIcon expanded={expanded} />
+            </button>
+            <button type="button" className={styles.close} onClick={close}>
+              Close
+            </button>
+          </header>
+        )}
 
         {/* title section — Figma: title 40 SemiBold, intro Light 24/25 (487 wide), four facts; image 860×532 r24 */}
         <section className={styles.intro}>
@@ -177,10 +218,14 @@ export default function ProjectOverlay({
         <div className={styles.study}>
           {expanded && (
             <nav className={styles.toc} aria-label="On this page">
-              <p className={styles.tocLabel}>On this page</p>
+              {/* Figma 64:591 "Aisle Directory": [n] markers, serif names, the current one larger in red */}
+              <p className={styles.tocLabel}>Aisle Directory</p>
               <ol>
                 {caseStudySections.map((name, i) => (
-                  <li key={name}>
+                  <li key={name} className={styles.tocRow}>
+                    <span className={styles.tocNum} aria-hidden="true">
+                      [{i + 1}]
+                    </span>
                     <button
                       type="button"
                       className={`${styles.tocItem} ${i === active ? styles.tocOn : ""}`}
