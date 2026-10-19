@@ -56,7 +56,7 @@ export const projects: Project[] = [
       timeline: "Dec 2025 – Aug 2026",
       role: "Product Design Intern",
       type: "Professional",
-      team: "Individual",
+      team: "Individual with supervision",
     },
   },
   {
