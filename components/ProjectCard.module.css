@@ -1,6 +1,9 @@
 /* Figma: cell 864×714 · image 681×466, 58 from top · text block 40 from left, 40 below image
    title 32 SemiBold · subtitle 24 Regular (-4 overlap) · gap 8 · pills 16px, 1px border, r24, 4/8 pad, gap 4 */
+/* the card only reacts to the pointer over the foam tray (.trayHit) — not its whole cell, the
+   title or the tags (keyboard focus still works on the whole card) */
 .card {
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -293,4 +296,19 @@
 /* coming-soon card: not clickable, no hover peel */
 .static {
   cursor: default;
+}
+
+/* foam tray outline (tray.webp: x 0.3%–99.3%, full height, corners ≈ 72 of 681) */
+.trayHit {
+  position: absolute;
+  left: 0.3%;
+  right: 0.7%;
+  top: 0;
+  bottom: 0;
+  border-radius: calc(72 / 681 * 100cqw);
+  pointer-events: auto;
+}
+
+.static .trayHit {
+  pointer-events: none;
 }

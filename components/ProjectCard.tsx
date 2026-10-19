@@ -122,6 +122,8 @@ function WrappedTray({
           </span>
         </div>
       ) : null}
+      {/* the only hover / click zone: the foam tray's own rounded shape */}
+      <span className={styles.trayHit} aria-hidden="true" />
     </div>
   );
 }
