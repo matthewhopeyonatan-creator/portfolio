@@ -84,6 +84,7 @@ export const projects: Project[] = [
     subtitle: "Onboarding and dashboard for creatives",
     tags: ["Consumer product", "Startup", "AI product", "Web"],
     href: "https://matthew-hope.com/shmood",
+    video: "/projects/shmood.mp4",
   },
   {
     slug: "25madison",
