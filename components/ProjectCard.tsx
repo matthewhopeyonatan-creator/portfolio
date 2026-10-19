@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/site";
+import { useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
+import ProjectOverlay from "@/components/ProjectOverlay";
 import styles from "./ProjectCard.module.css";
 
 /** Figma "… image": foam tray → project shot (or red placeholder) → plastic wrap on top. */
@@ -60,29 +62,42 @@ function WrappedTray({ cover }: { cover?: Project["cover"] }) {
 export default function ProjectCard({ project }: { project: Project }) {
   const external = project.href.startsWith("http");
   const { add } = useCart();
+  const [open, setOpen] = useState(false);
   return (
-    <Link
-      href={project.href}
-      onClick={() => add(project.slug)}
-      className={styles.card}
-      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-    >
-      <div className={styles.media}>
-        <WrappedTray cover={project.cover} />
-      </div>
-      <div className={styles.info}>
-        <div className={styles.heading}>
-          <h3 className={styles.title}>{project.title}</h3>
-          <p className={styles.subtitle}>{project.subtitle}</p>
+    <>
+      <Link
+        href={project.href}
+        onClick={(e) => {
+          add(project.slug);
+          // a plain click opens the project popup; cmd/ctrl-click still opens the page itself
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          setOpen(true);
+        }}
+        aria-haspopup="dialog"
+        className={styles.card}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
+        <div className={styles.media}>
+          <WrappedTray cover={project.cover} />
         </div>
-        <ul className={styles.tags} aria-label="Tags">
-          {project.tags.map((tag) => (
-            <li key={tag} className={styles.tag}>
-              {tag}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Link>
+        <div className={styles.info}>
+          <div className={styles.heading}>
+            <h3 className={styles.title}>{project.title}</h3>
+            <p className={styles.subtitle}>{project.subtitle}</p>
+          </div>
+          <ul className={styles.tags} aria-label="Tags">
+            {project.tags.map((tag) => (
+              <li key={tag} className={styles.tag}>
+                {tag}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Link>
+      {open && (
+        <ProjectOverlay project={project} onClose={() => setOpen(false)} />
+      )}
+    </>
   );
 }

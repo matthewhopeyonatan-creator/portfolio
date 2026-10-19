@@ -24,7 +24,13 @@ export type Project = {
    * 487×274). Leave it out to show the red placeholder from the design.
    */
   cover?: { src: string; alt: string };
+  /** project popup (Figma "project overlay"): intro paragraph + the four facts under it */
+  intro?: string;
+  facts?: { timeline: string; role: string; type: string; team: string };
 };
+
+/** Sections of the full-screen case study, in order (also the "On this page" tracker). */
+export const caseStudySections = ["The Challenge", "Solution", "Research Process", "Design Process", "Results"];
 
 // Order = grid order (left→right, top→bottom).
 export const projects: Project[] = [
@@ -34,6 +40,7 @@ export const projects: Project[] = [
     subtitle: "Multi-role design",
     tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
     href: "https://matthew-hope.com/crowdvolt",
+    facts: { timeline: "Dec 2025 – Aug 2026", role: "Product Design Intern", type: "Professional", team: "Individual" },
   },
   {
     slug: "inquirer",

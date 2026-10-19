@@ -1,0 +1,396 @@
+/* Project popup — Figma 64:317 "project overlay": 1526 × 903, page colour, 2px ink border.
+   Header: logo (Atelier Fleur 36) at 40, expand icon 38 at the right, rule at y84.
+   Title section: CrowdVolt SemiBold 40 at (40, 187) · intro Light 24/25, 487 wide, at y256 ·
+   facts (Light Italic 20 label over Regular 24 value, columns 293 apart) at y597 / y669 ·
+   image placeholder 860 × 532, r24, #D9D9D9 at (626, 187).
+   --pu = one Figma pixel at the popup's current size; it animates when the popup expands. */
+@property --pu {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 1px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 40, 40, 0.45);
+  animation: fadeIn 380ms ease both;
+}
+
+.frame {
+  /* card: as big as fits, keeping Figma's 1526 × 903 shape */
+  --w: min(1526px, 94vw, (100svh - 48px) * 1526 / 903);
+  --pu: calc(var(--w) / 1526);
+  position: absolute;
+  left: calc((100vw - var(--w)) / 2);
+  top: calc((100svh - var(--w) * 903 / 1526) / 2);
+  width: var(--w);
+  height: calc(var(--w) * 903 / 1526);
+  overflow: hidden;
+  border: 2px solid var(--color-ink);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  outline: none;
+  animation: popIn 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition:
+    left 620ms cubic-bezier(0.65, 0, 0.35, 1),
+    top 620ms cubic-bezier(0.65, 0, 0.35, 1),
+    width 620ms cubic-bezier(0.65, 0, 0.35, 1),
+    height 620ms cubic-bezier(0.65, 0, 0.35, 1),
+    --pu 620ms cubic-bezier(0.65, 0, 0.35, 1),
+    border-width 620ms ease;
+}
+
+/* full screen: fills the window and scrolls through the case study */
+.expanded {
+  --pu: min(100vw / 1526, 1.15px);
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100svh;
+  border-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* ── header ─────────────────────────────────────────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(84 * var(--pu));
+  min-height: 52px;
+  padding: 0 max(16px, calc(40 * var(--pu)));
+  border-bottom: 2px solid var(--color-ink);
+  background: var(--color-bg);
+}
+
+.logo {
+  font-family: var(--font-display-stack);
+  font-size: max(22px, calc(36 * var(--pu)));
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.logo b {
+  font-weight: 700;
+}
+
+.apos {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.15em;
+  position: relative;
+  top: -0.06em;
+  margin: 0 -0.05em 0 -0.03em;
+}
+
+.expand {
+  display: grid;
+  place-items: center;
+  width: max(28px, calc(38 * var(--pu)));
+  height: max(28px, calc(38 * var(--pu)));
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 220ms ease;
+}
+
+.expand:hover {
+  transform: scale(1.08);
+}
+
+.expand svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* keyboard / screen-reader close; click outside or Esc otherwise */
+.close {
+  position: absolute;
+  right: calc(100 * var(--pu));
+  padding: 4px 8px;
+  border: 0;
+  background: var(--color-bg);
+  font: inherit;
+  font-size: 15px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close:not(:focus-visible) {
+  clip-path: inset(50%);
+  opacity: 0;
+}
+
+/* ── title section ──────────────────────────────────────────────────────────────── */
+.intro {
+  display: grid;
+  grid-template-columns: calc(528 * var(--pu)) calc(860 * var(--pu));
+  justify-content: space-between;
+  padding: calc(103 * var(--pu)) calc(38 * var(--pu)) calc(100 * var(--pu));
+}
+
+.introText {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(532 * var(--pu));
+}
+
+.title {
+  margin: 0;
+  font-size: max(22px, calc(40 * var(--pu)));
+  font-weight: 600;
+  line-height: normal;
+}
+
+.lead {
+  max-width: calc(487 * var(--pu));
+  margin: calc(16 * var(--pu)) 0 0;
+  font-size: max(13px, calc(24 * var(--pu)));
+  font-weight: 300;
+  line-height: 1.0417;
+  letter-spacing: -0.04em;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: calc(293 * var(--pu)) auto;
+  row-gap: calc(22 * var(--pu));
+  margin: auto 0 0;
+}
+
+.fact dt {
+  font-size: max(11px, calc(20 * var(--pu)));
+  font-weight: 300;
+  font-style: italic;
+  line-height: calc(25 * var(--pu));
+  letter-spacing: -0.04em;
+}
+
+.fact dd {
+  margin: 0;
+  font-size: max(13px, calc(24 * var(--pu)));
+  line-height: calc(25 * var(--pu));
+  letter-spacing: -0.04em;
+}
+
+.hero {
+  height: calc(532 * var(--pu));
+  border-radius: calc(24 * var(--pu));
+  background: #d9d9d9;
+}
+
+/* ── full case study (expanded only) ────────────────────────────────────────────── */
+.study {
+  display: grid;
+  grid-template-columns: calc(380 * var(--pu)) minmax(0, 1fr);
+  gap: calc(40 * var(--pu));
+  padding: calc(40 * var(--pu)) calc(38 * var(--pu)) calc(160 * var(--pu));
+  border-top: 2px solid var(--color-ink);
+  animation: fadeUp 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 300ms both;
+}
+
+/* "On this page": small caps label, then the sections on a thin rail; the current one is ink
+   with a solid bar on the rail */
+.toc {
+  position: sticky;
+  top: calc(84 * var(--pu) + 48px);
+  align-self: start;
+}
+
+.tocLabel {
+  margin: 0 0 20px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(40, 40, 40, 0.6);
+}
+
+.toc ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid rgba(40, 40, 40, 0.18);
+}
+
+.tocItem {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 12px 0 12px 34px;
+  border: 0;
+  background: none;
+  font-family: var(--font-display-stack);
+  font-size: max(18px, calc(26 * var(--pu)));
+  line-height: 1.2;
+  text-align: left;
+  color: rgba(40, 40, 40, 0.55);
+  cursor: pointer;
+  transition: color 250ms ease;
+}
+
+.tocItem::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-ink);
+  transform: scaleY(0);
+  transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tocItem:hover {
+  color: var(--color-ink);
+}
+
+.tocOn {
+  color: var(--color-ink);
+}
+
+.tocOn::before {
+  transform: scaleY(1);
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: calc(120 * var(--pu));
+  max-width: calc(980 * var(--pu));
+}
+
+.section p {
+  margin: 0;
+  font-size: max(15px, calc(24 * var(--pu)));
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.sectionTitle {
+  margin: 0 0 calc(24 * var(--pu));
+  font-size: max(22px, calc(40 * var(--pu)));
+  font-weight: 600;
+  line-height: normal;
+}
+
+.shot {
+  aspect-ratio: 860 / 532;
+  margin: calc(40 * var(--pu)) 0;
+  border-radius: calc(24 * var(--pu));
+  background: #d9d9d9;
+}
+
+.more {
+  align-self: flex-start;
+  padding-bottom: 2px;
+  border-bottom: 2px solid currentColor;
+  font-size: max(16px, calc(24 * var(--pu)));
+}
+
+/* ── animation ──────────────────────────────────────────────────────────────────── */
+.leaving .backdrop,
+.leaving .frame {
+  animation: fadeOut 380ms ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* phones: always a full-screen sheet, everything stacked, no tracker */
+@media (max-width: 767px) {
+  .frame,
+  .expanded {
+    --pu: calc(100vw / 760);
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100svh;
+    border-width: 0;
+    overflow-y: auto;
+  }
+  .expand {
+    display: none;
+  }
+  .close,
+  .close:not(:focus-visible) {
+    right: 16px;
+    clip-path: none;
+    opacity: 1;
+  }
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px 16px 40px;
+  }
+  .introText {
+    min-height: 0;
+  }
+  .lead {
+    max-width: none;
+    margin-top: 12px;
+    line-height: 1.3;
+  }
+  .facts {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 16px;
+    margin-top: 28px;
+  }
+  .hero {
+    height: auto;
+    aspect-ratio: 860 / 532;
+  }
+  .study {
+    grid-template-columns: 1fr;
+    padding: 32px 16px 80px;
+  }
+  .toc {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame,
+  .backdrop,
+  .study {
+    animation-duration: 1ms;
+    transition-duration: 1ms;
+  }
+}
