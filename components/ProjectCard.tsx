@@ -130,6 +130,43 @@ export default function ProjectCard({ project }: { project: Project }) {
   const external = project.href.startsWith("http");
   const { add } = useCart();
   const [open, setOpen] = useState(false);
+  const body = (
+    <>
+      <div className={styles.media}>
+        <WrappedTray
+          cover={project.cover}
+          video={project.video}
+          badge={project.badge}
+          shot={project.shot}
+          shotArt={project.shotArt}
+          soldOut={project.soldOut}
+        />
+      </div>
+      <div className={styles.info}>
+        <div className={styles.heading}>
+          <h3 className={styles.title}>{project.title}</h3>
+          <p className={styles.subtitle}>{project.subtitle}</p>
+        </div>
+        <ul className={styles.tags} aria-label="Tags">
+          {project.tags.map((tag) => (
+            <li key={tag} className={styles.tag}>
+              {tag}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+
+  // coming soon (sold out): shown, but not a link — no popup, nothing added to the cart
+  if (project.soldOut) {
+    return (
+      <div className={`${styles.card} ${styles.static}`} aria-disabled="true">
+        {body}
+      </div>
+    );
+  }
+
   return (
     <>
       <Link
@@ -145,29 +182,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         className={styles.card}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
-        <div className={styles.media}>
-          <WrappedTray
-            cover={project.cover}
-            video={project.video}
-            badge={project.badge}
-            shot={project.shot}
-            shotArt={project.shotArt}
-            soldOut={project.soldOut}
-          />
-        </div>
-        <div className={styles.info}>
-          <div className={styles.heading}>
-            <h3 className={styles.title}>{project.title}</h3>
-            <p className={styles.subtitle}>{project.subtitle}</p>
-          </div>
-          <ul className={styles.tags} aria-label="Tags">
-            {project.tags.map((tag) => (
-              <li key={tag} className={styles.tag}>
-                {tag}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {body}
       </Link>
       {open && (
         <ProjectOverlay project={project} onClose={() => setOpen(false)} />
