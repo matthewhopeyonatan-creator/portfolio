@@ -45,6 +45,8 @@ export const projects: Project[] = [
     subtitle: "Multi-role design",
     tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
     href: "https://matthew-hope.com/crowdvolt",
+    intro:
+      "CrowdVolt is an electronic music ticket marketplace. Over nine months, I worked across product, graphics, social media, and event planning. Being at an early-stage company meant I got to own pieces of a lot of different flows and jump between roles, and this page covers the highlights.",
     facts: {
       timeline: "Dec 2025 – Aug 2026",
       role: "Product Design Intern",
