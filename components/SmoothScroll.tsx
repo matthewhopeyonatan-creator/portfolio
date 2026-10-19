@@ -34,6 +34,7 @@ export default function SmoothScroll() {
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (a.closest("[data-overlay-nav]")) return; // the project popup handles its own navbar
       const target = document.querySelector(a.getAttribute("href")!);
       if (!(target instanceof HTMLElement)) return;
       e.preventDefault();

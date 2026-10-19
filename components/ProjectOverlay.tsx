@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Lenis from "lenis";
 import { caseStudySections, type Project } from "@/data/site";
 import SiteHeader from "@/components/SiteHeader";
 import styles from "./ProjectOverlay.module.css";
@@ -52,23 +53,44 @@ export default function ProjectOverlay({
   const [active, setActive] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
+
+  // smooth (inertial) scrolling inside the popup too, same feel as the page
+  useEffect(() => {
+    const wrapper = frameRef.current;
+    const content = innerRef.current;
+    if (!wrapper || !content) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const lenis = new Lenis({ wrapper, content, autoRaf: true, lerp: 0.09 });
+    lenisRef.current = lenis;
+    return () => {
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
 
   // Full screen counts as its own page: it gets a history entry, so the browser's back button
   // returns to the main page. `pushed` = that entry is ours and still on top.
   const pushed = useRef(false);
 
-  const close = useCallback(() => {
-    if (leaving) return;
-    if (pushed.current) {
-      pushed.current = false;
-      history.back(); // drop our "page" too; popstate is ignored now that pushed is false
-    }
-    setLeaving(true);
-    window.setTimeout(() => {
-      lockScroll(false);
-      onClose();
-    }, 380);
-  }, [leaving, onClose]);
+  // `then` runs once the popup is gone and the page can scroll again
+  const close = useCallback(
+    (then?: () => void) => {
+      if (leaving) return;
+      if (pushed.current) {
+        pushed.current = false;
+        history.back(); // drop our "page" too; popstate is ignored now that pushed is false
+      }
+      setLeaving(true);
+      window.setTimeout(() => {
+        lockScroll(false);
+        onClose();
+        if (then) requestAnimationFrame(() => requestAnimationFrame(then));
+      }, 380);
+    },
+    [leaving, onClose],
+  );
 
   useEffect(() => {
     lockScroll(true);
@@ -124,7 +146,10 @@ export default function ProjectOverlay({
   }, [expanded]);
 
   const toggle = () => {
-    if (expanded) frameRef.current?.scrollTo({ top: 0 });
+    if (expanded) {
+      lenisRef.current?.scrollTo(0, { immediate: true });
+      frameRef.current?.scrollTo({ top: 0 });
+    }
     setExpanded((x) => !x);
   };
 
@@ -139,7 +164,8 @@ export default function ProjectOverlay({
       root.getBoundingClientRect().top -
       header -
       24;
-    root.scrollTo({ top, behavior: "smooth" });
+    if (lenisRef.current) lenisRef.current.scrollTo(top, { duration: 1.2 });
+    else root.scrollTo({ top, behavior: "smooth" });
   };
 
   const f = project.facts;
@@ -152,7 +178,11 @@ export default function ProjectOverlay({
 
   return createPortal(
     <div className={`${styles.overlay} ${leaving ? styles.leaving : ""}`}>
-      <div className={styles.backdrop} onClick={close} aria-hidden="true" />
+      <div
+        className={styles.backdrop}
+        onClick={() => close()}
+        aria-hidden="true"
+      />
       <div
         ref={frameRef}
         className={`${styles.frame} ${expanded ? styles.expanded : ""}`}
@@ -162,107 +192,146 @@ export default function ProjectOverlay({
         tabIndex={-1}
         data-lenis-prevent
       >
-        {expanded ? (
-          // full screen reads as the next page: the site's own navbar sits on top. Following any
-          // of its links leaves the case study; the cart opens over it.
-          <div
-            className={styles.siteNav}
-            onClickCapture={(e) => {
-              if ((e.target as HTMLElement).closest("a")) close();
-            }}
-          >
-            <SiteHeader />
-          </div>
-        ) : (
-          <header className={styles.header}>
-            <span className={styles.logo} aria-hidden="true">
-              <b>hope</b>
-              <span className={styles.apos}>’</span>
-              <b>s grocer</b>
-            </span>
-            <button
-              type="button"
-              className={styles.expand}
-              onClick={toggle}
-              aria-label={
-                expanded ? "Shrink back to a card" : "Expand to full screen"
-              }
-              aria-pressed={expanded}
+        {/* single content child for the popup's own smooth scroller */}
+        <div ref={innerRef}>
+          {expanded ? (
+            // full screen reads as the next page: the site's own navbar sits on top. Following any
+            // of its links leaves the case study; the cart opens over it.
+            <div
+              className={styles.siteNav}
+            data-overlay-nav
+              onClickCapture={(e) => {
+                const a = (e.target as HTMLElement).closest("a");
+                if (!a) return;
+                const href = a.getAttribute("href") ?? "";
+                if (
+                  /^https?:/.test(href) ||
+                  e.metaKey ||
+                  e.ctrlKey ||
+                  e.shiftKey
+                ) {
+                  close(); // leaving the site: just get out of the way
+                  return;
+                }
+                // in-page links (the logo, "projects") can't move the page while it's locked
+                // under the popup: close first, then go there
+                e.preventDefault();
+                e.stopPropagation();
+                close(() => {
+                  if (href.startsWith("#")) {
+                    const t = document.createElement("a");
+                    t.href = href;
+                    document.body.appendChild(t);
+                    t.click(); // SmoothScroll glides to the section
+                    t.remove();
+                  } else {
+                    const ask = new CustomEvent("scroll-to-top", {
+                      detail: { handled: false },
+                    });
+                    window.dispatchEvent(ask);
+                    if (!ask.detail.handled)
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                });
+              }}
             >
-              <ExpandIcon expanded={expanded} />
-            </button>
-            <button type="button" className={styles.close} onClick={close}>
-              Close
-            </button>
-          </header>
-        )}
-
-        {/* title section — Figma: title 40 SemiBold, intro Light 24/25 (487 wide), four facts; image 860×532 r24 */}
-        <section className={styles.intro}>
-          <div className={styles.introText}>
-            <h2 className={styles.title}>{project.title}</h2>
-            <p className={styles.lead}>{project.intro ?? LOREM}</p>
-            <dl className={styles.facts}>
-              {facts.map(([k, v]) => (
-                <div key={k} className={styles.fact}>
-                  <dt>{k}</dt>
-                  <dd>{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div className={styles.hero} aria-hidden="true" />
-        </section>
-
-        {/* full case study — scrolls in the card too; the tracker only shows full screen */}
-        <div className={styles.study}>
-          {expanded && (
-            <nav className={styles.toc} aria-label="On this page">
-              {/* Figma 64:591 "Aisle Directory": [n] markers, serif names, the current one larger in red */}
-              <p className={styles.tocLabel}>Aisle Directory</p>
-              <ol>
-                {caseStudySections.map((name, i) => (
-                  <li key={name} className={styles.tocRow}>
-                    <span className={styles.tocNum} aria-hidden="true">
-                      [{i + 1}]
-                    </span>
-                    <button
-                      type="button"
-                      className={`${styles.tocItem} ${i === active ? styles.tocOn : ""}`}
-                      aria-current={i === active ? "true" : undefined}
-                      onClick={() => jump(i)}
-                    >
-                      {name}
-                    </button>
-                  </li>
-                ))}
-              </ol>
-            </nav>
-          )}
-          <div className={styles.sections}>
-            {caseStudySections.map((name, i) => (
-              <section
-                key={name}
-                id={`${project.slug}-${slugify(name)}`}
-                ref={(el) => {
-                  sectionRefs.current[i] = el;
-                }}
-                className={styles.section}
+              <SiteHeader />
+            </div>
+          ) : (
+            <header className={styles.header}>
+              <span className={styles.logo} aria-hidden="true">
+                <b>hope</b>
+                <span className={styles.apos}>’</span>
+                <b>s grocer</b>
+              </span>
+              <button
+                type="button"
+                className={styles.expand}
+                onClick={toggle}
+                aria-label={
+                  expanded ? "Shrink back to a card" : "Expand to full screen"
+                }
+                aria-pressed={expanded}
               >
-                <h3 className={styles.sectionTitle}>{name}</h3>
-                <p>{LOREM}</p>
-                <div className={styles.shot} aria-hidden="true" />
-                <p>{LOREM}</p>
-              </section>
-            ))}
-            <a
-              className={styles.more}
-              href={project.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Read the current case study ↗
-            </a>
+                <ExpandIcon expanded={expanded} />
+              </button>
+              <button
+                type="button"
+                className={styles.close}
+                onClick={() => close()}
+              >
+                Close
+              </button>
+            </header>
+          )}
+
+          {/* title section — Figma: title 40 SemiBold, intro Light 24/25 (487 wide), four facts; image 860×532 r24 */}
+          <section className={styles.intro}>
+            <div className={styles.introText}>
+              <h2 className={styles.title}>{project.title}</h2>
+              <p className={styles.lead}>{project.intro ?? LOREM}</p>
+              <dl className={styles.facts}>
+                {facts.map(([k, v]) => (
+                  <div key={k} className={styles.fact}>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <div className={styles.hero} aria-hidden="true" />
+          </section>
+
+          {/* full case study — scrolls in the card too; the tracker only shows full screen */}
+          <div className={styles.study}>
+            {expanded && (
+              <nav className={styles.toc} aria-label="On this page">
+                {/* Figma 64:591 "Aisle Directory": [n] markers, serif names, the current one larger in red */}
+                <p className={styles.tocLabel}>Aisle Directory</p>
+                <ol>
+                  {caseStudySections.map((name, i) => (
+                    <li key={name} className={styles.tocRow}>
+                      <span className={styles.tocNum} aria-hidden="true">
+                        [{i + 1}]
+                      </span>
+                      <button
+                        type="button"
+                        className={`${styles.tocItem} ${i === active ? styles.tocOn : ""}`}
+                        aria-current={i === active ? "true" : undefined}
+                        onClick={() => jump(i)}
+                      >
+                        {name}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+            <div className={styles.sections}>
+              {caseStudySections.map((name, i) => (
+                <section
+                  key={name}
+                  id={`${project.slug}-${slugify(name)}`}
+                  ref={(el) => {
+                    sectionRefs.current[i] = el;
+                  }}
+                  className={styles.section}
+                >
+                  <h3 className={styles.sectionTitle}>{name}</h3>
+                  <p>{LOREM}</p>
+                  <div className={styles.shot} aria-hidden="true" />
+                  <p>{LOREM}</p>
+                </section>
+              ))}
+              <a
+                className={styles.more}
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Read the current case study ↗
+              </a>
+            </div>
           </div>
         </div>
       </div>
