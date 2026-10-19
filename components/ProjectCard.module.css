@@ -233,3 +233,51 @@
     --wpeel: 0px;
   }
 }
+
+/* "SOLD OUT" banner — Figma 78:2301: 572.19 × 121.42 at (47, 198.93) on the 681-wide tray,
+   turned 5.31° (rising to the right), r26.17, #F93636, clips its text. Text Host Grotesk
+   SemiBold Italic, uppercase, ink: 80.49 at (-15.27, -9.45) and 23.27 at (-7.27, 81.43). */
+.soldOut {
+  position: absolute;
+  left: calc(47 / 681 * 100%);
+  top: calc(198.934 / 466 * 100%);
+  width: calc(572.188 / 681 * 100%);
+  height: calc(121.417 / 466 * 100%);
+  overflow: hidden;
+  border-radius: calc(26.174 / 681 * 100cqw);
+  background: #f93636;
+  color: var(--color-ink);
+  font-style: italic;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(-5.308deg);
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.soldOutBig,
+.soldOutSmall {
+  position: absolute;
+}
+
+.soldOutBig {
+  left: calc(-15.268 / 681 * 100cqw);
+  top: calc(-9.452 / 681 * 100cqw);
+  font-size: calc(80.485 / 681 * 100cqw);
+}
+
+.soldOutSmall {
+  left: calc(-7.27 / 681 * 100cqw);
+  top: calc(81.43 / 681 * 100cqw);
+  font-size: calc(23.266 / 681 * 100cqw);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

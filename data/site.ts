@@ -25,6 +25,10 @@ export type Project = {
   cover?: { src: string; alt: string };
   /** looping, muted video: fills the tray on the homepage and the popup's header image */
   video?: string;
+  /** colour of the shot when there's no cover or video (default: the design's red) */
+  shot?: string;
+  /** red "SOLD OUT · on sale soon" banner slapped across the package (case study not out yet) */
+  soldOut?: boolean;
   /** logo sitting on the shot, bottom right, inside the plastic wrap */
   badge?: string;
   /** project popup (Figma "project overlay"): intro paragraph + the four facts under it */
@@ -79,11 +83,14 @@ export const projects: Project[] = [
     href: "https://matthew-hope.com/shmood",
   },
   {
-    slug: "crave",
-    title: "Crave",
-    subtitle: "Redefining the dining experience",
-    tags: ["Consumer product", "0 → 1", "Personal project", "Mobile app"],
-    href: "https://matthew-hope.com/crave",
+    slug: "25madison",
+    title: "25madison",
+    subtitle: "Internal tool for streamlining branding",
+    tags: ["B2B", "AI tool", "Internal tool", "Startup incubation"],
+    href: "https://matthew-hope.com",
+    // Figma 21:136 / 78:2301: dark shot under the wrap, "sold out" banner across the pack
+    shot: "#282828",
+    soldOut: true,
   },
 ];
 

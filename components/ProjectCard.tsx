@@ -13,10 +13,14 @@ function WrappedTray({
   cover,
   video,
   badge,
+  shot,
+  soldOut,
 }: {
   cover?: Project["cover"];
   video?: string;
   badge?: string;
+  shot?: string;
+  soldOut?: boolean;
 }) {
   return (
     <div className={styles.tray}>
@@ -30,7 +34,10 @@ function WrappedTray({
           sizes="(max-width: 767px) 88vw, 40vw"
           className={styles.trayBase}
         />
-        <div className={styles.content}>
+        <div
+          className={styles.content}
+          style={shot ? { background: shot } : undefined}
+        >
           {video ? (
             <video
               className={styles.coverVideo}
@@ -84,6 +91,20 @@ function WrappedTray({
           />
         </span>
       </div>
+      {/* Figma 78:2301: a price-gun style banner stuck across the pack, over the wrap */}
+      {soldOut ? (
+        <div className={styles.soldOut}>
+          <span className={styles.soldOutBig} aria-hidden="true">
+            Sold out sold
+          </span>
+          <span className={styles.soldOutSmall} aria-hidden="true">
+            on sale soon on sale soon on sale soon on sale soon
+          </span>
+          <span className={styles.srOnly}>
+            Sold out, case study on sale soon
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -112,6 +133,8 @@ export default function ProjectCard({ project }: { project: Project }) {
             cover={project.cover}
             video={project.video}
             badge={project.badge}
+            shot={project.shot}
+            soldOut={project.soldOut}
           />
         </div>
         <div className={styles.info}>
