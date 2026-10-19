@@ -70,7 +70,7 @@
   justify-content: space-between;
   height: calc(84 * var(--pu));
   min-height: 52px;
-  padding: 0 max(16px, calc(40 * var(--pu)));
+  padding: 0 40px;
   border-bottom: 2px solid var(--color-ink);
   background: var(--color-bg);
 }
@@ -140,7 +140,7 @@
   display: grid;
   grid-template-columns: calc(528 * var(--pu)) calc(860 * var(--pu));
   justify-content: space-between;
-  padding: calc(103 * var(--pu)) calc(38 * var(--pu)) calc(100 * var(--pu));
+  padding: calc(103 * var(--pu)) 40px calc(100 * var(--pu));
 }
 
 .introText {
@@ -199,7 +199,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: calc(40 * var(--pu));
-  padding: calc(40 * var(--pu)) calc(38 * var(--pu)) calc(160 * var(--pu));
+  /* runs the full width, 40 in from each edge */
+  padding: calc(40 * var(--pu)) 40px calc(160 * var(--pu));
   border-top: 2px solid var(--color-ink);
 }
 
@@ -280,7 +281,6 @@
   display: flex;
   flex-direction: column;
   gap: calc(120 * var(--pu));
-  max-width: calc(980 * var(--pu));
 }
 
 .section p {
