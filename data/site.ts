@@ -2,7 +2,7 @@
 export const navLinks = [
   { label: "about", href: "https://matthew-hope.com/about" },
   { label: "projects", href: "#seasonal-picks" },
-  { label: "graphics", href: "https://matthew-hope.com/#pantry" },
+  { label: "graphics", href: "#grocers-selects" },
 ];
 
 // Footer social links. TODO: add the X handle.
@@ -170,4 +170,88 @@ export const cartCatalog: {
     image: s.src.replace("/home/", "/cart/"),
     sticker: true,
   })),
+];
+
+/**
+ * "Grocer's Selects" shelf on the homepage (Figma 111:697): graphic work as products, three per
+ * row. Images are 2× renders of the Figma posters (742 × 988).
+ */
+export const grocersSelects: {
+  title: string;
+  source: string;
+  price: string;
+  src: string;
+}[] = [
+  {
+    title: "Solara Poster",
+    source: "CrowdVolt Print",
+    price: "$90.00",
+    src: "/graphics/select-01.webp",
+  },
+  {
+    title: "Solomun Special Event",
+    source: "CrowdVolt Socials",
+    price: "$102.00",
+    src: "/graphics/select-02.webp",
+  },
+  {
+    title: "Head Trip Poster",
+    source: "CrowdVolt Socials",
+    price: "$178.00",
+    src: "/graphics/select-03.webp",
+  },
+  {
+    title: "New Music Friday",
+    source: "CrowdVolt Socials",
+    price: "$109.00",
+    src: "/graphics/select-04.webp",
+  },
+  {
+    title: "Membership Invite",
+    source: "Design Meetup Socials",
+    price: "$237.00",
+    src: "/graphics/select-05.webp",
+  },
+  {
+    title: "Autumn Atelier",
+    source: "Design Meetup Socials",
+    price: "$173.00",
+    src: "/graphics/select-06.webp",
+  },
+  {
+    title: "Spotify Event",
+    source: "Design Meetup Socials",
+    price: "$254.00",
+    src: "/graphics/select-07.webp",
+  },
+  {
+    title: "Membership Invite",
+    source: "Design Meetup Socials",
+    price: "$155.00",
+    src: "/graphics/select-08.webp",
+  },
+  {
+    title: "Autumn Atelier Recap",
+    source: "Design Meetup Socials",
+    price: "$128.00",
+    src: "/graphics/select-09.webp",
+  },
+  {
+    title: "Rewind",
+    source: "CrowdVolt Print",
+    price: "$102.00",
+    src: "/graphics/select-10.webp",
+  },
+  {
+    title: "Rewind",
+    source: "CrowdVolt Print",
+    price: "$203.00",
+    src: "/graphics/select-11.webp",
+  },
+  {
+    title: "Recruitment Poster",
+    source: "CrowdVolt Socials",
+    price: "$41.00",
+    src: "/graphics/select-12.webp",
+  },
 ];

@@ -138,7 +138,6 @@ function Block({ b }: { b: CaseBlock }) {
           <iframe
             src={b.url}
             title={b.title}
-            loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>

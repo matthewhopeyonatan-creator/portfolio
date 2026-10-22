@@ -1,0 +1,105 @@
+/* Figma 111:697 — 3 equal columns, 2px ink rules · poster 371 × 494, r24 · caption 16 below:
+   name + price Medium 20, source Light 16 (5 below) · "See full catalog" Light 16, centred.
+   Each cell is 576 wide, so the poster gets (576 − 371) / 2 = 102.5 on every side. */
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-bg);
+}
+
+.cell {
+  padding: calc(102.5 * var(--u));
+  border-bottom: var(--rule);
+}
+
+.cell:not(:nth-child(3n)) {
+  border-right: var(--rule);
+}
+
+.item {
+  margin: 0;
+}
+
+.poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(24 * var(--u));
+}
+
+.caption {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 16px;
+  margin-top: calc(16 * var(--u));
+  color: var(--color-ink);
+  line-height: normal;
+}
+
+.title,
+.price {
+  font-size: max(15px, calc(20 * var(--u)));
+  font-weight: 500;
+}
+
+.price {
+  text-align: right;
+}
+
+.source {
+  grid-column: 1 / -1;
+  margin-top: calc(5 * var(--u));
+  font-size: max(12px, calc(16 * var(--u)));
+  font-weight: 300;
+}
+
+.more {
+  margin: 0;
+  padding: calc(56 * var(--u)) 0 0;
+  text-align: center;
+  font-size: max(13px, calc(16 * var(--u)));
+  font-weight: 300;
+}
+
+.more a {
+  color: var(--color-ink);
+}
+
+.more a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* tablets: two across */
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cell:not(:nth-child(3n)) {
+    border-right: 0;
+  }
+  .cell:nth-child(odd) {
+    border-right: var(--rule);
+  }
+  .cell {
+    padding: 40px;
+  }
+}
+
+/* phones: one per row */
+@media (max-width: 599px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .cell:nth-child(odd) {
+    border-right: 0;
+  }
+  .cell {
+    padding: 40px 16px;
+  }
+}
