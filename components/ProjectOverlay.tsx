@@ -110,6 +110,85 @@ function Block({ b }: { b: CaseBlock }) {
           {b.text}
         </a>
       );
+    case "group":
+      return (
+        <div className={styles.cvGroup}>
+          {b.label ? (
+            <p
+              className={`${styles.cvLabel} ${b.accent ? styles.cvAccent : ""}`}
+            >
+              {b.label}
+            </p>
+          ) : null}
+          {b.blocks.map((c, j) => (
+            <Block key={j} b={c} />
+          ))}
+        </div>
+      );
+    case "callout":
+      return (
+        <div className={styles.cvText}>
+          <p className={styles.cvCallout}>{b.text}</p>
+          {b.body ? <p className={styles.cvBody}>{b.body}</p> : null}
+        </div>
+      );
+    case "embed":
+      return (
+        <div className={styles.cvEmbed} style={{ aspectRatio: b.ratio }}>
+          <iframe
+            src={b.url}
+            title={b.title}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
+      );
+    case "flow":
+      return (
+        <div
+          className={styles.cvFlow}
+          role="img"
+          aria-label={b.steps.join(", then ")}
+        >
+          {b.steps.map((step, i) => (
+            <div key={step} className={styles.cvStep}>
+              <span className={styles.cvStepLabel}>{step}</span>
+              <span className={styles.cvDot} aria-hidden="true" />
+              {b.frictionAfter?.includes(i) ? (
+                <span className={styles.cvFriction} aria-hidden="true">
+                  +FRICTION
+                </span>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      );
+    case "figures":
+      return (
+        <div className={styles.cvFigures} data-count={b.items.length}>
+          {b.items.map((f) => (
+            <figure key={f.image.src} className={styles.cvFigure}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={f.image.src}
+                alt={f.image.alt}
+                width={f.image.w}
+                height={f.image.h}
+                loading="lazy"
+                decoding="async"
+              />
+              {f.caption ? <figcaption>{f.caption}</figcaption> : null}
+            </figure>
+          ))}
+        </div>
+      );
+    case "placeholder":
+      return (
+        <>
+          <p>{LOREM}</p>
+          <div className={styles.shot} aria-hidden="true" />
+        </>
+      );
   }
 }
 
@@ -424,11 +503,18 @@ export default function ProjectOverlay({
                   }}
                   className={styles.section}
                 >
-                  {study && (
-                    <p className={styles.sectionLabel}>
-                      <span aria-hidden="true">[{i + 1}]</span> {name}
+                  {study && study[i].blocks[0]?.type === "placeholder" && (
+                    <p className={`${styles.cvLabel} ${styles.cvAccent}`}>
+                      {name}
                     </p>
                   )}
+                  {study &&
+                    !study[i].ownLabel &&
+                    study[i].blocks[0]?.type !== "placeholder" && (
+                      <p className={styles.sectionLabel}>
+                        <span aria-hidden="true">[{i + 1}]</span> {name}
+                      </p>
+                    )}
                   {study ? (
                     study[i].blocks.map((b, j) => <Block key={j} b={b} />)
                   ) : (

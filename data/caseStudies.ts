@@ -21,9 +21,27 @@ export type CaseBlock =
       type: "cards";
       items: { title: string; text: string; image?: CaseImage }[];
     }
-  | { type: "link"; text: string; href: string };
+  | { type: "link"; text: string; href: string }
+  // ── CrowdVolt-style blocks (Figma 64:381) ──
+  // a labelled group: small uppercase label (red for a section's opening label), then its blocks
+  | { type: "group"; label?: string; accent?: boolean; blocks: CaseBlock[] }
+  // big 48px statement with an optional 24px line under it
+  | { type: "callout"; text: string; body?: string }
+  // live website in a rounded window
+  | { type: "embed"; url: string; title: string; ratio: number }
+  // step diagram: labels over dots, optional "+FRICTION" tags after given steps (0-based)
+  | { type: "flow"; steps: string[]; frictionAfter?: number[] }
+  // images with captions under them, side by side when more than one
+  | { type: "figures"; items: { image: CaseImage; caption?: string }[] }
+  // a not-yet-written section
+  | { type: "placeholder" };
 
-export type CaseSection = { name: string; blocks: CaseBlock[] };
+export type CaseSection = {
+  name: string;
+  blocks: CaseBlock[];
+  /** the section opens with its own label (e.g. a red "OVERVIEW"), so skip the generic "[n] Name" one */
+  ownLabel?: boolean;
+};
 
 const img = (n: string, w: number, h: number, alt: string): CaseImage => ({
   src: `/projects/shmood/${n}.webp`,
@@ -330,4 +348,183 @@ const shmood: CaseSection[] = [
   },
 ];
 
-export const caseStudies: Record<string, CaseSection[]> = { shmood };
+const cv = (n: string, alt: string): CaseImage => ({
+  src: `/projects/crowdvolt/${n}.webp`,
+  w: 1512,
+  h: 743,
+  alt,
+});
+
+const bidSteps = [
+  "I want to buy for $40",
+  "I’ll sell for $40",
+  "Confirm",
+  "Transaction complete",
+];
+
+// Figma 64:381 — Matthew's copy, as written there
+const crowdvolt: CaseSection[] = [
+  {
+    name: "Overview",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Overview",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "At a startup, I designed product features from scratch and took over others partway through. I also made graphics, ran social media, and helped plan events",
+            body: "CrowdVolt is a peer-to-peer ticket marketplace. Rather than holding inventory, it connects buyers with verified sellers, and tickets move straight from the seller’s account to the buyer’s.",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "What is CrowdVolt",
+        blocks: [
+          {
+            type: "callout",
+            text: "An EDM ticket marketplace backed by YC, that connects users to each other through a community-forward platform",
+            body: "CrowdVolt is a peer-to-peer ticket marketplace. Rather than holding inventory, it connects buyers with verified sellers, and tickets move straight from the seller’s account to the buyer’s.",
+          },
+          {
+            type: "embed",
+            url: "https://www.crowdvolt.com",
+            title: "crowdvolt.com",
+            ratio: 1314 / 547,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Bid Warning",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Bid Warning",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "Redesigning a core flow that allows users to place bids on tickets they want to buy",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "The Problem",
+        blocks: [
+          {
+            type: "callout",
+            text: "Once a buyer places a bid and a seller matches it, the transaction is automatically processed",
+            body: "Causes high user confusion since users are accustomed to secondary confirmation whether they want to buy the ticket or not",
+          },
+          { type: "flow", steps: bidSteps },
+        ],
+      },
+      {
+        type: "group",
+        label: "Decision Making",
+        blocks: [
+          {
+            type: "callout",
+            text: "This was causing a lot of pressure on the operations team, there was not much time to conduct a full design process",
+            body: "After identifying the core part of the problem, I realize that there are 2 areas that friction can be added to",
+          },
+          { type: "flow", steps: bidSteps, frictionAfter: [0, 1] },
+          {
+            type: "callout",
+            text: "Final decision was to add friction while buyer is placing the bid",
+            body: "Adding friction after the sale would make buyers come back to the platform to confirm it. That extra step could put them off, and some would drop off before finishing the purchase.",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Iterations",
+        blocks: [
+          {
+            type: "callout",
+            text: "Should the friction be added as a separate page or embedded in the current flow?",
+            body: "After identifying the core part of the problem, I realize that there are 2 areas that friction can be added to",
+          },
+          {
+            type: "figures",
+            items: [
+              {
+                image: cv(
+                  "bid-warning-page",
+                  "Bid warning as a separate page: You’re about to make an offer",
+                ),
+                caption: "Seperate warning page",
+              },
+              {
+                image: cv(
+                  "bid-checkbox",
+                  "Bid warning embedded in the review page as checkboxes",
+                ),
+                caption: "Embed to current page as checkbox",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        blocks: [
+          {
+            type: "callout",
+            text: "Using Post Hog heat maps and recordings to see user behavior",
+            body: "Users currently spend no attention or time on checkboxes, adding another one adds basically no friction to the process.",
+          },
+          {
+            type: "figures",
+            items: [
+              {
+                image: cv(
+                  "bid-heatmap",
+                  "Mock heat map of the review page: attention on totals and the Place Offer button, none on the checkbox text",
+                ),
+                caption:
+                  "Mock heat map depicting users not reading checkbox information (real heat map may not be displayed)",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Final Design Decision",
+        blocks: [
+          {
+            type: "callout",
+            text: "The bid warning should live as a separate page to introduce the right amount of friction without adding another user flow",
+          },
+          {
+            type: "figures",
+            items: [
+              {
+                image: cv(
+                  "bid-final",
+                  "Final bid warning page: You’re about to make an offer",
+                ),
+                caption: "Final implemented design",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // still to come (named in the Figma Aisle Directory)
+  { name: "Tickermaster Flow", blocks: [{ type: "placeholder" }] },
+  { name: "Graphics", blocks: [{ type: "placeholder" }] },
+  { name: "Play", blocks: [{ type: "placeholder" }] },
+  { name: "Impacts", blocks: [{ type: "placeholder" }] },
+];
+
+export const caseStudies: Record<string, CaseSection[]> = { shmood, crowdvolt };
