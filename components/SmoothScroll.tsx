@@ -74,11 +74,35 @@ export default function SmoothScroll() {
   // a popup — that isn't a place on the page, so it still starts at the top)
   const firstPath = useRef(true);
   useEffect(() => {
-    if (firstPath.current) {
-      firstPath.current = false;
-      if (window.location.hash && document.getElementById(window.location.hash.slice(1))) return;
-    } else if (window.location.hash && document.getElementById(window.location.hash.slice(1))) {
-      return;
+    const first = firstPath.current;
+    firstPath.current = false;
+    const id = window.location.hash.slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (target) {
+      // land on the section; tell the smooth scroller too, or it would drift back to where the
+      // previous page was scrolled
+      if (first) return; // the browser handles a fresh load
+      // the new page is still laying out (the hero sizes itself once it's mounted), so aim at the
+      // section a few times as it settles; stop the moment the visitor scrolls themselves
+      let stop = false;
+      const halt = () => (stop = true);
+      const aim = () => {
+        if (stop) return;
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (lenisRef.current) lenisRef.current.scrollTo(el, { immediate: true, force: true });
+        else el.scrollIntoView();
+      };
+      const timers = [0, 120, 300, 600, 1000].map((ms) => window.setTimeout(aim, ms));
+      window.addEventListener("wheel", halt, { passive: true, once: true });
+      window.addEventListener("touchstart", halt, { passive: true, once: true });
+      window.addEventListener("keydown", halt, { once: true });
+      return () => {
+        timers.forEach((t) => window.clearTimeout(t));
+        window.removeEventListener("wheel", halt);
+        window.removeEventListener("touchstart", halt);
+        window.removeEventListener("keydown", halt);
+      };
     }
     lenisRef.current?.scrollTo(0, { immediate: true, force: true });
     window.scrollTo(0, 0);

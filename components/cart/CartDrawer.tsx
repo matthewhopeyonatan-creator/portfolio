@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { cartCatalog } from "@/data/site";
 import { useCart } from "./CartContext";
@@ -176,13 +177,13 @@ export default function CartDrawer() {
                 checkout
               </a>
             ) : (
-              <a
+              <Link
                 className={styles.checkout}
                 href="/#seasonal-picks"
                 onClick={close}
               >
                 start shopping
-              </a>
+              </Link>
             )}
           </div>
         </div>

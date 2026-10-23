@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import Lenis from "lenis";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
@@ -428,6 +429,7 @@ export default function ProjectOverlay({
   );
   // opened from the address bar: the "page" entry already exists (it's the one we loaded on)
   const ownsUrl = useRef(fromUrl);
+  const router = useRouter();
   const [leaving, setLeaving] = useState(false);
   const [active, setActive] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -613,19 +615,23 @@ export default function ProjectOverlay({
                 e.preventDefault();
                 e.stopPropagation();
                 close(() => {
-                  if (href.startsWith("#")) {
+                  // "/#section" or "#section": a section of the main page, glide to it
+                  const hash = href.startsWith("/#") ? href.slice(1) : href.startsWith("#") ? href : "";
+                  if (hash) {
                     const t = document.createElement("a");
-                    t.href = href;
+                    t.href = hash;
                     document.body.appendChild(t);
                     t.click(); // SmoothScroll glides to the section
                     t.remove();
-                  } else {
+                  } else if (href === "/" || href === "") {
                     const ask = new CustomEvent("scroll-to-top", {
                       detail: { handled: false },
                     });
                     window.dispatchEvent(ask);
                     if (!ask.detail.handled)
                       window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    router.push(href); // another page of the site (e.g. the catalog)
                   }
                 });
               }}

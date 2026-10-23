@@ -23,7 +23,18 @@ export default function Catalog() {
     };
     read();
     window.addEventListener("hashchange", read);
-    return () => window.removeEventListener("hashchange", read);
+    window.addEventListener("popstate", read);
+    // "catalog" in the navbar/footer while a popup is open: back to the plain catalog
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest?.('a[href="/catalog"]');
+      if (a) setOpen(null);
+    };
+    document.addEventListener("click", onClick);
+    return () => {
+      window.removeEventListener("hashchange", read);
+      window.removeEventListener("popstate", read);
+      document.removeEventListener("click", onClick);
+    };
   }, []);
 
   const show = (slug: Slug) => {
