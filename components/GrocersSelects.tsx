@@ -219,16 +219,10 @@ function PosterView({
             />
           )}
         </div>
-        <div className={styles.viewInfo}>
-          <p className={styles.viewTitle}>
-            <span>{item.title}</span>
-            <span>{item.price}</span>
-          </p>
-          <p className={styles.viewSource}>{item.source}</p>
-          <p className={styles.viewAdded} aria-live="polite">
-            Added to your cart
-          </p>
-        </div>
+        {/* screen readers still hear that it went in the cart */}
+        <p className="visually-hidden" aria-live="polite">
+          {item.title} added to your cart
+        </p>
       </div>
       <button ref={closeRef} type="button" className={styles.viewClose} onClick={close}>
         close
