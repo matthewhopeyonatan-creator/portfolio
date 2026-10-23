@@ -18,6 +18,49 @@ type Item = (typeof grocersSelects)[number];
 export default function GrocersSelects() {
   const { add } = useCart();
   const [open, setOpen] = useState<{ item: Item; from: DOMRect } | null>(null);
+  const gridRef = useRef<HTMLUListElement>(null);
+
+  // Each poster swipes in only once its art has loaded (no half-drawn image mid-animation), and
+  // the moving posters only play while they're on screen.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const figs = Array.from(grid.querySelectorAll<HTMLElement>("figure"));
+    const cleanups: (() => void)[] = [];
+    for (const fig of figs) {
+      const done = () => (fig.dataset.loaded = "");
+      const img = fig.querySelector("img");
+      const video = fig.querySelector("video");
+      if (img) {
+        if (img.complete && img.naturalWidth) done();
+        else {
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
+        }
+      } else if (video) {
+        // the still is shown as the video's poster until it plays: wait for that still
+        const still = new window.Image();
+        still.onload = still.onerror = done;
+        still.src = video.poster;
+      }
+      const t = window.setTimeout(done, 2500); // never hold a poster back for long
+      cleanups.push(() => window.clearTimeout(t));
+    }
+    const videos = Array.from(grid.querySelectorAll("video"));
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        v.muted = true; // autoplay is only allowed muted (React doesn't always set the property)
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }
+    });
+    videos.forEach((v) => io.observe(v));
+    return () => {
+      cleanups.forEach((c) => c());
+      io.disconnect();
+    };
+  }, []);
 
   const pick = (item: Item, el: HTMLElement) => {
     add(posterKey(item.src));
@@ -36,7 +79,7 @@ export default function GrocersSelects() {
         </h2>
       </div>
       <div className={styles.shelf}>
-        <ul className={styles.grid}>
+        <ul ref={gridRef} className={styles.grid}>
           {grocersSelects.map((item, i) => (
             <li key={item.src} className={styles.cell}>
               {/* row by row, left to right */}
@@ -60,7 +103,6 @@ export default function GrocersSelects() {
                     poster={item.src}
                     width={742}
                     height={988}
-                    autoPlay
                     muted
                     loop
                     playsInline
@@ -80,6 +122,7 @@ export default function GrocersSelects() {
                     width={742}
                     height={988}
                     sizes="(max-width: 767px) 80vw, 22vw"
+                    loading="eager"
                     className={styles.poster}
                   />
                 )}

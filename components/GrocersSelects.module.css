@@ -138,11 +138,11 @@
   cursor: zoom-in;
 }
 
-.pick .poster {
+.pick {
   transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.pick:hover .poster {
+.pick:hover {
   transform: translateY(-6px);
 }
 

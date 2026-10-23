@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import { navLinks } from "@/data/site";
+import { shouldSkipIntro } from "@/lib/intro";
 import styles from "./SiteHeader.module.css";
 
 /** Hide on scroll down, show on scroll up — always visible near the top of the page. */
@@ -43,6 +44,10 @@ function useIntro(enabled: boolean) {
 
   useEffect(() => {
     if (!enabled) return;
+    if (shouldSkipIntro()) {
+      setPhase("off");
+      return;
+    }
     const start = () => setPhase((p) => (p === "waiting" ? "playing" : p));
     window.addEventListener("hero:intro", start);
     const fallback = window.setTimeout(start, 2500); // never leave the nav hidden
@@ -113,8 +118,10 @@ export default function SiteHeader({ intro = false }: { intro?: boolean }) {
         className={styles.logo}
         aria-label="hope's grocer — back to top"
         onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+          // from another page: an ordinary link (the landing page skips its intro then)
+          if (window.location.pathname !== "/") return;
           // already home: glide back to the top instead of reloading the page
-          if (window.location.pathname !== "/" || e.metaKey || e.ctrlKey || e.shiftKey) return;
           e.preventDefault();
           const ask = new CustomEvent("scroll-to-top", { detail: { handled: false } });
           window.dispatchEvent(ask);

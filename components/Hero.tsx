@@ -1,5 +1,6 @@
 "use client";
 
+import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
@@ -310,6 +311,8 @@ function Tomato({
 export default function Hero() {
   const [loaded, setLoaded] = useState(0);
   const [ready, setReady] = useState(false);
+  // arriving from another page via the logo: no intro, everything already in place
+  const [skip, setSkip] = useState(false);
   const total = Object.keys(tomatoes).length;
 
   // The sign's intro happens big and centred: measure its resting box, and hand CSS the offset +
@@ -350,6 +353,16 @@ export default function Hero() {
     );
   };
 
+  useEffect(() => {
+    const skipNow = shouldSkipIntro();
+    markIntroPlayed();
+    if (!skipNow) return;
+    started.current = true;
+    setSkip(true);
+    setReady(true);
+    document.documentElement.dataset.intro = "done";
+  }, []);
+
   // Start once the tomato images are in (so they don't pop in mid-animation); never wait > 1.6s.
   useEffect(() => {
     if (loaded >= total) start();
@@ -369,12 +382,12 @@ export default function Hero() {
         () => setActivePhrase((i) => (i + 1) % phrases.length),
         1000,
       );
-    }, 4200);
+    }, skip ? 1000 : 4200);
     return () => {
       window.clearTimeout(startAt);
       window.clearInterval(interval);
     };
-  }, [ready]);
+  }, [ready, skip]);
 
   // Let the header know the intro has started, so it can slide in after the hero has landed.
   useEffect(() => {
@@ -423,7 +436,7 @@ export default function Hero() {
 
   return (
     <section
-      className={`${styles.hero} ${ready ? styles.play : ""} ${introRunning ? styles.introRunning : ""}`}
+      className={`${styles.hero} ${ready ? styles.play : ""} ${introRunning ? styles.introRunning : ""} ${skip ? styles.skip : ""}`}
       aria-label="Intro"
     >
       <noscript>

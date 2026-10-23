@@ -142,13 +142,17 @@ html.modal-open {
   opacity: 1;
 }
 
+/* the poster's frame stays put and clips; the art inside slides up into it (transform only, so it
+   runs on the compositor). It waits for the art itself to have loaded (data-loaded). */
 .reveal-ready [data-reveal="swipe"] > :first-child {
-  clip-path: inset(100% 0 0 0);
-  transform: translateY(14%);
-  transition:
-    clip-path 650ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.reveal-ready [data-reveal="swipe"] > :first-child > * {
+  transform: translate3d(0, 101%, 0);
+  transition: transform 750ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: calc(var(--i, 0) * 70ms);
+  will-change: transform;
 }
 
 .reveal-ready [data-reveal="swipe"] > figcaption {
@@ -160,12 +164,11 @@ html.modal-open {
   transition-delay: calc(var(--i, 0) * 70ms + 220ms);
 }
 
-.reveal-ready [data-reveal="swipe"][data-revealed] > :first-child {
-  clip-path: inset(-24px -24px -24px -24px); /* a little slack so the hover lift isn't cut off */
+.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] > :first-child > * {
   transform: none;
 }
 
-.reveal-ready [data-reveal="swipe"][data-revealed] > figcaption {
+.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] > figcaption {
   opacity: 1;
   transform: none;
 }

@@ -38,20 +38,16 @@ export default function Catalog() {
   return (
     <main className={styles.page}>
       <div className={styles.tomatoes} aria-hidden="true">
-        <div className={styles.tomatoBack}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/catalog/tomato-4.svg" alt="" width={784} height={731} />
-        </div>
-        <div className={styles.tomatoFront}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/catalog/tomato-5.svg" alt="" width={1236} height={1116} />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.tomatoBack} src="/catalog/tomato-4.webp" alt="" width={809} height={851} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.tomatoFront} src="/catalog/tomato-5.webp" alt="" width={1202} height={1147} />
       </div>
 
       <h1 className="visually-hidden">Catalog</h1>
       <ul className={styles.aisles}>
-        {catalogAisles.map((a) => (
-          <li key={a.slug}>
+        {catalogAisles.map((a, i) => (
+          <li key={a.slug} style={{ "--i": i } as React.CSSProperties}>
             <a
               href={`#${a.slug}`}
               className={styles.aisle}

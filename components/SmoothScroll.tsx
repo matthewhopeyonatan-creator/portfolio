@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { useCart } from "@/components/cart/CartContext";
@@ -13,6 +14,7 @@ import { useCart } from "@/components/cart/CartContext";
 export default function SmoothScroll() {
   const lenisRef = useRef<Lenis | null>(null);
   const { isOpen } = useCart();
+  const pathname = usePathname();
 
   // A refresh always starts back on the landing screen (browsers otherwise restore the old
   // scroll position). Links to a section (#…) still land on that section.
@@ -67,6 +69,20 @@ export default function SmoothScroll() {
       lenisRef.current = null;
     };
   }, []);
+
+  // a new page starts at the top, unless its #hash names a section on it (/catalog#graphics opens
+  // a popup — that isn't a place on the page, so it still starts at the top)
+  const firstPath = useRef(true);
+  useEffect(() => {
+    if (firstPath.current) {
+      firstPath.current = false;
+      if (window.location.hash && document.getElementById(window.location.hash.slice(1))) return;
+    } else if (window.location.hash && document.getElementById(window.location.hash.slice(1))) {
+      return;
+    }
+    lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   // freeze the page behind the cart
   useEffect(() => {

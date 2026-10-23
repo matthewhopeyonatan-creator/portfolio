@@ -486,3 +486,11 @@
   from { opacity: 0; }
   to { opacity: var(--o); }
 }
+
+/* Back to the landing page from another page (the logo): skip the intro, show it at rest */
+.skip .layer,
+.skip .sticker,
+.skip .line {
+  opacity: 1 !important;
+  animation: none !important;
+}
