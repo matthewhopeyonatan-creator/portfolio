@@ -412,16 +412,22 @@ function ExpandIcon({ expanded }: { expanded: boolean }) {
 export default function ProjectOverlay({
   project,
   onClose,
+  fromUrl = false,
 }: {
   project: Project;
   onClose: () => void;
+  /** reopened from ?project=… on a refresh: start full screen, on the current history entry */
+  fromUrl?: boolean;
 }) {
   // phones get the whole case study straight away (the popup is a full-screen sheet there)
   const [expanded, setExpanded] = useState(
     () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 767px)").matches,
+      fromUrl ||
+      (typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 767px)").matches),
   );
+  // opened from the address bar: the "page" entry already exists (it's the one we loaded on)
+  const ownsUrl = useRef(fromUrl);
   const [leaving, setLeaving] = useState(false);
   const [active, setActive] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -454,6 +460,10 @@ export default function ProjectOverlay({
       if (pushed.current) {
         pushed.current = false;
         history.back(); // drop our "page" too; popstate is ignored now that pushed is false
+      } else if (ownsUrl.current) {
+        // loaded straight onto the project: there's nothing to go back to, so just tidy the URL
+        ownsUrl.current = false;
+        history.replaceState(history.state, "", window.location.pathname);
       }
       setLeaving(true);
       window.setTimeout(() => {
@@ -479,6 +489,14 @@ export default function ProjectOverlay({
   }, [close]);
 
   useEffect(() => {
+    if (ownsUrl.current) {
+      // shrinking a project we loaded straight onto: it's no longer a "page"
+      if (!expanded) {
+        ownsUrl.current = false;
+        history.replaceState(history.state, "", window.location.pathname);
+      }
+      return;
+    }
     if (!expanded || pushed.current) return;
     history.pushState(
       { ...(history.state ?? {}), projectPage: project.slug },

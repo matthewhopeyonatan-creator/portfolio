@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/site";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import ProjectOverlay from "@/components/ProjectOverlay";
 import styles from "./ProjectCard.module.css";
@@ -132,6 +132,15 @@ export default function ProjectCard({ project }: { project: Project }) {
   const external = project.href.startsWith("http");
   const { add } = useCart();
   const [open, setOpen] = useState(false);
+  // a refresh on a project page (?project=slug) lands back on that project, full screen
+  const [fromUrl, setFromUrl] = useState(false);
+  useEffect(() => {
+    if (project.soldOut) return;
+    if (new URLSearchParams(window.location.search).get("project") === project.slug) {
+      setFromUrl(true);
+      setOpen(true);
+    }
+  }, [project.slug, project.soldOut]);
   const body = (
     <>
       <div className={styles.media}>
@@ -187,7 +196,14 @@ export default function ProjectCard({ project }: { project: Project }) {
         {body}
       </Link>
       {open && (
-        <ProjectOverlay project={project} onClose={() => setOpen(false)} />
+        <ProjectOverlay
+          project={project}
+          fromUrl={fromUrl}
+          onClose={() => {
+            setOpen(false);
+            setFromUrl(false);
+          }}
+        />
       )}
     </>
   );
