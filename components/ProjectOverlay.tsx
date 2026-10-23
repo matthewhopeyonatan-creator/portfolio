@@ -242,8 +242,10 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
       let t = 0;
       setFilled([]);
       setRejecting([]);
-      setBall({ at: 0, dur: 0, on: true });
-      t += 450;
+      // snap home while hidden (no travel back across the row), then fade in and go
+      setBall({ at: 0, dur: 0, on: false });
+      at(60, () => setBall({ at: 0, dur: 0, on: true }));
+      t += 520;
       let i = 0;
       while (i < n - 1) {
         // travel to the next real stop, passing over any skipped dots
@@ -285,6 +287,54 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     return () => timers.forEach((id) => window.clearTimeout(id));
   }, [animated, inView, n, b.skip, b.steps]);
 
+  // friction tags: a dark fill hops between them like it's weighing it up, slowing down until it
+  // settles on the one that was chosen (the first), then replays
+  const friction = b.frictionAfter ?? [];
+  const deciding = friction.length > 1;
+  const [fInView, setFInView] = useState(false);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!deciding || !el) return;
+    const io = new IntersectionObserver(([e]) => setFInView(e.isIntersecting), { threshold: 0.25 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [deciding]);
+  useEffect(() => {
+    if (!deciding) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setPicked(friction[0]);
+      setSettled(true);
+      return;
+    }
+    setPicked(null);
+    setSettled(false);
+    if (!fInView) return;
+    const timers: number[] = [];
+    // hops between the two, each a little slower, ending on the first
+    const gaps = [260, 300, 340, 400, 480, 580, 700];
+    const run = () => {
+      let t = 300;
+      setSettled(false);
+      gaps.forEach((g, i) => {
+        t += g;
+        const target = friction[(gaps.length - 1 - i) % 2 === 0 ? 0 : 1];
+        timers.push(window.setTimeout(() => setPicked(target), t));
+      });
+      timers.push(window.setTimeout(() => setSettled(true), t + 120));
+      timers.push(
+        window.setTimeout(() => {
+          setPicked(null);
+          setSettled(false);
+        }, t + 2200),
+      );
+      timers.push(window.setTimeout(run, t + 2700));
+    };
+    run();
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [deciding, fInView, friction]);
+
   const c = centres[ball.at];
   return (
     <div
@@ -312,7 +362,12 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
               aria-hidden="true"
             />
             {b.frictionAfter?.includes(i) ? (
-              <span className={styles.cvFriction} aria-hidden="true">
+              <span
+                className={`${styles.cvFriction} ${picked === i ? styles.cvFrictionOn : ""} ${
+                  picked === i && settled ? styles.cvFrictionSettled : ""
+                }`}
+                aria-hidden="true"
+              >
                 +FRICTION
               </span>
             ) : null}
@@ -328,7 +383,7 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
             height: size,
             transform: `translate(${c.x - size / 2}px, ${c.y - size / 2}px) scale(${ball.on ? 1 : 0.6})`,
             opacity: ball.on ? 1 : 0,
-            transition: `transform ${ball.dur || 300}ms cubic-bezier(0.65, 0, 0.35, 1), opacity 300ms ease`,
+            transition: `transform ${ball.dur}ms cubic-bezier(0.65, 0, 0.35, 1), opacity 300ms ease`,
           }}
         />
       ) : null}

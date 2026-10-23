@@ -634,6 +634,34 @@
   white-space: nowrap;
 }
 
+/* the friction tags "deciding": the dark fill hops between them, then lands */
+.cvFriction {
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.cvFrictionOn {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+.cvFrictionSettled {
+  animation: frictionLand 420ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+@keyframes frictionLand {
+  0% {
+    transform: translate(50%, 50%) scale(1);
+  }
+  40% {
+    transform: translate(50%, 50%) scale(1.08);
+  }
+  100% {
+    transform: translate(50%, 50%) scale(1);
+  }
+}
+
 /* images r24 with a Regular 20/25 caption 12 under each; pairs sit 24 apart */
 .cvFigures {
   display: grid;
