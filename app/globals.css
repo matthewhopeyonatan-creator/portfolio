@@ -208,21 +208,3 @@ html.modal-open {
   opacity: 1;
   transform: none;
 }
-
-
-/* Static grain over the tomatoes: a noise tile clipped to the tomato's own shape (the element's
-   mask is the tomato image) and blended in. The 256px tile is shown at full size, so each speck
-   is one CSS px, kept crisp rather than smoothed. */
-.tomato-noise {
-  position: absolute;
-  pointer-events: none;
-  background: url("/noise.png") repeat;
-  background-size: 256px 256px;
-  image-rendering: pixelated;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  mix-blend-mode: overlay;
-  opacity: 0.35;
-}

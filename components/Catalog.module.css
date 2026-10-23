@@ -26,8 +26,7 @@
 }
 
 .tomatoRot,
-.tomatoRot img,
-.tomatoRot :global(.tomato-noise) {
+.tomatoRot img {
   position: absolute;
 }
 
@@ -52,8 +51,7 @@
   rotate: -48.31deg;
 }
 
-.tomatoBack img,
-.tomatoBack :global(.tomato-noise) {
+.tomatoBack img {
   /* Figma's −10.07% / −23.21% insets, plus the 280px of room added round the SVG so its blur
      can fade out fully instead of being clipped at the canvas edge */
   left: calc(-345.72 * var(--u));
@@ -74,8 +72,7 @@
   rotate: -28.12deg;
 }
 
-.tomatoFront img,
-.tomatoFront :global(.tomato-noise) {
+.tomatoFront img {
   left: calc(-369.97 * var(--u));
   top: calc(-431.67 * var(--u));
   width: calc(1520.326 * var(--u));

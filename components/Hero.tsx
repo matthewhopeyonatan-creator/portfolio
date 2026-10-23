@@ -18,7 +18,7 @@ import styles from "./Hero.module.css";
  */
 const tomatoes = {
   small: {
-    src: "/home/tomato-small.webp",
+    src: "/home/tomato-small-grain.webp",
     w: 1243,
     h: 1290,
     x: 1047.68,
@@ -29,7 +29,7 @@ const tomatoes = {
     order: 3,
   },
   right: {
-    src: "/home/tomato-right-base.webp",
+    src: "/home/tomato-right-base-grain.webp",
     w: 1438,
     h: 1347,
     x: 1108.82,
@@ -40,7 +40,7 @@ const tomatoes = {
     order: 2,
   },
   mid: {
-    src: "/home/tomato-mid-base.webp",
+    src: "/home/tomato-mid-base-grain.webp",
     w: 1501,
     h: 1579,
     x: 644.75,
@@ -51,7 +51,7 @@ const tomatoes = {
     order: 1,
   },
   left: {
-    src: "/home/tomato-left-base.webp",
+    src: "/home/tomato-left-base-grain.webp",
     w: 1782,
     h: 1697,
     x: -195,
@@ -300,11 +300,6 @@ function Tomato({
             .then(onLoad);
         }}
         className={styles.tomatoImg}
-      />
-      <span
-        className="tomato-noise"
-        aria-hidden="true"
-        style={{ inset: 0, maskImage: `url(${t.src})`, WebkitMaskImage: `url(${t.src})` }}
       />
       {stickers[id]?.map((s) => (
         <Sticker key={s.src} s={s} onOpen={onOpen} away={activeSrc === s.src} />
