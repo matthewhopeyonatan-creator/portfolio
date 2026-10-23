@@ -52,10 +52,12 @@
 }
 
 .tomatoBack img {
-  left: -10.07%;
-  top: -23.21%;
-  width: calc(784.113 * var(--u));
-  height: calc(731.07 * var(--u));
+  /* Figma's −10.07% / −23.21% insets, plus the 280px of room added round the SVG so its blur
+     can fade out fully instead of being clipped at the canvas edge */
+  left: calc(-345.72 * var(--u));
+  top: calc(-406.86 * var(--u));
+  width: calc(1344.113 * var(--u));
+  height: calc(1291.07 * var(--u));
 }
 
 /* front: 780.326 × 653.489, −28.12°, centred in its 996 × 944 frame at (569, 321) */
@@ -71,10 +73,10 @@
 }
 
 .tomatoFront img {
-  left: -11.53%;
-  top: -23.21%;
-  width: calc(960.326 * var(--u));
-  height: calc(895.142 * var(--u));
+  left: calc(-369.97 * var(--u));
+  top: calc(-431.67 * var(--u));
+  width: calc(1520.326 * var(--u));
+  height: calc(1455.142 * var(--u));
 }
 
 /* ── load-in, like the landing page: the tomatoes drop in (largest first), then each aisle
