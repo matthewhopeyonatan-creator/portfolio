@@ -181,6 +181,8 @@ export const grocersSelects: {
   source: string;
   price: string;
   src: string;
+  /** looping video for posters that move (the still is its poster frame) */
+  video?: string;
 }[] = [
   {
     title: "Solara Poster",
@@ -211,6 +213,7 @@ export const grocersSelects: {
     source: "Design Meetup Socials",
     price: "$237.00",
     src: "/graphics/select-05.webp",
+    video: "/graphics/select-05.mp4",
   },
   {
     title: "Autumn Atelier",
@@ -223,6 +226,7 @@ export const grocersSelects: {
     source: "Design Meetup Socials",
     price: "$254.00",
     src: "/graphics/select-07.webp",
+    video: "/graphics/select-07.mp4",
   },
   {
     title: "Membership Invite",
@@ -235,6 +239,7 @@ export const grocersSelects: {
     source: "Design Meetup Socials",
     price: "$128.00",
     src: "/graphics/select-09.webp",
+    video: "/graphics/select-09.mp4",
   },
   {
     title: "Rewind",

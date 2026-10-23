@@ -20,14 +20,35 @@ export default function GrocersSelects() {
         {grocersSelects.map((item) => (
           <li key={item.src} className={styles.cell}>
             <figure className={styles.item}>
-              <Image
-                src={item.src}
-                alt={`${item.title} — ${item.source}`}
-                width={742}
-                height={988}
-                sizes="(max-width: 767px) 80vw, 22vw"
-                className={styles.poster}
-              />
+              {item.video ? (
+                <video
+                  className={styles.poster}
+                  poster={item.src}
+                  width={742}
+                  height={988}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label={`${item.title} — ${item.source}`}
+                >
+                  <source
+                    src={item.video.replace(/\.mp4$/, ".webm")}
+                    type="video/webm"
+                  />
+                  <source src={item.video} type="video/mp4" />
+                </video>
+              ) : (
+                <Image
+                  src={item.src}
+                  alt={`${item.title} — ${item.source}`}
+                  width={742}
+                  height={988}
+                  sizes="(max-width: 767px) 80vw, 22vw"
+                  className={styles.poster}
+                />
+              )}
               <figcaption className={styles.caption}>
                 <span className={styles.title}>{item.title}</span>
                 <span className={styles.price}>{item.price}</span>

@@ -29,6 +29,8 @@
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 371 / 494;
+  object-fit: cover; /* videos fill the same 3:4 slot as the stills */
   border-radius: calc(24 * var(--u));
 }
 
