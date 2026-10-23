@@ -11,7 +11,8 @@
   flex-direction: column;
   align-items: center;
   gap: max(40px, calc(62 * var(--u)));
-  padding: max(64px, calc(96 * var(--u))) 24px 0;
+  /* same, tighter space above (from the shelf rule) and below (to the footer rule) */
+  padding: max(48px, calc(80 * var(--u))) 24px;
   text-align: center;
 }
 

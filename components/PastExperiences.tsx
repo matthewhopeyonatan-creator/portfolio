@@ -15,12 +15,21 @@ export default function PastExperiences() {
       aria-labelledby="past-experiences-title"
       className={styles.section}
     >
-      <h2 id="past-experiences-title" className={pageStyles.sectionTitle}>
+      <h2
+        id="past-experiences-title"
+        className={pageStyles.sectionTitle}
+        data-reveal="up"
+      >
         Past experiences
       </h2>
       <ul className={styles.list}>
-        {pastExperiences.map((x) => (
-          <li key={x.org} className={styles.item}>
+        {pastExperiences.map((x, i) => (
+          <li
+            key={x.org}
+            className={styles.item}
+            data-reveal="roll"
+            style={{ "--i": i < 5 ? i : i - 5 + 0.5 } as React.CSSProperties}
+          >
             <Image
               src={x.logo}
               alt=""

@@ -12,55 +12,66 @@ export default function GrocersSelects() {
   return (
     <section id="grocers-selects" aria-labelledby="grocers-selects-title">
       <div className={`${pageStyles.sectionTitleRow} ${styles.titleRow}`}>
-        <h2 id="grocers-selects-title" className={pageStyles.sectionTitle}>
+        <h2
+          id="grocers-selects-title"
+          className={pageStyles.sectionTitle}
+          data-reveal="up"
+        >
           Grocer’s selects
         </h2>
       </div>
-      <ul className={styles.grid}>
-        {grocersSelects.map((item) => (
-          <li key={item.src} className={styles.cell}>
-            <figure className={styles.item}>
-              {item.video ? (
-                <video
-                  className={styles.poster}
-                  poster={item.src}
-                  width={742}
-                  height={988}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  aria-label={`${item.title} — ${item.source}`}
-                >
-                  <source
-                    src={item.video.replace(/\.mp4$/, ".webm")}
-                    type="video/webm"
+      <div className={styles.shelf}>
+        <ul className={styles.grid}>
+          {grocersSelects.map((item, i) => (
+            <li key={item.src} className={styles.cell}>
+              {/* row by row, left to right */}
+              <figure
+                className={styles.item}
+                data-reveal="pop"
+                style={{ "--i": i % 3 } as React.CSSProperties}
+              >
+                {item.video ? (
+                  <video
+                    className={styles.poster}
+                    poster={item.src}
+                    width={742}
+                    height={988}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={`${item.title} — ${item.source}`}
+                  >
+                    <source
+                      src={item.video.replace(/\.mp4$/, ".webm")}
+                      type="video/webm"
+                    />
+                    <source src={item.video} type="video/mp4" />
+                  </video>
+                ) : (
+                  <Image
+                    src={item.src}
+                    alt={`${item.title} — ${item.source}`}
+                    width={742}
+                    height={988}
+                    sizes="(max-width: 767px) 80vw, 22vw"
+                    className={styles.poster}
                   />
-                  <source src={item.video} type="video/mp4" />
-                </video>
-              ) : (
-                <Image
-                  src={item.src}
-                  alt={`${item.title} — ${item.source}`}
-                  width={742}
-                  height={988}
-                  sizes="(max-width: 767px) 80vw, 22vw"
-                  className={styles.poster}
-                />
-              )}
-              <figcaption className={styles.caption}>
-                <span className={styles.title}>{item.title}</span>
-                <span className={styles.price}>{item.price}</span>
-                <span className={styles.source}>{item.source}</span>
-              </figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-      <p className={styles.more}>
-        <a href="https://matthew-hope.com/#pantry">See full catalog</a>
-      </p>
+                )}
+                <figcaption className={styles.caption}>
+                  <span className={styles.title}>{item.title}</span>
+                  <span className={styles.price}>{item.price}</span>
+                  <span className={styles.source}>{item.source}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+        <p className={styles.more} data-reveal="up">
+          <a href="https://matthew-hope.com/#pantry">See full catalog</a>
+        </p>
+      </div>
     </section>
   );
 }

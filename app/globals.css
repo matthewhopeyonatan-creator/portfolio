@@ -113,3 +113,48 @@ html.cart-open,
 html.modal-open {
   overflow: hidden;
 }
+
+/* ── scroll entrances (components/RevealOnScroll) ──────────────────────────────────────────
+   data-reveal="up"     rise + fade (section titles, caption rows)
+   data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
+   data-reveal="pop"    posters: rise + grow in from 94%
+   data-reveal="roll"   experience rows: rise + fade; the logo rolls in
+   --i staggers an item after its neighbours */
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+
+.reveal-ready [data-reveal="up"] {
+  transform: translateY(28px);
+}
+
+.reveal-ready [data-reveal="tray"] {
+  transform: translateY(56px) rotate(1.6deg);
+}
+
+.reveal-ready [data-reveal="pop"] {
+  transform: translateY(40px) scale(0.94);
+}
+
+.reveal-ready [data-reveal="roll"] {
+  transform: translateY(24px);
+}
+
+.reveal-ready [data-reveal="roll"] img {
+  transform: rotate(-120deg) scale(0.6);
+  transition: transform 900ms cubic-bezier(0.34, 1.4, 0.5, 1);
+  transition-delay: calc(var(--i, 0) * 110ms + 120ms);
+}
+
+.reveal-ready [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-ready [data-reveal="roll"][data-revealed] img {
+  transform: none;
+}

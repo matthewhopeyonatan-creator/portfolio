@@ -65,9 +65,20 @@
   font-weight: 300;
 }
 
+/* "See full catalog" sits just above the shelf's bottom rule, centred in the middle column, so
+   the column rules still run down and meet it */
+.shelf {
+  position: relative;
+}
+
 .more {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(2px + max(16px, calc(32 * var(--u))));
+  z-index: 1;
   margin: 0;
-  padding: 24px 0 0;
+  pointer-events: none;
   text-align: center;
   font-size: max(13px, calc(16 * var(--u)));
   font-weight: 300;
@@ -75,6 +86,7 @@
 
 .more a {
   color: var(--color-ink);
+  pointer-events: auto;
 }
 
 .more a:hover {
@@ -84,6 +96,11 @@
 
 /* tablets: two across */
 @media (max-width: 1023px) {
+  /* no middle column here: the link goes back under the shelf */
+  .more {
+    position: static;
+    padding-top: 24px;
+  }
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
