@@ -180,39 +180,112 @@ function Block({ b }: { b: CaseBlock }) {
  */
 function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
   const animated = !!b.skip?.length;
-  // how many dots are filled (0 = all outlines)
-  const [shown, setShown] = useState(animated ? 0 : b.steps.length);
+  const n = b.steps.length;
   const ref = useRef<HTMLDivElement>(null);
-  // the loop only runs while the diagram is on screen, and starts from the outlines each time
-  // it comes into view
+  const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  // dot centres within the box, so the ball can travel between them
+  const [centres, setCentres] = useState<{ x: number; y: number }[]>([]);
+  const [size, setSize] = useState(0);
+  // loop state: which dots are filled, where the ball is, which skipped dot is shaking it off
+  const [filled, setFilled] = useState<number[]>(animated ? [] : b.steps.map((_, i) => i));
+  const [ball, setBall] = useState<{ at: number; dur: number; on: boolean }>({ at: 0, dur: 0, on: false });
+  const [rejecting, setRejecting] = useState<number[]>([]);
+  const [rejectKey, setRejectKey] = useState(0);
   const [inView, setInView] = useState(false);
+
   useEffect(() => {
     const el = ref.current;
     if (!animated || !el) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
-      threshold: 0.6,
-    });
+    // layout offsets, not screen rects: the popup scales in, and a rect taken mid-animation
+    // would put the stops in the wrong place
+    const measure = () => {
+      setCentres(
+        dotRefs.current.map((d) => {
+          if (!d) return { x: 0, y: 0 };
+          const step = d.offsetParent as HTMLElement | null; // the column (position: relative)
+          return {
+            x: (step?.offsetLeft ?? 0) + d.offsetLeft + d.offsetWidth / 2,
+            y: (step?.offsetTop ?? 0) + d.offsetTop + d.offsetHeight / 2,
+          };
+        }),
+      );
+      setSize(dotRefs.current[0]?.offsetWidth ?? 0);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.6 });
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+    };
   }, [animated]);
+
   useEffect(() => {
     if (!animated) return;
+    const skip = new Set(b.skip);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setShown(b.steps.length);
+      setFilled(b.steps.map((_, i) => i).filter((i) => !skip.has(i)));
+      setRejecting([...skip]);
       return;
     }
-    setShown(0);
+    setFilled([]);
+    setRejecting([]);
+    setBall({ at: 0, dur: 0, on: false });
     if (!inView) return;
-    // 0 → n one step at a time, then hold on the full row, then start over
-    const n = b.steps.length;
-    let step = 0;
-    const id = window.setInterval(() => {
-      step = (step + 1) % (n + 3); // n fills + 2 ticks of hold + the reset tick
-      setShown(Math.min(step, n));
-    }, 700);
-    return () => window.clearInterval(id);
-  }, [animated, inView, b.steps.length]);
+    // the ball hops dot to dot; it sails straight over a skipped dot, which shakes it off
+    const timers: number[] = [];
+    const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    const LEG = 650; // ms per dot of travel
+    const run = () => {
+      let t = 0;
+      setFilled([]);
+      setRejecting([]);
+      setBall({ at: 0, dur: 0, on: true });
+      t += 900;
+      let i = 0;
+      while (i < n - 1) {
+        // travel to the next real stop, passing over any skipped dots
+        let j = i + 1;
+        while (j < n - 1 && skip.has(j)) j++;
+        const legs = j - i;
+        const dur = LEG * legs;
+        const from = i;
+        const to = j;
+        // the dot it leaves stays filled behind it (filled as it departs, so the ball always
+        // covers it while it's there)
+        at(t, () => {
+          setFilled((f) => [...f, from]);
+          setBall({ at: to, dur, on: true });
+        });
+        for (let k = from + 1; k < to; k++) {
+          const cross = t + (dur * (k - from)) / legs - 60;
+          const kk = k;
+          at(cross, () => {
+            setRejecting((r) => [...r, kk]);
+            setRejectKey((x) => x + 1);
+          });
+        }
+        t += dur + 450;
+        i = j;
+      }
+      // hold the finished row, then clear and go again
+      at(t + 1300, () => {
+        setFilled((f) => [...f, n - 1]);
+        setBall((bl) => ({ ...bl, on: false }));
+      });
+      at(t + 1800, () => {
+        setFilled([]);
+        setRejecting([]);
+      });
+      at(t + 2400, run);
+    };
+    run();
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [animated, inView, n, b.skip, b.steps]);
 
+  const c = centres[ball.at];
   return (
     <div
       ref={ref}
@@ -223,19 +296,19 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
         .join(", then ")}
     >
       {b.steps.map((step, i) => {
-        const on = i < shown;
-        const skipped = b.skip?.includes(i);
+        const on = filled.includes(i);
+        const rejected = rejecting.includes(i);
         return (
           <div key={step} className={styles.cvStep}>
             <span className={styles.cvStepLabel}>{step}</span>
             <span
+              ref={(el) => {
+                dotRefs.current[i] = el;
+              }}
+              key={rejected ? `r${rejectKey}` : "d"}
               className={`${styles.cvDot} ${animated ? styles.cvDotRing : ""} ${
-                animated && on
-                  ? skipped
-                    ? styles.cvDotSkip
-                    : styles.cvDotOn
-                  : ""
-              }`}
+                animated && on ? styles.cvDotOn : ""
+              } ${animated && rejected ? styles.cvDotReject : ""}`}
               aria-hidden="true"
             />
             {b.frictionAfter?.includes(i) ? (
@@ -246,6 +319,19 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
           </div>
         );
       })}
+      {animated && c && size ? (
+        <span
+          className={styles.cvBall}
+          aria-hidden="true"
+          style={{
+            width: size,
+            height: size,
+            transform: `translate(${c.x - size / 2}px, ${c.y - size / 2}px) scale(${ball.on ? 1 : 0.6})`,
+            opacity: ball.on ? 1 : 0,
+            transition: `transform ${ball.dur || 300}ms cubic-bezier(0.65, 0, 0.35, 1), opacity 300ms ease`,
+          }}
+        />
+      ) : null}
     </div>
   );
 }
