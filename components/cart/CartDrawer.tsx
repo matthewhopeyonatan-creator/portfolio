@@ -178,7 +178,7 @@ export default function CartDrawer() {
             ) : (
               <a
                 className={styles.checkout}
-                href="#seasonal-picks"
+                href="/#seasonal-picks"
                 onClick={close}
               >
                 start shopping

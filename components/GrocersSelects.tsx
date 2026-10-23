@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { grocersSelects, posterKey } from "@/data/site";
 import { useCart } from "@/components/cart/CartContext";
@@ -93,7 +94,7 @@ export default function GrocersSelects() {
           ))}
         </ul>
         <p className={styles.more} data-reveal="up">
-          <a href="https://matthew-hope.com/#pantry">See full catalog</a>
+          <Link href="/catalog#graphics">See full catalog</Link>
         </p>
       </div>
       {open ? (

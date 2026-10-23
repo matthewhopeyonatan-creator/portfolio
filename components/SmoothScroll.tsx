@@ -32,15 +32,19 @@ export default function SmoothScroll() {
 
     // in-page links (e.g. "start shopping") glide to their section too
     const onClick = (e: MouseEvent) => {
-      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]');
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
       if (a.closest("[data-overlay-nav]")) return; // the project popup handles its own navbar
-      const target = document.querySelector(a.getAttribute("href")!);
+      const href = a.getAttribute("href")!;
+      // "/#section" from another page is an ordinary page change
+      if (href.startsWith("/") && window.location.pathname !== "/") return;
+      const hash = href.replace(/^\//, "");
+      const target = document.querySelector(hash);
       if (!(target instanceof HTMLElement)) return;
       e.preventDefault();
       e.stopPropagation(); // Next's <Link> would otherwise jump there instantly
       lenis.scrollTo(target, { duration: 1.4, force: true });
-      history.replaceState(null, "", a.getAttribute("href"));
+      history.replaceState(null, "", hash);
     };
     document.addEventListener("click", onClick, true); // capture: before React/Next handlers
 

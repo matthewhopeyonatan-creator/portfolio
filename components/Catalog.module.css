@@ -1,0 +1,239 @@
+/* Figma 122:925 (1728 frame, header rule at y130 → measured from the bottom of our bar):
+   aisles Host Grotesk Regular 64 / 60, −2% tracking, 60 apart, from (40, +111); an up-right arrow
+   (31 × 31) sits ~18 after each word, top-aligned. Two blurred tomatoes behind (rotated −48.31°
+   and −28.12°). Popup: 1526 wide, centred, 61 below the bar, 903 tall, 2px ink border; title row
+   82 tall (Atelier Fleur Bold 36) closed by a 2px rule. Page area runs 1266 down to the footer. */
+.page {
+  --u: calc(100vw / 1728);
+  position: relative;
+  min-height: max(calc(100svh - var(--header-h)), calc(1266 * var(--u)));
+  overflow: hidden; /* the tomatoes' glow stops at the footer rule */
+}
+
+/* ── tomatoes ── */
+.tomatoes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tomatoBack,
+.tomatoFront {
+  position: absolute;
+  transform-origin: center;
+}
+
+.tomatoBack {
+  left: calc(1013.67 * var(--u));
+  top: calc(113.21 * var(--u));
+  width: calc(652.659 * var(--u));
+  height: calc(546.573 * var(--u));
+  rotate: -48.31deg;
+}
+
+.tomatoFront {
+  left: calc(644.46 * var(--u));
+  top: calc(365.29 * var(--u));
+  width: calc(935.802 * var(--u));
+  height: calc(783.693 * var(--u));
+  rotate: -28.12deg;
+}
+
+.tomatoBack img,
+.tomatoFront img {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+.tomatoBack img {
+  left: -10.07%;
+  top: -23.21%;
+  width: calc(784.113 * var(--u));
+  height: calc(731.07 * var(--u));
+}
+
+.tomatoFront img {
+  left: -16.03%;
+  top: -23.21%;
+  width: calc(1235.8 * var(--u));
+  height: calc(1115.56 * var(--u));
+}
+
+/* ── aisle list ── */
+.aisles {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: max(28px, calc(60 * var(--u)));
+  margin: 0;
+  padding: max(56px, calc(111 * var(--u))) var(--gutter) 80px;
+  list-style: none;
+}
+
+.aisle {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: max(10px, calc(18 * var(--u)));
+  color: var(--color-ink);
+  font-size: max(36px, calc(64 * var(--u)));
+  font-weight: 400;
+  line-height: calc(60 / 64);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  transform-origin: left center;
+  transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aisle:hover,
+.aisle:focus-visible {
+  transform: scale(1.06);
+}
+
+.aisle:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 8px;
+}
+
+.arrow {
+  position: relative;
+  flex: none;
+  width: max(18px, calc(31 * var(--u)));
+  height: max(18px, calc(31 * var(--u)));
+  overflow: hidden;
+  /* the arrow's stroke bleeds a hair past its box */
+  padding: 2px;
+  box-sizing: content-box;
+  margin: -2px;
+}
+
+.arrow img {
+  position: absolute;
+  inset: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  transition: transform 420ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* the waiting arrow sits off the bottom-left corner */
+.arrow img:last-child {
+  transform: translate(-130%, 130%);
+}
+
+.aisle:hover .arrow img:first-child,
+.aisle:focus-visible .arrow img:first-child {
+  transform: translate(130%, -130%);
+}
+
+.aisle:hover .arrow img:last-child,
+.aisle:focus-visible .arrow img:last-child {
+  transform: none;
+  transition-delay: 80ms;
+}
+
+/* ── popup ── */
+.popupRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 60; /* over the bar's hidden state, under the cart */
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.popup {
+  --top: calc(var(--header-h) + max(20px, calc(61 * var(--u))));
+  position: absolute;
+  top: var(--top);
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(calc(1526 * var(--u)), calc(100vw - 32px));
+  height: min(max(420px, calc(903 * var(--u))), calc(100svh - var(--top) - 24px));
+  translate: -50% 0;
+  background: var(--color-bg);
+  border: var(--rule);
+  animation: popupIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.leaving .popup {
+  animation: popupOut 260ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+@keyframes popupOut {
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+}
+
+.popupHead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: max(56px, calc(82 * var(--u)));
+  padding: 0 max(20px, calc(38 * var(--u)));
+  border-bottom: var(--rule);
+}
+
+.popupTitle {
+  margin: 0;
+  font-family: var(--font-display-stack);
+  font-size: max(26px, calc(36 * var(--u)));
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.popupClose {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: max(14px, calc(20 * var(--u)));
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.popupClose:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.popupBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: max(24px, calc(40 * var(--u)));
+}
+
+.stocking {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: max(14px, calc(20 * var(--u)));
+  font-weight: 300;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aisle,
+  .arrow img {
+    transition: none;
+  }
+  .popup,
+  .leaving .popup {
+    animation: none;
+  }
+}

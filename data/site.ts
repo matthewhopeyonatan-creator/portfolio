@@ -1,8 +1,8 @@
 // Site-wide links. Placeholders point at the current Framer site until the new pages exist.
 export const navLinks = [
   { label: "about", href: "https://matthew-hope.com/about" },
-  { label: "projects", href: "#seasonal-picks" },
-  { label: "catalog", href: "#grocers-selects" },
+  { label: "projects", href: "/#seasonal-picks" },
+  { label: "catalog", href: "/catalog" },
 ];
 
 // Footer social links. TODO: add the X handle.
@@ -318,3 +318,12 @@ cartCatalog.push(
     poster: true,
   })),
 );
+
+/** Catalog page aisles (Figma 122:925). Each opens its own popup; `#slug` links straight to one. */
+export const catalogAisles = [
+  { slug: "graphics", label: "Graphics" },
+  { slug: "florals", label: "Florals" },
+  { slug: "cooking", label: "Cooking" },
+  { slug: "events", label: "Events" },
+  { slug: "photography", label: "Photography" },
+] as const;
