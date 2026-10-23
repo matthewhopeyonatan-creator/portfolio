@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { catalogAisles } from "@/data/site";
-import TomatoGrain from "./TomatoGrain";
 import styles from "./Catalog.module.css";
 
 type Slug = (typeof catalogAisles)[number]["slug"];
@@ -43,14 +42,12 @@ export default function Catalog() {
           <div className={styles.tomatoRot}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/catalog/tomato-4.svg" alt="" width={1344} height={1291} />
-            <TomatoGrain rotate={-48.31} />
           </div>
         </div>
         <div className={`${styles.tomato} ${styles.tomatoFront}`}>
           <div className={styles.tomatoRot}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/catalog/tomato-5.svg" alt="" width={1520} height={1455} />
-            <TomatoGrain rotate={-28.12} />
           </div>
         </div>
       </div>
