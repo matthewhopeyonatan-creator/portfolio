@@ -3,111 +3,36 @@
 import { useEffect, useRef } from "react";
 
 /**
- * The tomato, redrawn grain by grain. Every pixel of the tomato becomes a particle carrying its
- * colour with a touch of noise (so the fruit reads as finely grained), drawn on a canvas that
- * replaces the image. On hover, the particles under the cursor are pushed away from it, so the
- * tomato thins out there until it's nearly the beige page, then they drift back home.
+ * The tomato with a fine film grain, drawn at the screen's real pixel density (so the grain is
+ * a single device pixel). On hover, the fruit under the cursor is gently pushed outward and
+ * dissolves, grain by grain, toward the page — nearly see-through right under the pointer, with
+ * a soft edge — then heals smoothly once the cursor moves on.
+ *
+ * Under the hood: a coarse "wear" field follows the cursor (rising fast, healing slowly); each
+ * pixel looks it up with bilinear smoothing, shifts its source a little away from the cursor and
+ * drops out when a fixed per-pixel noise value falls under the wear. Only the worn area is redrawn.
  *
  * Drop it in right after the tomato's <img>, inside the same positioned parent. It copies the
  * img's box, so it inherits any rotation on that parent; pass that rotation (degrees) as
  * `rotate` so the cursor can be mapped into the tomato's own coordinates.
  */
-const Q = 0.5; // particles per CSS px (each grain is 2 CSS px, smoothed by the canvas scale-up)
-const NOISE_A = 0.22; // grain: random wobble in each particle's opacity…
-const NOISE_L = 0.1; // …and brightness
-const RADIUS = 100; // CSS px around the cursor where the tomato thins out
-const FADE = 0.86; // how far the grains right under the cursor fade toward the page (0–1)
-const FADE_IN = 0.18; // per-frame easing as the cursor arrives…
-const FADE_OUT = 0.045; // …and as the tomato heals behind it
-const PUSH = 0.38; // a gentle outward drift, so the grains scatter as they fade
-const JITTER = 0.5;
-const SPRING = 0.04;
-const DAMP = 0.86;
-const BUCKET = 24; // canvas px per spatial bucket
+const MAX_PIXELS = 2_400_000; // cap per tomato (keeps memory and redraws in check)
+const GRAIN_L = 0.07; // grain: brightness wobble per pixel…
+const GRAIN_A = 0.1; // …and opacity wobble
+const RADIUS = 105; // CSS px around the cursor that dissolves
+const PEAK = 0.9; // how worn the very centre gets (1 = fully gone)
+const RISE = 0.22; // per-frame easing as the cursor arrives…
+const HEAL = 0.05; // …and as the tomato heals behind it
+const PUSH = 9; // CSS px the fruit is nudged outward at the centre
+const CELL = 8; // canvas px per wear-field cell
+const NOISE = 256; // tiled noise size
 
-type Field = {
-  w: number;
-  h: number;
-  n: number;
-  hx: Float32Array;
-  hy: Float32Array;
-  x: Float32Array;
-  y: Float32Array;
-  vx: Float32Array;
-  vy: Float32Array;
-  fade: Float32Array; // 0 = as drawn, 1 = gone
-  col: Uint32Array;
-  live: Uint8Array;
-  liveList: number[];
-  buckets: Int32Array[];
-  bw: number;
-  bh: number;
-  img: ImageData;
-  px: Uint32Array;
-};
-
-function buildField(img: HTMLImageElement, cssW: number, cssH: number): Field | null {
-  const w = Math.max(1, Math.round(cssW * Q));
-  const h = Math.max(1, Math.round(cssH * Q));
-  const off = document.createElement("canvas");
-  off.width = w;
-  off.height = h;
-  const ctx = off.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return null;
-  try {
-    ctx.drawImage(img, 0, 0, w, h);
-  } catch {
-    return null;
-  }
-  const src = ctx.getImageData(0, 0, w, h).data;
-  const keep: number[] = [];
-  const cols: number[] = [];
-  const clamp = (v: number) => (v < 0 ? 0 : v > 255 ? 255 : v | 0);
-  for (let p = 0, i = 0; p < w * h; p++, i += 4) {
-    const a = src[i + 3];
-    if (a < 3) continue;
-    keep.push(p);
-    const l = 1 + (Math.random() - 0.5) * 2 * NOISE_L;
-    const na = clamp(a * (1 + (Math.random() - 0.5) * 2 * NOISE_A));
-    cols.push(
-      ((na << 24) | (clamp(src[i + 2] * l) << 16) | (clamp(src[i + 1] * l) << 8) | clamp(src[i] * l)) >>>
-        0,
-    );
-  }
-  const n = keep.length;
-  const f: Field = {
-    w,
-    h,
-    n,
-    hx: new Float32Array(n),
-    hy: new Float32Array(n),
-    x: new Float32Array(n),
-    y: new Float32Array(n),
-    vx: new Float32Array(n),
-    vy: new Float32Array(n),
-    fade: new Float32Array(n),
-    col: Uint32Array.from(cols),
-    live: new Uint8Array(n),
-    liveList: [],
-    buckets: [],
-    bw: Math.ceil(w / BUCKET),
-    bh: Math.ceil(h / BUCKET),
-    img: new ImageData(w, h),
-    px: new Uint32Array(0),
-  };
-  f.px = new Uint32Array(f.img.data.buffer);
-  const lists: number[][] = Array.from({ length: f.bw * f.bh }, () => []);
-  for (let k = 0; k < n; k++) {
-    const p = keep[k];
-    const x = p % w;
-    const y = (p - x) / w;
-    f.hx[k] = f.x[k] = x;
-    f.hy[k] = f.y[k] = y;
-    f.px[p] = f.col[k];
-    lists[((y / BUCKET) | 0) * f.bw + ((x / BUCKET) | 0)].push(k);
-  }
-  f.buckets = lists.map((l) => Int32Array.from(l));
-  return f;
+let noiseTile: Float32Array | null = null;
+function getNoise() {
+  if (noiseTile) return noiseTile;
+  noiseTile = new Float32Array(NOISE * NOISE);
+  for (let i = 0; i < noiseTile.length; i++) noiseTile[i] = Math.random();
+  return noiseTile;
 }
 
 export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
@@ -123,8 +48,19 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     const interactive =
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
       window.matchMedia("(hover: hover)").matches;
+    const noise = getNoise();
 
-    let field: Field | null = null;
+    // state for the current size
+    let w = 0;
+    let h = 0;
+    let scale = 1; // canvas px per CSS px
+    let base: Uint8ClampedArray | null = null; // grained tomato, at rest
+    let out: ImageData | null = null; // what's on screen
+    let gw = 0;
+    let gh = 0;
+    let wear = new Float32Array(0);
+    let touched = new Uint8Array(0);
+    let active: number[] = []; // cells with any wear
     let raf = 0;
     let near = false;
     let mx = -1e6;
@@ -133,35 +69,73 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     const cos = Math.cos(-rad);
     const sin = Math.sin(-rad);
 
-    // the grain canvas sits exactly on the img's box
     const build = () => {
-      const w = img.offsetWidth;
-      const h = img.offsetHeight;
-      if (!img.complete || !img.naturalWidth || !w || !h) return;
+      const cw = img.offsetWidth;
+      const ch = img.offsetHeight;
+      if (!img.complete || !img.naturalWidth || !cw || !ch) return;
       canvas.style.left = `${img.offsetLeft}px`;
       canvas.style.top = `${img.offsetTop}px`;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      if (field && field.w === Math.round(w * Q) && field.h === Math.round(h * Q)) return;
-      field = buildField(img, w, h);
-      if (!field) return;
-      canvas.width = field.w;
-      canvas.height = field.h;
-      ctx.putImageData(field.img, 0, 0);
-      // the grain tomato takes over from the picture (same colours, so it's a seamless swap)
+      canvas.style.width = `${cw}px`;
+      canvas.style.height = `${ch}px`;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let s = dpr;
+      if (cw * ch * s * s > MAX_PIXELS) s = Math.sqrt(MAX_PIXELS / (cw * ch));
+      const nw = Math.round(cw * s);
+      const nh = Math.round(ch * s);
+      if (base && nw === w && nh === h) return;
+      w = nw;
+      h = nh;
+      scale = s;
+      canvas.width = w;
+      canvas.height = h;
+      ctx.clearRect(0, 0, w, h);
+      try {
+        ctx.drawImage(img, 0, 0, w, h);
+      } catch {
+        return;
+      }
+      const data = ctx.getImageData(0, 0, w, h);
+      const d = data.data;
+      // bake the grain in: every pixel's brightness and opacity wobble a touch
+      for (let y = 0, i = 0; y < h; y++) {
+        const row = (y & (NOISE - 1)) * NOISE;
+        const row2 = ((y * 5 + 97) & (NOISE - 1)) * NOISE;
+        for (let x = 0; x < w; x++, i += 4) {
+          if (!d[i + 3]) continue;
+          const n = noise[row + (x & (NOISE - 1))];
+          const m = noise[row2 + ((x * 3 + 41) & (NOISE - 1))];
+          const l = 1 + (n - 0.5) * 2 * GRAIN_L;
+          d[i] = d[i] * l;
+          d[i + 1] = d[i + 1] * l;
+          d[i + 2] = d[i + 2] * l;
+          d[i + 3] = d[i + 3] * (1 + (m - 0.5) * 2 * GRAIN_A);
+        }
+      }
+      base = new Uint8ClampedArray(d);
+      out = data;
+      ctx.putImageData(out, 0, 0);
+      gw = Math.ceil(w / CELL) + 1;
+      gh = Math.ceil(h / CELL) + 1;
+      wear = new Float32Array(gw * gh);
+      touched = new Uint8Array(gw * gh);
+      active = [];
+      // the grained tomato takes over from the picture (same colours: a seamless swap)
       canvas.style.opacity = "1";
       img.style.visibility = "hidden";
     };
     let idle = 0;
-    const schedule = () => {
-      cancelIdle();
-      const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 60));
-      idle = ric(build) as unknown as number;
-    };
     const cancelIdle = () => {
       if (!idle) return;
       (window.cancelIdleCallback ?? window.clearTimeout)(idle);
       idle = 0;
+    };
+    const schedule = () => {
+      cancelIdle();
+      const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 60));
+      idle = ric(() => {
+        idle = 0;
+        build();
+      }) as unknown as number;
     };
     if (img.complete) schedule();
     img.addEventListener("load", schedule);
@@ -173,140 +147,154 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       const r = parent.getBoundingClientRect();
       const dx = cx - (r.left + r.width / 2);
       const dy = cy - (r.top + r.height / 2);
-      const s = field ? field.w / img.offsetWidth : Q;
       return [
-        (dx * cos - dy * sin + parent.offsetWidth / 2 - img.offsetLeft) * s,
-        (dx * sin + dy * cos + parent.offsetHeight / 2 - img.offsetTop) * s,
+        (dx * cos - dy * sin + parent.offsetWidth / 2 - img.offsetLeft) * scale,
+        (dx * sin + dy * cos + parent.offsetHeight / 2 - img.offsetTop) * scale,
       ] as const;
+    };
+
+    const wearAt = (x: number, y: number) => {
+      // bilinear over cell corners → a smooth gradient, no blocky steps
+      const fx = x / CELL;
+      const fy = y / CELL;
+      const ix = fx | 0;
+      const iy = fy | 0;
+      const tx = fx - ix;
+      const ty = fy - iy;
+      const i = iy * gw + ix;
+      const a = wear[i];
+      const b = wear[i + 1];
+      const c = wear[i + gw];
+      const e = wear[i + gw + 1];
+      return (a + (b - a) * tx) * (1 - ty) + (c + (e - c) * tx) * ty;
     };
 
     const step = () => {
       raf = 0;
-      const f = field;
-      if (!f) return;
-      const R = RADIUS * (f.w / img.offsetWidth);
-      // wake the particles around the cursor
+      if (!base || !out) return;
+      const R = RADIUS * scale;
+      const push = PUSH * scale;
+      // 1 · grow wear around the cursor, heal it everywhere else
       if (near) {
-        const b0x = Math.max(0, ((mx - R) / BUCKET) | 0);
-        const b1x = Math.min(f.bw - 1, ((mx + R) / BUCKET) | 0);
-        const b0y = Math.max(0, ((my - R) / BUCKET) | 0);
-        const b1y = Math.min(f.bh - 1, ((my + R) / BUCKET) | 0);
-        for (let by = b0y; by <= b1y; by++)
-          for (let bx = b0x; bx <= b1x; bx++) {
-            const list = f.buckets[by * f.bw + bx];
-            for (let j = 0; j < list.length; j++) {
-              const k = list[j];
-              if (!f.live[k]) {
-                f.live[k] = 1;
-                f.liveList.push(k);
-              }
+        const c0x = Math.max(0, Math.floor((mx - R) / CELL));
+        const c1x = Math.min(gw - 1, Math.ceil((mx + R) / CELL));
+        const c0y = Math.max(0, Math.floor((my - R) / CELL));
+        const c1y = Math.min(gh - 1, Math.ceil((my + R) / CELL));
+        for (let cy = c0y; cy <= c1y; cy++)
+          for (let cx = c0x; cx <= c1x; cx++) {
+            const k = cy * gw + cx;
+            if (wear[k] === 0) {
+              wear[k] = 1e-6;
+              active.push(k);
             }
           }
       }
-      const { x, y, vx, vy, hx, hy, fade, live, px, col, w, h } = f;
-      // dirty box: everywhere a moving grain was, is, or calls home
+      const still: number[] = [];
+      for (const k of active) {
+        const cx = k % gw;
+        const cy = (k - cx) / gw;
+        let target = 0;
+        if (near) {
+          const dx = cx * CELL - mx;
+          const dy = cy * CELL - my;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < R) {
+            const t = 1 - d / R;
+            target = t * t * (3 - 2 * t) * PEAK;
+          }
+        }
+        const v = wear[k] + (target - wear[k]) * (target > wear[k] ? RISE : HEAL);
+        if (v < 0.003 && target === 0) wear[k] = 0;
+        else {
+          wear[k] = v;
+          still.push(k);
+        }
+        // the cells this corner value feeds (bilinear reaches one cell up/left)
+        for (let oy = -1; oy <= 0; oy++)
+          for (let ox = -1; ox <= 0; ox++) {
+            const nx = cx + ox;
+            const ny = cy + oy;
+            if (nx >= 0 && ny >= 0 && nx < gw && ny < gh) touched[ny * gw + nx] = 1;
+          }
+      }
+      active = still;
+
+      // 2 · redraw the touched cells
+      const o = out.data;
+      const src = base;
       let x0 = w;
       let y0 = h;
       let x1 = -1;
       let y1 = -1;
-      const grow = (gx: number, gy: number) => {
-        if (gx < x0) x0 = gx;
-        if (gy < y0) y0 = gy;
-        if (gx > x1) x1 = gx;
-        if (gy > y1) y1 = gy;
-      };
-      const next: number[] = [];
-      for (const k of f.liveList) {
-        grow((x[k] + 0.5) | 0, (y[k] + 0.5) | 0);
-        grow(hx[k], hy[k]);
-        let ax = (hx[k] - x[k]) * SPRING;
-        let ay = (hy[k] - y[k]) * SPRING;
-        let target = 0;
-        if (near) {
-          const dx = hx[k] - mx;
-          const dy = hy[k] - my;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < R * R) {
-            const d = Math.sqrt(d2) || 1;
-            const t = 1 - d / R;
-            const ease = t * t * (3 - 2 * t); // smoothstep: soft all the way to the edge
-            target = ease;
-            ax += (dx / d) * ease * PUSH + (Math.random() - 0.5) * JITTER * ease;
-            ay += (dy / d) * ease * PUSH + (Math.random() - 0.5) * JITTER * ease;
-          }
-        }
-        fade[k] += (target - fade[k]) * (target > fade[k] ? FADE_IN : FADE_OUT);
-        vx[k] = (vx[k] + ax) * DAMP;
-        vy[k] = (vy[k] + ay) * DAMP;
-        x[k] += vx[k];
-        y[k] += vy[k];
-        grow((x[k] + 0.5) | 0, (y[k] + 0.5) | 0);
-        const off = Math.abs(x[k] - hx[k]) + Math.abs(y[k] - hy[k]);
-        if (
-          !target &&
-          fade[k] < 0.004 &&
-          off < 0.05 &&
-          Math.abs(vx[k]) + Math.abs(vy[k]) < 0.02
-        ) {
-          x[k] = hx[k];
-          y[k] = hy[k];
-          vx[k] = vy[k] = fade[k] = 0;
-          live[k] = 0;
-        } else next.push(k);
-      }
-      if (x1 >= 0) {
-        x0 = Math.max(0, x0 - 1);
-        y0 = Math.max(0, y0 - 1);
-        x1 = Math.min(w - 1, x1 + 1);
-        y1 = Math.min(h - 1, y1 + 1);
-        // redraw just that box: clear it, put the resting specks back, then the moving ones
-        for (let yy = y0; yy <= y1; yy++) px.fill(0, yy * w + x0, yy * w + x1 + 1);
-        const b0x = (x0 / BUCKET) | 0;
-        const b1x = (x1 / BUCKET) | 0;
-        const b0y = (y0 / BUCKET) | 0;
-        const b1y = (y1 / BUCKET) | 0;
-        for (let by = b0y; by <= b1y; by++)
-          for (let bx = b0x; bx <= b1x; bx++) {
-            const list = f.buckets[by * f.bw + bx];
-            for (let j = 0; j < list.length; j++) {
-              const k = list[j];
-              if (live[k]) continue; // still moving: drawn below at its current spot
-              const gx = hx[k];
-              const gy = hy[k];
-              if (gx >= x0 && gx <= x1 && gy >= y0 && gy <= y1) px[gy * w + gx] = col[k];
+      for (let k = 0; k < touched.length; k++) {
+        if (!touched[k]) continue;
+        touched[k] = 0;
+        const cx = k % gw;
+        const cy = (k - cx) / gw;
+        const px0 = cx * CELL;
+        const py0 = cy * CELL;
+        if (px0 >= w || py0 >= h) continue;
+        const px1 = Math.min(w, px0 + CELL);
+        const py1 = Math.min(h, py0 + CELL);
+        if (px0 < x0) x0 = px0;
+        if (py0 < y0) y0 = py0;
+        if (px1 > x1) x1 = px1;
+        if (py1 > y1) y1 = py1;
+        for (let y = py0; y < py1; y++) {
+          const row = (y & (NOISE - 1)) * NOISE;
+          for (let x = px0; x < px1; x++) {
+            const i = (y * w + x) * 4;
+            const e = wearAt(x, y);
+            if (e < 0.002) {
+              o[i] = src[i];
+              o[i + 1] = src[i + 1];
+              o[i + 2] = src[i + 2];
+              o[i + 3] = src[i + 3];
+              continue;
             }
+            // pushed outward: show the fruit from a little closer to the cursor
+            let sx = x;
+            let sy = y;
+            const dx = x - mx;
+            const dy = y - my;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 0.5) {
+              const m = (e * push) / dist;
+              sx = Math.min(w - 1, Math.max(0, (x - dx * m + 0.5) | 0));
+              sy = Math.min(h - 1, Math.max(0, (y - dy * m + 0.5) | 0));
+            }
+            const j = (sy * w + sx) * 4;
+            // dissolve: this pixel drops out once the wear passes its own noise value
+            const n = noise[row + (x & (NOISE - 1))];
+            let keep = (n - (e * 1.15 - 0.15)) / 0.15;
+            keep = keep < 0 ? 0 : keep > 1 ? 1 : keep;
+            o[i] = src[j];
+            o[i + 1] = src[j + 1];
+            o[i + 2] = src[j + 2];
+            o[i + 3] = src[j + 3] * keep * (1 - 0.3 * e);
           }
-        for (const k of next) {
-          // round, not floor: a grain sitting a hair off home still lands on its own pixel
-          const gx = (x[k] + 0.5) | 0;
-          const gy = (y[k] + 0.5) | 0;
-          if (gx < x0 || gx > x1 || gy < y0 || gy > y1) continue;
-          const c = col[k];
-          const a = ((c >>> 24) * (1 - FADE * fade[k])) | 0;
-          px[gy * w + gx] = ((a << 24) | (c & 0xffffff)) >>> 0;
         }
-        ctx.putImageData(f.img, 0, 0, x0, y0, x1 - x0 + 1, y1 - y0 + 1);
       }
-      f.liveList = next;
-      if (near || next.length) raf = requestAnimationFrame(step);
+      if (x1 > x0) ctx.putImageData(out, 0, 0, x0, y0, x1 - x0, y1 - y0);
+      if (near || active.length) raf = requestAnimationFrame(step);
     };
 
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch" || !field) return;
+      if (e.pointerType === "touch" || !base) return;
       const [lx, ly] = toLocal(e.clientX, e.clientY);
-      const R = RADIUS * (field.w / img.offsetWidth);
-      const inBox = lx > -R && ly > -R && lx < field.w + R && ly < field.h + R;
+      const R = RADIUS * scale;
+      const inBox = lx > -R && ly > -R && lx < w + R && ly < h + R;
       // something interactive drawn over the tomato (a sticker, a link, a popup, the bar)
       const top = inBox ? document.elementFromPoint(e.clientX, e.clientY) : null;
       const covered = !!top?.closest("a, button, header, [role=dialog]");
       near = inBox && !covered;
       mx = lx;
       my = ly;
-      if ((near || field.liveList.length) && !raf) raf = requestAnimationFrame(step);
+      if ((near || active.length) && !raf) raf = requestAnimationFrame(step);
     };
     const onLeave = () => {
       near = false;
-      if (!raf && field?.liveList.length) raf = requestAnimationFrame(step);
+      if (!raf && active.length) raf = requestAnimationFrame(step);
     };
     if (interactive) {
       window.addEventListener("pointermove", onMove, { passive: true });
@@ -327,11 +315,7 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     <canvas
       ref={ref}
       aria-hidden="true"
-      style={{
-        position: "absolute",
-        pointerEvents: "none",
-        opacity: 0,
-      }}
+      style={{ position: "absolute", pointerEvents: "none", opacity: 0 }}
     />
   );
 }
