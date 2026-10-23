@@ -19,11 +19,13 @@ import { useEffect, useRef } from "react";
 const MAX_PIXELS = 2_400_000; // cap per tomato (keeps memory and redraws in check)
 const GRAIN_L = 0.07; // grain: brightness wobble per pixel…
 const GRAIN_A = 0.1; // …and opacity wobble
-const RADIUS = 105; // CSS px around the cursor that dissolves
+const RADIUS = 95; // CSS px around the cursor that dissolves
 const PEAK = 0.9; // how worn the very centre gets (1 = fully gone)
-const RISE = 0.22; // per-frame easing as the cursor arrives…
-const HEAL = 0.05; // …and as the tomato heals behind it
-const PUSH = 9; // CSS px the fruit is nudged outward at the centre
+const HOLD = 20; // frames the wake stays put before it starts to heal (~⅓ s)
+const HEAL = 0.011; // wear lost per frame once healing (linear, so the tail narrows as it goes)
+const PUSH = 7; // CSS px the grain is shoved outward at the centre…
+const DRAG = 0.55; // …and how much of the cursor's motion it gets dragged along with
+const FLOW_DECAY = 0.955; // how quickly that shove relaxes
 const CELL = 8; // canvas px per wear-field cell
 const NOISE = 256; // tiled noise size
 
@@ -59,7 +61,13 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     let gw = 0;
     let gh = 0;
     let wear = new Float32Array(0);
+    let hold = new Uint8Array(0);
+    let listed = new Uint8Array(0); // cell is in the active list (each cell at most once)
+    let flx = new Float32Array(0); // per-cell shove, canvas px
+    let fly = new Float32Array(0);
     let touched = new Uint8Array(0);
+    let pmx = -1e6; // cursor last frame (for its velocity and to fill gaps on fast moves)
+    let pmy = -1e6;
     let active: number[] = []; // cells with any wear
     let raf = 0;
     let near = false;
@@ -117,6 +125,10 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       gw = Math.ceil(w / CELL) + 1;
       gh = Math.ceil(h / CELL) + 1;
       wear = new Float32Array(gw * gh);
+      hold = new Uint8Array(gw * gh);
+      listed = new Uint8Array(gw * gh);
+      flx = new Float32Array(gw * gh);
+      fly = new Float32Array(gw * gh);
       touched = new Uint8Array(gw * gh);
       active = [];
       // the grained tomato takes over from the picture (same colours: a seamless swap)
@@ -153,62 +165,81 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       ] as const;
     };
 
-    const wearAt = (x: number, y: number) => {
-      // bilinear over cell corners → a smooth gradient, no blocky steps
-      const fx = x / CELL;
-      const fy = y / CELL;
-      const ix = fx | 0;
-      const iy = fy | 0;
-      const tx = fx - ix;
-      const ty = fy - iy;
-      const i = iy * gw + ix;
-      const a = wear[i];
-      const b = wear[i + 1];
-      const c = wear[i + gw];
-      const e = wear[i + gw + 1];
+    const lerp2 = (f: Float32Array, i: number, tx: number, ty: number) => {
+      const a = f[i];
+      const b = f[i + 1];
+      const c = f[i + gw];
+      const e = f[i + gw + 1];
       return (a + (b - a) * tx) * (1 - ty) + (c + (e - c) * tx) * ty;
     };
-
     const step = () => {
       raf = 0;
       if (!base || !out) return;
       const R = RADIUS * scale;
       const push = PUSH * scale;
-      // 1 · grow wear around the cursor, heal it everywhere else
+      // 1 · lay wear (and a shove) along the cursor's path since last frame
       if (near) {
-        const c0x = Math.max(0, Math.floor((mx - R) / CELL));
-        const c1x = Math.min(gw - 1, Math.ceil((mx + R) / CELL));
-        const c0y = Math.max(0, Math.floor((my - R) / CELL));
-        const c1y = Math.min(gh - 1, Math.ceil((my + R) / CELL));
-        for (let cy = c0y; cy <= c1y; cy++)
-          for (let cx = c0x; cx <= c1x; cx++) {
-            const k = cy * gw + cx;
-            if (wear[k] === 0) {
-              wear[k] = 1e-6;
-              active.push(k);
+        const vx0 = pmx > -1e5 ? mx - pmx : 0;
+        const vy0 = pmy > -1e5 ? my - pmy : 0;
+        const len = Math.hypot(vx0, vy0);
+        // clamp the drag so a flick doesn't tear the fruit apart
+        const vmax = R * 0.2;
+        const vs = len > vmax ? vmax / len : 1;
+        const vx = vx0 * vs;
+        const vy = vy0 * vs;
+        const steps = Math.max(1, Math.ceil(len / (R * 0.06))); // dense, so the circles merge into one even band
+        for (let sI = 1; sI <= steps; sI++) {
+          const px = pmx > -1e5 ? pmx + (vx0 * sI) / steps : mx;
+          const py = pmy > -1e5 ? pmy + (vy0 * sI) / steps : my;
+          const c0x = Math.max(0, Math.floor((px - R) / CELL));
+          const c1x = Math.min(gw - 1, Math.ceil((px + R) / CELL));
+          const c0y = Math.max(0, Math.floor((py - R) / CELL));
+          const c1y = Math.min(gh - 1, Math.ceil((py + R) / CELL));
+          for (let cy = c0y; cy <= c1y; cy++)
+            for (let cx = c0x; cx <= c1x; cx++) {
+              const dx = cx * CELL - px;
+              const dy = cy * CELL - py;
+              const d = Math.sqrt(dx * dx + dy * dy);
+              if (d >= R) continue;
+              const k = cy * gw + cx;
+              const t = 1 - d / R;
+              const ease = t * t * (3 - 2 * t);
+              const target = ease * PEAK;
+              if (!listed[k]) {
+                listed[k] = 1;
+                active.push(k);
+              }
+              // the deepest wear along the path wins, so a fast sweep leaves one smooth wake
+              if (target > wear[k]) wear[k] = target;
+              if (ease > 0.05) hold[k] = HOLD;
+              // shove: outward from the cursor plus along its motion
+              const inv = d > 0.5 ? 1 / d : 0;
+              const tx = dx * inv * push * ease + vx * DRAG * ease;
+              const ty = dy * inv * push * ease + vy * DRAG * ease;
+              if (Math.abs(tx) + Math.abs(ty) > Math.abs(flx[k]) + Math.abs(fly[k]) * 0.999) {
+                flx[k] += (tx - flx[k]) * 0.5;
+                fly[k] += (ty - fly[k]) * 0.5;
+              }
             }
-          }
+        }
+        pmx = mx;
+        pmy = my;
+      } else {
+        pmx = pmy = -1e6;
       }
+      // heal: hold for a beat, then wear away linearly (edges go first, so the tail tapers)
       const still: number[] = [];
       for (const k of active) {
+        if (hold[k]) hold[k]--;
+        else wear[k] = Math.max(0, wear[k] - HEAL);
+        flx[k] *= FLOW_DECAY;
+        fly[k] *= FLOW_DECAY;
+        if (wear[k] <= 0 && !hold[k] && Math.abs(flx[k]) + Math.abs(fly[k]) < 0.05) {
+          wear[k] = flx[k] = fly[k] = 0;
+          listed[k] = 0;
+        } else still.push(k);
         const cx = k % gw;
         const cy = (k - cx) / gw;
-        let target = 0;
-        if (near) {
-          const dx = cx * CELL - mx;
-          const dy = cy * CELL - my;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < R) {
-            const t = 1 - d / R;
-            target = t * t * (3 - 2 * t) * PEAK;
-          }
-        }
-        const v = wear[k] + (target - wear[k]) * (target > wear[k] ? RISE : HEAL);
-        if (v < 0.003 && target === 0) wear[k] = 0;
-        else {
-          wear[k] = v;
-          still.push(k);
-        }
         // the cells this corner value feeds (bilinear reaches one cell up/left)
         for (let oy = -1; oy <= 0; oy++)
           for (let ox = -1; ox <= 0; ox++) {
@@ -244,25 +275,26 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
           const row = (y & (NOISE - 1)) * NOISE;
           for (let x = px0; x < px1; x++) {
             const i = (y * w + x) * 4;
-            const e = wearAt(x, y);
-            if (e < 0.002) {
+            const fx = x / CELL;
+            const fy = y / CELL;
+            const ix = fx | 0;
+            const iy = fy | 0;
+            const ci = iy * gw + ix;
+            const tx = fx - ix;
+            const ty = fy - iy;
+            const e = lerp2(wear, ci, tx, ty);
+            const ox = lerp2(flx, ci, tx, ty);
+            const oy = lerp2(fly, ci, tx, ty);
+            if (e < 0.002 && Math.abs(ox) + Math.abs(oy) < 0.3) {
               o[i] = src[i];
               o[i + 1] = src[i + 1];
               o[i + 2] = src[i + 2];
               o[i + 3] = src[i + 3];
               continue;
             }
-            // pushed outward: show the fruit from a little closer to the cursor
-            let sx = x;
-            let sy = y;
-            const dx = x - mx;
-            const dy = y - my;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist > 0.5) {
-              const m = (e * push) / dist;
-              sx = Math.min(w - 1, Math.max(0, (x - dx * m + 0.5) | 0));
-              sy = Math.min(h - 1, Math.max(0, (y - dy * m + 0.5) | 0));
-            }
+            // shoved: show the fruit from upstream of the flow, so the grain looks pushed along
+            const sx = Math.min(w - 1, Math.max(0, (x - ox + 0.5) | 0));
+            const sy = Math.min(h - 1, Math.max(0, (y - oy + 0.5) | 0));
             const j = (sy * w + sx) * 4;
             // dissolve: this pixel drops out once the wear passes its own noise value
             const n = noise[row + (x & (NOISE - 1))];
