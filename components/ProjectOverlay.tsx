@@ -182,12 +182,27 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
   const animated = !!b.skip?.length;
   // how many dots are filled (0 = all outlines)
   const [shown, setShown] = useState(animated ? 0 : b.steps.length);
+  const ref = useRef<HTMLDivElement>(null);
+  // the loop only runs while the diagram is on screen, and starts from the outlines each time
+  // it comes into view
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!animated || !el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
+      threshold: 0.6,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [animated]);
   useEffect(() => {
     if (!animated) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setShown(b.steps.length);
       return;
     }
+    setShown(0);
+    if (!inView) return;
     // 0 → n one step at a time, then hold on the full row, then start over
     const n = b.steps.length;
     let step = 0;
@@ -196,10 +211,11 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
       setShown(Math.min(step, n));
     }, 700);
     return () => window.clearInterval(id);
-  }, [animated, b.steps.length]);
+  }, [animated, inView, b.steps.length]);
 
   return (
     <div
+      ref={ref}
       className={styles.cvFlow}
       role="img"
       aria-label={b.steps
