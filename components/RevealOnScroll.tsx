@@ -22,9 +22,25 @@ export default function RevealOnScroll() {
       },
       { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
     );
-    const els = document.querySelectorAll("[data-reveal]");
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    // posters swipe up the moment their top edge enters the screen
+    const ioNow = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          (e.target as HTMLElement).dataset.revealed = "";
+          ioNow.unobserve(e.target);
+        }
+      },
+      { threshold: 0 },
+    );
+    document
+      .querySelectorAll('[data-reveal]:not([data-reveal="swipe"])')
+      .forEach((el) => io.observe(el));
+    document.querySelectorAll('[data-reveal="swipe"]').forEach((el) => ioNow.observe(el));
+    return () => {
+      io.disconnect();
+      ioNow.disconnect();
+    };
   }, []);
   return null;
 }

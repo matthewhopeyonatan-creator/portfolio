@@ -12,7 +12,7 @@
   align-items: center;
   gap: max(40px, calc(62 * var(--u)));
   /* same, tighter space above (from the shelf rule) and below (to the footer rule) */
-  padding: max(48px, calc(80 * var(--u))) 24px;
+  padding: max(80px, calc(144 * var(--u))) 24px max(48px, calc(80 * var(--u)));
   text-align: center;
 }
 

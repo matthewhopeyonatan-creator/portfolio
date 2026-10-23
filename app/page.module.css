@@ -9,11 +9,11 @@
   border-bottom: var(--rule);
 }
 
-/* set in the display serif (Atelier Fleur Bold), like the logo */
+/* section titles: Host Grotesk Regular */
 .sectionTitle {
-  font-family: var(--font-display-stack);
+  font-family: var(--font-sans-stack);
   font-size: max(30px, calc(54 * var(--u)));
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1;
   /* trim the font's built-in leading so the 24px is measured from the letters themselves */
   text-box: trim-both cap alphabetic;

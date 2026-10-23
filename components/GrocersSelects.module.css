@@ -3,7 +3,7 @@
    Each cell is 576 wide, so the poster gets (576 − 371) / 2 = 102.5 on every side. */
 /* title row: same space above and below the letters (the row is boxed by rules on both sides) */
 .titleRow {
-  padding-top: 40px;
+  padding-top: max(72px, calc(128 * var(--u)));
 }
 
 .grid {
@@ -125,4 +125,140 @@
   .cell {
     padding: 40px 16px;
   }
+}
+
+/* ── poster as a button ── */
+.pick {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.pick .poster {
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pick:hover .poster {
+  transform: translateY(-6px);
+}
+
+.pick:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 6px;
+}
+
+/* ── close-up ── */
+.view {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+}
+
+.viewBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(40 40 40 / 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 450ms ease;
+  cursor: zoom-out;
+}
+
+.viewShown .viewBackdrop {
+  opacity: 1;
+}
+
+.viewStage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  pointer-events: none;
+}
+
+.viewMedia {
+  height: min(78vh, calc((100vw - 80px) * 494 / 371));
+  aspect-ratio: 371 / 494;
+  transform-origin: center;
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+  pointer-events: auto;
+  cursor: zoom-out;
+  will-change: transform;
+}
+
+.viewPoster {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.viewInfo {
+  width: min(78vh * 371 / 494, calc(100vw - 80px));
+  color: var(--color-bg);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 300ms ease,
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.viewShown .viewInfo {
+  opacity: 1;
+  transform: none;
+  transition-delay: 300ms;
+}
+
+.viewTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.viewSource {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.viewAdded {
+  margin: 12px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.viewAdded::before {
+  content: "✓ ";
+}
+
+.viewClose {
+  position: absolute;
+  top: 24px;
+  right: 40px;
+  padding: 6px 16px;
+  border: 2px solid var(--color-bg);
+  border-radius: 100px;
+  background: none;
+  color: var(--color-bg);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.viewShown .viewClose {
+  opacity: 1;
 }

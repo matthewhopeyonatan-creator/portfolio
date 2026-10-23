@@ -157,6 +157,8 @@ export const cartCatalog: {
   name: string;
   image?: string;
   sticker?: boolean;
+  /** a Grocer's Selects poster (portrait art) */
+  poster?: boolean;
 }[] = [
   ...projects.map((p) => ({
     key: p.slug,
@@ -188,76 +190,76 @@ export const grocersSelects: {
     title: "Solara Poster",
     source: "CrowdVolt Print",
     price: "$90.00",
-    src: "/graphics/select-01.webp",
+    src: "/graphics/poster-01.webp",
   },
   {
     title: "Solomun Special Event",
     source: "CrowdVolt Socials",
     price: "$102.00",
-    src: "/graphics/select-02.webp",
+    src: "/graphics/poster-02.webp",
   },
   {
     title: "Head Trip Poster",
     source: "CrowdVolt Socials",
     price: "$178.00",
-    src: "/graphics/select-03.webp",
+    src: "/graphics/poster-03.webp",
   },
   {
     title: "New Music Friday",
     source: "CrowdVolt Socials",
     price: "$109.00",
-    src: "/graphics/select-04.webp",
+    src: "/graphics/poster-04.webp",
   },
   {
     title: "Membership Invite",
     source: "Design Meetup Socials",
     price: "$237.00",
-    src: "/graphics/select-05.webp",
+    src: "/graphics/poster-05.webp",
     video: "/graphics/select-05.mp4",
   },
   {
     title: "Autumn Atelier",
     source: "Design Meetup Socials",
     price: "$173.00",
-    src: "/graphics/select-06.webp",
+    src: "/graphics/poster-06.webp",
   },
   {
     title: "Spotify Event",
     source: "Design Meetup Socials",
     price: "$254.00",
-    src: "/graphics/select-07.webp",
+    src: "/graphics/poster-07.webp",
     video: "/graphics/select-07.mp4",
   },
   {
     title: "Membership Invite",
     source: "Design Meetup Socials",
     price: "$155.00",
-    src: "/graphics/select-08.webp",
+    src: "/graphics/poster-08.webp",
   },
   {
     title: "Autumn Atelier Recap",
     source: "Design Meetup Socials",
     price: "$128.00",
-    src: "/graphics/select-09.webp",
+    src: "/graphics/poster-09.webp",
     video: "/graphics/select-09.mp4",
   },
   {
     title: "Rewind",
     source: "CrowdVolt Print",
     price: "$102.00",
-    src: "/graphics/select-10.webp",
+    src: "/graphics/poster-10.webp",
   },
   {
     title: "Rewind",
     source: "CrowdVolt Print",
     price: "$203.00",
-    src: "/graphics/select-11.webp",
+    src: "/graphics/poster-11.webp",
   },
   {
     title: "Recruitment Poster",
     source: "CrowdVolt Socials",
     price: "$41.00",
-    src: "/graphics/select-12.webp",
+    src: "/graphics/poster-12.webp",
   },
 ];
 
@@ -305,3 +307,14 @@ export const pastExperiences: { org: string; role: string; logo: string }[] = [
   },
   { org: "LOKO", role: "Graphics Chair", logo: "/experience/loko.png" },
 ];
+
+// posters picked up from the shelf (clicking one opens it up close and drops it in the cart)
+export const posterKey = (src: string) => src.replace(/^.*\/(.*)\.webp$/, "$1");
+cartCatalog.push(
+  ...grocersSelects.map((g) => ({
+    key: posterKey(g.src),
+    name: g.title,
+    image: g.src,
+    poster: true,
+  })),
+);
