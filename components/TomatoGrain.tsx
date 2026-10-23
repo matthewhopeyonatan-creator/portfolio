@@ -3,31 +3,34 @@
 import { useEffect, useRef } from "react";
 
 /**
- * The tomato with a fine film grain, drawn at the screen's real pixel density (so the grain is
- * a single device pixel). On hover, the fruit under the cursor is gently pushed outward and
- * dissolves, grain by grain, toward the page — nearly see-through right under the pointer, with
- * a soft edge — then heals smoothly once the cursor moves on.
+ * The tomato with a fine film grain, drawn at the screen's real pixel density. On hover the
+ * grains themselves are pushed: everything near the cursor breaks loose into particles (each
+ * keeps its own colour), gets shoved out from under the pointer and dragged along with its
+ * motion — so the page shows through where they've left and they bank up around the edge —
+ * then, after a beat, they spring back home and the tomato knits itself together again.
  *
- * Under the hood: a coarse "wear" field follows the cursor (rising fast, healing slowly); each
- * pixel looks it up with bilinear smoothing, shifts its source a little away from the cursor and
- * drops out when a fixed per-pixel noise value falls under the wear. Only the worn area is redrawn.
+ * Only the disturbed area is simulated: the tomato is split into small cells, a cell turns into
+ * particles the first time the cursor comes near, and turns back into plain pixels once all of
+ * its grains are home.
  *
  * Drop it in right after the tomato's <img>, inside the same positioned parent. It copies the
  * img's box, so it inherits any rotation on that parent; pass that rotation (degrees) as
  * `rotate` so the cursor can be mapped into the tomato's own coordinates.
  */
-const MAX_PIXELS = 2_400_000; // cap per tomato (keeps memory and redraws in check)
-const GRAIN_L = 0.07; // grain: brightness wobble per pixel…
+const MAX_PIXELS = 2_400_000; // canvas cap per tomato
+const GRAIN_L = 0.07; // baked-in grain: brightness wobble per pixel…
 const GRAIN_A = 0.1; // …and opacity wobble
-const RADIUS = 95; // CSS px around the cursor that dissolves
-const PEAK = 0.9; // how worn the very centre gets (1 = fully gone)
-const HOLD = 20; // frames the wake stays put before it starts to heal (~⅓ s)
-const HEAL = 0.011; // wear lost per frame once healing (linear, so the tail narrows as it goes)
-const PUSH = 7; // CSS px the grain is shoved outward at the centre…
-const DRAG = 0.55; // …and how much of the cursor's motion it gets dragged along with
-const FLOW_DECAY = 0.955; // how quickly that shove relaxes
-const CELL = 8; // canvas px per wear-field cell
-const NOISE = 256; // tiled noise size
+const RADIUS = 85; // CSS px: how far from the cursor grains get shoved
+const LENS = 0.6; // grains right under the cursor are shoved this share of RADIUS outward…
+const DRAG = 0.28; // …plus this share of the cursor's own motion
+const GRAB = 0.16; // how briskly grains get out of the way
+const DAMP = 0.8;
+const HOLD = 16; // frames a grain waits after its last shove before heading home
+const RAMP = 40; // frames over which the pull home builds up (so the return eases in)
+const SPRING = 0.035;
+const CELL = 8; // canvas px per cell
+const MAX_PARTICLES = 220_000; // per tomato, allocated on first hover
+const NOISE = 256;
 
 let noiseTile: Float32Array | null = null;
 function getNoise() {
@@ -52,30 +55,65 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       window.matchMedia("(hover: hover)").matches;
     const noise = getNoise();
 
-    // state for the current size
     let w = 0;
     let h = 0;
     let scale = 1; // canvas px per CSS px
-    let base: Uint8ClampedArray | null = null; // grained tomato, at rest
-    let out: ImageData | null = null; // what's on screen
+    let B = 1; // particle size in canvas px (one CSS px on dense screens)
+    let base: Uint32Array | null = null; // grained tomato at rest (RGBA packed)
+    let out: ImageData | null = null;
+    let o32 = new Uint32Array(0);
     let gw = 0;
     let gh = 0;
-    let wear = new Float32Array(0);
-    let hold = new Uint8Array(0);
-    let listed = new Uint8Array(0); // cell is in the active list (each cell at most once)
-    let flx = new Float32Array(0); // per-cell shove, canvas px
-    let fly = new Float32Array(0);
-    let touched = new Uint8Array(0);
-    let pmx = -1e6; // cursor last frame (for its velocity and to fill gaps on fast moves)
-    let pmy = -1e6;
-    let active: number[] = []; // cells with any wear
+    // cells
+    let liquid = new Uint8Array(0); // 1 = currently particles
+    let cStart = new Int32Array(0); // first particle of the cell
+    let cLen = new Int32Array(0); // particle count
+    let cAwake = new Int32Array(0); // particles not yet home
+    let dirty = new Uint8Array(0);
+    let liquidCells: number[] = [];
+    // particles (struct of arrays)
+    let n = 0;
+    let dead = 0;
+    let hx = new Float32Array(0);
+    let hy = new Float32Array(0);
+    let x = new Float32Array(0);
+    let y = new Float32Array(0);
+    let vx = new Float32Array(0);
+    let vy = new Float32Array(0);
+    let quiet = new Uint16Array(0);
+    let str = new Float32Array(0); // per-grain push strength, so the parting has a ragged, grainy edge
+    let home = new Uint8Array(0); // 1 = resting at home
+    let gone = new Uint8Array(0); // 1 = removed (cell went solid again)
+    let pcell = new Int32Array(0);
+    let col = new Uint32Array(0); // B*B colours per particle
+
     let raf = 0;
     let near = false;
     let mx = -1e6;
     let my = -1e6;
+    let pmx = -1e6;
+    let pmy = -1e6;
     const rad = (rotate * Math.PI) / 180;
     const cos = Math.cos(-rad);
     const sin = Math.sin(-rad);
+
+    const alloc = () => {
+      const cap = MAX_PARTICLES;
+      hx = new Float32Array(cap);
+      hy = new Float32Array(cap);
+      x = new Float32Array(cap);
+      y = new Float32Array(cap);
+      vx = new Float32Array(cap);
+      vy = new Float32Array(cap);
+      quiet = new Uint16Array(cap);
+      str = new Float32Array(cap);
+      home = new Uint8Array(cap);
+      gone = new Uint8Array(cap);
+      pcell = new Int32Array(cap);
+      col = new Uint32Array(cap * B * B);
+      n = 0;
+      dead = 0;
+    };
 
     const build = () => {
       const cw = img.offsetWidth;
@@ -94,6 +132,7 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       w = nw;
       h = nh;
       scale = s;
+      B = s >= 1.5 ? 2 : 1;
       canvas.width = w;
       canvas.height = h;
       ctx.clearRect(0, 0, w, h);
@@ -104,34 +143,34 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       }
       const data = ctx.getImageData(0, 0, w, h);
       const d = data.data;
-      // bake the grain in: every pixel's brightness and opacity wobble a touch
-      for (let y = 0, i = 0; y < h; y++) {
-        const row = (y & (NOISE - 1)) * NOISE;
-        const row2 = ((y * 5 + 97) & (NOISE - 1)) * NOISE;
-        for (let x = 0; x < w; x++, i += 4) {
+      for (let yy = 0, i = 0; yy < h; yy++) {
+        const row = (yy & (NOISE - 1)) * NOISE;
+        const row2 = ((yy * 5 + 97) & (NOISE - 1)) * NOISE;
+        for (let xx = 0; xx < w; xx++, i += 4) {
           if (!d[i + 3]) continue;
-          const n = noise[row + (x & (NOISE - 1))];
-          const m = noise[row2 + ((x * 3 + 41) & (NOISE - 1))];
-          const l = 1 + (n - 0.5) * 2 * GRAIN_L;
+          const l = 1 + (noise[row + (xx & (NOISE - 1))] - 0.5) * 2 * GRAIN_L;
           d[i] = d[i] * l;
           d[i + 1] = d[i + 1] * l;
           d[i + 2] = d[i + 2] * l;
-          d[i + 3] = d[i + 3] * (1 + (m - 0.5) * 2 * GRAIN_A);
+          d[i + 3] =
+            d[i + 3] * (1 + (noise[row2 + ((xx * 3 + 41) & (NOISE - 1))] - 0.5) * 2 * GRAIN_A);
         }
       }
-      base = new Uint8ClampedArray(d);
+      base = new Uint32Array(new Uint8ClampedArray(d).buffer);
       out = data;
+      o32 = new Uint32Array(out.data.buffer);
       ctx.putImageData(out, 0, 0);
-      gw = Math.ceil(w / CELL) + 1;
-      gh = Math.ceil(h / CELL) + 1;
-      wear = new Float32Array(gw * gh);
-      hold = new Uint8Array(gw * gh);
-      listed = new Uint8Array(gw * gh);
-      flx = new Float32Array(gw * gh);
-      fly = new Float32Array(gw * gh);
-      touched = new Uint8Array(gw * gh);
-      active = [];
-      // the grained tomato takes over from the picture (same colours: a seamless swap)
+      gw = Math.ceil(w / CELL);
+      gh = Math.ceil(h / CELL);
+      liquid = new Uint8Array(gw * gh);
+      cStart = new Int32Array(gw * gh);
+      cLen = new Int32Array(gw * gh);
+      cAwake = new Int32Array(gw * gh);
+      dirty = new Uint8Array(gw * gh);
+      liquidCells = [];
+      n = 0;
+      dead = 0;
+      hx = new Float32Array(0); // (re)allocated on first hover at this size
       canvas.style.opacity = "1";
       img.style.visibility = "hidden";
     };
@@ -154,7 +193,6 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     const ro = new ResizeObserver(schedule);
     ro.observe(img);
 
-    // window point → canvas point (undoing the parent's rotation)
     const toLocal = (cx: number, cy: number) => {
       const r = parent.getBoundingClientRect();
       const dx = cx - (r.left + r.width / 2);
@@ -165,150 +203,273 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       ] as const;
     };
 
-    const lerp2 = (f: Float32Array, i: number, tx: number, ty: number) => {
-      const a = f[i];
-      const b = f[i + 1];
-      const c = f[i + gw];
-      const e = f[i + gw + 1];
-      return (a + (b - a) * tx) * (1 - ty) + (c + (e - c) * tx) * ty;
+    // a cell breaks loose: each B×B block with any colour becomes one particle
+    const liquefy = (c: number) => {
+      if (!base || liquid[c]) return;
+      if (!hx.length) alloc();
+      const cx = c % gw;
+      const cy = (c - cx) / gw;
+      const x0 = cx * CELL;
+      const y0 = cy * CELL;
+      const x1 = Math.min(w, x0 + CELL);
+      const y1 = Math.min(h, y0 + CELL);
+      const start = n;
+      for (let by = y0; by < y1; by += B)
+        for (let bx = x0; bx < x1; bx += B) {
+          if (n >= MAX_PARTICLES) break;
+          let any = 0;
+          const ci = n * B * B;
+          for (let oy = 0; oy < B; oy++)
+            for (let ox = 0; ox < B; ox++) {
+              const px = bx + ox;
+              const py = by + oy;
+              const v = px < w && py < h ? base[py * w + px] : 0;
+              col[ci + oy * B + ox] = v;
+              any |= v >>> 24;
+            }
+          if (!any) continue;
+          hx[n] = x[n] = bx;
+          hy[n] = y[n] = by;
+          vx[n] = vy[n] = 0;
+          quiet[n] = 0;
+          home[n] = 0;
+          gone[n] = 0;
+          pcell[n] = c;
+          str[n] = 0.25 + Math.random() * 0.95;
+          n++;
+        }
+      const len = n - start;
+      if (!len) return;
+      liquid[c] = 1;
+      cStart[c] = start;
+      cLen[c] = len;
+      cAwake[c] = len;
+      liquidCells.push(c);
     };
+
+    // squeeze out removed particles once they pile up (cells keep contiguous ranges)
+    const compact = () => {
+      let j = 0;
+      const BB = B * B;
+      for (const c of liquidCells) {
+        const s0 = cStart[c];
+        const len = cLen[c];
+        cStart[c] = j;
+        for (let k = s0; k < s0 + len; k++, j++) {
+          if (k === j) continue;
+          hx[j] = hx[k];
+          hy[j] = hy[k];
+          x[j] = x[k];
+          y[j] = y[k];
+          vx[j] = vx[k];
+          vy[j] = vy[k];
+          quiet[j] = quiet[k];
+          str[j] = str[k];
+          home[j] = home[k];
+          gone[j] = 0;
+          pcell[j] = c;
+          col.copyWithin(j * BB, k * BB, k * BB + BB);
+        }
+      }
+      n = j;
+      dead = 0;
+    };
+
+    const markDirty = (px: number, py: number) => {
+      const cx = (px / CELL) | 0;
+      const cy = (py / CELL) | 0;
+      if (cx >= 0 && cy >= 0 && cx < gw && cy < gh) dirty[cy * gw + cx] = 1;
+    };
+
     const step = () => {
       raf = 0;
       if (!base || !out) return;
       const R = RADIUS * scale;
-      const push = PUSH * scale;
-      // 1 · lay wear (and a shove) along the cursor's path since last frame
+      const R2 = R * R;
+      
+      // 1 · break loose every cell along the cursor's path since last frame
+      let cvx = 0;
+      let cvy = 0;
       if (near) {
-        const vx0 = pmx > -1e5 ? mx - pmx : 0;
-        const vy0 = pmy > -1e5 ? my - pmy : 0;
-        const len = Math.hypot(vx0, vy0);
-        // clamp the drag so a flick doesn't tear the fruit apart
-        const vmax = R * 0.2;
-        const vs = len > vmax ? vmax / len : 1;
-        const vx = vx0 * vs;
-        const vy = vy0 * vs;
-        const steps = Math.max(1, Math.ceil(len / (R * 0.06))); // dense, so the circles merge into one even band
-        for (let sI = 1; sI <= steps; sI++) {
-          const px = pmx > -1e5 ? pmx + (vx0 * sI) / steps : mx;
-          const py = pmy > -1e5 ? pmy + (vy0 * sI) / steps : my;
+        const sx = pmx > -1e5 ? pmx : mx;
+        const sy = pmy > -1e5 ? pmy : my;
+        cvx = mx - sx;
+        cvy = my - sy;
+        const len = Math.hypot(cvx, cvy);
+        const steps = Math.max(1, Math.ceil(len / (R * 0.3)));
+        for (let s = 1; s <= steps; s++) {
+          const px = sx + (cvx * s) / steps;
+          const py = sy + (cvy * s) / steps;
           const c0x = Math.max(0, Math.floor((px - R) / CELL));
-          const c1x = Math.min(gw - 1, Math.ceil((px + R) / CELL));
+          const c1x = Math.min(gw - 1, Math.floor((px + R) / CELL));
           const c0y = Math.max(0, Math.floor((py - R) / CELL));
-          const c1y = Math.min(gh - 1, Math.ceil((py + R) / CELL));
+          const c1y = Math.min(gh - 1, Math.floor((py + R) / CELL));
           for (let cy = c0y; cy <= c1y; cy++)
             for (let cx = c0x; cx <= c1x; cx++) {
-              const dx = cx * CELL - px;
-              const dy = cy * CELL - py;
-              const d = Math.sqrt(dx * dx + dy * dy);
-              if (d >= R) continue;
-              const k = cy * gw + cx;
-              const t = 1 - d / R;
-              const ease = t * t * (3 - 2 * t);
-              const target = ease * PEAK;
-              if (!listed[k]) {
-                listed[k] = 1;
-                active.push(k);
-              }
-              // the deepest wear along the path wins, so a fast sweep leaves one smooth wake
-              if (target > wear[k]) wear[k] = target;
-              if (ease > 0.05) hold[k] = HOLD;
-              // shove: outward from the cursor plus along its motion
-              const inv = d > 0.5 ? 1 / d : 0;
-              const tx = dx * inv * push * ease + vx * DRAG * ease;
-              const ty = dy * inv * push * ease + vy * DRAG * ease;
-              if (Math.abs(tx) + Math.abs(ty) > Math.abs(flx[k]) + Math.abs(fly[k]) * 0.999) {
-                flx[k] += (tx - flx[k]) * 0.5;
-                fly[k] += (ty - fly[k]) * 0.5;
-              }
+              const c = cy * gw + cx;
+              if (liquid[c]) continue;
+              const ddx = (cx + 0.5) * CELL - px;
+              const ddy = (cy + 0.5) * CELL - py;
+              if (ddx * ddx + ddy * ddy < (R + CELL) * (R + CELL)) liquefy(c);
             }
+        }
+        // the cursor's own motion, clamped so a flick doesn't fling the fruit apart
+        const vl = Math.hypot(cvx, cvy);
+        const vmax = R * 0.25;
+        if (vl > vmax) {
+          cvx *= vmax / vl;
+          cvy *= vmax / vl;
         }
         pmx = mx;
         pmy = my;
       } else {
         pmx = pmy = -1e6;
       }
-      // heal: hold for a beat, then wear away linearly (edges go first, so the tail tapers)
-      const still: number[] = [];
-      for (const k of active) {
-        if (hold[k]) hold[k]--;
-        else wear[k] = Math.max(0, wear[k] - HEAL);
-        flx[k] *= FLOW_DECAY;
-        fly[k] *= FLOW_DECAY;
-        if (wear[k] <= 0 && !hold[k] && Math.abs(flx[k]) + Math.abs(fly[k]) < 0.05) {
-          wear[k] = flx[k] = fly[k] = 0;
-          listed[k] = 0;
-        } else still.push(k);
-        const cx = k % gw;
-        const cy = (k - cx) / gw;
-        // the cells this corner value feeds (bilinear reaches one cell up/left)
-        for (let oy = -1; oy <= 0; oy++)
-          for (let ox = -1; ox <= 0; ox++) {
-            const nx = cx + ox;
-            const ny = cy + oy;
-            if (nx >= 0 && ny >= 0 && nx < gw && ny < gh) touched[ny * gw + nx] = 1;
-          }
-      }
-      active = still;
 
-      // 2 · redraw the touched cells
-      const o = out.data;
-      const src = base;
+      // 2 · move the loose grains
+      for (const c of liquidCells) dirty[c] = 1;
+      const restored: number[] = [];
+      for (let k = 0; k < n; k++) {
+        if (gone[k]) continue;
+        if (home[k] && !near) continue;
+        // where this grain wants to be: shoved outward (by how close its home is to the cursor),
+        // or back home once the cursor has gone and it has waited a beat
+        let gxT = hx[k];
+        let gyT = hy[k];
+        let kk = 0;
+        let pushed = false;
+        if (near) {
+          const dx = hx[k] - mx;
+          const dy = hy[k] - my;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < R2) {
+            const d = Math.sqrt(d2) || 1;
+            const f = 1 - d / R;
+            const u = R * LENS * f * f * str[k];
+            gxT += (dx / d) * u;
+            gyT += (dy / d) * u;
+            vx[k] += cvx * DRAG * f;
+            vy[k] += cvy * DRAG * f;
+            kk = GRAB;
+            pushed = true;
+          }
+        }
+        if (pushed) {
+          if (home[k]) {
+            home[k] = 0;
+            cAwake[pcell[k]]++;
+          }
+          quiet[k] = 0;
+        } else {
+          if (home[k]) continue;
+          if (quiet[k] < 65000) quiet[k]++;
+          // the pull home only starts after a beat, then eases in
+          const q = quiet[k] - HOLD;
+          kk = q <= 0 ? 0 : SPRING * Math.min(1, q / RAMP);
+        }
+        const ox = x[k];
+        const oy = y[k];
+        vx[k] = (vx[k] + (gxT - ox) * kk) * DAMP;
+        vy[k] = (vy[k] + (gyT - oy) * kk) * DAMP;
+        x[k] = ox + vx[k];
+        y[k] = oy + vy[k];
+        markDirty(ox, oy);
+        markDirty(x[k], y[k]);
+        if (
+          !pushed &&
+          kk > 0 &&
+          Math.abs(x[k] - hx[k]) + Math.abs(y[k] - hy[k]) < 0.3 &&
+          Math.abs(vx[k]) + Math.abs(vy[k]) < 0.08
+        ) {
+          x[k] = hx[k];
+          y[k] = hy[k];
+          vx[k] = vy[k] = 0;
+          home[k] = 1;
+          const c = pcell[k];
+          if (--cAwake[c] === 0) restored.push(c);
+        }
+      }
+      // cells whose grains are all home go back to plain pixels
+      if (restored.length) {
+        for (const c of restored) {
+          if (cAwake[c] !== 0 || !liquid[c]) continue;
+          liquid[c] = 0;
+          for (let k = cStart[c]; k < cStart[c] + cLen[c]; k++) gone[k] = 1;
+          dead += cLen[c];
+          dirty[c] = 1;
+        }
+        liquidCells = liquidCells.filter((c) => liquid[c]);
+        if (dead > 40_000 && dead > n / 2) compact();
+        if (!liquidCells.length) {
+          n = 0;
+          dead = 0;
+        }
+      }
+
+      // 3 · redraw: dirty cells back to the tomato (solid) or empty (loose), then splat the grains
       let x0 = w;
       let y0 = h;
       let x1 = -1;
       let y1 = -1;
-      for (let k = 0; k < touched.length; k++) {
-        if (!touched[k]) continue;
-        touched[k] = 0;
-        const cx = k % gw;
-        const cy = (k - cx) / gw;
+      for (let c = 0; c < dirty.length; c++) {
+        if (!dirty[c]) continue;
+        const cx = c % gw;
+        const cy = (c - cx) / gw;
         const px0 = cx * CELL;
         const py0 = cy * CELL;
-        if (px0 >= w || py0 >= h) continue;
         const px1 = Math.min(w, px0 + CELL);
         const py1 = Math.min(h, py0 + CELL);
         if (px0 < x0) x0 = px0;
         if (py0 < y0) y0 = py0;
         if (px1 > x1) x1 = px1;
         if (py1 > y1) y1 = py1;
-        for (let y = py0; y < py1; y++) {
-          const row = (y & (NOISE - 1)) * NOISE;
-          for (let x = px0; x < px1; x++) {
-            const i = (y * w + x) * 4;
-            const fx = x / CELL;
-            const fy = y / CELL;
-            const ix = fx | 0;
-            const iy = fy | 0;
-            const ci = iy * gw + ix;
-            const tx = fx - ix;
-            const ty = fy - iy;
-            const e = lerp2(wear, ci, tx, ty);
-            const ox = lerp2(flx, ci, tx, ty);
-            const oy = lerp2(fly, ci, tx, ty);
-            if (e < 0.002 && Math.abs(ox) + Math.abs(oy) < 0.3) {
-              o[i] = src[i];
-              o[i + 1] = src[i + 1];
-              o[i + 2] = src[i + 2];
-              o[i + 3] = src[i + 3];
-              continue;
-            }
-            // shoved: show the fruit from upstream of the flow, so the grain looks pushed along
-            const sx = Math.min(w - 1, Math.max(0, (x - ox + 0.5) | 0));
-            const sy = Math.min(h - 1, Math.max(0, (y - oy + 0.5) | 0));
-            const j = (sy * w + sx) * 4;
-            // dissolve: this pixel drops out once the wear passes its own noise value
-            const n = noise[row + (x & (NOISE - 1))];
-            let keep = (n - (e * 1.15 - 0.15)) / 0.15;
-            keep = keep < 0 ? 0 : keep > 1 ? 1 : keep;
-            o[i] = src[j];
-            o[i + 1] = src[j + 1];
-            o[i + 2] = src[j + 2];
-            o[i + 3] = src[j + 3] * keep * (1 - 0.3 * e);
-          }
+        for (let yy = py0; yy < py1; yy++) {
+          const a = yy * w + px0;
+          const b = yy * w + px1;
+          if (liquid[c]) o32.fill(0, a, b);
+          else o32.set(base.subarray(a, b), a);
         }
       }
-      if (x1 > x0) ctx.putImageData(out, 0, 0, x0, y0, x1 - x0, y1 - y0);
-      if (near || active.length) raf = requestAnimationFrame(step);
+      if (x1 >= 0) {
+        const BB = B * B;
+        const od = out.data;
+        for (let k = 0; k < n; k++) {
+          if (gone[k]) continue;
+          const gx = (x[k] + 0.5) | 0;
+          const gy = (y[k] + 0.5) | 0;
+          if (gx < 0 || gy < 0 || gx + B > w || gy + B > h) continue;
+          if (!dirty[((gy / CELL) | 0) * gw + ((gx / CELL) | 0)]) continue;
+          const ci = k * BB;
+          // a grain that's been moved draws one px larger, so no hairline gaps open up between
+          // neighbours that moved by slightly different amounts
+          const S = gx === hx[k] && gy === hy[k] ? B : B + 1;
+          if (gx + S > w || gy + S > h) continue;
+          for (let oy = 0; oy < S; oy++)
+            for (let ox = 0; ox < S; ox++) {
+              const c = col[ci + (oy < B ? oy : B - 1) * B + (ox < B ? ox : B - 1)];
+              const sa = c >>> 24;
+              if (!sa) continue;
+              const p = (gy + oy) * w + gx + ox;
+              const da = o32[p] >>> 24;
+              if (!da) {
+                o32[p] = c;
+                continue;
+              }
+              // grains banking up over each other: plain "over" blend
+              const i = p * 4;
+              const a = sa / 255;
+              const ra = a + (da / 255) * (1 - a);
+              const kd = ((da / 255) * (1 - a)) / ra;
+              od[i] = (c & 255) * (a / ra) + od[i] * kd;
+              od[i + 1] = ((c >>> 8) & 255) * (a / ra) + od[i + 1] * kd;
+              od[i + 2] = ((c >>> 16) & 255) * (a / ra) + od[i + 2] * kd;
+              od[i + 3] = ra * 255;
+            }
+        }
+        dirty.fill(0);
+        ctx.putImageData(out, 0, 0, x0, y0, x1 - x0, y1 - y0);
+      }
+      if (near || liquidCells.length) raf = requestAnimationFrame(step);
     };
 
     const onMove = (e: PointerEvent) => {
@@ -322,11 +483,11 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
       near = inBox && !covered;
       mx = lx;
       my = ly;
-      if ((near || active.length) && !raf) raf = requestAnimationFrame(step);
+      if ((near || liquidCells.length) && !raf) raf = requestAnimationFrame(step);
     };
     const onLeave = () => {
       near = false;
-      if (!raf && active.length) raf = requestAnimationFrame(step);
+      if (!raf && liquidCells.length) raf = requestAnimationFrame(step);
     };
     if (interactive) {
       window.addEventListener("pointermove", onMove, { passive: true });
