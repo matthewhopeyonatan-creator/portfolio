@@ -42,12 +42,22 @@ export default function Catalog() {
           <div className={styles.tomatoRot}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/catalog/tomato-4.svg" alt="" width={1344} height={1291} />
+            <span
+              className="tomato-noise"
+              aria-hidden="true"
+              style={{ maskImage: "url(/catalog/tomato-4.svg)", WebkitMaskImage: "url(/catalog/tomato-4.svg)" }}
+            />
           </div>
         </div>
         <div className={`${styles.tomato} ${styles.tomatoFront}`}>
           <div className={styles.tomatoRot}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/catalog/tomato-5.svg" alt="" width={1520} height={1455} />
+            <span
+              className="tomato-noise"
+              aria-hidden="true"
+              style={{ maskImage: "url(/catalog/tomato-5.svg)", WebkitMaskImage: "url(/catalog/tomato-5.svg)" }}
+            />
           </div>
         </div>
       </div>

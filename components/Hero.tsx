@@ -301,6 +301,11 @@ function Tomato({
         }}
         className={styles.tomatoImg}
       />
+      <span
+        className="tomato-noise"
+        aria-hidden="true"
+        style={{ inset: 0, maskImage: `url(${t.src})`, WebkitMaskImage: `url(${t.src})` }}
+      />
       {stickers[id]?.map((s) => (
         <Sticker key={s.src} s={s} onOpen={onOpen} away={activeSrc === s.src} />
       ))}
