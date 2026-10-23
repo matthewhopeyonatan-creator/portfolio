@@ -237,13 +237,13 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     // the ball hops dot to dot; it sails straight over a skipped dot, which shakes it off
     const timers: number[] = [];
     const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
-    const LEG = 650; // ms per dot of travel
+    const LEG = 380; // ms per dot of travel
     const run = () => {
       let t = 0;
       setFilled([]);
       setRejecting([]);
       setBall({ at: 0, dur: 0, on: true });
-      t += 900;
+      t += 450;
       let i = 0;
       while (i < n - 1) {
         // travel to the next real stop, passing over any skipped dots
@@ -267,19 +267,19 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
             setRejectKey((x) => x + 1);
           });
         }
-        t += dur + 450;
+        t += dur + 220;
         i = j;
       }
       // hold the finished row, then clear and go again
-      at(t + 1300, () => {
+      at(t + 800, () => {
         setFilled((f) => [...f, n - 1]);
         setBall((bl) => ({ ...bl, on: false }));
       });
-      at(t + 1800, () => {
+      at(t + 1150, () => {
         setFilled([]);
         setRejecting([]);
       });
-      at(t + 2400, run);
+      at(t + 1500, run);
     };
     run();
     return () => timers.forEach((id) => window.clearTimeout(id));
