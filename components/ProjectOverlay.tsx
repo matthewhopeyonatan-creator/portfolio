@@ -214,7 +214,7 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.6 });
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.25 }); // loops whenever it’s on screen
     io.observe(el);
     return () => {
       ro.disconnect();
