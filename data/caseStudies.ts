@@ -30,7 +30,13 @@ export type CaseBlock =
   // live website in a rounded window
   | { type: "embed"; url: string; title: string; ratio: number }
   // step diagram: labels over dots, optional "+FRICTION" tags after given steps (0-based)
-  | { type: "flow"; steps: string[]; frictionAfter?: number[] }
+  | {
+      type: "flow";
+      steps: string[];
+      frictionAfter?: number[];
+      /** loop: dots start as outlines and fill in one by one; these steps turn red (skipped) */
+      skip?: number[];
+    }
   // images with captions under them, side by side when more than one
   | { type: "figures"; items: { image: CaseImage; caption?: string }[] }
   // a not-yet-written section
@@ -423,7 +429,7 @@ const crowdvolt: CaseSection[] = [
             text: "Once a buyer places a bid and a seller matches it, the transaction is automatically processed",
             body: "Causes high user confusion since users are accustomed to secondary confirmation whether they want to buy the ticket or not",
           },
-          { type: "flow", steps: bidSteps },
+          { type: "flow", steps: bidSteps, skip: [2] },
         ],
       },
       {

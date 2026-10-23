@@ -143,25 +143,7 @@ function Block({ b }: { b: CaseBlock }) {
         </div>
       );
     case "flow":
-      return (
-        <div
-          className={styles.cvFlow}
-          role="img"
-          aria-label={b.steps.join(", then ")}
-        >
-          {b.steps.map((step, i) => (
-            <div key={step} className={styles.cvStep}>
-              <span className={styles.cvStepLabel}>{step}</span>
-              <span className={styles.cvDot} aria-hidden="true" />
-              {b.frictionAfter?.includes(i) ? (
-                <span className={styles.cvFriction} aria-hidden="true">
-                  +FRICTION
-                </span>
-              ) : null}
-            </div>
-          ))}
-        </div>
-      );
+      return <Flow b={b} />;
     case "figures":
       return (
         <div className={styles.cvFigures} data-count={b.items.length}>
@@ -189,6 +171,67 @@ function Block({ b }: { b: CaseBlock }) {
         </>
       );
   }
+}
+
+/**
+ * Step diagram. With `skip`, it plays on a loop: every dot starts as a black outline, then they
+ * fill in one after another (black), and a skipped step fills red instead — so the flow reads as
+ * steps where that one gets jumped over. Holds a beat, resets, repeats.
+ */
+function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
+  const animated = !!b.skip?.length;
+  // how many dots are filled (0 = all outlines)
+  const [shown, setShown] = useState(animated ? 0 : b.steps.length);
+  useEffect(() => {
+    if (!animated) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(b.steps.length);
+      return;
+    }
+    // 0 → n one step at a time, then hold on the full row, then start over
+    const n = b.steps.length;
+    let step = 0;
+    const id = window.setInterval(() => {
+      step = (step + 1) % (n + 3); // n fills + 2 ticks of hold + the reset tick
+      setShown(Math.min(step, n));
+    }, 700);
+    return () => window.clearInterval(id);
+  }, [animated, b.steps.length]);
+
+  return (
+    <div
+      className={styles.cvFlow}
+      role="img"
+      aria-label={b.steps
+        .map((s, i) => (b.skip?.includes(i) ? `${s} (skipped)` : s))
+        .join(", then ")}
+    >
+      {b.steps.map((step, i) => {
+        const on = i < shown;
+        const skipped = b.skip?.includes(i);
+        return (
+          <div key={step} className={styles.cvStep}>
+            <span className={styles.cvStepLabel}>{step}</span>
+            <span
+              className={`${styles.cvDot} ${animated ? styles.cvDotRing : ""} ${
+                animated && on
+                  ? skipped
+                    ? styles.cvDotSkip
+                    : styles.cvDotOn
+                  : ""
+              }`}
+              aria-hidden="true"
+            />
+            {b.frictionAfter?.includes(i) ? (
+              <span className={styles.cvFriction} aria-hidden="true">
+                +FRICTION
+              </span>
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function ExpandIcon({ expanded }: { expanded: boolean }) {
