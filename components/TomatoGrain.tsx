@@ -3,25 +3,27 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Hover a tomato and it breaks up into film grain: the image cross-fades to a stochastic
- * dither of itself (every grain keeps the colour of the pixel it came from), and the grains
- * nearest the cursor are blown away from it, drifting back home once it moves on.
+ * A fine film grain laid over a tomato, always on. The grain is a sparse scatter of tiny light
+ * and dark specks inside the tomato's shape (stronger where the tomato is more opaque), drawn on
+ * a canvas over the image — the tomato itself never changes. On hover, the specks near the
+ * cursor are gently pushed away from it and ease back home once it moves on.
  *
  * Drop it in right after the tomato's <img>, inside the same positioned parent. It copies the
- * img's box, so it also inherits any rotation on that parent; pass the parent's rotation in
- * degrees as `rotate` so the cursor can be mapped into the tomato's own coordinates.
+ * img's box, so it inherits any rotation on that parent; pass that rotation (degrees) as
+ * `rotate` so the cursor can be mapped into the tomato's own coordinates.
  */
-const Q = 0.5; // grain canvas resolution vs CSS px (one grain = 2 CSS px)
-const RADIUS = 120; // CSS px around the cursor that the grains flee
-const PUSH = 2.6;
-const SPRING = 0.055;
-const DAMP = 0.86;
-const BUCKET = 24; // canvas px per spatial bucket
+const DENSITY = 0.42; // share of the tomato's pixels that carry a speck (scaled by opacity)
+const LIGHT = 54; // speck strength out of 255, light specks
+const DARK = 46; // …and dark ones
+const RADIUS = 90; // CSS px around the cursor that the grain parts from
+const PUSH = 1.15;
+const SPRING = 0.035;
+const DAMP = 0.88;
+const BUCKET = 32; // px per spatial bucket
 
 type Field = {
   w: number;
   h: number;
-  alpha: Uint8Array; // source alpha at canvas res (hover hit-test)
   n: number;
   hx: Float32Array;
   hy: Float32Array;
@@ -30,17 +32,16 @@ type Field = {
   vx: Float32Array;
   vy: Float32Array;
   col: Uint32Array;
-  live: Uint8Array; // currently moving
-  buckets: Int32Array[]; // particle indices per bucket
+  live: Uint8Array;
+  liveList: number[];
+  buckets: Int32Array[];
   bw: number;
   bh: number;
   img: ImageData;
   px: Uint32Array;
 };
 
-function buildField(img: HTMLImageElement, cssW: number, cssH: number): Field | null {
-  const w = Math.max(1, Math.round(cssW * Q));
-  const h = Math.max(1, Math.round(cssH * Q));
+function buildField(img: HTMLImageElement, w: number, h: number): Field | null {
   const off = document.createElement("canvas");
   off.width = w;
   off.height = h;
@@ -52,19 +53,25 @@ function buildField(img: HTMLImageElement, cssW: number, cssH: number): Field | 
     return null;
   }
   const src = ctx.getImageData(0, 0, w, h).data;
-  const alpha = new Uint8Array(w * h);
   const keep: number[] = [];
-  for (let i = 0, p = 0; p < w * h; p++, i += 4) {
-    const a = src[i + 3];
-    alpha[p] = a;
-    // dither: a pixel becomes a grain with a chance set by its opacity
-    if (a > 6 && Math.random() < Math.pow(a / 255, 1.15) * 0.9) keep.push(p);
+  const cols: number[] = [];
+  for (let p = 0, i = 3; p < w * h; p++, i += 4) {
+    const a = src[i] / 255;
+    if (a < 0.04 || Math.random() > DENSITY * Math.min(1, a * 1.4)) continue;
+    keep.push(p);
+    // light or dark speck, its strength following how solid the tomato is there
+    const lightSpeck = Math.random() < 0.5;
+    const s = Math.round((lightSpeck ? LIGHT : DARK) * Math.min(1, a * 1.3) * (0.5 + Math.random()));
+    cols.push(
+      lightSpeck
+        ? ((s << 24) | (236 << 16) | (244 << 8) | 255) >>> 0 // warm white
+        : ((s << 24) | (0 << 16) | (6 << 8) | 40) >>> 0, // deep red-black
+    );
   }
   const n = keep.length;
   const f: Field = {
     w,
     h,
-    alpha,
     n,
     hx: new Float32Array(n),
     hy: new Float32Array(n),
@@ -72,8 +79,9 @@ function buildField(img: HTMLImageElement, cssW: number, cssH: number): Field | 
     y: new Float32Array(n),
     vx: new Float32Array(n),
     vy: new Float32Array(n),
-    col: new Uint32Array(n),
+    col: Uint32Array.from(cols),
     live: new Uint8Array(n),
+    liveList: [],
     buckets: [],
     bw: Math.ceil(w / BUCKET),
     bh: Math.ceil(h / BUCKET),
@@ -88,9 +96,7 @@ function buildField(img: HTMLImageElement, cssW: number, cssH: number): Field | 
     const y = (p - x) / w;
     f.hx[k] = f.x[k] = x;
     f.hy[k] = f.y[k] = y;
-    const i = p * 4;
-    // little-endian RGBA; grains are near-opaque so they read as grain, not as a soft copy
-    f.col[k] = ((235 << 24) | (src[i + 2] << 16) | (src[i + 1] << 8) | src[i]) >>> 0;
+    f.px[p] = f.col[k];
     lists[((y / BUCKET) | 0) * f.bw + ((x / BUCKET) | 0)].push(k);
   }
   f.buckets = lists.map((l) => Int32Array.from(l));
@@ -105,80 +111,72 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     const img = canvas?.previousElementSibling as HTMLImageElement | null;
     const parent = canvas?.parentElement;
     if (!canvas || !img || img.tagName !== "IMG" || !parent) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!window.matchMedia("(hover: hover)").matches) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const interactive =
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+      window.matchMedia("(hover: hover)").matches;
 
     let field: Field | null = null;
     let raf = 0;
-    let mix = 0; // 0 = picture, 1 = all grain
-    let inside = false;
+    let near = false;
     let mx = -1e6;
     let my = -1e6;
     const rad = (rotate * Math.PI) / 180;
     const cos = Math.cos(-rad);
     const sin = Math.sin(-rad);
 
-    // keep the canvas on top of the img's box
-    const place = () => {
+    // grain at one speck per CSS pixel, on top of the img's box
+    const build = () => {
+      const w = img.offsetWidth;
+      const h = img.offsetHeight;
+      if (!img.complete || !img.naturalWidth || !w || !h) return;
       canvas.style.left = `${img.offsetLeft}px`;
       canvas.style.top = `${img.offsetTop}px`;
-      canvas.style.width = `${img.offsetWidth}px`;
-      canvas.style.height = `${img.offsetHeight}px`;
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      if (field && field.w === w && field.h === h) return;
+      field = buildField(img, w, h);
+      if (!field) return;
+      canvas.width = w;
+      canvas.height = h;
+      ctx.putImageData(field.img, 0, 0);
+      canvas.style.opacity = "1";
     };
-    place();
-    const ro = new ResizeObserver(() => {
-      place();
-      field = null; // rebuild at the new size on next hover
-    });
+    let idle = 0;
+    const schedule = () => {
+      cancelIdle();
+      const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 60));
+      idle = ric(build) as unknown as number;
+    };
+    const cancelIdle = () => {
+      if (!idle) return;
+      (window.cancelIdleCallback ?? window.clearTimeout)(idle);
+      idle = 0;
+    };
+    if (img.complete) schedule();
+    img.addEventListener("load", schedule);
+    const ro = new ResizeObserver(schedule);
     ro.observe(img);
 
-    const ensure = () => {
-      if (field) return field;
-      if (!img.complete || !img.naturalWidth || !img.offsetWidth) return null;
-      field = buildField(img, img.offsetWidth, img.offsetHeight);
-      if (field) {
-        canvas.width = field.w;
-        canvas.height = field.h;
-      }
-      return field;
-    };
-
-    // window point → grain-canvas point (undoing the parent's rotation)
+    // window point → canvas point (undoing the parent's rotation)
     const toLocal = (cx: number, cy: number) => {
       const r = parent.getBoundingClientRect();
       const dx = cx - (r.left + r.width / 2);
       const dy = cy - (r.top + r.height / 2);
-      const lx = dx * cos - dy * sin + parent.offsetWidth / 2 - img.offsetLeft;
-      const ly = dx * sin + dy * cos + parent.offsetHeight / 2 - img.offsetTop;
-      const s = field ? field.w / img.offsetWidth : Q;
-      return [lx * s, ly * s] as const;
-    };
-
-    const draw = (f: Field) => {
-      const { px, x, y, col, n, w, h } = f;
-      px.fill(0);
-      for (let k = 0; k < n; k++) {
-        const gx = x[k] | 0;
-        const gy = y[k] | 0;
-        if (gx < 0 || gy < 0 || gx >= w || gy >= h) continue;
-        px[gy * w + gx] = col[k];
-      }
-      ctx.putImageData(f.img, 0, 0);
+      return [
+        dx * cos - dy * sin + parent.offsetWidth / 2 - img.offsetLeft,
+        dx * sin + dy * cos + parent.offsetHeight / 2 - img.offsetTop,
+      ] as const;
     };
 
     const step = () => {
       raf = 0;
       const f = field;
       if (!f) return;
-      mix += ((inside ? 1 : 0) - mix) * (inside ? 0.14 : 0.08);
-      canvas.style.opacity = String(mix);
-      img.style.opacity = String(1 - mix);
-
-      const R = RADIUS * (f.w / img.offsetWidth);
-      // wake every grain near the cursor
-      if (inside) {
+      const R = RADIUS;
+      // wake the specks around the cursor
+      if (near) {
         const b0x = Math.max(0, ((mx - R) / BUCKET) | 0);
         const b1x = Math.min(f.bw - 1, ((mx + R) / BUCKET) | 0);
         const b0y = Math.max(0, ((my - R) / BUCKET) | 0);
@@ -186,78 +184,120 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
         for (let by = b0y; by <= b1y; by++)
           for (let bx = b0x; bx <= b1x; bx++) {
             const list = f.buckets[by * f.bw + bx];
-            for (let j = 0; j < list.length; j++) f.live[list[j]] = 1;
+            for (let j = 0; j < list.length; j++) {
+              const k = list[j];
+              if (!f.live[k]) {
+                f.live[k] = 1;
+                f.liveList.push(k);
+              }
+            }
           }
       }
-      let moving = 0;
-      const { x, y, vx, vy, hx, hy, live, n } = f;
-      for (let k = 0; k < n; k++) {
-        if (!live[k]) continue;
+      const { x, y, vx, vy, hx, hy, live, px, col, w, h } = f;
+      // dirty box: everywhere a moving speck was, is, or calls home
+      let x0 = w;
+      let y0 = h;
+      let x1 = -1;
+      let y1 = -1;
+      const grow = (gx: number, gy: number) => {
+        if (gx < x0) x0 = gx;
+        if (gy < y0) y0 = gy;
+        if (gx > x1) x1 = gx;
+        if (gy > y1) y1 = gy;
+      };
+      const next: number[] = [];
+      for (const k of f.liveList) {
+        grow(x[k] | 0, y[k] | 0);
+        grow(hx[k], hy[k]);
         let ax = (hx[k] - x[k]) * SPRING;
         let ay = (hy[k] - y[k]) * SPRING;
-        if (inside) {
+        if (near) {
           const dx = x[k] - mx;
           const dy = y[k] - my;
           const d2 = dx * dx + dy * dy;
           if (d2 < R * R) {
             const d = Math.sqrt(d2) || 1;
             const t = 1 - d / R;
-            const fpush = t * t * PUSH;
-            ax += (dx / d) * fpush + (Math.random() - 0.5) * 0.6;
-            ay += (dy / d) * fpush + (Math.random() - 0.5) * 0.6;
+            // smoothstep falloff: a soft-edged parting rather than a hard ring
+            const fp = t * t * (3 - 2 * t) * PUSH;
+            ax += (dx / d) * fp;
+            ay += (dy / d) * fp;
           }
         }
         vx[k] = (vx[k] + ax) * DAMP;
         vy[k] = (vy[k] + ay) * DAMP;
         x[k] += vx[k];
         y[k] += vy[k];
+        grow(x[k] | 0, y[k] | 0);
         const off = Math.abs(x[k] - hx[k]) + Math.abs(y[k] - hy[k]);
         if (off < 0.05 && Math.abs(vx[k]) + Math.abs(vy[k]) < 0.02) {
           x[k] = hx[k];
           y[k] = hy[k];
           vx[k] = vy[k] = 0;
           live[k] = 0;
-        } else moving++;
+        } else next.push(k);
       }
-      if (mix > 0.004) draw(f);
-      if (inside || moving || mix > 0.004) raf = requestAnimationFrame(step);
-      else {
-        mix = 0;
-        canvas.style.opacity = "0";
-        img.style.opacity = "";
+      if (x1 >= 0) {
+        x0 = Math.max(0, x0 - 1);
+        y0 = Math.max(0, y0 - 1);
+        x1 = Math.min(w - 1, x1 + 1);
+        y1 = Math.min(h - 1, y1 + 1);
+        // redraw just that box: clear it, put the resting specks back, then the moving ones
+        for (let yy = y0; yy <= y1; yy++) px.fill(0, yy * w + x0, yy * w + x1 + 1);
+        const b0x = (x0 / BUCKET) | 0;
+        const b1x = (x1 / BUCKET) | 0;
+        const b0y = (y0 / BUCKET) | 0;
+        const b1y = (y1 / BUCKET) | 0;
+        for (let by = b0y; by <= b1y; by++)
+          for (let bx = b0x; bx <= b1x; bx++) {
+            const list = f.buckets[by * f.bw + bx];
+            for (let j = 0; j < list.length; j++) {
+              const k = list[j];
+              if (live[k]) continue; // still moving: drawn below at its current spot
+              const gx = hx[k];
+              const gy = hy[k];
+              if (gx >= x0 && gx <= x1 && gy >= y0 && gy <= y1) px[gy * w + gx] = col[k];
+            }
+          }
+        for (const k of next) {
+          const gx = x[k] | 0;
+          const gy = y[k] | 0;
+          if (gx >= x0 && gx <= x1 && gy >= y0 && gy <= y1) px[gy * w + gx] = col[k];
+        }
+        ctx.putImageData(f.img, 0, 0, x0, y0, x1 - x0 + 1, y1 - y0 + 1);
       }
+      f.liveList = next;
+      if (near || next.length) raf = requestAnimationFrame(step);
     };
 
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
-      const f = ensure();
-      if (!f) return;
+      if (e.pointerType === "touch" || !field) return;
       const [lx, ly] = toLocal(e.clientX, e.clientY);
-      const gx = lx | 0;
-      const gy = ly | 0;
-      const hit =
-        gx >= 0 && gy >= 0 && gx < f.w && gy < f.h && f.alpha[gy * f.w + gx] > 40;
-      // something interactive drawn over the tomato (a sticker, a link, a popup, the bar) keeps
-      // it whole — the tomatoes themselves never take the pointer
-      const top = document.elementFromPoint(e.clientX, e.clientY);
+      const inBox =
+        lx > -RADIUS && ly > -RADIUS && lx < field.w + RADIUS && ly < field.h + RADIUS;
+      // something interactive drawn over the tomato (a sticker, a link, a popup, the bar)
+      const top = inBox ? document.elementFromPoint(e.clientX, e.clientY) : null;
       const covered = !!top?.closest("a, button, header, [role=dialog]");
-      inside = hit && !covered;
+      near = inBox && !covered;
       mx = lx;
       my = ly;
-      if ((inside || mix > 0) && !raf) raf = requestAnimationFrame(step);
+      if ((near || field.liveList.length) && !raf) raf = requestAnimationFrame(step);
     };
     const onLeave = () => {
-      inside = false;
-      if (!raf && mix > 0) raf = requestAnimationFrame(step);
+      near = false;
+      if (!raf && field?.liveList.length) raf = requestAnimationFrame(step);
     };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    document.documentElement.addEventListener("pointerleave", onLeave);
+    if (interactive) {
+      window.addEventListener("pointermove", onMove, { passive: true });
+      document.documentElement.addEventListener("pointerleave", onLeave);
+    }
     return () => {
       window.removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);
+      img.removeEventListener("load", schedule);
       ro.disconnect();
+      cancelIdle();
       cancelAnimationFrame(raf);
-      img.style.opacity = "";
     };
   }, [rotate]);
 
@@ -265,7 +305,12 @@ export default function TomatoGrain({ rotate = 0 }: { rotate?: number }) {
     <canvas
       ref={ref}
       aria-hidden="true"
-      style={{ position: "absolute", pointerEvents: "none", opacity: 0 }}
+      style={{
+        position: "absolute",
+        pointerEvents: "none",
+        opacity: 0,
+        transition: "opacity 600ms ease",
+      }}
     />
   );
 }
