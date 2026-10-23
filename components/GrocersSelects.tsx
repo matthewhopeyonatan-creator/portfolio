@@ -27,7 +27,7 @@ export default function GrocersSelects() {
               {/* row by row, left to right */}
               <figure
                 className={styles.item}
-                data-reveal="pop"
+                data-reveal="swipe"
                 style={{ "--i": i % 3 } as React.CSSProperties}
               >
                 {item.video ? (

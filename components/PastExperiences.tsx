@@ -37,9 +37,12 @@ export default function PastExperiences() {
               height={210}
               className={styles.logo}
             />
-            <span className={styles.pill}>
-              <span className={styles.org}>{x.org}</span>
-              <span className={styles.role}>{x.role}</span>
+            {/* the pill starts tucked behind the logo and slides out of it on entrance */}
+            <span className={styles.pillTrack} data-pill-track>
+              <span className={styles.pill} data-pill>
+                <span className={styles.org}>{x.org}</span>
+                <span className={styles.role}>{x.role}</span>
+              </span>
             </span>
           </li>
         ))}

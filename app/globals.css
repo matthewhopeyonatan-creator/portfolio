@@ -117,8 +117,9 @@ html.modal-open {
 /* ── scroll entrances (components/RevealOnScroll) ──────────────────────────────────────────
    data-reveal="up"     rise + fade (section titles, caption rows)
    data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
-   data-reveal="pop"    posters: rise + grow in from 94%
-   data-reveal="roll"   experience rows: rise + fade; the logo rolls in
+   data-reveal="swipe"  posters: wiped up into view from the bottom edge, caption following
+   data-reveal="roll"   experience rows: logo and pill start as one (pill tucked behind the
+                        logo); the logo rolls in, then the pill slides out of it
    --i staggers an item after its neighbours */
 .reveal-ready [data-reveal] {
   opacity: 0;
@@ -136,18 +137,68 @@ html.modal-open {
   transform: translateY(56px) rotate(1.6deg);
 }
 
-.reveal-ready [data-reveal="pop"] {
-  transform: translateY(40px) scale(0.94);
+/* the poster is unmasked bottom → top while it slides up into place; the figure itself stays put */
+.reveal-ready [data-reveal="swipe"] {
+  opacity: 1;
+}
+
+.reveal-ready [data-reveal="swipe"] > :first-child {
+  clip-path: inset(100% 0 0 0);
+  transform: translateY(18%);
+  transition:
+    clip-path 1000ms cubic-bezier(0.65, 0, 0.2, 1),
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+
+.reveal-ready [data-reveal="swipe"] > figcaption {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 600ms ease,
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 120ms + 450ms);
+}
+
+.reveal-ready [data-reveal="swipe"][data-revealed] > :first-child {
+  clip-path: inset(0 0 0 0);
+  transform: none;
+}
+
+.reveal-ready [data-reveal="swipe"][data-revealed] > figcaption {
+  opacity: 1;
+  transform: none;
 }
 
 .reveal-ready [data-reveal="roll"] {
-  transform: translateY(24px);
+  opacity: 1;
 }
 
 .reveal-ready [data-reveal="roll"] img {
+  opacity: 0;
   transform: rotate(-120deg) scale(0.6);
-  transition: transform 900ms cubic-bezier(0.34, 1.4, 0.5, 1);
-  transition-delay: calc(var(--i, 0) * 110ms + 120ms);
+  transition:
+    opacity 400ms ease,
+    transform 800ms cubic-bezier(0.34, 1.4, 0.5, 1);
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+
+/* the pill starts slid fully back into its clipped slot, i.e. tucked against the logo, so at
+   first only the logo shows; then it slides out to the right. (No layout change: the row never
+   reflows.) */
+.reveal-ready [data-reveal="roll"] [data-pill] {
+  transform: translateX(-100%);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 110ms + 380ms);
+}
+
+.reveal-ready [data-reveal="roll"][data-revealed] img {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-ready [data-reveal="roll"][data-revealed] [data-pill] {
+  transform: none;
 }
 
 .reveal-ready [data-reveal][data-revealed] {
@@ -155,6 +206,3 @@ html.modal-open {
   transform: none;
 }
 
-.reveal-ready [data-reveal="roll"][data-revealed] img {
-  transform: none;
-}

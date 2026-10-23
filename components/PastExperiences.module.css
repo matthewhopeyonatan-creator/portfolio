@@ -34,10 +34,19 @@
 }
 
 .logo {
+  position: relative;
+  z-index: 1; /* sits over the pill while it slides out from behind */
   flex: none;
   width: max(44px, calc(70 * var(--u)));
   height: max(44px, calc(70 * var(--u)));
   border-radius: 50%;
+}
+
+/* clips the pill while it slides out from behind the logo */
+.pillTrack {
+  display: flex;
+  overflow: hidden;
+  border-radius: 100px;
 }
 
 .pill {

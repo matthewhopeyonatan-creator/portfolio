@@ -36,7 +36,6 @@
   height: auto;
   aspect-ratio: 371 / 494;
   object-fit: cover; /* videos fill the same 3:4 slot as the stills */
-  border-radius: 12px;
 }
 
 .caption {
