@@ -5,68 +5,125 @@
    82 tall (Atelier Fleur Bold 36) closed by a 2px rule. Page area runs 1266 down to the footer. */
 .page {
   --u: calc(100vw / 1728);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  overflow: hidden; /* the tomatoes' glow stays inside the page */
+  /* Figma: the page runs from the bar to the footer rule (y130 → y945); the tomatoes are cut
+     cleanly by that rule */
+  min-height: calc(815 * var(--u));
+  overflow: hidden;
 }
 
-/* ── tomatoes: Figma's own renders (122:1119, 122:1136), placed on their frame boxes and
-   multiplied onto the page so the two glows mix instead of boxing each other out ── */
+/* ── tomatoes (Figma 122:1119 / 122:1136): each sits in its layer box, rotated, with the SVG
+   bleeding past the box by Figma's insets ── */
 .tomatoes {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: var(--color-bg); /* the multiplied tomatoes need the page colour under them here */
-  /* fade out before the footer rule */
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
 }
 
-.tomatoes img {
+.tomato {
   position: absolute;
+}
+
+.tomatoRot,
+.tomatoRot img {
+  position: absolute;
+}
+
+.tomatoRot {
+  inset: 0;
+}
+
+.tomatoRot img {
   display: block;
   max-width: none;
-  height: auto;
-  mix-blend-mode: multiply;
+}
+
+/* back: 652.659 × 546.573, −48.31°, centred in its 842 × 851 frame at (951, 46 → −84 below the bar) */
+.tomatoBack {
+  left: calc(1045.78 * var(--u));
+  top: calc(68.17 * var(--u));
+  width: calc(652.659 * var(--u));
+  height: calc(546.573 * var(--u));
+}
+
+.tomatoBack .tomatoRot {
+  rotate: -48.31deg;
+}
+
+.tomatoBack img {
+  left: -10.07%;
+  top: -23.21%;
+  width: calc(784.113 * var(--u));
+  height: calc(731.07 * var(--u));
+}
+
+/* front: 780.326 × 653.489, −28.12°, centred in its 996 × 944 frame at (569, 321) */
+.tomatoFront {
+  left: calc(676.95 * var(--u));
+  top: calc(336.33 * var(--u));
+  width: calc(780.326 * var(--u));
+  height: calc(653.489 * var(--u));
+}
+
+.tomatoFront .tomatoRot {
+  rotate: -28.12deg;
+}
+
+.tomatoFront img {
+  left: -11.53%;
+  top: -23.21%;
+  width: calc(960.326 * var(--u));
+  height: calc(895.142 * var(--u));
+}
+
+/* ── load-in, like the landing page: the tomatoes drop in (largest first), then each aisle
+   rises in out of a soft blur ── */
+.tomato {
+  animation:
+    tomatoDrop 1700ms cubic-bezier(0.22, 1, 0.32, 1) var(--d) both,
+    tomatoFade 800ms cubic-bezier(0.33, 0, 0.2, 1) var(--d) both;
+  will-change: transform, opacity;
+}
+
+.tomatoFront {
+  --d: 150ms;
 }
 
 .tomatoBack {
-  left: calc(935.6 * var(--u));
-  top: calc(-39 * var(--u));
-  width: calc(809 * var(--u));
+  --d: 330ms;
 }
 
-.tomatoFront {
-  left: calc(511.4 * var(--u));
-  top: calc(183.6 * var(--u));
-  width: calc(1202 * var(--u));
+@keyframes tomatoDrop {
+  from {
+    transform: translate3d(0, calc(-120 * var(--u)), 0) scale(0.985);
+  }
+  to {
+    transform: none;
+  }
 }
 
-/* ── load-in: the glow blooms, then the aisles rise in one after another ── */
-.tomatoBack,
-.tomatoFront {
-  animation: bloom 1600ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.tomatoFront {
-  animation-delay: 150ms;
-}
-
-@keyframes bloom {
+@keyframes tomatoFade {
   from {
     opacity: 0;
-    transform: scale(0.82) rotate(-6deg);
   }
 }
 
 .aisles li {
-  animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(250ms + var(--i) * 90ms);
+  animation: lineIn 1100ms var(--ease-out) both;
+  animation-delay: calc(1050ms + var(--i) * 140ms);
 }
 
-@keyframes rise {
+@keyframes lineIn {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(0.45em);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
 
@@ -243,8 +300,7 @@
   .arrow img {
     transition: none;
   }
-  .tomatoBack,
-  .tomatoFront,
+  .tomato,
   .aisles li {
     animation: none;
   }

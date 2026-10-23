@@ -38,10 +38,18 @@ export default function Catalog() {
   return (
     <main className={styles.page}>
       <div className={styles.tomatoes} aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.tomatoBack} src="/catalog/tomato-4.webp" alt="" width={809} height={851} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.tomatoFront} src="/catalog/tomato-5.webp" alt="" width={1202} height={1147} />
+        <div className={`${styles.tomato} ${styles.tomatoBack}`}>
+          <div className={styles.tomatoRot}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/catalog/tomato-4.svg" alt="" width={784} height={731} />
+          </div>
+        </div>
+        <div className={`${styles.tomato} ${styles.tomatoFront}`}>
+          <div className={styles.tomatoRot}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/catalog/tomato-5.svg" alt="" width={960} height={895} />
+          </div>
+        </div>
       </div>
 
       <h1 className="visually-hidden">Catalog</h1>
