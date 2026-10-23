@@ -22,7 +22,7 @@ export default function RevealOnScroll() {
       },
       { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
     );
-    // posters swipe up the moment their top edge enters the screen
+    // posters swipe up once their top edge is a little way onto the screen
     const ioNow = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -31,7 +31,7 @@ export default function RevealOnScroll() {
           ioNow.unobserve(e.target);
         }
       },
-      { threshold: 0 },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
     );
     document
       .querySelectorAll('[data-reveal]:not([data-reveal="swipe"])')
