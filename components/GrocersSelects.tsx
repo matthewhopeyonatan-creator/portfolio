@@ -11,7 +11,7 @@ import styles from "./GrocersSelects.module.css";
 export default function GrocersSelects() {
   return (
     <section id="grocers-selects" aria-labelledby="grocers-selects-title">
-      <div className={pageStyles.sectionTitleRow}>
+      <div className={`${pageStyles.sectionTitleRow} ${styles.titleRow}`}>
         <h2 id="grocers-selects-title" className={pageStyles.sectionTitle}>
           Grocer’s selects
         </h2>
