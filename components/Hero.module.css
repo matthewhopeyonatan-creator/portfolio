@@ -487,10 +487,16 @@
   to { opacity: var(--o); }
 }
 
-/* Back to the landing page from another page (the logo): skip the intro, show it at rest */
+/* Back to the landing page from another page (the logo): skip the intro, show it at rest.
+   The open sign only exists for the intro (it drops out of view at the end), so it stays gone. */
 .skip .layer,
 .skip .sticker,
 .skip .line {
   opacity: 1 !important;
   animation: none !important;
+}
+
+.skip .sign {
+  visibility: hidden;
+  opacity: 0 !important;
 }
