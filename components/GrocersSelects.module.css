@@ -67,7 +67,7 @@
 
 .more {
   margin: 0;
-  padding: calc(56 * var(--u)) 0 0;
+  padding: 24px 0 0;
   text-align: center;
   font-size: max(13px, calc(16 * var(--u)));
   font-weight: 300;
