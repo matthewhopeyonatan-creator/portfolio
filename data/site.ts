@@ -2,7 +2,7 @@
 export const navLinks = [
   { label: "about", href: "https://matthew-hope.com/about" },
   { label: "projects", href: "#seasonal-picks" },
-  { label: "graphics", href: "#grocers-selects" },
+  { label: "catalog", href: "#grocers-selects" },
 ];
 
 // Footer social links. TODO: add the X handle.
