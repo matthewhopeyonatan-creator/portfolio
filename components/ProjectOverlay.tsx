@@ -313,7 +313,7 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     if (!fInView) return;
     const timers: number[] = [];
     // hops between the two, each a little slower, ending on the first
-    const gaps = [420, 480, 540, 620, 720, 860, 1020];
+    const gaps = [260, 300, 340, 400, 480, 580, 700];
     const run = () => {
       let t = 300;
       setSettled(false);
