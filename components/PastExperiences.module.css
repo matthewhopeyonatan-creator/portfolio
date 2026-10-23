@@ -1,0 +1,63 @@
+/* Figma: title Atelier Fleur Bold (same treatment as the other section titles), rows start 62
+   below it · items 40 apart, rows 48 apart · logo 70 round, 12 to the pill · pill 2px ink border,
+   fully rounded, 8 / 24 padding, name Regular 20 over role Light 16. Sizes follow the 1728 frame. */
+.section {
+  /* sizes scale with the window, shrinking a touch more if needed so the first row (1621 wide in
+     Figma) always fits — keeps the five-over-four rows on laptop widths */
+  --u: min(calc(100vw / 1728), calc((100vw - 48px) / 1625));
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: max(40px, calc(62 * var(--u)));
+  padding: max(64px, calc(96 * var(--u))) 24px 0;
+  text-align: center;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: max(16px, calc(40 * var(--u)));
+  row-gap: max(24px, calc(48 * var(--u)));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: max(6px, calc(12 * var(--u)));
+}
+
+.logo {
+  flex: none;
+  width: max(44px, calc(70 * var(--u)));
+  height: max(44px, calc(70 * var(--u)));
+  border-radius: 50%;
+}
+
+.pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: max(5px, calc(8 * var(--u))) max(14px, calc(24 * var(--u)));
+  border: 2px solid var(--color-ink);
+  border-radius: 100px;
+  color: var(--color-ink);
+  line-height: normal;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.org {
+  font-size: max(14px, calc(20 * var(--u)));
+  font-weight: 400;
+}
+
+.role {
+  font-size: max(12px, calc(16 * var(--u)));
+  font-weight: 300;
+}

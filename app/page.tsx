@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import SiteFooter from "@/components/SiteFooter";
 import ProjectCard from "@/components/ProjectCard";
 import GrocersSelects from "@/components/GrocersSelects";
+import PastExperiences from "@/components/PastExperiences";
 import SiteHeader from "@/components/SiteHeader";
 import { projects } from "@/data/site";
 import styles from "./page.module.css";
@@ -27,6 +28,7 @@ export default function Home() {
           </ul>
         </section>
         <GrocersSelects />
+        <PastExperiences />
         <div className={styles.footerSpace} />
       </main>
       <SiteFooter />

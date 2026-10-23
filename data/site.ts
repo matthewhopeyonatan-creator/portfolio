@@ -260,3 +260,48 @@ export const grocersSelects: {
     src: "/graphics/select-12.webp",
   },
 ];
+
+/** "Past experiences" (Figma 118:702 / 118:828 / 118:874): round logo + pill, in Figma order. */
+export const pastExperiences: { org: string; role: string; logo: string }[] = [
+  {
+    org: "25madison",
+    role: "Product Design Fellow",
+    logo: "/experience/25madison.png",
+  },
+  {
+    org: "Design Meetup",
+    role: "Graphics Lead",
+    logo: "/experience/design-meetup.png",
+  },
+  {
+    org: "Crowdvolt",
+    role: "Product Design Intern",
+    logo: "/experience/crowdvolt.png",
+  },
+  {
+    org: "UX Club NYU",
+    role: "UX Team Lead",
+    logo: "/experience/ux-club-nyu.png",
+  },
+  {
+    org: "Fatboy Supperclub",
+    role: "Graphics & Guest Experience",
+    logo: "/experience/fatboy.png",
+  },
+  {
+    org: "Design Consulting Cornell",
+    role: "Graphics Chair",
+    logo: "/experience/design-consulting-cornell.png",
+  },
+  {
+    org: "The Philadelphia Inquirer",
+    role: "Product Designer (contract)",
+    logo: "/experience/philadelphia-inquirer.png",
+  },
+  {
+    org: "Shmood",
+    role: "Product Designer (contract)",
+    logo: "/experience/shmood.png",
+  },
+  { org: "LOKO", role: "Graphics Chair", logo: "/experience/loko.png" },
+];
