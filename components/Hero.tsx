@@ -291,7 +291,9 @@ function Tomato({
         width={t.w}
         height={t.h}
         priority
-        sizes="52vw"
+        // served as-is: the optimiser's downscale + re-encode put visible blocks in the soft
+        // gradients; the source renders are already sized for 2× screens
+        unoptimized
         onLoad={(e) => {
           // wait until the image is decoded too, so nothing stutters once the drop starts
           const img = e.currentTarget;
