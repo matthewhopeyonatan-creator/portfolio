@@ -4,6 +4,7 @@ import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
+import TomatoGrain from "@/components/TomatoGrain";
 import { useCart } from "@/components/cart/CartContext";
 import { stickerItems } from "@/data/site";
 import styles from "./Hero.module.css";
@@ -301,6 +302,7 @@ function Tomato({
         }}
         className={styles.tomatoImg}
       />
+      <TomatoGrain />
       {stickers[id]?.map((s) => (
         <Sticker key={s.src} s={s} onOpen={onOpen} away={activeSrc === s.src} />
       ))}
