@@ -487,16 +487,17 @@
   to { opacity: var(--o); }
 }
 
-/* Back to the landing page from another page (the logo): skip the intro, show it at rest.
-   The open sign only exists for the intro (it drops out of view at the end), so it stays gone. */
-.skip .layer,
-.skip .sticker,
-.skip .line {
-  opacity: 1 !important;
-  animation: none !important;
+/* Coming back to the landing page from elsewhere in the site: the same load-in as the other
+   pages — tomatoes drop in, then the headline rises — just without the open sign (that's only
+   for the very first visit / a refresh), so everything runs sooner. */
+.skip {
+  --tomato-start: 100ms;
+  --text-delay: 1050ms;
+  --peel-hint-delay: 2300ms;
+  --cue-delay: 2500ms;
 }
 
 .skip .sign {
   visibility: hidden;
-  opacity: 0 !important;
+  animation: none;
 }

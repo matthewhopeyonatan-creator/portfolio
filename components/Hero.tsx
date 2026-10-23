@@ -382,7 +382,7 @@ export default function Hero() {
         () => setActivePhrase((i) => (i + 1) % phrases.length),
         1000,
       );
-    }, skip ? 1000 : 4200);
+    }, skip ? 2000 : 4200);
     return () => {
       window.clearTimeout(startAt);
       window.clearInterval(interval);
