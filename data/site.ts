@@ -263,11 +263,14 @@ export const grocersSelects: {
   },
 ];
 
-/** "Past experiences" (Figma 118:702 / 118:828 / 118:874): round logo + pill, in Figma order. */
-export const pastExperiences: { org: string; role: string; logo: string }[] = [
+/** "Past experiences" (Figma 141:151): dates · role · company rows, two columns, in this order.
+ * `dates` is optional until it's filled in for every entry. (`logo` is kept for reference; the
+ * current design doesn't show it.) */
+export const pastExperiences: { org: string; role: string; dates?: string; logo: string }[] = [
   {
     org: "25madison",
     role: "Product Design Fellow",
+    dates: "Aug 2026 – Dec 2026",
     logo: "/experience/25madison.png",
   },
   {
@@ -278,6 +281,7 @@ export const pastExperiences: { org: string; role: string; logo: string }[] = [
   {
     org: "Crowdvolt",
     role: "Product Design Intern",
+    dates: "Dec 2025 – Aug 2026",
     logo: "/experience/crowdvolt.png",
   },
   {
@@ -303,6 +307,7 @@ export const pastExperiences: { org: string; role: string; logo: string }[] = [
   {
     org: "Shmood",
     role: "Product Designer (contract)",
+    dates: "Aug 2024 – Dec 2024",
     logo: "/experience/shmood.png",
   },
   { org: "LOKO", role: "Graphics Chair", logo: "/experience/loko.png" },

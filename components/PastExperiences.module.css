@@ -1,84 +1,77 @@
-/* Figma: title Atelier Fleur Bold (same treatment as the other section titles), rows start 62
-   below it · items 40 apart, rows 48 apart · logo 70 round, 12 to the pill · pill 2px ink border,
-   fully rounded, 8 / 24 padding, name Regular 20 over role Light 16. Sizes follow the 1728 frame. */
+/* Figma 141:151 (1728 frame): "PAST EXPERIENCES" Host Grotesk Bold 40, set on the right margin,
+   34 above the first rules. Two columns on the 40px margins, 40 apart; each entry: 2px rule, then
+   16 below it dates (left) and role (right) Bold 20, the company Bold 32 right-aligned 2 under the
+   role; entries 131 apart (rule to rule). Ink, never black. */
 .section {
-  /* sizes scale with the window, shrinking a touch more if needed so the first row (1621 wide in
-     Figma) always fits — keeps the five-over-four rows on laptop widths */
-  --u: min(calc(100vw / 1728), calc((100vw - 48px) / 1625));
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: max(40px, calc(62 * var(--u)));
-  /* same, tighter space above (from the shelf rule) and below (to the footer rule) */
-  padding: max(80px, calc(144 * var(--u))) 24px max(80px, calc(144 * var(--u)));
-  text-align: center;
+  /* top: the title's capitals sit 128 below the shelf rule, like "Grocer's selects"; bottom: the
+     same breathing room above the footer as before */
+  padding: max(72px, calc(128 * var(--u))) var(--gutter) max(80px, calc(144 * var(--u)));
+  color: var(--color-ink);
+}
+
+.title {
+  margin: 0 0 max(24px, calc(34 * var(--u)));
+  font-size: max(28px, calc(40 * var(--u)));
+  font-weight: 700;
+  line-height: normal;
+  text-align: right;
+  text-transform: uppercase;
 }
 
 .list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  column-gap: max(16px, calc(40 * var(--u)));
-  row-gap: max(24px, calc(48 * var(--u)));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: calc(40 * var(--u));
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .item {
-  display: flex;
-  align-items: center;
-  gap: max(6px, calc(12 * var(--u)));
-}
-
-.logo {
-  position: relative;
-  z-index: 1; /* sits over the pill while it slides out from behind */
-  flex: none;
-  width: max(44px, calc(70 * var(--u)));
-  height: max(44px, calc(70 * var(--u)));
-  border-radius: 50%;
-}
-
-/* clips the pill while it slides out from behind the logo */
-.pillTrack {
-  display: flex;
-  overflow: hidden;
-  border-radius: 100px;
-}
-
-.pill {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: max(5px, calc(8 * var(--u))) max(14px, calc(24 * var(--u)));
-  border: 2px solid var(--color-ink);
-  border-radius: 100px;
-  color: var(--color-ink);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "dates role"
+    ". org";
+  column-gap: 24px;
+  align-content: start;
+  min-height: calc(131 * var(--u));
+  padding-top: calc(16 * var(--u));
+  padding-bottom: max(24px, calc(43 * var(--u))); /* → 131 rule to rule, as in Figma */
+  border-top: var(--rule);
+  font-weight: 700;
   line-height: normal;
-  text-align: left;
+}
+
+.dates {
+  grid-area: dates;
+  font-size: max(14px, calc(20 * var(--u)));
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
-.org {
-  font-size: max(14px, calc(20 * var(--u)));
-  font-weight: 400;
-}
-
 .role {
-  font-size: max(12px, calc(16 * var(--u)));
-  font-weight: 300;
+  grid-area: role;
+  font-size: max(14px, calc(20 * var(--u)));
+  text-align: right;
 }
 
-/* Desktop: same rhythm as the other sections — the title sits as far below the shelf rule as
-   "Grocer's selects" sits below its rule (128), with 40 from its letters to the content (like the
-   other titles' 40 to their rule). (The pill text keeps its sizes: any larger and the rows break
-   from five-over-four into three rows on laptop widths.) */
-@media (min-width: 768px) {
-  .section {
-    gap: 40px;
-    padding-top: max(72px, calc(128 * var(--u)));
+.org {
+  grid-area: org;
+  margin-top: calc(2 * var(--u));
+  font-size: max(22px, calc(32 * var(--u)));
+  text-align: right;
+}
+
+/* phones: one column (to be refined with the rest of the phone pass) */
+@media (max-width: 767px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .item {
+    min-height: 0;
+    padding: 12px 0 24px;
   }
 }

@@ -51,7 +51,8 @@ implements his designs faithfully.
   - `GrocersSelects` — poster shelf; click zooms a close-up (`PosterView`) and adds to cart
   - `Catalog` — aisle list; each aisle opens a popup addressed by hash (`/catalog#graphics`)
   - `cart/` — `CartContext` (localStorage) + `CartDrawer`
-  - `RevealOnScroll` — `data-reveal="up|tray|swipe|roll"` entrances, staggered by `--i`
+  - `PastExperiences` — two columns of dates · role · company rows under 2px rules
+  - `RevealOnScroll` — `data-reveal="up|tray|swipe"` entrances, staggered by `--i`
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating
   back home skips it (`shouldSkipIntro`, `.skip` in Hero)
 

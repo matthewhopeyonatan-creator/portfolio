@@ -1,12 +1,10 @@
-import Image from "next/image";
 import { pastExperiences } from "@/data/site";
-import pageStyles from "@/app/page.module.css";
 import styles from "./PastExperiences.module.css";
 
 /**
- * Past experiences (Figma 118:702, 118:828, 118:874): the serif section title, then each role as
- * a round logo beside an outlined pill (org name over role), centred rows that wrap — five over
- * four at the Figma width.
+ * Past experiences (Figma 141:151): a bold title on the right margin, then every role as a row
+ * under a 2px rule — dates on the left, the role on the right with the company large beneath it —
+ * in two columns.
  */
 export default function PastExperiences() {
   return (
@@ -15,11 +13,7 @@ export default function PastExperiences() {
       aria-labelledby="past-experiences-title"
       className={styles.section}
     >
-      <h2
-        id="past-experiences-title"
-        className={pageStyles.sectionTitle}
-        data-reveal="up"
-      >
+      <h2 id="past-experiences-title" className={styles.title} data-reveal="up">
         Past experiences
       </h2>
       <ul className={styles.list}>
@@ -27,23 +21,12 @@ export default function PastExperiences() {
           <li
             key={x.org}
             className={styles.item}
-            data-reveal="roll"
-            style={{ "--i": i < 5 ? i : i - 5 + 0.5 } as React.CSSProperties}
+            data-reveal="up"
+            style={{ "--i": Math.floor(i / 2) * 0.6 + (i % 2) * 0.3 } as React.CSSProperties}
           >
-            <Image
-              src={x.logo}
-              alt=""
-              width={210}
-              height={210}
-              className={styles.logo}
-            />
-            {/* the pill starts tucked behind the logo and slides out of it on entrance */}
-            <span className={styles.pillTrack} data-pill-track>
-              <span className={styles.pill} data-pill>
-                <span className={styles.org}>{x.org}</span>
-                <span className={styles.role}>{x.role}</span>
-              </span>
-            </span>
+            <span className={styles.dates}>{x.dates}</span>
+            <span className={styles.role}>{x.role}</span>
+            <span className={styles.org}>{x.org}</span>
           </li>
         ))}
       </ul>
