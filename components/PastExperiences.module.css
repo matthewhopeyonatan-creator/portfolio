@@ -87,6 +87,17 @@
   text-align: right;
 }
 
+/* a little hover margin around the company name (an invisible pad, so nothing shifts) */
+.org {
+  position: relative;
+}
+
+.org::after {
+  content: "";
+  position: absolute;
+  inset: -14px -20px;
+}
+
 /* phones: one column (to be refined with the rest of the phone pass) */
 @media (max-width: 767px) {
   .list {
