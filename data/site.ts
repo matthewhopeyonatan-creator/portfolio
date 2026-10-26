@@ -266,15 +266,22 @@ export const grocersSelects: {
 /** "Past experiences" (Figma 141:151): dates · role · company rows, two columns, in this order.
  * `dates` is optional until it's filled in for every entry. (`logo` is kept for reference; the
  * current design doesn't show it.) */
-export const pastExperiences: { org: string; role: string; dates?: string; logo: string }[] = [
+/* `blurb` shows in the hover card (Figma 141:165) next to the logo; rows without one get no card */
+export const pastExperiences: {
+  org: string;
+  role: string;
+  dates?: string;
+  logo: string;
+  blurb?: string;
+}[] = [
   // newest first, by start date
-  { org: "25madison", role: "Product Design Fellow", dates: "Aug 2026 – Present", logo: "/experience/25madison.png" },
+  { org: "25madison", role: "Product Design Fellow", dates: "Aug 2026 – Present", logo: "/experience/25madison.png", blurb: "Venture-building and investment platform focusing on incubating and developing startups in the legacy industries" },
   { org: "Design Meetup", role: "Graphics Lead", dates: "Jul 2026 – Present", logo: "/experience/design-meetup.png" },
   { org: "Fatboy Supperclub", role: "Graphics & Guest Experience", dates: "Jun 2026 – Present", logo: "/experience/fatboy.png" },
   { org: "UX Club NYU", role: "UX Team Lead", dates: "May 2026 – Present", logo: "/experience/ux-club-nyu.png" },
-  { org: "Crowdvolt", role: "Product Design Intern", dates: "Dec 2025 – Aug 2026", logo: "/experience/crowdvolt.png" },
+  { org: "Crowdvolt", role: "Product Design Intern", dates: "Dec 2025 – Aug 2026", logo: "/experience/crowdvolt.png", blurb: "Peer-to-peer ticket marketplace connecting buyers with verified sellers for electronic music events" },
   { org: "The Philadelphia Inquirer", role: "Product Designer (contract)", dates: "Jan 2025 – May 2025", logo: "/experience/philadelphia-inquirer.png" },
-  { org: "Shmood", role: "Product Designer (contract)", dates: "Aug 2024 – Dec 2024", logo: "/experience/shmood.png" },
+  { org: "Shmood", role: "Product Designer (contract)", dates: "Aug 2024 – Dec 2024", logo: "/experience/shmood.png", blurb: "AI-powered creative management tool that bridges the gap between designers and clients" },
   { org: "Design Consulting Cornell", role: "Graphics Chair", dates: "Jan 2024 – May 2025", logo: "/experience/design-consulting-cornell.png" },
   { org: "LOKO", role: "Graphics Chair", dates: "Aug 2023 – May 2025", logo: "/experience/loko.png" },
 ];

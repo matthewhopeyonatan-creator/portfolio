@@ -99,3 +99,69 @@
     padding: 12px 0 24px;
   }
 }
+
+/* ── company card on hover (Figma 141:165) ──────────────────────────────────────────────────────
+   386 × 181, page colour, 2px ink border, r24 · logo 70 round at (22, 23) · blurb Medium 20, 246
+   wide, 26 right of the logo. It sits 18px below-right of the cursor and trails it (see
+   useFollowCard). The outer box only moves; the inner card fades and settles from 96% out of the
+   corner nearest the cursor, and leaves quicker than it arrives. Mouse only. */
+.hoverCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 70px 246px;
+  column-gap: 26px;
+  align-items: start;
+  box-sizing: border-box;
+  width: 386px;
+  min-height: 181px;
+  padding: 21px 20px; /* 23 / 22 from the outside, inside the 2px border */
+  border: var(--rule);
+  border-radius: 24px;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  opacity: 0;
+  transform: scale(0.96);
+  transform-origin: 0 0;
+  transition:
+    opacity 150ms var(--ease-out),
+    transform 150ms var(--ease-out);
+}
+
+.cardOn {
+  opacity: 1;
+  transform: none;
+  transition-duration: 200ms;
+}
+
+.cardLogo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.cardText {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* rows with a card: no text cursor flicker over the words */
+.hasCard {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .cardOn {
+    transform: none;
+  }
+}
