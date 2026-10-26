@@ -32,7 +32,7 @@ export default function RevealOnScroll() {
           ioNow.unobserve(e.target);
         }
       },
-      { rootMargin: "0px 0px 15% 0px", threshold: 0 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0 },
     );
     document
       .querySelectorAll('[data-reveal]:not([data-reveal="swipe"]):not([data-reveal-early])')

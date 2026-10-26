@@ -10,10 +10,10 @@
   color: var(--color-ink);
 }
 
-/* the title is the shared section title (54 Regular caps); centred, with the same 40 from its
-   letters to the first rules as the other titles have to theirs */
+/* the title is the shared section title (54 Regular caps), centred, with a little more air below
+   it than the other titles (no rule boxes this one in) */
 .title {
-  margin: 0 0 40px;
+  margin: 0 0 max(48px, calc(72 * var(--u)));
   text-align: center;
 }
 
@@ -80,6 +80,7 @@
 
 .org {
   grid-area: org;
+  justify-self: end; /* the box hugs the name, so only the name itself opens the hover card */
   font-weight: 500;
   margin-top: calc(2 * var(--u));
   font-size: max(22px, calc(32 * var(--u)));
@@ -121,8 +122,9 @@
   align-items: start;
   box-sizing: border-box;
   width: 386px;
-  min-height: 181px;
-  padding: 21px 20px; /* 23 / 22 from the outside, inside the 2px border */
+  /* the same 22 all round from the outer edge (inside the 2px border); the card's height follows
+     the text (or the logo, if the text is shorter) */
+  padding: 20px;
   border: var(--rule);
   border-radius: 24px;
   background: var(--color-bg);
@@ -150,12 +152,12 @@
 .cardText {
   margin: 0;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
 }
 
 /* rows with a card: no text cursor flicker over the words */
-.hasCard {
+.hasCard .org {
   cursor: default;
 }
 

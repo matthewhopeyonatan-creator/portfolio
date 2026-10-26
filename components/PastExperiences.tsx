@@ -12,8 +12,8 @@ type Experience = (typeof pastExperiences)[number];
 /**
  * Past experiences (Figma 141:151): the section title (same as the others, centred), then every
  * role as a row under a 2px rule — dates on the left, the role on the right with the company large
- * beneath it — in two columns. Hovering a row (mouse only) brings up its company card (Figma
- * 141:165) just below-right of the cursor, following it while you stay on the row.
+ * beneath it — in two columns. Hovering a company name (mouse only) brings up its card (Figma
+ * 141:165) just below-right of the cursor, following it while you stay on the name.
  */
 export default function PastExperiences() {
   const [hovered, setHovered] = useState<Experience | null>(null);
@@ -40,19 +40,24 @@ export default function PastExperiences() {
             className={`${styles.item} ${x.blurb ? styles.hasCard : ""}`}
             data-reveal="ledger"
             data-reveal-early
-            onPointerEnter={(e) => {
-              if (e.pointerType !== "mouse" || !x.blurb) return;
-              card.place(e.clientX, e.clientY, true);
-              setHovered(x);
-            }}
-            onPointerMove={(e) => {
-              if (e.pointerType === "mouse" && x.blurb) card.place(e.clientX, e.clientY);
-            }}
-            onPointerLeave={() => setHovered(null)}
           >
             <span className={styles.dates}>{x.dates}</span>
             <span className={styles.role}>{x.role}</span>
-            <span className={styles.org}>{x.org}</span>
+            {/* only the company name opens its card */}
+            <span
+              className={styles.org}
+              onPointerEnter={(e) => {
+                if (e.pointerType !== "mouse" || !x.blurb) return;
+                card.place(e.clientX, e.clientY, true);
+                setHovered(x);
+              }}
+              onPointerMove={(e) => {
+                if (e.pointerType === "mouse" && x.blurb) card.place(e.clientX, e.clientY);
+              }}
+              onPointerLeave={() => setHovered(null)}
+            >
+              {x.org}
+            </span>
             {x.blurb ? <span className="visually-hidden">{x.blurb}</span> : null}
           </li>
         ))}
