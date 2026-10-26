@@ -18,6 +18,7 @@
   /* trim the font's built-in leading so the 24px is measured from the letters themselves */
   text-box: trim-both cap alphabetic;
   text-transform: uppercase;
+  letter-spacing: -0.02em; /* a touch tighter */
   color: var(--color-ink);
 }
 
