@@ -23,8 +23,8 @@ export default function PastExperiences() {
       </h2>
       <ul className={styles.list}>
         {pastExperiences.map((x) => (
-          // each row rises as it's about to come on screen (both columns together)
-          <li key={x.org} className={styles.item} data-reveal="up" data-reveal-early>
+          // "ledger" entrance (globals.css): the rule draws across, then the line is written in
+          <li key={x.org} className={styles.item} data-reveal="ledger" data-reveal-early>
             <span className={styles.dates}>{x.dates}</span>
             <span className={styles.role}>{x.role}</span>
             <span className={styles.org}>{x.org}</span>

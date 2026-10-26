@@ -140,6 +140,7 @@ html.modal-open {
 /* ── scroll entrances (components/RevealOnScroll) ──────────────────────────────────────────
    data-reveal="up"     rise + fade (section titles, caption rows)
    data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
+   data-reveal="ledger" experience rows: rule drawn across, then the entry written in
    data-reveal="swipe"  posters: the slot's shutter rolls up, the poster rises into it, tag follows
    --i staggers an item after its neighbours */
 .reveal-ready [data-reveal] {
@@ -201,6 +202,43 @@ html.modal-open {
 .reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] > figcaption {
   opacity: 1;
   transform: none;
+}
+
+/* experience rows — a ledger being filled in: the rule is drawn across left to right, then the
+   entry is written on it — dates and role first, the company a beat later — each line rising out
+   of a soft blur (the same lift as the hero headline). Both columns of a row together. */
+.reveal-ready [data-reveal="ledger"] {
+  opacity: 1;
+}
+
+.reveal-ready [data-reveal="ledger"]::before {
+  transform: scaleX(0);
+  transition: transform 900ms var(--ease-in-out);
+}
+
+.reveal-ready [data-reveal="ledger"] > * {
+  opacity: 0;
+  transform: translateY(0.4em);
+  filter: blur(4px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 800ms var(--ease-intro),
+    filter 700ms var(--ease-out);
+  transition-delay: 280ms;
+}
+
+.reveal-ready [data-reveal="ledger"] > :last-child {
+  transition-delay: 400ms;
+}
+
+.reveal-ready [data-reveal="ledger"][data-revealed]::before {
+  transform: none;
+}
+
+.reveal-ready [data-reveal="ledger"][data-revealed] > * {
+  opacity: 1;
+  transform: none;
+  filter: none;
 }
 
 .reveal-ready [data-reveal][data-revealed] {

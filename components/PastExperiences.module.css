@@ -37,9 +37,21 @@
   min-height: calc(131 * var(--u));
   padding-top: calc(16 * var(--u));
   padding-bottom: max(24px, calc(43 * var(--u))); /* → 131 rule to rule, as in Figma */
-  border-top: var(--rule);
+  position: relative;
   font-weight: 700;
   line-height: normal;
+}
+
+/* the row's 2px rule (a drawn line, so it can be ruled in on entrance) */
+.item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-ink);
+  transform-origin: left center;
 }
 
 /* an odd one out on the last row sits in the right-hand column */

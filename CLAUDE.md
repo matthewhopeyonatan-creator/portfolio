@@ -52,7 +52,7 @@ implements his designs faithfully.
   - `Catalog` — aisle list; each aisle opens a popup addressed by hash (`/catalog#graphics`)
   - `cart/` — `CartContext` (localStorage) + `CartDrawer`
   - `PastExperiences` — two columns of dates · role · company rows under 2px rules
-  - `RevealOnScroll` — `data-reveal="up|tray|swipe"` entrances, staggered by `--i`
+  - `RevealOnScroll` — `data-reveal="up|tray|swipe|ledger"` entrances, staggered by `--i`
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating
   back home skips it (`shouldSkipIntro`, `.skip` in Hero)
 
