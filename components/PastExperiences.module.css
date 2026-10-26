@@ -45,6 +45,11 @@
   line-height: normal;
 }
 
+.dates,
+.role {
+  font-weight: 300; /* Light: the company carries the Bold */
+}
+
 .dates {
   grid-area: dates;
   font-size: max(14px, calc(20 * var(--u)));
