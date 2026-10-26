@@ -108,7 +108,7 @@ function AislePopup({ label, onClose }: { label: string; onClose: () => void }) 
   const close = useCallback(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return onClose();
     setLeaving(true);
-    window.setTimeout(onClose, 260);
+    window.setTimeout(onClose, 240);
   }, [onClose]);
 
   useEffect(() => {

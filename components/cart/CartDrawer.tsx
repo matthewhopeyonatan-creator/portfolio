@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { cartCatalog } from "@/data/site";
 import { useCart } from "./CartContext";
 import styles from "./CartDrawer.module.css";
@@ -14,6 +14,47 @@ export default function CartDrawer() {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
+
+  // taking the last one out: the row slides away, then the list closes up behind it, then it's
+  // dropped from the cart — so the rows below never jump
+  const removing = useRef(new Set<string>());
+  const removeRow = useCallback(
+    (key: string, row: HTMLElement | null) => {
+      if (removing.current.has(key)) return;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!row || reduce) return setQty(key, 0);
+      removing.current.add(key);
+      const h = row.offsetHeight;
+      row.style.pointerEvents = "none";
+      row
+        .animate(
+          [
+            { opacity: 1, transform: "none" },
+            { opacity: 0, transform: "translateX(24px)" },
+          ],
+          { duration: 200, easing: "cubic-bezier(0.23, 1, 0.32, 1)", fill: "forwards" }, // --ease-out
+        )
+        .finished.then(() =>
+          row.animate(
+            [
+              { height: `${h}px`, minHeight: "0px", overflow: "hidden", marginBottom: "0px" },
+              {
+                height: "0px",
+                minHeight: "0px",
+                overflow: "hidden",
+                marginBottom: "calc(-1 * var(--row-gap, 0px))", // takes the gap below with it
+              },
+            ],
+            { duration: 180, easing: "cubic-bezier(0.23, 1, 0.32, 1)", fill: "forwards" },
+          ).finished,
+        )
+        .finally(() => {
+          removing.current.delete(key);
+          setQty(key, 0);
+        });
+    },
+    [setQty],
+  );
 
   const lines = cartCatalog
     .filter((c) => items[c.key])
@@ -122,7 +163,11 @@ export default function CartDrawer() {
                       <button
                         type="button"
                         className={styles.step}
-                        onClick={() => setQty(item.key, qty - 1)}
+                        onClick={(e) =>
+                          qty > 1
+                            ? setQty(item.key, qty - 1)
+                            : removeRow(item.key, e.currentTarget.closest("li"))
+                        }
                         aria-label={
                           qty > 1
                             ? `One less ${item.name}`

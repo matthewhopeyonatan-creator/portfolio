@@ -211,9 +211,11 @@ function PosterView({
       onClose();
       return;
     }
+    // going back is quicker than coming out: the visitor's done looking
+    el.style.transition = "transform 300ms var(--ease-out)";
     el.style.transform = fromTransform();
     el.addEventListener("transitionend", onClose, { once: true });
-    window.setTimeout(onClose, 700); // in case transitionend never fires
+    window.setTimeout(onClose, 400); // in case transitionend never fires
   }, [fromTransform, onClose]);
 
   useEffect(() => {

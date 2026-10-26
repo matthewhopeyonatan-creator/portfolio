@@ -24,22 +24,35 @@
   container-type: inline-size;
   width: calc(681 * var(--u));
   aspect-ratio: 681 / 466;
-  transition: transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform var(--dur-hover) var(--ease-out);
 }
 
-.card:not(.static):hover .tray {
-  transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg);
+/* press: the tray gives a little under the finger */
+.card:not(.static):active .tray {
+  transform: scale(0.98);
+  transition-duration: var(--dur-press);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:not(.static):hover .tray {
+    transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg);
+  }
+  .card:not(.static):hover:active .tray {
+    transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg) scale(0.98);
+  }
 }
 
 /* the foam tray and the shot in it grow a little as the plastic comes off */
 .goods {
   position: absolute;
   inset: 0;
-  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 650ms var(--ease-peel);
 }
 
-.card:not(.static):hover .goods {
-  transform: scale(1.035);
+@media (hover: hover) and (pointer: fine) {
+  .card:not(.static):hover .goods {
+    transform: scale(1.035);
+  }
 }
 
 .trayBase {
@@ -104,13 +117,16 @@
   width: calc(674 / 681 * 100%);
   height: calc(457 / 466 * 100%);
   pointer-events: none;
-  transition: --wpeel 520ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* wrapping back up is quicker than the unwrap */
+  transition: --wpeel 420ms var(--ease-out);
 }
 
-.card:not(.static):hover .wrap {
-  --wpeel: 58cqw;
-  transition-duration: 900ms;
-  transition-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+@media (hover: hover) and (pointer: fine) {
+  .card:not(.static):hover .wrap {
+    --wpeel: 58cqw;
+    transition-duration: 900ms;
+    transition-timing-function: var(--ease-peel);
+  }
 }
 
 .wrapFace,
@@ -229,6 +245,8 @@
     transition: none;
   }
   .card:not(.static):hover .tray,
+  .card:not(.static):active .tray,
+  .card:not(.static):hover:active .tray,
   .card:not(.static):hover .goods {
     transform: none;
   }

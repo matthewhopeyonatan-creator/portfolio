@@ -88,7 +88,8 @@
   pointer-events: auto;
 }
 
-.more a:hover {
+.more a:hover,
+.more a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -139,11 +140,21 @@
 }
 
 .pick {
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-hover) var(--ease-out);
 }
 
-.pick:hover {
-  transform: translateY(-6px);
+.pick:active {
+  transform: scale(0.97);
+  transition-duration: var(--dur-press);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pick:hover {
+    transform: translateY(-6px);
+  }
+  .pick:hover:active {
+    transform: translateY(-6px) scale(0.97);
+  }
 }
 
 .pick:focus-visible {
@@ -167,12 +178,13 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;
-  transition: opacity 450ms ease;
+  transition: opacity var(--dur-exit) ease;
   cursor: zoom-out;
 }
 
 .viewShown .viewBackdrop {
   opacity: 1;
+  transition-duration: 450ms;
 }
 
 .viewStage {
@@ -188,7 +200,7 @@
   height: min(78vh, calc((100vw - 80px) * 494 / 371));
   aspect-ratio: 371 / 494;
   transform-origin: center;
-  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 480ms var(--ease-out);
   box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
   pointer-events: auto;
   cursor: zoom-out;
@@ -208,14 +220,15 @@
   opacity: 0;
   transform: translateY(10px);
   transition:
-    opacity 300ms ease,
-    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 160ms ease,
+    transform 300ms var(--ease-out);
 }
 
 .viewShown .viewInfo {
   opacity: 1;
   transform: none;
-  transition-delay: 300ms;
+  transition-duration: 300ms, 400ms;
+  transition-delay: 240ms;
 }
 
 .viewTitle {
@@ -256,9 +269,26 @@
   font-size: 15px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 300ms ease;
+  transition: opacity 160ms ease;
 }
 
 .viewShown .viewClose {
   opacity: 1;
+  transition-duration: 300ms;
+}
+
+/* reduced motion: the close-up simply fades in and out, no zoom from the poster */
+@media (prefers-reduced-motion: reduce) {
+  .pick,
+  .viewMedia,
+  .viewInfo {
+    transition: none;
+  }
+  .viewMedia {
+    opacity: 0;
+  }
+  .viewShown .viewMedia {
+    opacity: 1;
+    transition: opacity 200ms ease;
+  }
 }

@@ -152,8 +152,9 @@ export default function StickerCard({
         { transform: `translate(${dx}px, ${dy}px) scale(${k}) rotate(0deg)` },
       ],
       {
-        duration: reduce ? 1 : 760,
-        easing: "cubic-bezier(0.3, 0.7, 0.2, 1)",
+        // flying home is a little quicker than flying out
+        duration: reduce ? 1 : back ? 600 : 760,
+        easing: "cubic-bezier(0.3, 0.7, 0.2, 1)", // --ease-peel
         fill: "forwards",
       },
     ).finished;

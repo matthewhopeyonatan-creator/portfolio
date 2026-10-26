@@ -32,7 +32,7 @@
   border: 2px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
-  animation: cardIn 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: cardIn 520ms var(--ease-out) both;
 }
 
 /* 24px margin on every edge of the card; the photo keeps Figma's width */
@@ -62,7 +62,7 @@
 
 .photoOn,
 .photoOff {
-  transition: transform 560ms cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 560ms var(--ease-in-out);
 }
 
 .photoOn {
@@ -222,7 +222,8 @@
 .leaving .backdrop,
 .leaving .card,
 .leaving .close {
-  animation: fadeOut 520ms ease 180ms both;
+  /* leaving: the card gets out of the way quickly; the sticker's flight home carries the moment */
+  animation: fadeOut var(--dur-exit) var(--ease-out) both;
 }
 
 @keyframes fadeIn {

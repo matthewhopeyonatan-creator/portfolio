@@ -40,14 +40,9 @@
   background: var(--color-bg);
   color: var(--color-ink);
   outline: none;
-  animation: popIn 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  transition:
-    left 620ms cubic-bezier(0.65, 0, 0.35, 1),
-    top 620ms cubic-bezier(0.65, 0, 0.35, 1),
-    width 620ms cubic-bezier(0.65, 0, 0.35, 1),
-    height 620ms cubic-bezier(0.65, 0, 0.35, 1),
-    --pu 620ms cubic-bezier(0.65, 0, 0.35, 1),
-    border-width 620ms ease;
+  animation: popIn 480ms var(--ease-out) both;
+  /* card ⇄ full screen: the layout switches in one step and the move itself is a transform +
+     clip-path (ProjectOverlay.tsx, toggle), so nothing re-lays out while it animates */
 }
 
 /* full screen: fills the window and scrolls through the case study */
@@ -118,11 +113,20 @@
   background: none;
   color: inherit;
   cursor: pointer;
-  transition: transform 220ms ease;
+  transition: transform var(--dur-press) var(--ease-out);
 }
 
-.expand:hover {
-  transform: scale(1.08);
+.expand:active {
+  transform: scale(0.92);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .expand:hover {
+    transform: scale(1.08);
+  }
+  .expand:hover:active {
+    transform: scale(1);
+  }
 }
 
 .expand svg {
@@ -238,7 +242,7 @@
   position: sticky;
   top: calc(var(--header-h) + 48px);
   align-self: start;
-  animation: fadeUp 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 300ms both;
+  animation: fadeUp 600ms var(--ease-out) 300ms both;
 }
 
 .tocLabel {
@@ -283,17 +287,25 @@
   text-align: left;
   color: var(--color-ink);
   cursor: pointer;
+  /* the current aisle grows 32 → 40 with a scale, not font-size, so the text never re-lays out */
+  transform-origin: left center;
   transition:
-    color 300ms ease,
-    font-size 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    color var(--dur-hover) ease,
+    transform 300ms var(--ease-out);
 }
 
-.tocItem:hover {
+@media (hover: hover) and (pointer: fine) {
+  .tocItem:hover {
+    color: #f93636;
+  }
+}
+
+.tocItem:focus-visible {
   color: #f93636;
 }
 
 .tocOn {
-  font-size: 40px;
+  transform: scale(1.25);
   color: #f93636;
 }
 
@@ -551,13 +563,13 @@
   transition:
     background-color 260ms ease,
     box-shadow 260ms ease,
-    transform 260ms cubic-bezier(0.3, 1.6, 0.5, 1);
+    transform 260ms var(--ease-pop);
 }
 
 .cvDotOn,
 .cvDotSkip {
   transform: scale(1.06);
-  animation: dotPop 420ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+  animation: dotPop 420ms var(--ease-pop) both;
 }
 
 .cvDotOn {
@@ -652,7 +664,7 @@
   background: #a4c100;
   border-color: #a4c100;
   color: var(--color-ink);
-  animation: frictionLand 560ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+  animation: frictionLand 560ms var(--ease-pop) both;
 }
 
 @keyframes frictionLand {
@@ -712,9 +724,20 @@
 }
 
 /* ── animation ──────────────────────────────────────────────────────────────────── */
-.leaving .backdrop,
+/* leaving: quicker than coming in, and it sinks out the way it rose in */
+.leaving .backdrop {
+  animation: fadeOut var(--dur-exit) var(--ease-out) both;
+}
+
 .leaving .frame {
-  animation: fadeOut 380ms ease both;
+  animation: popOut var(--dur-exit) var(--ease-out) both;
+}
+
+@keyframes popOut {
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
 }
 
 @keyframes fadeIn {

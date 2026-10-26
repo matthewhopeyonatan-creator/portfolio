@@ -5,7 +5,6 @@
    82 tall (Atelier Fleur Bold 36) closed by a 2px rule. Page area runs 1266 down to the footer. */
 .page {
   --u: calc(100vw / 1728);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   /* Figma: the page runs from the bar to the footer rule (y130 → y945); the tomatoes are cut
      cleanly by that rule */
@@ -112,7 +111,7 @@
 }
 
 .aisles li {
-  animation: lineIn 1100ms var(--ease-out) both;
+  animation: lineIn 1100ms var(--ease-intro) both;
   animation-delay: calc(1050ms + var(--i) * 140ms);
 }
 
@@ -152,12 +151,32 @@
   letter-spacing: -0.02em;
   text-decoration: none;
   transform-origin: left center;
-  transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-hover) var(--ease-out);
 }
 
-.aisle:hover,
 .aisle:focus-visible {
   transform: scale(1.06);
+}
+
+.aisle:active {
+  transform: scale(1.03);
+  transition-duration: var(--dur-press);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aisle:hover {
+    transform: scale(1.06);
+  }
+  .aisle:hover:active {
+    transform: scale(1.03);
+  }
+  .aisle:hover .arrow img:first-child {
+    transform: translate(130%, -130%);
+  }
+  .aisle:hover .arrow img:last-child {
+    transform: none;
+    transition-delay: 60ms;
+  }
 }
 
 .aisle:focus-visible {
@@ -182,7 +201,7 @@
   inset: 2px;
   width: calc(100% - 4px);
   height: calc(100% - 4px);
-  transition: transform 420ms cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 380ms var(--ease-in-out);
 }
 
 /* the waiting arrow sits off the bottom-left corner */
@@ -190,15 +209,13 @@
   transform: translate(-130%, 130%);
 }
 
-.aisle:hover .arrow img:first-child,
 .aisle:focus-visible .arrow img:first-child {
   transform: translate(130%, -130%);
 }
 
-.aisle:hover .arrow img:last-child,
 .aisle:focus-visible .arrow img:last-child {
   transform: none;
-  transition-delay: 80ms;
+  transition-delay: 60ms;
 }
 
 /* ── popup ── */
@@ -226,11 +243,11 @@
   translate: -50% 0;
   background: var(--color-bg);
   border: var(--rule);
-  animation: popupIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: popupIn 480ms var(--ease-out) both;
 }
 
 .leaving .popup {
-  animation: popupOut 260ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation: popupOut var(--dur-exit) var(--ease-out) both;
 }
 
 @keyframes popupIn {
@@ -277,7 +294,14 @@
   cursor: pointer;
 }
 
-.popupClose:hover {
+@media (hover: hover) and (pointer: fine) {
+  .popupClose:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.popupClose:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

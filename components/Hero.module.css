@@ -32,7 +32,6 @@
      4. navbar (SiteHeader)                                                     4.1s →
      5. sticker peel hint                                                       5.1s →
      6. "start shopping" cue                                                    5.7s → */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --intro-dur: 2800ms;
   --tomato-start: 2350ms; /* 4 tomatoes, largest → smallest */
   --tomato-dur: 1700ms;
@@ -127,7 +126,7 @@
   background: none;
   cursor: pointer;
   --peel: 0px;
-  transition: --peel 420ms cubic-bezier(0.3, 0.7, 0.2, 1);
+  transition: --peel 420ms var(--ease-peel);
 }
 
 /* clicks and hover come from .stickerHit (the sticker's own shape where it overlaps another);
@@ -270,7 +269,7 @@
 }
 
 .play .line {
-  animation: lineIn 1100ms var(--ease-out) both;
+  animation: lineIn 1100ms var(--ease-intro) both;
   animation-delay: var(--text-delay);
 }
 
@@ -409,7 +408,7 @@
 
 /* fades up with the end of the sequence, then the arrow gently bobs */
 .play .cue {
-  animation: cueIn 900ms var(--ease-out) both;
+  animation: cueIn 900ms var(--ease-intro) both;
   animation-delay: var(--cue-delay);
 }
 

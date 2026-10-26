@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Lenis from "lenis";
@@ -472,7 +472,7 @@ export default function ProjectOverlay({
         lockScroll(false);
         onClose();
         if (then) requestAnimationFrame(() => requestAnimationFrame(then));
-      }, 380);
+      }, 240); // = --dur-exit
     },
     [leaving, onClose],
   );
@@ -538,13 +538,47 @@ export default function ProjectOverlay({
     return () => root.removeEventListener("scroll", onScroll);
   }, [expanded]);
 
+  // card ⇄ full screen (FLIP): the layout switches in one go, then the frame is drawn back over
+  // where it was and eased into place with transform + clip-path only — the case study inside
+  // never re-lays out mid-move, so it stays smooth however long the page is.
+  const flipFrom = useRef<DOMRect | null>(null);
   const toggle = () => {
     if (expanded) {
       lenisRef.current?.scrollTo(0, { immediate: true });
       frameRef.current?.scrollTo({ top: 0 });
     }
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      flipFrom.current = frameRef.current?.getBoundingClientRect() ?? null;
+    }
     setExpanded((x) => !x);
   };
+
+  useLayoutEffect(() => {
+    const el = frameRef.current;
+    const from = flipFrom.current;
+    flipFrom.current = null;
+    if (!el || !from) return;
+    const to = el.getBoundingClientRect();
+    if (!to.width || !to.height) return;
+    // scale evenly (no squashing) so the new layout covers the old box, centre it on the old
+    // box, and clip off the overhang
+    const k = Math.max(from.width / to.width, from.height / to.height);
+    const tx = from.left + from.width / 2 - (to.left + (to.width * k) / 2);
+    const ty = from.top + from.height / 2 - (to.top + (to.height * k) / 2);
+    const ix = (to.width * k - from.width) / (2 * k);
+    const iy = (to.height * k - from.height) / (2 * k);
+    el.animate(
+      [
+        {
+          transformOrigin: "0 0",
+          transform: `translate(${tx}px, ${ty}px) scale(${k})`,
+          clipPath: `inset(${iy}px ${ix}px)`,
+        },
+        { transformOrigin: "0 0", transform: "none", clipPath: "inset(0px 0px)" },
+      ],
+      { duration: 520, easing: "cubic-bezier(0.77, 0, 0.175, 1)" }, // --ease-in-out
+    );
+  }, [expanded]);
 
   const jump = (i: number) => {
     const root = frameRef.current;

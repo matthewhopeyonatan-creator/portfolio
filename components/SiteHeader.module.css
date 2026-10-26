@@ -12,8 +12,8 @@
   background: var(--color-bg);
   border-bottom: var(--rule);
   transform: translate3d(0, 0, 0);
-  /* reveal: gentle ease-out so it glides in and settles */
-  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* reveal: quick and decisive — this fires every time the scroll direction flips */
+  transition: transform 240ms var(--ease-out);
   will-change: transform;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .introPlaying {
-  animation: headerIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 4100ms both;
+  animation: headerIn 900ms var(--ease-intro) 4100ms both;
 }
 
 @keyframes headerIn {
@@ -39,8 +39,8 @@
 
 .hidden {
   transform: translate3d(0, -100%, 0);
-  /* hide: smooth ease-in-out, slightly quicker so it gets out of the way */
-  transition: transform 420ms cubic-bezier(0.65, 0, 0.35, 1);
+  /* hide: a touch quicker still, so it gets out of the way */
+  transition: transform 200ms var(--ease-out);
 }
 
 .nav {
@@ -66,13 +66,20 @@
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 220ms ease;
+  transition: transform var(--dur-hover) var(--ease-out);
 }
 
-.nav a:hover .navLink::after,
-.nav .navLink:hover::after,
-.cart:hover .navLink::after {
+.nav a:focus-visible .navLink::after,
+.cart:focus-visible .navLink::after {
   transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav a:hover .navLink::after,
+  .nav .navLink:hover::after,
+  .cart:hover .navLink::after {
+    transform: scaleX(1);
+  }
 }
 
 .logo {
@@ -117,13 +124,22 @@
 
 /* a little hop whenever a project lands in the cart */
 .cartHop {
-  animation: cartHop 520ms cubic-bezier(0.3, 1.6, 0.5, 1);
+  animation: cartHop 520ms var(--ease-pop);
 }
 
 @keyframes cartHop {
   0% { transform: translateY(0) rotate(0); }
   35% { transform: translateY(-6px) rotate(-6deg); }
   100% { transform: none; }
+}
+
+/* press feedback */
+.cartIcon {
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.cart:active .cartIcon {
+  transform: scale(0.94);
 }
 
 .cartIcon {

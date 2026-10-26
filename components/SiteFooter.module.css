@@ -111,12 +111,19 @@ a.social::after {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 220ms ease;
+  transition: transform var(--dur-hover) var(--ease-out);
 }
 
-.navLink:hover::after,
-a.social:hover::after {
+.navLink:focus-visible::after,
+a.social:focus-visible::after {
   transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover::after,
+  a.social:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 @media (max-width: 767px) {
