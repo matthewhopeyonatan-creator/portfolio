@@ -2,6 +2,9 @@
    1728 × 961 design px) always spans the screen width — never zoomed past it, so the Open sign and
    stickers near the edges stay fully on screen. */
 .hero {
+  /* the tomatoes and stickers run off the right edge — clip them there so the page never gets
+     wider than the window (clip, not hidden: no scroll box, and they still spill downward) */
+  overflow-x: clip;
   /* Full Figma scale: the 1728px artboard spans the screen. The band is at least a screen tall,
      and always tall enough to hold the tomatoes' bottoms (visible to artboard y≈1044), so
      "Seasonal picks" starts below them instead of covering them. */
@@ -502,4 +505,15 @@
 .skip .sign {
   visibility: hidden;
   animation: none;
+}
+
+/* Desktop: the dimmed phrases sit at 56% ink — dimmed, but still 3.4:1 against the page
+   (large-text minimum is 3:1; 50% was 2.9:1). Phones to be handled separately. */
+@media (min-width: 768px) {
+  .phrase {
+    color: rgba(40, 40, 40, 0.56);
+  }
+  .cue {
+    font-size: max(14px, calc(18 * var(--hu)));
+  }
 }

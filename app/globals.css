@@ -126,6 +126,12 @@ html:not([data-intro="done"]) #seasonal-picks {
 }
 
 /* page doesn't scroll behind the open cart */
+/* nothing on the page (tomatoes, stickers, the trays' folded plastic) may make it wider than the
+   window — clip, not hidden, so it isn't a scroll box and the sticky navbar keeps working */
+main {
+  overflow-x: clip;
+}
+
 html.cart-open,
 html.modal-open {
   overflow: hidden;

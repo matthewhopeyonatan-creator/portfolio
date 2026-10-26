@@ -330,3 +330,10 @@
 .static .trayHit {
   pointer-events: none;
 }
+
+/* Desktop: the tags stop shrinking at 13px so they stay readable on laptop widths */
+@media (min-width: 768px) {
+  .tag {
+    font-size: max(13px, calc(16 * var(--u)));
+  }
+}

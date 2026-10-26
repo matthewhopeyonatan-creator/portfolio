@@ -201,7 +201,7 @@
   aspect-ratio: 371 / 494;
   transform-origin: center;
   transition: transform 480ms var(--ease-out);
-  box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+  box-shadow: 0 30px 80px rgb(40 40 40 / 0.45);
   pointer-events: auto;
   cursor: zoom-out;
   will-change: transform;
@@ -290,5 +290,26 @@
   .viewShown .viewMedia {
     opacity: 1;
     transition: opacity 200ms ease;
+  }
+}
+
+/* Desktop readability floors: on laptop widths the captions stop shrinking at a size that stays
+   easy to read (title 16 Medium over source 14 Light; "See full catalog" 14) */
+@media (min-width: 768px) {
+  .title,
+  .price {
+    font-size: max(16px, calc(20 * var(--u)));
+  }
+  .source,
+  .more {
+    font-size: max(14px, calc(16 * var(--u)));
+  }
+}
+
+/* three across: the last column has no rule on its right, so give it an invisible one — every
+   poster is then exactly the same width/height and the captions line up across the row */
+@media (min-width: 1024px) {
+  .cell:nth-child(3n) {
+    border-right: 2px solid transparent;
   }
 }
