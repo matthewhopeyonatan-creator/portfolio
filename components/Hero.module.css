@@ -513,6 +513,10 @@
   .phrase {
     color: rgba(40, 40, 40, 0.56);
   }
+  /* (restated here so the highlight still wins over the dimmed colour above) */
+  .phraseOn {
+    color: var(--color-ink);
+  }
   .cue {
     font-size: max(14px, calc(18 * var(--hu)));
   }
