@@ -12,7 +12,7 @@
      screen's bottom edge), up to 1.25× so the stickers don't crowd the sides. Capped so the left tomato's dome (visible
      top at artboard y≈221, i.e. 740 above the bottom) stays 16px clear of the headline; the
      small tomato's top (y≈72) then always clears the navbar too. */
-  --hl-bottom: calc(37 * var(--u) + 2.8125 * max(20px, 64 * var(--u)));
+  --hl-bottom: calc(var(--gutter) + 2.7425 * max(20px, 64 * var(--u)));
   --tu: max(
     var(--u),
     min(
@@ -244,7 +244,10 @@
 .headline {
   position: absolute;
   left: var(--gutter);
-  top: calc(37 * var(--hu));
+  /* the gap from the navbar rule to the top of the capitals always matches the side margin to
+     the "C" — at every window size. (0.07em = the cap's inset in its line box, 0.10em, minus
+     the C's side bearing, 0.03em.) */
+  top: calc(var(--gutter) - 0.07em);
   z-index: 2;
   margin: 0;
   font-size: max(20px, calc(64 * var(--hu)));
