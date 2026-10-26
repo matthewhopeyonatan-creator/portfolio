@@ -97,6 +97,8 @@ export default function GrocersSelects() {
                   }
                   aria-label={`View ${item.title} up close and add it to your cart`}
                 >
+                {/* the shelf slot: a shutter that rolls up to show the poster (globals.css) */}
+                <span className={styles.frame} data-shutter>
                 {item.video ? (
                   <video
                     className={styles.poster}
@@ -126,6 +128,7 @@ export default function GrocersSelects() {
                     className={styles.poster}
                   />
                 )}
+                </span>
                 </button>
                 <figcaption className={styles.caption}>
                   <span className={styles.title}>{item.title}</span>

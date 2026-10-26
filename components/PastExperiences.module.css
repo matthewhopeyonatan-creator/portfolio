@@ -50,13 +50,10 @@
   grid-column: 2;
 }
 
-/* dates Light · role Medium · company Bold */
-.dates {
-  font-weight: 300;
-}
-
+/* dates and role Light · company Medium */
+.dates,
 .role {
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .dates {
@@ -74,6 +71,7 @@
 
 .org {
   grid-area: org;
+  font-weight: 500;
   margin-top: calc(2 * var(--u));
   font-size: max(22px, calc(32 * var(--u)));
   text-align: right;

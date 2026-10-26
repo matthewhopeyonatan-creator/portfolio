@@ -140,7 +140,7 @@ html.modal-open {
 /* ── scroll entrances (components/RevealOnScroll) ──────────────────────────────────────────
    data-reveal="up"     rise + fade (section titles, caption rows)
    data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
-   data-reveal="swipe"  posters: wiped up into view from the bottom edge, caption following
+   data-reveal="swipe"  posters: the slot's shutter rolls up, the poster rises into it, tag follows
    --i staggers an item after its neighbours */
 .reveal-ready [data-reveal] {
   opacity: 0;
@@ -158,34 +158,43 @@ html.modal-open {
   transform: translateY(56px) rotate(1.6deg);
 }
 
-/* the poster is unmasked bottom → top while it slides up into place; the figure itself stays put */
+/* posters — "stocking the shelf": each slot's shutter rolls up from the shelf edge (clip-path on
+   the slot), while the poster behind it rises a touch slower and settles from a hair larger, like
+   it's being pushed up into place. Then its shelf tag (the caption) clicks in underneath. Left to
+   right along each row, ~90ms apart. Transform / opacity / clip-path only; it waits for the art
+   to have loaded (data-loaded) so nothing half-drawn ever moves. */
 .reveal-ready [data-reveal="swipe"] {
   opacity: 1;
 }
 
-/* the poster's frame stays put and clips; the art inside slides up into it (transform only, so it
-   runs on the compositor). It waits for the art itself to have loaded (data-loaded). */
-.reveal-ready [data-reveal="swipe"] > :first-child {
-  overflow: hidden;
+.reveal-ready [data-reveal="swipe"] [data-shutter] {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1000ms var(--ease-in-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
 }
 
-.reveal-ready [data-reveal="swipe"] > :first-child > * {
-  transform: translate3d(0, 101%, 0);
-  transition: transform 750ms var(--ease-intro);
-  transition-delay: calc(var(--i, 0) * 70ms);
+.reveal-ready [data-reveal="swipe"] [data-shutter] > * {
+  transform: translate3d(0, 22%, 0) scale(1.06);
+  transform-origin: 50% 100%;
+  transition: transform 1300ms var(--ease-intro);
+  transition-delay: calc(var(--i, 0) * 90ms + 60ms);
   will-change: transform;
 }
 
 .reveal-ready [data-reveal="swipe"] > figcaption {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(10px);
   transition:
-    opacity 600ms ease,
-    transform 700ms var(--ease-intro);
-  transition-delay: calc(var(--i, 0) * 70ms + 220ms);
+    opacity 500ms var(--ease-out),
+    transform 600ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 90ms + 620ms);
 }
 
-.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] > :first-child > * {
+.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] [data-shutter] {
+  clip-path: inset(0 0 0 0);
+}
+
+.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] [data-shutter] > * {
   transform: none;
 }
 

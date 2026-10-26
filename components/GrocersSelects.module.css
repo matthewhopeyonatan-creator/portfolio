@@ -30,6 +30,10 @@
   margin: 0;
 }
 
+.frame {
+  display: block;
+}
+
 .poster {
   display: block;
   width: 100%;
