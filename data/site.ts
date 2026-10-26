@@ -267,50 +267,17 @@ export const grocersSelects: {
  * `dates` is optional until it's filled in for every entry. (`logo` is kept for reference; the
  * current design doesn't show it.) */
 export const pastExperiences: { org: string; role: string; dates?: string; logo: string }[] = [
-  {
-    org: "25madison",
-    role: "Product Design Fellow",
-    dates: "Aug 2026 – Dec 2026",
-    logo: "/experience/25madison.png",
-  },
-  {
-    org: "Design Meetup",
-    role: "Graphics Lead",
-    logo: "/experience/design-meetup.png",
-  },
-  {
-    org: "Crowdvolt",
-    role: "Product Design Intern",
-    dates: "Dec 2025 – Aug 2026",
-    logo: "/experience/crowdvolt.png",
-  },
-  {
-    org: "UX Club NYU",
-    role: "UX Team Lead",
-    logo: "/experience/ux-club-nyu.png",
-  },
-  {
-    org: "Fatboy Supperclub",
-    role: "Graphics & Guest Experience",
-    logo: "/experience/fatboy.png",
-  },
-  {
-    org: "Design Consulting Cornell",
-    role: "Graphics Chair",
-    logo: "/experience/design-consulting-cornell.png",
-  },
-  {
-    org: "The Philadelphia Inquirer",
-    role: "Product Designer (contract)",
-    logo: "/experience/philadelphia-inquirer.png",
-  },
-  {
-    org: "Shmood",
-    role: "Product Designer (contract)",
-    dates: "Aug 2024 – Dec 2024",
-    logo: "/experience/shmood.png",
-  },
-  { org: "LOKO", role: "Graphics Chair", logo: "/experience/loko.png" },
+  // newest first, by start date
+  { org: "25madison", role: "Product Design Fellow", dates: "Aug 2026 – Present", logo: "/experience/25madison.png" },
+  { org: "Design Meetup", role: "Graphics Lead", dates: "Jul 2026 – Present", logo: "/experience/design-meetup.png" },
+  { org: "Fatboy Supperclub", role: "Graphics & Guest Experience", dates: "Jun 2026 – Present", logo: "/experience/fatboy.png" },
+  { org: "UX Club NYU", role: "UX Team Lead", dates: "May 2026 – Present", logo: "/experience/ux-club-nyu.png" },
+  { org: "Crowdvolt", role: "Product Design Intern", dates: "Dec 2025 – Aug 2026", logo: "/experience/crowdvolt.png" },
+  { org: "The Philadelphia Inquirer", role: "Product Designer (contract)", dates: "Jan 2025 – May 2025", logo: "/experience/philadelphia-inquirer.png" },
+  { org: "Shmood", role: "Product Designer (contract)", dates: "Aug 2024 – Dec 2024", logo: "/experience/shmood.png" },
+  { org: "LOKO", role: "Graphics Chair", dates: "Aug 2023 – May 2025", logo: "/experience/loko.png" },
+  // dates to come
+  { org: "Design Consulting Cornell", role: "Graphics Chair", logo: "/experience/design-consulting-cornell.png" },
 ];
 
 // posters picked up from the shelf (clicking one opens it up close and drops it in the cart)
