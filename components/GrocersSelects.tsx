@@ -80,14 +80,10 @@ export default function GrocersSelects() {
       </div>
       <div className={styles.shelf}>
         <ul ref={gridRef} className={styles.grid}>
-          {grocersSelects.map((item, i) => (
+          {grocersSelects.map((item) => (
             <li key={item.src} className={styles.cell}>
-              {/* row by row, left to right */}
-              <figure
-                className={styles.item}
-                data-reveal="swipe"
-                style={{ "--i": i % 3 } as React.CSSProperties}
-              >
+              {/* each row rolls up together */}
+              <figure className={styles.item} data-reveal="swipe">
                 {/* the whole poster is the button: opens it up close and adds it to the cart */}
                 <button
                   type="button"

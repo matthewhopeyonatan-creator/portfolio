@@ -160,8 +160,8 @@ html.modal-open {
 
 /* posters — "stocking the shelf": each slot's shutter rolls up from the shelf edge (clip-path on
    the slot), while the poster behind it rises a touch slower and settles from a hair larger, like
-   it's being pushed up into place. Then its shelf tag (the caption) clicks in underneath. Left to
-   right along each row, ~90ms apart. Transform / opacity / clip-path only; it waits for the art
+   it's being pushed up into place. Then its shelf tag (the caption) clicks in underneath. A whole
+   row rolls up together. Transform / opacity / clip-path only; it waits for the art
    to have loaded (data-loaded) so nothing half-drawn ever moves. */
 .reveal-ready [data-reveal="swipe"] {
   opacity: 1;
