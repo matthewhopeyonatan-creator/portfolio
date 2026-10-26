@@ -45,6 +45,11 @@
   line-height: normal;
 }
 
+/* an odd one out on the last row sits in the right-hand column */
+.item:last-child:nth-child(odd) {
+  grid-column: 2;
+}
+
 /* dates Light · role Medium · company Bold */
 .dates {
   font-weight: 300;
@@ -78,6 +83,9 @@
 @media (max-width: 767px) {
   .list {
     grid-template-columns: 1fr;
+  }
+  .item:last-child:nth-child(odd) {
+    grid-column: auto;
   }
   .item {
     min-height: 0;
