@@ -141,7 +141,7 @@ html.modal-open {
    data-reveal="up"     rise + fade (section titles, caption rows)
    data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
    data-reveal="ledger" experience rows: rule drawn across, then the entry written in
-   data-reveal="swipe"  posters: the slot's shutter rolls up, the poster rises into it, tag follows
+   data-reveal="swipe"  posters: come into focus out of a soft blur, tag follows
    --i staggers an item after its neighbours */
 .reveal-ready [data-reveal] {
   opacity: 0;
@@ -159,49 +159,49 @@ html.modal-open {
   transform: translateY(56px) rotate(1.6deg);
 }
 
-/* posters — "stocking the shelf": each slot's shutter rolls up from the shelf edge (clip-path on
-   the slot), while the poster behind it rises a touch slower and settles from a hair larger, like
-   it's being pushed up into place. Then its shelf tag (the caption) clicks in underneath. A whole
-   row rolls up together. Transform / opacity / clip-path only; it waits for the art
-   to have loaded (data-loaded) so nothing half-drawn ever moves. */
+/* posters — "coming into focus": each poster fades up a few px out of a soft blur, its art
+   settling from a touch larger inside a crisp frame, like a lens pulling focus; the shelf tag
+   follows a beat later. Short (≈0.7s) so the posters, not the motion, stay the focus — and mostly
+   opacity / blur / scale, with only a small lift, so Lenis' smooth-scroll glide doesn't fight it.
+   A whole row together; waits for the art to have loaded (data-loaded). */
 .reveal-ready [data-reveal="swipe"] {
   opacity: 1;
 }
 
-.reveal-ready [data-reveal="swipe"] [data-shutter] {
-  clip-path: inset(100% 0 0 0);
-  transition: clip-path 1000ms var(--ease-in-out);
-  transition-delay: calc(var(--i, 0) * 90ms);
+.reveal-ready [data-reveal="swipe"] [data-slot] {
+  overflow: hidden; /* the frame stays crisp while the art inside focuses */
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 700ms var(--ease-out);
 }
 
-.reveal-ready [data-reveal="swipe"] [data-shutter] > * {
-  transform: translate3d(0, 22%, 0) scale(1.06);
-  transform-origin: 50% 100%;
-  transition: transform 1300ms var(--ease-intro);
-  transition-delay: calc(var(--i, 0) * 90ms + 60ms);
-  will-change: transform;
+.reveal-ready [data-reveal="swipe"] [data-slot] > * {
+  transform: scale(1.06);
+  filter: blur(10px);
+  transition:
+    transform 900ms var(--ease-intro),
+    filter 700ms var(--ease-out);
 }
 
 .reveal-ready [data-reveal="swipe"] > figcaption {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
+  filter: blur(4px);
   transition:
     opacity 500ms var(--ease-out),
-    transform 600ms var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 90ms + 620ms);
+    transform 600ms var(--ease-out),
+    filter 500ms var(--ease-out);
+  transition-delay: 180ms;
 }
 
-.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] [data-shutter] {
-  clip-path: inset(0 0 0 0);
-}
-
-.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] [data-shutter] > * {
-  transform: none;
-}
-
+.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] [data-slot],
+.reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] [data-slot] > *,
 .reveal-ready [data-reveal="swipe"][data-revealed][data-loaded] > figcaption {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 
 /* experience rows — a ledger being filled in: the rule is drawn across left to right, then the
