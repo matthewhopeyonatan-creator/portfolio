@@ -1,7 +1,6 @@
-/* Figma 141:151 (1728 frame): "PAST EXPERIENCES" Host Grotesk Bold 40, set on the right margin,
-   34 above the first rules. Two columns on the 40px margins, 40 apart; each entry: 2px rule, then
-   16 below it dates (left) and role (right) Bold 20, the company Bold 32 right-aligned 2 under the
-   role; entries 131 apart (rule to rule). Ink, never black. */
+/* Figma 141:151 (1728 frame); title matched to the other section titles. Two columns on the 40px
+   margins, 40 apart; each entry: 2px rule, then 16 below it dates (left) and role (right) Light
+   20, the company Medium 32 right-aligned 2 under the role; entries 131 apart (rule to rule). */
 .section {
   position: relative;
   z-index: 1;
@@ -11,13 +10,11 @@
   color: var(--color-ink);
 }
 
+/* the title is the shared section title (54 Regular caps); centred, with the same 40 from its
+   letters to the first rules as the other titles have to theirs */
 .title {
-  margin: 0 0 max(24px, calc(34 * var(--u)));
-  font-size: max(28px, calc(40 * var(--u)));
-  font-weight: 700;
-  line-height: normal;
-  text-align: right;
-  text-transform: uppercase;
+  margin: 0 0 40px;
+  text-align: center;
 }
 
 .list {

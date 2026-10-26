@@ -22,7 +22,7 @@ export default function RevealOnScroll() {
       },
       { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
     );
-    // posters: the shutter starts rolling up just before the slot reaches the screen (while it's
+    // posters (and anything marked data-reveal-early): start just before reaching the screen (while it's
     // still ~15% of a screen below), so even a fast scroll lands on a poster that's already rising
     const ioNow = new IntersectionObserver(
       (entries) => {
@@ -35,9 +35,11 @@ export default function RevealOnScroll() {
       { rootMargin: "0px 0px 15% 0px", threshold: 0 },
     );
     document
-      .querySelectorAll('[data-reveal]:not([data-reveal="swipe"])')
+      .querySelectorAll('[data-reveal]:not([data-reveal="swipe"]):not([data-reveal-early])')
       .forEach((el) => io.observe(el));
-    document.querySelectorAll('[data-reveal="swipe"]').forEach((el) => ioNow.observe(el));
+    document
+      .querySelectorAll('[data-reveal="swipe"], [data-reveal-early]')
+      .forEach((el) => ioNow.observe(el));
     return () => {
       io.disconnect();
       ioNow.disconnect();
