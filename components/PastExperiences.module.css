@@ -45,9 +45,13 @@
   line-height: normal;
 }
 
-.dates,
+/* dates Light · role Medium · company Bold */
+.dates {
+  font-weight: 300;
+}
+
 .role {
-  font-weight: 300; /* Light: the company carries the Bold */
+  font-weight: 500;
 }
 
 .dates {

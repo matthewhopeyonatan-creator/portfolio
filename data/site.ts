@@ -275,9 +275,8 @@ export const pastExperiences: { org: string; role: string; dates?: string; logo:
   { org: "Crowdvolt", role: "Product Design Intern", dates: "Dec 2025 – Aug 2026", logo: "/experience/crowdvolt.png" },
   { org: "The Philadelphia Inquirer", role: "Product Designer (contract)", dates: "Jan 2025 – May 2025", logo: "/experience/philadelphia-inquirer.png" },
   { org: "Shmood", role: "Product Designer (contract)", dates: "Aug 2024 – Dec 2024", logo: "/experience/shmood.png" },
+  { org: "Design Consulting Cornell", role: "Graphics Chair", dates: "Jan 2024 – May 2025", logo: "/experience/design-consulting-cornell.png" },
   { org: "LOKO", role: "Graphics Chair", dates: "Aug 2023 – May 2025", logo: "/experience/loko.png" },
-  // dates to come
-  { org: "Design Consulting Cornell", role: "Graphics Chair", logo: "/experience/design-consulting-cornell.png" },
 ];
 
 // posters picked up from the shelf (clicking one opens it up close and drops it in the cart)
