@@ -1,5 +1,5 @@
 /* Slide to check out — in the cart's own style: the same box as the old checkout button (2px ink
-   border, square, page colour, 78 tall, Medium 32 label) with an ink handle inside. The ground the
+   border, square, page colour, 78 tall, Regular 32 label) with an ink handle inside. The ground the
    handle has crossed is the same ink, so handle + trail read as one block; it sits above the label
    and wipes it. On commit the ink fills the box and the page-colour "checking out" sits on it. */
 .slide {
@@ -25,7 +25,7 @@
   display: grid;
   place-items: center;
   font-size: max(17px, calc(32 * var(--cu)));
-  font-weight: 500;
+  font-weight: 400;
   pointer-events: none;
   white-space: nowrap;
 }
@@ -92,7 +92,7 @@
   gap: 10px;
   color: var(--color-bg);
   font-size: max(17px, calc(32 * var(--cu)));
-  font-weight: 500;
+  font-weight: 400;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
