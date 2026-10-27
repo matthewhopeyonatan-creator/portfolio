@@ -37,7 +37,8 @@
   position: absolute;
   height: auto;
   max-width: none;
-  animation: tomatoIn 1400ms var(--ease-intro) both;
+  /* step 2: once the slip has printed, the tomatoes swell in behind it, one after another */
+  animation: tomatoIn 1000ms var(--ease-intro) 1150ms backwards;
 }
 
 .tomatoBack {
@@ -50,7 +51,7 @@
   left: calc(366.82 * var(--ru));
   top: calc(228.84 * var(--ru));
   width: calc(718.91 * var(--ru));
-  animation-delay: 90ms;
+  animation-delay: 1270ms;
 }
 
 /* padded 60 on the left so its blur isn't cut */
@@ -58,31 +59,26 @@
   left: calc(-680 * var(--ru));
   top: calc(122.44 * var(--ru));
   width: calc(902.65 * var(--ru));
-  animation-delay: 180ms;
+  animation-delay: 1390ms;
 }
 
 @keyframes tomatoIn {
   from {
     opacity: 0;
-    transform: translateY(calc(-24 * var(--ru)));
+    transform: scale(0.94);
   }
 }
 
-/* ── entrance: it prints — fed down out of the top, revealed as it comes ── */
+/* ── entrance, step 1: it prints — fed up out of the bottom edge of the screen at a steady pace,
+   easing to a stop. The page clips it, so it appears to come out of a slot under the window. ── */
 .print {
   position: relative;
-  animation: printIn 1000ms var(--ease-intro) both;
+  animation: printIn 1400ms var(--ease-in-out) backwards;
 }
 
 @keyframes printIn {
   from {
-    clip-path: inset(0 0 100% 0);
-    transform: translateY(calc(-40 * var(--ru)));
-  }
-  to {
-    /* open wide at the end so the tilt's corners and shadow are never clipped */
-    clip-path: inset(-200px -200px -200px -200px);
-    transform: none;
+    transform: translateY(100svh);
   }
 }
 
@@ -320,7 +316,15 @@
 .actions {
   display: flex;
   gap: calc(14 * var(--ru));
-  animation: actionsIn 500ms var(--ease-out) 700ms both;
+}
+
+/* step 3: the buttons settle in last, a beat apart. `backwards` so the press scale still works after */
+.actions > .button {
+  animation: actionsIn 450ms var(--ease-out) 1550ms backwards;
+}
+
+.actions > .button + .button {
+  animation-delay: 1620ms;
 }
 
 @keyframes actionsIn {
@@ -368,7 +372,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .print {
-    animation: printFade 300ms ease both;
+    animation: printFade 300ms ease backwards;
   }
   @keyframes printFade {
     from {
@@ -376,15 +380,15 @@
     }
   }
   .tomato {
-    animation: printFade 400ms ease both;
+    animation: printFade 500ms ease 250ms backwards;
   }
   .clear,
   .clearOn,
   .clearOn:hover svg {
     transform: none;
   }
-  .actions {
-    animation-duration: 200ms;
-    animation-delay: 0ms;
+  .actions > .button,
+  .actions > .button + .button {
+    animation: printFade 300ms ease 400ms backwards;
   }
 }
