@@ -38,7 +38,7 @@
   height: auto;
   max-width: none;
   /* step 2: once the slip has printed, the tomatoes swell in behind it, one after another */
-  animation: tomatoIn 1000ms var(--ease-intro) 1150ms backwards;
+  animation: tomatoIn 1200ms var(--ease-intro) 3250ms backwards;
 }
 
 .tomatoBack {
@@ -51,7 +51,7 @@
   left: calc(366.82 * var(--ru));
   top: calc(228.84 * var(--ru));
   width: calc(718.91 * var(--ru));
-  animation-delay: 1270ms;
+  animation-delay: 3400ms;
 }
 
 /* padded 60 on the left so its blur isn't cut */
@@ -59,7 +59,7 @@
   left: calc(-680 * var(--ru));
   top: calc(122.44 * var(--ru));
   width: calc(902.65 * var(--ru));
-  animation-delay: 1390ms;
+  animation-delay: 3550ms;
 }
 
 @keyframes tomatoIn {
@@ -69,16 +69,77 @@
   }
 }
 
-/* ── entrance, step 1: it prints — fed up out of the bottom edge of the screen at a steady pace,
-   easing to a stop. The page clips it, so it appears to come out of a slot under the window. ── */
+/* ── entrance, step 1: it prints — fed up out of the bottom edge of the screen the way a receipt
+   printer does it: slow, in uneven bursts with little stalls between them, easing to a stop.
+   The page clips it, so it appears to come out of a slot under the window. ── */
 .print {
   position: relative;
-  animation: printIn 1400ms var(--ease-in-out) backwards;
+  animation: printIn 3400ms backwards;
 }
 
 @keyframes printIn {
-  from {
+  0% {
     transform: translateY(100svh);
+    animation-timing-function: var(--ease-in-out);
+  }
+  8% {
+    transform: translateY(calc(0.88 * 100svh));
+    animation-timing-function: linear;
+  }
+  12% {
+    transform: translateY(calc(0.88 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  21% {
+    transform: translateY(calc(0.74 * 100svh));
+    animation-timing-function: linear;
+  }
+  24% {
+    transform: translateY(calc(0.74 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  33% {
+    transform: translateY(calc(0.62 * 100svh));
+    animation-timing-function: linear;
+  }
+  39% {
+    transform: translateY(calc(0.62 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  48% {
+    transform: translateY(calc(0.47 * 100svh));
+    animation-timing-function: linear;
+  }
+  51% {
+    transform: translateY(calc(0.47 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  60% {
+    transform: translateY(calc(0.35 * 100svh));
+    animation-timing-function: linear;
+  }
+  65% {
+    transform: translateY(calc(0.35 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  74% {
+    transform: translateY(calc(0.22 * 100svh));
+    animation-timing-function: linear;
+  }
+  77% {
+    transform: translateY(calc(0.22 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  87% {
+    transform: translateY(calc(0.1 * 100svh));
+    animation-timing-function: linear;
+  }
+  90% {
+    transform: translateY(calc(0.1 * 100svh));
+    animation-timing-function: var(--ease-in-out);
+  }
+  100% {
+    transform: none;
   }
 }
 
@@ -320,11 +381,11 @@
 
 /* step 3: the buttons settle in last, a beat apart. `backwards` so the press scale still works after */
 .actions > .button {
-  animation: actionsIn 450ms var(--ease-out) 1550ms backwards;
+  animation: actionsIn 450ms var(--ease-out) 3800ms backwards;
 }
 
 .actions > .button + .button {
-  animation-delay: 1620ms;
+  animation-delay: 3880ms;
 }
 
 @keyframes actionsIn {
