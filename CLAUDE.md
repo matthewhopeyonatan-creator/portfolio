@@ -42,7 +42,7 @@ implements his designs faithfully.
 
 ## Where things live
 
-- `app/page.tsx` home · `app/catalog/page.tsx` catalog · `app/globals.css` tokens + scroll reveals
+- `app/page.tsx` home · `app/catalog/page.tsx` catalog · `app/receipt/page.tsx` checkout receipt · `app/globals.css` tokens + scroll reveals
 - `data/site.ts` — nav links, projects, posters (`grocersSelects`), cart catalog, catalog aisles
 - `data/caseStudies.ts` — project case-study content
 - `components/`
@@ -52,7 +52,8 @@ implements his designs faithfully.
     popup, which can expand to a full-screen case study (`?project=slug` restores it on refresh)
   - `GrocersSelects` — poster shelf; click zooms a close-up (`PosterView`) and adds to cart
   - `Catalog` — aisle list; each aisle opens a popup addressed by hash (`/catalog#graphics`)
-  - `cart/` — `CartContext` (localStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to email the cart)
+  - `cart/` — `CartContext` (sessionStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to check out: saves a receipt, empties the cart, goes to `/receipt`)
+  - `Receipt` (Figma 146:168) + `Tilt` (card that tips under the pointer) — the receipt lists the basket, a note with the contact email, most-viewed project and minutes on site (`lib/visit.ts`); download (PNG via `html-to-image`) / share
   - `PastExperiences` — two columns of dates · role · company rows under 2px rules
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|ledger"` entrances, staggered by `--i`
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating

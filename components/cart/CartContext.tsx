@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { startVisit } from "@/lib/visit";
 
 /** slug → quantity. Clicking a project adds it; the drawer adjusts quantities. */
 type Items = Record<string, number>;
@@ -13,6 +14,8 @@ type CartValue = {
   addedTick: number;
   add: (slug: string) => void;
   setQty: (slug: string, qty: number) => void;
+  /** empties the cart (after checking out) */
+  clear: () => void;
   open: () => void;
   close: () => void;
 };
@@ -27,6 +30,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // keep the cart through refreshes in the same tab; a new tab starts empty (sessionStorage)
   useEffect(() => {
+    startVisit(); // the receipt's "total time" counts from here
     try {
       const saved = window.sessionStorage.getItem(STORAGE_KEY);
       if (saved) setItems(JSON.parse(saved));
@@ -60,6 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       addedTick,
       add,
       setQty,
+      clear: () => setItems({}),
       open: () => setIsOpen(true),
       close: () => setIsOpen(false),
     }),

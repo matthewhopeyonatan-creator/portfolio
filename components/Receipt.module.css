@@ -1,0 +1,228 @@
+/* Figma 146:168 — the receipt: 522 × 791 white slip, 2px ink border · "hope's grocer" Atelier Fleur
+   Bold 36, centred, 37 from the top · "VISIT SUMMARY" Regular 24 (−1.2 tracking) at (23, 102) ·
+   a 474-wide 2px box from y150: the basket list (Regular 20, −1 tracking, rows 4 apart) · a NOTES
+   band from y495 (label Regular 24, note Light 16/16) · a band from y610 with MOST VIEWED / TOTAL
+   (Regular 24, values right) · box ends 54 above the slip's bottom. Under it, 20 below: two 184 × 42
+   white buttons, 2px border, 14 apart, Regular 20. --ru is 1 Figma px, scaled so the whole slip
+   and its buttons fit the screen under the navbar. */
+.page {
+  --ru: max(0.5px, min(1px, (100vw - 32px) / 522, (100svh - var(--header-h) - 96px) / 873));
+  display: grid;
+  place-items: center;
+  min-height: calc(100svh - var(--header-h));
+  padding: 48px var(--gutter);
+  color: var(--color-ink);
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: calc(20 * var(--ru));
+  width: calc(522 * var(--ru));
+}
+
+/* ── entrance: it prints — fed down out of the top, revealed as it comes ── */
+.print {
+  animation: printIn 1000ms var(--ease-intro) both;
+}
+
+@keyframes printIn {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(calc(-40 * var(--ru)));
+  }
+  to {
+    /* open wide at the end so the tilt's corners and shadow are never clipped */
+    clip-path: inset(-200px -200px -200px -200px);
+    transform: none;
+  }
+}
+
+.slip {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(791 * var(--ru));
+  padding: calc(35 * var(--ru)) calc(22 * var(--ru)) calc(52 * var(--ru));
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper);
+}
+
+.logo {
+  margin: 0 0 calc(20 * var(--ru));
+  font-family: var(--font-display-stack);
+  font-size: calc(36 * var(--ru));
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.logoBold {
+  font-weight: 700;
+}
+
+/* the display font has no curly apostrophe; the navbar logo uses the fallback serif the same way */
+.logoApostrophe {
+  font-weight: 400;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.15em;
+  position: relative;
+  top: -0.06em;
+  margin: 0 -0.05em 0 -0.03em;
+}
+
+.heading {
+  margin: 0;
+  font-size: calc(24 * var(--ru));
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.slip > .heading {
+  margin-bottom: calc(18 * var(--ru));
+}
+
+.box {
+  border: 2px solid var(--color-ink);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: calc(4 * var(--ru));
+  min-height: calc(343 * var(--ru));
+  margin: 0;
+  padding: calc(17 * var(--ru)) calc(21 * var(--ru)) calc(40 * var(--ru));
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(16 * var(--ru));
+  font-size: calc(20 * var(--ru));
+  line-height: normal;
+  letter-spacing: -0.05em;
+}
+
+.qty {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.notes {
+  min-height: calc(115 * var(--ru));
+  padding: calc(16 * var(--ru)) calc(21 * var(--ru)) calc(18 * var(--ru));
+  box-sizing: border-box;
+  border-top: 2px solid var(--color-ink);
+}
+
+.note {
+  max-width: calc(430 * var(--ru));
+  margin: calc(6 * var(--ru)) 0 0;
+  font-size: calc(16 * var(--ru));
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.mail {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: calc(11 * var(--ru));
+  margin: 0;
+  padding: calc(27 * var(--ru)) calc(21 * var(--ru)) calc(25 * var(--ru));
+  border-top: 2px solid var(--color-ink);
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(16 * var(--ru));
+  font-size: calc(24 * var(--ru));
+  line-height: normal;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.line dt,
+.line dd {
+  margin: 0;
+}
+
+.line dd {
+  text-align: right;
+}
+
+/* ── download / share ── */
+.actions {
+  display: flex;
+  gap: calc(14 * var(--ru));
+  animation: actionsIn 500ms var(--ease-out) 700ms both;
+}
+
+@keyframes actionsIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.button {
+  display: grid;
+  place-items: center;
+  width: calc(184 * var(--ru));
+  height: max(36px, calc(42 * var(--ru)));
+  padding: 0;
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: max(15px, calc(20 * var(--ru)));
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-hover) ease,
+    color var(--dur-hover) ease,
+    transform var(--dur-press) var(--ease-out);
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+.button:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    background: var(--color-ink);
+    color: var(--color-bg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .print {
+    animation: printFade 300ms ease both;
+  }
+  @keyframes printFade {
+    from {
+      opacity: 0;
+    }
+  }
+  .actions {
+    animation-duration: 200ms;
+    animation-delay: 0ms;
+  }
+}

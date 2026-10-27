@@ -1,0 +1,22 @@
+/* The frame is what the pointer is measured against and the only thing here that never moves; it
+   carries the perspective so the vanishing point stays in the room instead of riding along with
+   the rotation. Rotation, sheen and shadow are written per frame by Tilt.tsx — nothing here may
+   transition them, or the two would fight. */
+.frame {
+  position: relative;
+  perspective: 1400px;
+}
+
+.card {
+  position: relative;
+  transform-style: flat;
+}
+
+/* the dent under the pointer and the rim at its mirror; it inherits the card's corners */
+.sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+}

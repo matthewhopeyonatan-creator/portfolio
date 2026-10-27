@@ -7,6 +7,7 @@ import Lenis from "lenis";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
 import SiteHeader from "@/components/SiteHeader";
+import { addProjectView } from "@/lib/visit";
 import styles from "./ProjectOverlay.module.css";
 
 const LOREM =
@@ -429,6 +430,11 @@ export default function ProjectOverlay({
   );
   // opened from the address bar: the "page" entry already exists (it's the one we loaded on)
   const ownsUrl = useRef(fromUrl);
+  // time spent in this case study, for the checkout receipt's "most viewed"
+  useEffect(() => {
+    const opened = Date.now();
+    return () => addProjectView(project.slug, Date.now() - opened);
+  }, [project.slug]);
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
   const [active, setActive] = useState(0);

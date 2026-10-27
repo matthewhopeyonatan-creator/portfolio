@@ -1,0 +1,100 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import styles from "./Tilt.module.css";
+
+/**
+ * A card that gives under the pointer: it tips a few degrees toward it, with a soft dent of shade
+ * under the pointer, a light rim at its mirror, and a shadow thrown the other way. The frame never
+ * moves (it's what the pointer is measured against, and it holds the perspective so the vanishing
+ * point stays put); only the card turns. Everything is written straight to the elements each frame
+ * and eased toward the pointer, so it trails a touch rather than snapping. Mouse only; off for
+ * reduced motion. No will-change — the browser promotes the card itself once it starts moving.
+ */
+export default function Tilt({
+  children,
+  className = "",
+  max = 5, // degrees at the very edge
+}: {
+  children: React.ReactNode;
+  className?: string;
+  max?: number;
+}) {
+  const frame = useRef<HTMLDivElement>(null);
+  const card = useRef<HTMLDivElement>(null);
+  const sheen = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const f = frame.current;
+    const c = card.current;
+    const s = sheen.current;
+    if (!f || !c || !s) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // pointer position across the card, -1 … 1; `on` is how present the effect is (0 at rest)
+    const target = { x: 0, y: 0, on: 0 };
+    const now = { x: 0, y: 0, on: 0 };
+    let raf = 0;
+
+    const paint = () => {
+      const { x, y, on } = now;
+      c.style.transform = `rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg)`;
+      c.style.boxShadow = `${(-x * 14).toFixed(1)}px ${(18 - y * 10).toFixed(1)}px ${40 + on * 20}px rgba(40, 40, 40, ${(0.08 + on * 0.1).toFixed(3)})`;
+      const px = 50 + x * 50;
+      const py = 50 + y * 50;
+      s.style.opacity = on.toFixed(3);
+      s.style.background =
+        `radial-gradient(circle at ${px}% ${py}%, rgba(40, 40, 40, 0.06), transparent 45%),` +
+        `radial-gradient(circle at ${100 - px}% ${100 - py}%, rgba(255, 255, 255, 0.22), transparent 45%)`;
+    };
+
+    const tick = () => {
+      now.x += (target.x - now.x) * 0.14;
+      now.y += (target.y - now.y) * 0.14;
+      now.on += (target.on - now.on) * 0.12;
+      paint();
+      const settled =
+        Math.abs(target.x - now.x) < 0.001 &&
+        Math.abs(target.y - now.y) < 0.001 &&
+        Math.abs(target.on - now.on) < 0.002;
+      raf = settled ? 0 : requestAnimationFrame(tick);
+    };
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      const r = f.getBoundingClientRect();
+      target.x = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1));
+      target.y = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1));
+      target.on = 1;
+      kick();
+    };
+    const leave = () => {
+      target.x = 0;
+      target.y = 0;
+      target.on = 0;
+      kick();
+    };
+
+    paint();
+    f.addEventListener("pointermove", move);
+    f.addEventListener("pointerleave", leave);
+    return () => {
+      cancelAnimationFrame(raf);
+      f.removeEventListener("pointermove", move);
+      f.removeEventListener("pointerleave", leave);
+    };
+  }, [max]);
+
+  return (
+    <div ref={frame} className={`${styles.frame} ${className}`}>
+      <div ref={card} className={styles.card}>
+        {children}
+        <div ref={sheen} className={styles.sheen} aria-hidden="true" data-tilt-sheen />
+      </div>
+    </div>
+  );
+}

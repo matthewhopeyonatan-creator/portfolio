@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
-import { cartCatalog } from "@/data/site";
+import { cartCatalog, projects } from "@/data/site";
+import { mostViewedSlug, saveReceipt, visitMinutes } from "@/lib/visit";
 import { useCart } from "./CartContext";
 import SlideToCheckout from "./SlideToCheckout";
 import styles from "./CartDrawer.module.css";
 
-const CONTACT = "matthew.hope.yonatan@gmail.com";
 
 /** Figma "Frame 25": the cart, sliding in from the right. */
 export default function CartDrawer() {
-  const { items, isOpen, close, setQty } = useCart();
+  const { items, isOpen, close, setQty, clear } = useCart();
+  const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
@@ -94,16 +96,6 @@ export default function CartDrawer() {
       lastFocus.current?.focus?.();
     };
   }, [isOpen, close]);
-
-  const checkoutHref =
-    `mailto:${CONTACT}?subject=${encodeURIComponent("Checking out at hope’s grocer")}` +
-    `&body=${encodeURIComponent(
-      "Hi Matthew,\n\nI picked up:\n" +
-        lines
-          .map((l) => `• ${l.item.name}${l.qty > 1 ? ` × ${l.qty}` : ""}`)
-          .join("\n") +
-        "\n\nLet's talk!",
-    )}`;
 
   return (
     <div
@@ -221,7 +213,17 @@ export default function CartDrawer() {
             {lines.length ? (
               <SlideToCheckout
                 onConfirm={() => {
-                  window.location.href = checkoutHref;
+                  // ring it up: the receipt keeps what was in the basket, then the basket empties
+                  const slug = mostViewedSlug();
+                  saveReceipt({
+                    items: lines.map((l) => ({ name: l.item.name, qty: l.qty })),
+                    minutes: visitMinutes(),
+                    mostViewed: projects.find((p) => p.slug === slug)?.title ?? null,
+                    at: Date.now(),
+                  });
+                  clear();
+                  close();
+                  router.push("/receipt");
                 }}
               />
             ) : (

@@ -9,7 +9,7 @@ import styles from "./SlideToCheckout.module.css";
  * Slide to check out. An ink handle sits at the left of the cart's checkout box; drag it across.
  * The ground it has covered is the same ink as the handle, so it reads as one block stretching
  * out of its corner and wiping the label as it goes. Past ~85% (or a quick flick) it commits:
- * the ink fills the box, "checking out" appears, and the email opens. Short of that it springs
+ * the ink fills the box, "checking out" appears, and onConfirm rings up the receipt. Short of that it springs
  * back. Keyboard: the handle is a button — Enter / Space checks out straight away.
  */
 export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }) {
@@ -39,12 +39,12 @@ export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }
     const max = travel();
     setDone(true);
     const finish = () => {
-      onConfirm();
-      // put it back once the mail app has taken over
+      // let "checking out" land for a beat, then ring it up (the receipt page)
+      window.setTimeout(onConfirm, reduce() ? 0 : 550);
+      // and be ready again if anyone comes back to it
       window.setTimeout(() => {
         setDone(false);
-        if (reduce()) x.set(0);
-        else animate(x, 0, { type: "spring", duration: 0.6, bounce: 0 });
+        x.set(0);
       }, 1600);
     };
     if (reduce()) {
@@ -113,7 +113,7 @@ export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }
           type="button"
           className={styles.grip}
           style={{ x }}
-          aria-label="Check out — opens an email to Matthew with your cart"
+          aria-label="Check out — see your receipt"
           onClick={(e) => {
             // a real click (keyboard, or a tap with no drag) checks out straight away
             if (e.detail === 0 && !done) commit();
