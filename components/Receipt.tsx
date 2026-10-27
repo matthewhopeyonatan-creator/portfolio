@@ -16,6 +16,13 @@ import styles from "./Receipt.module.css";
  * as an image or shared. With nothing checked out (someone landed here directly) it still prints,
  * with an empty basket and a way back to the shelves.
  */
+// the checkout date as printed on the slip: MM/DD/YY (Figma 150:332)
+const stamp = (t: number) => {
+  const d = new Date(t);
+  const two = (n: number) => String(n).padStart(2, "0");
+  return `${two(d.getMonth() + 1)}/${two(d.getDate())}/${two(d.getFullYear() % 100)}`;
+};
+
 export default function Receipt() {
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
@@ -121,7 +128,12 @@ export default function Receipt() {
                 <span className={styles.logoApostrophe}>’</span>
                 <span className={styles.logoBold}>s grocer</span>
               </p>
-              <p className={styles.heading}>Orders</p>
+              <div className={styles.orderRow}>
+                <p className={`${styles.heading} ${styles.orders}`}>Orders</p>
+                <p className={`${styles.heading} ${styles.date}`}>
+                  <time dateTime={new Date(receipt.at).toISOString()}>{stamp(receipt.at)}</time>
+                </p>
+              </div>
 
               <div className={styles.box}>
                 <ul className={styles.items}>

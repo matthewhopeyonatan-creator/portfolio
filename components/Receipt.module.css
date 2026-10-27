@@ -208,8 +208,22 @@
   text-transform: uppercase;
 }
 
-.slip > .heading {
+/* ORDERS (SemiBold) on the left, the checkout date (Medium) on the right edge of the box */
+.orderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: calc(16 * var(--ru));
   margin-bottom: calc(18 * var(--ru));
+}
+
+.orders {
+  font-weight: 600;
+}
+
+.date {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 .box {

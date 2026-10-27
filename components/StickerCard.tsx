@@ -130,9 +130,10 @@ export default function StickerCard({
   // time spent reading this sticker's story, for the receipt's "most viewed"
   useEffect(() => {
     const opened = Date.now();
-    const name = sticker.title ?? sticker.label;
+    // the sticker's own name ("CrowdVolt"), not its story's heading — minus the tag/code printed on it
+    const name = sticker.label.replace(/(\s+(#\S+|\d+))+$/, "");
     return () => addView(name, Date.now() - opened);
-  }, [sticker.title, sticker.label]);
+  }, [sticker.label]);
 
   // animate the flying copy from one box to another (centre to centre, scaled to fit)
   const fly = useCallback((from: DOMRect, to: DOMRect, back: boolean) => {
