@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { addView } from "@/lib/visit";
 import styles from "./StickerCard.module.css";
 
 export type CardSticker = {
@@ -125,6 +126,13 @@ export default function StickerCard({
   const closeRef = useRef<HTMLButtonElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // time spent reading this sticker's story, for the receipt's "most viewed"
+  useEffect(() => {
+    const opened = Date.now();
+    const name = sticker.title ?? sticker.label;
+    return () => addView(name, Date.now() - opened);
+  }, [sticker.title, sticker.label]);
 
   // animate the flying copy from one box to another (centre to centre, scaled to fit)
   const fly = useCallback((from: DOMRect, to: DOMRect, back: boolean) => {

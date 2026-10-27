@@ -3,16 +3,13 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
-import { loadReceipt, mostViewedSlug, visitMinutes, type Receipt as R } from "@/lib/visit";
-import { projects } from "@/data/site";
+import { loadReceipt, mostViewed, saveReceipt, visitMinutes, type Receipt as R } from "@/lib/visit";
 import styles from "./Receipt.module.css";
-
-const CONTACT = "matthew.hope.yonatan@gmail.com";
 
 /**
  * The checkout receipt (Figma 146:168): a paper slip, centred on the page — the shop's name, a
- * "visit summary" box with everything that was in the basket, a note, and the most-viewed project
- * and time spent. It tilts under the pointer (Tilt), prints in on arrival, and can be downloaded
+ * "visit summary" box with everything that was in the basket, notes the visitor can type, the
+ * thing they looked at longest and their total time on the site. It tilts under the pointer (Tilt), prints in on arrival, and can be downloaded
  * as an image or shared. With nothing checked out (someone landed here directly) it still prints,
  * with an empty basket and a way back to the shelves.
  */
@@ -24,31 +21,18 @@ export default function Receipt() {
   useEffect(() => {
     const saved = loadReceipt();
     if (saved) setReceipt(saved);
-    else {
-      const slug = mostViewedSlug();
-      setReceipt({
-        items: [],
-        minutes: visitMinutes(),
-        mostViewed: projects.find((p) => p.slug === slug)?.title ?? null,
-        at: Date.now(),
-      });
-    }
+    else setReceipt({ items: [], minutes: visitMinutes(), mostViewed: mostViewed(), at: Date.now() });
   }, []);
 
   if (!receipt) return <main className={styles.page} />;
 
   const empty = receipt.items.length === 0;
-  const mailto =
-    `mailto:${CONTACT}?subject=${encodeURIComponent("My receipt from hope’s grocer")}` +
-    `&body=${encodeURIComponent(
-      "Hi Matthew,\n\n" +
-        (empty
-          ? "I stopped by hope’s grocer."
-          : "I picked up:\n" +
-            receipt.items.map((i) => `• ${i.name}${i.qty > 1 ? ` × ${i.qty}` : ""}`).join("\n")) +
-        "\n\nLet's talk!",
-    )}`;
-
+  const note = receipt.note ?? "";
+  const setNote = (v: string) => {
+    const next = { ...receipt, note: v };
+    setReceipt(next);
+    if (!empty) saveReceipt(next); // keeps the note through a refresh
+  };
   const snapshot = async () => {
     const node = slip.current;
     if (!node) return null;
@@ -127,19 +111,15 @@ export default function Receipt() {
 
                 <div className={styles.notes}>
                   <p className={styles.heading}>Notes</p>
-                  <p className={styles.note}>
-                    {empty
-                      ? "Nothing rung up yet. Take a look around the shelves — everything here is fresh from Matthew’s studio."
-                      : "Thanks for shopping at hope’s grocer! Everything here is fresh from Matthew’s studio. Want to talk about any of it? Say hi at "}
-                    {empty ? null : (
-                      <>
-                        <a className={styles.mail} href={mailto}>
-                          {CONTACT}
-                        </a>
-                        .
-                      </>
-                    )}
-                  </p>
+                  <textarea
+                    className={styles.note}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Add a note…"
+                    rows={3}
+                    maxLength={280}
+                    aria-label="Notes"
+                  />
                 </div>
 
                 <dl className={styles.summary}>

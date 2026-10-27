@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
-import { cartCatalog, projects } from "@/data/site";
-import { mostViewedSlug, saveReceipt, visitMinutes } from "@/lib/visit";
+import { cartCatalog } from "@/data/site";
+import { mostViewed, saveReceipt, visitMinutes } from "@/lib/visit";
 import { useCart } from "./CartContext";
 import SlideToCheckout from "./SlideToCheckout";
 import styles from "./CartDrawer.module.css";
@@ -214,11 +214,10 @@ export default function CartDrawer() {
               <SlideToCheckout
                 onConfirm={() => {
                   // ring it up: the receipt keeps what was in the basket, then the basket empties
-                  const slug = mostViewedSlug();
                   saveReceipt({
                     items: lines.map((l) => ({ name: l.item.name, qty: l.qty })),
                     minutes: visitMinutes(),
-                    mostViewed: projects.find((p) => p.slug === slug)?.title ?? null,
+                    mostViewed: mostViewed(),
                     at: Date.now(),
                   });
                   clear();

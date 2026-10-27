@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { grocersSelects, posterKey } from "@/data/site";
 import { useCart } from "@/components/cart/CartContext";
+import { addView } from "@/lib/visit";
 import pageStyles from "@/app/page.module.css";
 import styles from "./GrocersSelects.module.css";
 
@@ -168,6 +169,12 @@ function PosterView({
   const closeRef = useRef<HTMLButtonElement>(null);
   const [shown, setShown] = useState(false);
   const closing = useRef(false);
+
+  // time spent looking at this poster up close, for the receipt's "most viewed"
+  useEffect(() => {
+    const opened = Date.now();
+    return () => addView(item.title, Date.now() - opened);
+  }, [item.title]);
 
   // transform that puts the big poster exactly over its shelf slot
   const fromTransform = useCallback(() => {

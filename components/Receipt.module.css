@@ -119,19 +119,36 @@
   border-top: 2px solid var(--color-ink);
 }
 
+/* Notes: the visitor types here — set like the Figma note (Light 16/16) with no box of its own */
 .note {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
   max-width: calc(430 * var(--ru));
+  min-height: calc(48 * var(--ru));
   margin: calc(6 * var(--ru)) 0 0;
-  font-size: calc(16 * var(--ru));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: max(14px, calc(16 * var(--ru)));
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: -0.04em;
+  resize: none;
+  outline: none;
+  cursor: text;
 }
 
-.mail {
-  color: inherit;
+.note::placeholder {
+  color: rgba(40, 40, 40, 0.45);
+}
+
+.note:focus-visible {
   text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-decoration-color: rgba(40, 40, 40, 0.3);
+  text-underline-offset: 0.2em;
 }
 
 .summary {
