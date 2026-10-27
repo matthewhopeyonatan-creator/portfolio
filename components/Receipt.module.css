@@ -70,6 +70,7 @@
 
 /* ── entrance: it prints — fed down out of the top, revealed as it comes ── */
 .print {
+  position: relative;
   animation: printIn 1000ms var(--ease-intro) both;
 }
 
@@ -82,6 +83,70 @@
     /* open wide at the end so the tilt's corners and shadow are never clipped */
     clip-path: inset(-200px -200px -200px -200px);
     transform: none;
+  }
+}
+
+/* clear drawing: a small paper button just above the slip's right edge, out of the layout so the
+   receipt doesn't move; fades up once there's ink on the slip */
+.clear {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur-exit) var(--ease-out),
+    transform var(--dur-exit) var(--ease-out),
+    visibility 0s linear var(--dur-exit),
+    background-color var(--dur-hover) ease,
+    color var(--dur-hover) ease;
+}
+
+.clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.clearOn {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 350ms var(--ease-out),
+    transform 350ms var(--ease-out),
+    visibility 0s,
+    background-color var(--dur-hover) ease,
+    color var(--dur-hover) ease;
+}
+
+.clearOn:active {
+  transform: scale(0.97);
+  transition-duration: var(--dur-press);
+}
+
+.clear:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .clear:hover {
+    background: var(--color-ink);
+    color: var(--color-bg);
   }
 }
 
@@ -303,6 +368,10 @@
   }
   .tomato {
     animation: printFade 400ms ease both;
+  }
+  .clear,
+  .clearOn {
+    transform: none;
   }
   .actions {
     animation-duration: 200ms;

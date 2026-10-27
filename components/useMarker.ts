@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const INK = "#e82c2c"; // red felt-tip; drawn solid, the canvas itself is multiplied over the print (CSS)
 
@@ -12,6 +12,7 @@ const INK = "#e82c2c"; // red felt-tip; drawn solid, the canvas itself is multip
  */
 export default function useMarker() {
   const cv = useRef<HTMLCanvasElement | null>(null);
+  const [drawn, setDrawn] = useState(false); // anything on the slip yet (shows the clear button)
   const stroke = useRef<{ id: number; pts: { x: number; y: number; t: number }[]; w: number } | null>(null);
 
   const ctx = () => cv.current?.getContext("2d") ?? null;
@@ -64,6 +65,7 @@ export default function useMarker() {
     const base = (c.width / (c.clientWidth || 1)) * Math.max(5, c.clientWidth / 64); // ~7 css px, felt-tip
     const p = point(e);
     stroke.current = { id: e.pointerId, pts: [p], w: base };
+    setDrawn(true);
     // a dot, so a single press still leaves a mark
     const g = ctx();
     if (g) {
@@ -118,11 +120,13 @@ export default function useMarker() {
   const clear = () => {
     const c = cv.current;
     ctx()?.clearRect(0, 0, c?.width ?? 0, c?.height ?? 0);
+    setDrawn(false);
   };
 
   return {
     canvas,
     clear,
+    drawn,
     handlers: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp },
   };
 }

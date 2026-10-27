@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { RotateCcw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
@@ -100,6 +101,17 @@ export default function Receipt() {
           <Image className={`${styles.tomato} ${styles.tomatoLeft}`} src="/receipt/tomato-left.svg" alt="" width={903} height={815} unoptimized priority />
         </div>
         <div className={styles.print}>
+          {/* start the drawing over — sits just above the slip, only once something's been drawn */}
+          <button
+            type="button"
+            className={`${styles.clear} ${marker.drawn ? styles.clearOn : ""}`}
+            onClick={marker.clear}
+            tabIndex={marker.drawn ? 0 : -1}
+            aria-hidden={!marker.drawn}
+          >
+            <RotateCcw aria-hidden="true" strokeWidth={2} />
+            clear drawing
+          </button>
           <Tilt className={styles.tilt}>
             <div ref={slip} className={styles.slip} {...marker.handlers}>
               {/* the red marker people can draw on the receipt with (useMarker) */}
