@@ -78,6 +78,8 @@ const stickers: Record<
     y: number;
     peel: number;
     label: string;
+    /** what the receipt calls it under "most viewed" */
+    name: string;
     title: string;
     story?: string;
     lessons?: string[];
@@ -97,6 +99,7 @@ const stickers: Record<
       y: 258.56,
       peel: 106,
       label: "CrowdVolt #YCW24",
+      name: "CrowdVolt",
       title: "Shaping My Path",
       story:
         "Being my first in-person design internship made CrowdVolt a very special place to me, more so since I spent 9 months and 104 cups of coffee there. Working at a startup has taught me how to wear multiple hats and not to shy away when something is unfamiliar to me. Learning is always possible, and I owe it big time to a team so supportive of my growth. Whether I was creating event graphics or new product flows, no two days were the same. Truly a pivotal experience for me as a designer, and one that solidified my confidence in this industry.",
@@ -111,6 +114,7 @@ const stickers: Record<
       y: 463.77,
       peel: 154,
       label: "Born and raised Jakarta 0717",
+      name: "Jakarta",
       title: "My Forever Home",
       story:
         "I grew up in the bustling metropolis of Jakarta, Indonesia. This city is where I found my love for food and the arts, supported by the culture I am surrounded with. Jakarta and its people are what I built my values on. Warmth, humility, curiosity, and diligence are just some to mention. I’ve been moving around a lot, building my versatility, finding my footing wherever I am, but Jakarta will always be my home.",
@@ -125,6 +129,7 @@ const stickers: Record<
       y: 377.56,
       peel: 57,
       label: "Cornell Agriculture #2025",
+      name: "Cornell",
       inset: [22, 20], // its tilted corner otherwise touches the photo's corner
       title: "Shaping My Youth",
       story:
@@ -150,6 +155,7 @@ const stickers: Record<
       y: 363.16,
       peel: 116,
       label: "Fatboy supperclub NYC",
+      name: "Fatboy Supperclub",
       title: "Fighting Sunday Scaries",
       story:
         "Having a life-long interest in food and a curiosity for how people experience things, I find running front of house at a supper club to be a natural fit. Every month, my friends and I host a 24-person dinner, serving 5 courses and emulating the dining experience of eating at a friend\u2019s house. This has allowed me to excel in guest experience and hospitality, but at the end of the day, it is something I do for the sake of food and people.\n\nYou can be a guest too! More information [here](https://www.instagram.com/fatboy.supperclub/) :)",
@@ -164,6 +170,7 @@ const stickers: Record<
       y: 213.16,
       peel: 175,
       label: "Design meetup",
+      name: "Design Meetup",
       // the triangle only — its empty corners sit over the Fatboy sticker
       hit: "20.7% 72%, 24.2% 59%, 36.2% 24.2%, 38.7% 17.1%, 42.2% 13.5%, 46.9% 14.3%, 70.4% 41%, 83.6% 56.1%, 85.2% 61.5%, 82.4% 65.1%, 77.9% 66.1%, 38.7% 73.8%, 28.5% 75.8%, 22.8% 74.9%",
       title: "Design Meetup",
@@ -178,6 +185,7 @@ const stickers: Record<
       y: 184.87,
       peel: 128,
       label: "NYU design YR 2027",
+      name: "NYU",
       title: "Quarter Life Pivot",
       story:
         "After a series of existential crises and feeling a gap in my career, I decided to pursue my master’s degree in Integrated Design and Media at NYU to delve deeper into multimedia design. Being in a completely different field than I was for the past 21 years of my life was difficult, but I know that design is where I am meant to be. I got to meet the brightest minds in design, work on meaningful products in the startup space, and challenge myself in learning things I had never touched before. Most importantly, living in New York City has allowed me to unlock inhumane amounts of frozen yogurt.",

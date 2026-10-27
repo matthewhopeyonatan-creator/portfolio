@@ -86,39 +86,36 @@
   }
 }
 
-/* clear drawing: a small paper button just above the slip's right edge, out of the layout so the
-   receipt doesn't move; fades up once there's ink on the slip */
+/* clear drawing: an icon in the slip's top-right corner, above the ink; fades in once there's
+   something drawn */
 .clear {
   position: absolute;
-  right: 0;
-  bottom: calc(100% + 12px);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  top: calc(14 * var(--ru));
+  right: calc(14 * var(--ru));
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 32px;
   height: 32px;
-  padding: 0 12px;
-  border: 2px solid var(--color-ink);
-  background: var(--color-paper);
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--color-ink);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 400;
-  white-space: nowrap;
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(6px);
+  transform: scale(0.9);
   transition:
     opacity var(--dur-exit) var(--ease-out),
     transform var(--dur-exit) var(--ease-out),
     visibility 0s linear var(--dur-exit),
-    background-color var(--dur-hover) ease,
     color var(--dur-hover) ease;
 }
 
 .clear svg {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
+  transition: transform var(--dur-hover) var(--ease-out);
 }
 
 .clearOn {
@@ -129,7 +126,6 @@
     opacity 350ms var(--ease-out),
     transform 350ms var(--ease-out),
     visibility 0s,
-    background-color var(--dur-hover) ease,
     color var(--dur-hover) ease;
 }
 
@@ -139,14 +135,13 @@
 }
 
 .clear:focus-visible {
-  background: var(--color-ink);
-  color: var(--color-bg);
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .clear:hover {
-    background: var(--color-ink);
-    color: var(--color-bg);
+  .clearOn:hover svg {
+    transform: rotate(-60deg);
   }
 }
 
@@ -384,7 +379,8 @@
     animation: printFade 400ms ease both;
   }
   .clear,
-  .clearOn {
+  .clearOn,
+  .clearOn:hover svg {
     transform: none;
   }
   .actions {
