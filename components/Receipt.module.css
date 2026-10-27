@@ -39,12 +39,29 @@
 }
 
 .slip {
+  position: relative;
+  /* the whole slip is a drawing surface (useMarker) */
+  cursor: crosshair;
+  touch-action: none;
   box-sizing: border-box;
   width: 100%;
   min-height: calc(791 * var(--ru));
   padding: calc(35 * var(--ru)) calc(22 * var(--ru)) calc(52 * var(--ru));
   border: 2px solid var(--color-ink);
   background: var(--color-paper);
+}
+
+/* the marker's canvas, over everything on the slip; multiplied so the print shows through the red
+   like a felt-tip on paper */
+.ink {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.88;
 }
 
 .logo {

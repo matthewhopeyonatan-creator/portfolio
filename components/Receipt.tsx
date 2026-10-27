@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
+import useMarker from "@/components/useMarker";
 import { loadReceipt, mostViewed, saveReceipt, visitMinutes, type Receipt as R } from "@/lib/visit";
 import styles from "./Receipt.module.css";
 
@@ -16,6 +17,7 @@ import styles from "./Receipt.module.css";
 export default function Receipt() {
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
+  const marker = useMarker();
   const [shareNote, setShareNote] = useState("");
 
   useEffect(() => {
@@ -87,7 +89,9 @@ export default function Receipt() {
       <div className={styles.stage}>
         <div className={styles.print}>
           <Tilt className={styles.tilt}>
-            <div ref={slip} className={styles.slip}>
+            <div ref={slip} className={styles.slip} {...marker.handlers}>
+              {/* the red marker people can draw on the receipt with (useMarker) */}
+              <canvas ref={marker.canvas} className={styles.ink} aria-hidden="true" />
               <p className={styles.logo} aria-label="hope’s grocer">
                 <span className={styles.logoBold}>hope</span>
                 <span className={styles.logoApostrophe}>’</span>
@@ -103,7 +107,7 @@ export default function Receipt() {
                     receipt.items.map((i) => (
                       <li key={i.name} className={styles.item}>
                         <span>{i.name}</span>
-                        {i.qty > 1 ? <span className={styles.qty}>× {i.qty}</span> : null}
+                        <span className={styles.qty}>× {i.qty}</span>
                       </li>
                     ))
                   )}
@@ -130,7 +134,7 @@ export default function Receipt() {
                   <div className={styles.line}>
                     <dt>Total</dt>
                     <dd>
-                      ({receipt.minutes}) {receipt.minutes === 1 ? "minute" : "minutes"}
+                      {receipt.minutes} {receipt.minutes === 1 ? "minute" : "minutes"}
                     </dd>
                   </div>
                 </dl>

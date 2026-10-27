@@ -64,8 +64,24 @@ export default function Tilt({
       if (!raf) raf = requestAnimationFrame(tick);
     };
 
+    // while something is pressed on the card (someone drawing on it), it lies flat and still, so
+    // the paper doesn't swing out from under the pen
+    let held = false;
+    const down = (e: PointerEvent) => {
+      if ((e.target as HTMLElement).closest("textarea, button, a")) return;
+      held = true;
+      cancelAnimationFrame(raf);
+      raf = 0;
+      target.x = target.y = target.on = 0;
+      now.x = now.y = now.on = 0;
+      paint();
+    };
+    const up = () => {
+      held = false;
+    };
+
     const move = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
+      if (e.pointerType !== "mouse" || held) return;
       const r = f.getBoundingClientRect();
       target.x = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1));
       target.y = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1));
@@ -80,10 +96,16 @@ export default function Tilt({
     };
 
     paint();
+    f.addEventListener("pointerdown", down);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
     f.addEventListener("pointermove", move);
     f.addEventListener("pointerleave", leave);
     return () => {
       cancelAnimationFrame(raf);
+      f.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
       f.removeEventListener("pointermove", move);
       f.removeEventListener("pointerleave", leave);
     };
