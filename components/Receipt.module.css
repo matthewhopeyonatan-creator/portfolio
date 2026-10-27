@@ -1,5 +1,5 @@
 /* Figma 146:168 — the receipt: 522 × 791 white slip, 2px ink border · "hope's grocer" Atelier Fleur
-   Bold 36, centred, 37 from the top · "VISIT SUMMARY" Regular 24 (−1.2 tracking) at (23, 102) ·
+   Bold 36, centred, 37 from the top · "ORDERS" Regular 24 (−1.2 tracking) at (23, 102) ·
    a 474-wide 2px box from y150: the basket list (Regular 20, −1 tracking, rows 4 apart) · a NOTES
    band from y495 (label Regular 24, note Light 16/16) · a band from y610 with MOST VIEWED / TOTAL
    (Regular 24, values right) · box ends 54 above the slip's bottom. Under it, 20 below: two 184 × 42
@@ -12,13 +12,60 @@
   min-height: calc(100svh - var(--header-h));
   padding: 48px var(--gutter);
   color: var(--color-ink);
+  /* the tomatoes spill past the window; never let them make it scroll sideways */
+  overflow: clip;
 }
 
 .stage {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: calc(20 * var(--ru));
   width: calc(522 * var(--ru));
+}
+
+/* ── background tomatoes: Figma render boxes, measured from the slip's top-left (slip at 620,100) ── */
+.tomatoes {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.tomato {
+  position: absolute;
+  height: auto;
+  max-width: none;
+  animation: tomatoIn 1400ms var(--ease-intro) both;
+}
+
+.tomatoBack {
+  left: calc(328.68 * var(--ru));
+  top: calc(15.74 * var(--ru));
+  width: calc(621.37 * var(--ru));
+}
+
+.tomatoRight {
+  left: calc(366.82 * var(--ru));
+  top: calc(228.84 * var(--ru));
+  width: calc(718.91 * var(--ru));
+  animation-delay: 90ms;
+}
+
+/* padded 60 on the left so its blur isn't cut */
+.tomatoLeft {
+  left: calc(-680 * var(--ru));
+  top: calc(122.44 * var(--ru));
+  width: calc(902.65 * var(--ru));
+  animation-delay: 180ms;
+}
+
+@keyframes tomatoIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-24 * var(--ru)));
+  }
 }
 
 /* ── entrance: it prints — fed down out of the top, revealed as it comes ── */
@@ -142,7 +189,6 @@
   box-sizing: border-box;
   width: 100%;
   max-width: calc(430 * var(--ru));
-  min-height: calc(48 * var(--ru));
   margin: calc(6 * var(--ru)) 0 0;
   padding: 0;
   border: 0;
@@ -254,6 +300,9 @@
     from {
       opacity: 0;
     }
+  }
+  .tomato {
+    animation: printFade 400ms ease both;
   }
   .actions {
     animation-duration: 200ms;

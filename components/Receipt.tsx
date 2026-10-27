@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
@@ -9,7 +10,7 @@ import styles from "./Receipt.module.css";
 
 /**
  * The checkout receipt (Figma 146:168): a paper slip, centred on the page — the shop's name, a
- * "visit summary" box with everything that was in the basket, notes the visitor can type, the
+ * "orders" box with everything that was in the basket, notes the visitor can type, the
  * thing they looked at longest and their total time on the site. It tilts under the pointer (Tilt), prints in on arrival, and can be downloaded
  * as an image or shared. With nothing checked out (someone landed here directly) it still prints,
  * with an empty basket and a way back to the shelves.
@@ -34,6 +35,11 @@ export default function Receipt() {
     const next = { ...receipt, note: v };
     setReceipt(next);
     if (!empty) saveReceipt(next); // keeps the note through a refresh
+  };
+  // the note is one line until there's more to say, so the rest of the band stays free to draw on
+  const fitNote = (t: HTMLTextAreaElement) => {
+    t.style.height = "auto";
+    t.style.height = `${t.scrollHeight}px`;
   };
   const snapshot = async () => {
     const node = slip.current;
@@ -87,6 +93,12 @@ export default function Receipt() {
     <main className={styles.page}>
       <h1 className="visually-hidden">Your receipt</h1>
       <div className={styles.stage}>
+        {/* blurred tomatoes behind the slip (Figma 146:168), placed relative to it in receipt px */}
+        <div className={styles.tomatoes} aria-hidden="true">
+          <Image className={`${styles.tomato} ${styles.tomatoBack}`} src="/receipt/tomato-back.svg" alt="" width={622} height={645} unoptimized priority />
+          <Image className={`${styles.tomato} ${styles.tomatoRight}`} src="/receipt/tomato-right.svg" alt="" width={719} height={674} unoptimized priority />
+          <Image className={`${styles.tomato} ${styles.tomatoLeft}`} src="/receipt/tomato-left.svg" alt="" width={903} height={815} unoptimized priority />
+        </div>
         <div className={styles.print}>
           <Tilt className={styles.tilt}>
             <div ref={slip} className={styles.slip} {...marker.handlers}>
@@ -97,7 +109,7 @@ export default function Receipt() {
                 <span className={styles.logoApostrophe}>’</span>
                 <span className={styles.logoBold}>s grocer</span>
               </p>
-              <p className={styles.heading}>Visit summary</p>
+              <p className={styles.heading}>Orders</p>
 
               <div className={styles.box}>
                 <ul className={styles.items}>
@@ -118,9 +130,15 @@ export default function Receipt() {
                   <textarea
                     className={styles.note}
                     value={note}
-                    onChange={(e) => setNote(e.target.value)}
+                    onChange={(e) => {
+                      setNote(e.target.value);
+                      fitNote(e.target);
+                    }}
+                    ref={(n) => {
+                      if (n) fitNote(n);
+                    }}
                     placeholder="Add a note…"
-                    rows={3}
+                    rows={1}
                     maxLength={280}
                     aria-label="Notes"
                   />
