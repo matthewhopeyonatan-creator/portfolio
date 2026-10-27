@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef } from "react";
 import { cartCatalog } from "@/data/site";
 import { useCart } from "./CartContext";
+import SlideToCheckout from "./SlideToCheckout";
 import styles from "./CartDrawer.module.css";
 
 const CONTACT = "matthew.hope.yonatan@gmail.com";
@@ -218,9 +219,11 @@ export default function CartDrawer() {
 
           <div className={styles.foot}>
             {lines.length ? (
-              <a className={styles.checkout} href={checkoutHref}>
-                checkout
-              </a>
+              <SlideToCheckout
+                onConfirm={() => {
+                  window.location.href = checkoutHref;
+                }}
+              />
             ) : (
               <Link
                 className={styles.checkout}

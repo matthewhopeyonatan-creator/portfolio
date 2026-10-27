@@ -1,0 +1,131 @@
+/* Slide to check out — in the cart's own style: the same box as the old checkout button (2px ink
+   border, square, page colour, 78 tall, Medium 32 label) with an ink handle inside. The ground the
+   handle has crossed is the same ink, so handle + trail read as one block; it sits above the label
+   and wipes it. On commit the ink fills the box and the page-colour "checking out" sits on it. */
+.slide {
+  width: 100%;
+}
+
+.track {
+  position: relative;
+  height: max(44px, calc(78 * var(--cu)));
+  border: 2px solid var(--color-ink);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  overflow: hidden;
+  /* the drag is the control; the browser mustn't treat it as a pan */
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.say {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: max(17px, calc(32 * var(--cu)));
+  font-weight: 500;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* the crossed ground: same ink as the handle, above the label so it wipes it */
+.wash {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  bottom: 4px;
+  background: var(--color-ink);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.grip {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  bottom: 4px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: var(--color-ink);
+  color: var(--color-bg);
+  cursor: grab;
+  z-index: 2;
+  /* placed by a motion value — nothing here may transition transform */
+  transition: none;
+}
+
+.grip svg {
+  width: 46%;
+  height: 46%;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+.grip:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+.track[data-held] .grip {
+  cursor: grabbing;
+}
+
+/* a small nudge that says "this way" */
+@media (hover: hover) and (pointer: fine) {
+  .track:not([data-held]):not([data-done]) .grip:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+/* confirmed: page-colour words on the filled ink */
+.done {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-bg);
+  font-size: max(17px, calc(32 * var(--cu)));
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur-exit) var(--ease-out),
+    transform var(--dur-exit) var(--ease-out);
+}
+
+.done svg {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.track[data-done] .done {
+  opacity: 1;
+  transform: none;
+  transition-duration: 300ms;
+  transition-delay: 120ms;
+}
+
+.track[data-done] .grip {
+  cursor: default;
+}
+
+/* the arrow has done its job */
+.track[data-done] .grip svg {
+  opacity: 0;
+  transition: opacity 160ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .done {
+    transform: none;
+  }
+}

@@ -26,7 +26,9 @@ implements his designs faithfully.
 ## Stack
 
 - Next.js (App Router) + React + TypeScript, **CSS Modules** (one `.module.css` per component).
-  No Tailwind, no UI library, no motion library.
+  No Tailwind, no UI library. `framer-motion` is installed for gesture-driven motion only (the
+  cart's slide-to-checkout, `components/cart/SlideToCheckout.tsx`); everything else stays CSS.
+  `lucide-react` is available for small UI icons (keep Figma's own SVGs where they exist).
 - Smooth scrolling: **Lenis** (`components/SmoothScroll.tsx`). Don't add CSS `scroll-behavior`.
 - Scripts: `npm run dev`, `npm run build`, `npm run start`. Always `npm run build` before shipping.
 
@@ -50,7 +52,7 @@ implements his designs faithfully.
     popup, which can expand to a full-screen case study (`?project=slug` restores it on refresh)
   - `GrocersSelects` — poster shelf; click zooms a close-up (`PosterView`) and adds to cart
   - `Catalog` — aisle list; each aisle opens a popup addressed by hash (`/catalog#graphics`)
-  - `cart/` — `CartContext` (localStorage) + `CartDrawer`
+  - `cart/` — `CartContext` (localStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to email the cart)
   - `PastExperiences` — two columns of dates · role · company rows under 2px rules
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|ledger"` entrances, staggered by `--i`
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating
