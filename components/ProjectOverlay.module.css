@@ -402,7 +402,7 @@
 }
 
 .section .cvCallout {
-  font-size: max(24px, calc(48 * var(--pu)));
+  font-size: max(24px, calc(40 * var(--pu)));
   font-weight: 400;
   line-height: 1.0417; /* 50 / 48 */
   letter-spacing: -0.03em;
