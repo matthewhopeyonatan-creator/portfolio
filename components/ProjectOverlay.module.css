@@ -766,7 +766,7 @@
 }
 
 /* Impacts (Figma 166:2459): a 48 heading, then 2px ink r24 boxes 16 apart, 24/32 padding,
-   Regular 36/35 · the two lists sit 48 apart · the closing lines 60 under them */
+   Light 36/35 · the two lists sit 48 apart · the closing lines 60 under them */
 .cvWins {
   display: flex;
   flex-direction: column;
@@ -786,7 +786,7 @@
 .section .cvWin p {
   margin: 0;
   font-size: max(18px, calc(36 * var(--pu)));
-  font-weight: 400;
+  font-weight: 300;
   line-height: 0.9722; /* 35 / 36 */
   letter-spacing: -0.03em;
 }
