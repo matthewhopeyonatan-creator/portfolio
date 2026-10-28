@@ -218,7 +218,11 @@ function Block({ b }: { b: CaseBlock }) {
       return <Figures b={b} />;
     case "blockers":
       return (
-        <div className={styles.cvBlockers}>
+        <div
+          className={styles.cvBlockers}
+          data-count={b.items.length}
+          data-small={b.small ? "" : undefined}
+        >
           {b.items.map((it) => (
             <div key={it.label} className={styles.cvBlocker}>
               <p className={styles.cvBlockerHead}>

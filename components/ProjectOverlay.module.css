@@ -796,6 +796,17 @@
   text-align: center;
 }
 
+/* four (Shmood's research insights) sit two to a row */
+.cvBlockers[data-count="4"] {
+  flex-wrap: wrap;
+  row-gap: calc(24 * var(--pu));
+  column-gap: calc(24 * var(--pu));
+}
+
+.cvBlockers[data-count="4"] > .cvBlocker {
+  flex: 1 1 calc(50% - 12 * var(--pu));
+}
+
 .section .cvBlockerHead {
   display: flex;
   flex-direction: column;
@@ -817,6 +828,15 @@
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.03em;
+}
+
+.section .cvBlockers[data-small] .cvBlockerText {
+  font-size: max(15px, calc(24 * var(--pu)));
+  line-height: 1.25;
+}
+
+.cvBlockers[data-small] .cvBlocker {
+  min-height: 0;
 }
 
 /* Figma 135:252: the sketch (645 × 470, r24) beside three 571-wide cards that share its height,
@@ -1002,6 +1022,9 @@
   }
   .cvBoxes {
     grid-auto-flow: row;
+  }
+  .cvBlockers[data-count="4"] > .cvBlocker {
+    flex-basis: 100%;
   }
 }
 

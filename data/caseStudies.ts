@@ -37,6 +37,8 @@ export type CaseBlock =
   | {
       type: "blockers";
       items: { label: string; title: string; text: string; w: number }[];
+      /** a longer line per card: set at the 24px body size instead of 36 */
+      small?: boolean;
     }
   // a photo beside a stack of bordered cards (bold title, big light line), caption under (Figma 135:252)
   | {
@@ -145,17 +147,33 @@ const shmood: CaseSection[] = [
             body: "We wanted to gain insights on the how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
           },
           {
-            type: "figures",
-            rise: true,
+            type: "blockers",
+            small: true,
             items: [
-              fig(
-                img(
-                  "05",
-                  1504,
-                  604,
-                  "Four research insights: feedback is scattered, communication is key, emphasizing UVP, ensuring trust in AI",
-                ),
-              ),
+              {
+                label: "Insight 1",
+                title: "Feedback is Scattered",
+                text: "Designers expressed frustration in how unorganized and inefficient the feedback process can be. With so many channels of communication, feedback is lost, and designs are stuck in limbo.",
+                w: 560,
+              },
+              {
+                label: "Insight 2",
+                title: "Communication is Key",
+                text: "“Can you make it pop?” -- a designer’s worst nightmare in the form of feedback. Clients often struggle articulating what they want-- this communication issue often derails project progress.",
+                w: 560,
+              },
+              {
+                label: "Insight 3",
+                title: "Emphasizing UVP",
+                text: "What does it take for designers to adopt a completely new workflow and set of tools? While challenging, the key is communicating UVP. Shmood’s onboarding process must be compelling and personalized to connect with new users and gain loyalty.",
+                w: 560,
+              },
+              {
+                label: "Insight 4",
+                title: "Ensuring Trust in AI",
+                text: "Designers are skeptical about AI generating creative work, citing concerns over style, misinterpretation, and ethics. However, they are open to using AI for the tedious stuff, like organizing and synthesizing feedback and keeping track of deliverables.",
+                w: 560,
+              },
             ],
           },
         ],
