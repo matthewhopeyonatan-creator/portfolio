@@ -284,9 +284,12 @@ export const pastExperiences: {
   { org: "LOKO", role: "Graphics Chair", dates: "Aug 2023 – May 2025", logo: "/experience/loko.png", blurb: "Cornell University’s K-hip-hop and K-pop dance team, drawing 500 attendees to its annual showcase" },
 ];
 
-/** Catalog page aisles (Figma 122:925). Each opens its own popup; `#slug` links straight to one. */
+/**
+ * Catalog page aisles (Figma 122:925). Each opens its own popup; `#slug` links straight to one.
+ * `preview` is the picture that rides beside the cursor while it is over the aisle (Figma 166:3428).
+ */
 export const catalogAisles = [
-  { slug: "graphics", label: "Graphics" },
+  { slug: "graphics", label: "Graphics", preview: "/catalog/previews/graphics.webp" },
   { slug: "florals", label: "Florals" },
   { slug: "cooking", label: "Cooking" },
   { slug: "events", label: "Events" },

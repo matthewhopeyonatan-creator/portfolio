@@ -128,6 +128,72 @@
   }
 }
 
+/* ── hover preview (Figma 166:3428): a 450 × 253 card, r24, the picture over #534444 with a
+   faint shade up from the bottom, sitting just right of the cursor. Mouse only. ── */
+.preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40; /* over the page, under the navbar (50) and the aisle popups (45) */
+  pointer-events: none;
+}
+
+.previewCard {
+  position: relative;
+  width: max(300px, calc(450 * var(--u)));
+  aspect-ratio: 450 / 253;
+  margin-left: 24px; /* clear of the cursor */
+  overflow: hidden;
+  border-radius: max(16px, calc(24 * var(--u)));
+  background: #534444;
+  opacity: 0;
+  transform: scale(0.94);
+  transform-origin: left top; /* it grows out of the cursor */
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+.previewCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(40, 40, 40, 0.2) 24.9%, rgba(102, 102, 102, 0));
+}
+
+.previewCard img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+}
+
+.previewCard img[data-on] {
+  opacity: 1;
+}
+
+.preview[data-show] .previewCard {
+  opacity: 1;
+  transform: none;
+  transition-duration: 260ms;
+}
+
+@media not ((hover: hover) and (pointer: fine)) {
+  .preview {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .previewCard,
+  .preview[data-show] .previewCard {
+    transform: none;
+  }
+}
+
 /* ── aisle list ── */
 .aisles {
   position: relative;
