@@ -345,15 +345,18 @@ const shmood: CaseSection[] = [
             type: "figures",
             rise: true,
             items: [
-              fig(
-                img(
-                  "14",
-                  406,
-                  254,
-                  "Shmood ID card, back: Early Access Member",
-                ),
-              ),
-              fig(img("15", 406, 254, "Shmood ID card, front, with a lemon")),
+              fig({
+                src: "/projects/shmood/ids/front.svg",
+                w: 1085,
+                h: 676,
+                alt: "Shmood ID card, front: Name Name, Early Access Member",
+              }),
+              fig({
+                src: "/projects/shmood/ids/back.svg",
+                w: 1395,
+                h: 869,
+                alt: "Shmood ID card, back: Shmood logo, name, join date and a lemon",
+              }),
             ],
           },
         ],

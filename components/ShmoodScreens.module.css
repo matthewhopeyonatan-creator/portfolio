@@ -13,6 +13,10 @@
   overflow: hidden;
   border-radius: calc(24 * var(--pu));
   background: #f3f1eb;
+  /* keep the cards' lift, z-index and shadows inside the screen — never over the top bar */
+  isolation: isolate;
+  contain: paint;
+  clip-path: inset(0 round calc(24 * var(--pu)));
 }
 
 .canvas {
