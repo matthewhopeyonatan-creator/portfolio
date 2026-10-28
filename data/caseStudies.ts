@@ -36,6 +36,8 @@ export type CaseBlock =
       frictionAfter?: number[];
       /** loop: dots start as outlines and fill in one by one; these steps turn red (skipped) */
       skip?: number[];
+      /** loop the ball along the steps even with none skipped */
+      loop?: boolean;
     }
   // images with captions under them, side by side when more than one
   | { type: "figures"; items: { image: CaseImage; caption?: string }[] }
@@ -567,6 +569,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "flow",
             steps: ["Seller’s Ticketmaster Account", "CrowdVolt Inventory", "Buyer’s Ticketmaster Account"],
+            loop: true,
           },
           {
             type: "blockers",

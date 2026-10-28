@@ -10,7 +10,8 @@ import styles from "./TicketmasterPhones.module.css";
  *    1 batch → 2 batches → 3 batches → custom, each with a little tap.
  *  - explore-6 (Figma 137:757): batch 2's "+" is tapped and a ticket moves down from batch 1 into
  *    batch 2, until they're even; then "−" sends them back up, and it repeats.
- * The final-design screens are static. Everything is sized in --pu (1 Figma px in the popup).
+ * The final-design screens loop too: the choice screen clicks through its three choices, and the
+ * delivery screen sends its ticket off. Everything is sized in --pu (1 Figma px in the popup).
  * Both loops only run while they're on screen; with reduced motion they hold their Figma frame.
  */
 
@@ -311,7 +312,7 @@ function Explore6() {
   );
 }
 
-// ── final design screens (static) ─────────────────────────────────────────────────────────
+// ── final design screens ─────────────────────────────────────────────────────────
 function FinalChrome({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${styles.phone} ${styles.final}`}>
@@ -366,65 +367,108 @@ function FinalChrome({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * The final choice screen clicks through its three choices, and each shows what it means with a
+ * small move on its tickets: Default — they lift one after another (any amount can go); Don't
+ * leave me with one ticket — the odd orange one shakes its head; All or nothing — the whole row
+ * lifts as one.
+ */
+const FINAL_OPTIONS = [
+  { label: "Default", caption: "Anyone can buy any amount of tickets" },
+  { label: "Don’t leave me with one ticket", caption: "Auto-groups so you’re never left with one ticket" },
+  { label: "All or nothing", caption: "Buyer can only take all tickets at once" },
+];
+
 function FinalSell() {
+  // nothing picked in the Figma frame (-1); the loop picks each in turn
+  const [sel, setSel] = useState(-1);
+  const [tap, setTap] = useState(0);
+  const ref = useLoop(
+    (at) => {
+      const HOLD = 2000;
+      [0, 1, 2].forEach((k, i) =>
+        at(i * HOLD + 500, () => {
+          setSel(k);
+          setTap((t) => t + 1);
+        }),
+      );
+      at(3 * HOLD + 500, () => setSel(-1));
+      return 3 * HOLD + 1100;
+    },
+    () => setSel(-1),
+  );
+  const tickets = (k: number) =>
+    [0, 1, 2, 3, 4, 5].map((i) => {
+      const t = <OutlineTicket orange={k === 1 && i === 5} />;
+      const lift = (
+        <span key={i} className={styles.fLift} style={{ ["--i" as string]: i }}>
+          {t}
+        </span>
+      );
+      return k === 0 ? (
+        <span key={i} className={styles.fCell}>
+          {i ? <span className={styles.fDivider} aria-hidden="true" /> : null}
+          {lift}
+        </span>
+      ) : (
+        lift
+      );
+    });
   return (
-    <FinalChrome>
-      <p className={styles.finalTitle}>How do you want to sell your tickets?</p>
-      <div className={styles.fOption}>
-        <div className={styles.optionHead}>
-          <Radio />
-          <span className={styles.optionLabel}>Default</span>
-        </div>
-        <div className={`${styles.fRow} ${styles.fRowSplit}`}>
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <span key={i} className={styles.fCell}>
-              {i ? <span className={styles.fDivider} aria-hidden="true" /> : null}
-              <OutlineTicket />
-            </span>
-          ))}
-        </div>
-        <p className={styles.caption}>Anyone can buy any amount of tickets</p>
-      </div>
-      <div className={`${styles.fOption} ${styles.fOptionLight}`}>
-        <div className={styles.optionHead}>
-          <Radio />
-          <span className={styles.optionLabel}>Don’t leave me with one ticket</span>
-        </div>
-        <div className={styles.fRow}>
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <OutlineTicket key={i} orange={i === 5} />
-          ))}
-        </div>
-        <p className={styles.caption}>Auto-groups so you’re never left with one ticket</p>
-      </div>
-      <div className={styles.fOption}>
-        <div className={styles.optionHead}>
-          <Radio />
-          <span className={styles.optionLabel}>All or nothing</span>
-        </div>
-        <div className={`${styles.fRow} ${styles.fRowTight}`}>
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <OutlineTicket key={i} />
-          ))}
-        </div>
-        <p className={styles.caption}>Buyer can only take all tickets at once</p>
-      </div>
-    </FinalChrome>
+    <div ref={ref}>
+      <FinalChrome>
+        <p className={styles.finalTitle}>How do you want to sell your tickets?</p>
+        {FINAL_OPTIONS.map((o, k) => (
+          <div
+            key={o.label}
+            data-demo={k}
+            className={`${styles.fOption} ${k === 1 ? styles.fOptionLight : ""} ${sel === k ? styles.fOn : ""}`}
+          >
+            <div className={styles.optionHead}>
+              <span className={styles.radioWrap}>
+                <Radio on={sel === k} />
+                {sel === k ? <span key={tap} className={styles.tapRing} aria-hidden="true" /> : null}
+              </span>
+              <span className={styles.optionLabel}>{o.label}</span>
+            </div>
+            <div
+              className={`${styles.fRow} ${k === 0 ? styles.fRowSplit : ""} ${k === 2 ? styles.fRowTight : ""}`}
+            >
+              {tickets(k)}
+            </div>
+            <p className={styles.caption}>{o.caption}</p>
+          </div>
+        ))}
+      </FinalChrome>
+    </div>
   );
 }
 
+/** the delivery screen's ticket is sent off to the right, then the next one slides in */
 function FinalDelivery() {
+  const [round, setRound] = useState(0);
+  const ref = useLoop(
+    (at) => {
+      at(900, () => setRound((r) => r + 1));
+      return 3600;
+    },
+    () => setRound(0),
+  );
   return (
-    <FinalChrome>
-      <p className={styles.finalTitle}>Ticket Delivery</p>
-      <div className={styles.delivery}>
-        <OutlineTicket />
-      </div>
-      <p className={styles.deliveryNote}>
-        <b>You’ll transfer your ticket to us on Ticketmaster</b> in the final steps before going live.{" "}
-        <b>Your ticket stays in your account until it sells. Once sold, we’ll handle the transfer.</b>
-      </p>
-    </FinalChrome>
+    <div ref={ref}>
+      <FinalChrome>
+        <p className={styles.finalTitle}>Ticket Delivery</p>
+        <div className={styles.delivery}>
+          <span key={round} className={round ? styles.sending : ""}>
+            <OutlineTicket />
+          </span>
+        </div>
+        <p className={styles.deliveryNote}>
+          <b>You’ll transfer your ticket to us on Ticketmaster</b> in the final steps before going live.{" "}
+          <b>Your ticket stays in your account until it sells. Once sold, we’ll handle the transfer.</b>
+        </p>
+      </FinalChrome>
+    </div>
   );
 }
 

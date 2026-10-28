@@ -227,10 +227,11 @@ function Block({ b }: { b: CaseBlock }) {
 /**
  * Step diagram. With `skip`, it plays on a loop: every dot starts as a black outline, then they
  * fill in one after another (black), and a skipped step fills red instead — so the flow reads as
- * steps where that one gets jumped over. Holds a beat, resets, repeats.
+ * steps where that one gets jumped over. Holds a beat, resets, repeats. With `loop` and nothing
+ * skipped, the ball simply carries left to right through every stop.
  */
 function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
-  const animated = !!b.skip?.length;
+  const animated = !!b.skip?.length || !!b.loop;
   const n = b.steps.length;
   const ref = useRef<HTMLDivElement>(null);
   const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
