@@ -29,7 +29,7 @@ type Img = { src: string; w: number; h: number; alt: string };
  * reaches the screen: the posters rise a little and fade up out of a soft blur. A tile waits for its
  * image (fetched early, well before the grid scrolls in) so it never comes in empty.
  */
-function Gallery({ images }: { images: Img[] }) {
+function Gallery({ images, gap }: { images: Img[]; gap?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const rows = ref.current?.querySelectorAll<HTMLElement>("[data-row]");
@@ -68,7 +68,11 @@ function Gallery({ images }: { images: Img[] }) {
     if (el?.complete && el.naturalWidth) el.parentElement!.dataset.loaded = "";
   };
   return (
-    <div ref={ref} className={styles.cvGallery}>
+    <div
+      ref={ref}
+      className={styles.cvGallery}
+      style={gap ? ({ ["--gallery-gap" as string]: gap } as React.CSSProperties) : undefined}
+    >
       {rows.map((row, r) => (
         <div key={r} className={styles.cvGalleryRow} data-row="">
           {row.map((im) => (
@@ -285,7 +289,28 @@ function Block({ b }: { b: CaseBlock }) {
     case "phones":
       return <TicketmasterPhones screens={b.screens} />;
     case "gallery":
-      return <Gallery images={b.images} />;
+      return <Gallery images={b.images} gap={b.gap} />;
+    case "wins":
+      return (
+        <div className={styles.cvWins}>
+          <p className={styles.cvCallout}>{b.title}</p>
+          {b.items.map((t) => (
+            <div key={t} className={styles.cvWin}>
+              <p>{t}</p>
+            </div>
+          ))}
+        </div>
+      );
+    case "statement":
+      return (
+        <div className={styles.cvStatement}>
+          {b.lines.map((t) => (
+            <p key={t} className={styles.cvCallout}>
+              {t}
+            </p>
+          ))}
+        </div>
+      );
     case "placeholder":
       return (
         <>

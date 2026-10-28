@@ -720,7 +720,7 @@
 .cvGallery {
   display: flex;
   flex-direction: column;
-  gap: calc(42 * var(--pu));
+  gap: calc(var(--gallery-gap, 42) * var(--pu)); /* Play's photos: 60 */
   margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
 }
 
@@ -763,6 +763,39 @@
     filter: none;
     transition: opacity 400ms var(--ease-out);
   }
+}
+
+/* Impacts (Figma 166:2459): a 48 heading, then 2px ink r24 boxes 16 apart, 24/32 padding,
+   Regular 36/35 · the two lists sit 48 apart · the closing lines 60 under them, a blank line apart */
+.cvWins {
+  display: flex;
+  flex-direction: column;
+  gap: calc(16 * var(--pu));
+}
+
+.cvWins + .cvWins {
+  margin-top: calc(24 * var(--pu)); /* + the group's 24 = 48 */
+}
+
+.cvWin {
+  padding: calc(24 * var(--pu)) calc(32 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
+.section .cvWin p {
+  margin: 0;
+  font-size: max(18px, calc(36 * var(--pu)));
+  font-weight: 400;
+  line-height: 0.9722; /* 35 / 36 */
+  letter-spacing: -0.03em;
+}
+
+.cvStatement {
+  display: flex;
+  flex-direction: column;
+  gap: calc(50 * var(--pu));
+  margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
 }
 
 /* Figma 131:232: three 425 × 319 cards, 2px ink r24, spread across · "BLOCKER n" Bold 20/25 over

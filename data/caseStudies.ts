@@ -53,7 +53,11 @@ export type CaseBlock =
   // phone screens built in code, in a bordered frame (components/TicketmasterPhones.tsx)
   | { type: "phones"; screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[] }
   // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
-  | { type: "gallery"; images: CaseImage[] }
+  | { type: "gallery"; images: CaseImage[]; gap?: number }
+  // a 48px heading over a stack of bordered 36px lines (Figma 166:2459)
+  | { type: "wins"; title: string; items: string[] }
+  // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
+  | { type: "statement"; lines: string[] }
   // a not-yet-written section
   | { type: "placeholder" };
 
@@ -710,8 +714,80 @@ const crowdvolt: CaseSection[] = [
       },
     ],
   },
-  { name: "Play", blocks: [{ type: "placeholder" }] },
-  { name: "Impacts", blocks: [{ type: "placeholder" }] },
+  // Figma 166:2428
+  {
+    name: "Play",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Play",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "The design team, myself and my supervisor, spearheaded a 300 RSVP app launch party, from ideation to execution.",
+          },
+        ],
+      },
+      {
+        type: "gallery",
+        gap: 60,
+        images: [
+          "CrowdVolt neon sign over the bar, lit by rows of candles",
+          "The launch party bar under hanging plants and the CrowdVolt sign",
+          "CrowdVolt merch rail under red light",
+          "Two guests taking a mirror selfie under the pink CrowdVolt neon",
+          "Red-lit entrance hallway with a glowing mirror",
+          "Guests in the dark watching a lit-up screen",
+        ].map((alt, i) => ({
+          src: `/projects/crowdvolt/play/p0${i + 1}.webp`,
+          w: 1080,
+          h: 1440,
+          alt,
+        })),
+      },
+    ],
+  },
+  {
+    name: "Impacts",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Impacts",
+        accent: true,
+        blocks: [
+          {
+            type: "wins",
+            title: "Personal Wins",
+            items: [
+              "My first design internship, extending all the way to 9 months",
+              "Learned how to deliver my designs through front-end code",
+              "Conquered my fear of motion graphics in After Effects and Figma Motion",
+            ],
+          },
+          {
+            type: "wins",
+            title: "Impacts",
+            items: [
+              "Decreased user confusion through 3 different owned flows",
+              "Increased social media followers by 10,000 with over 1 million engagements",
+              "Redesigned the empty state UI for the entirety of the web and app product",
+              "Helped shape the flow of design critique and design workflows in the company",
+            ],
+          },
+        ],
+      },
+      {
+        type: "statement",
+        lines: [
+          "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
+          "EVERYONE DOWNLOAD THE APP!",
+        ],
+      },
+    ],
+  },
 ];
 
 export const caseStudies: Record<string, CaseSection[]> = { shmood, crowdvolt };
