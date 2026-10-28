@@ -1,0 +1,550 @@
+/* CrowdVolt's Ticketmaster batching screens (Figma 129:151 / 152:337). Sizes are Figma px × --pu
+   (set by the case-study popup). The screens are CrowdVolt's dark UI in Space Grotesk; their
+   "black" is a hair off pure black, per the site's rule. */
+
+/* the 2px ink frame they sit in: 24 / 40 padding, phones 120 apart, centred */
+.frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(120 * var(--pu));
+  padding: calc(40 * var(--pu)) calc(24 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
+.phone {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: calc(8 * var(--pu));
+  overflow: hidden;
+  border-radius: calc(24 * var(--pu));
+  background: #050505;
+  color: #fff;
+  font-family: var(--font-cv), "Space Grotesk", sans-serif;
+  font-weight: 500;
+  letter-spacing: calc(-0.32 * var(--pu));
+  text-align: left;
+}
+
+/* the popup styles every paragraph; put CrowdVolt's back */
+.frame .phone p {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: calc(-0.32 * var(--pu));
+}
+
+.explore {
+  width: calc(397 * var(--pu));
+  padding: calc(24 * var(--pu));
+}
+
+.explore6 {
+  width: calc(402 * var(--pu));
+  padding: calc(17 * var(--pu)) calc(24 * var(--pu));
+}
+
+.frame .phone .qty {
+  font-size: calc(16 * var(--pu));
+  line-height: calc(24 * var(--pu));
+}
+
+.frame .phone .desc {
+  width: calc(350.414 * var(--pu));
+  color: #adadad;
+  font-size: calc(14 * var(--pu));
+  font-weight: 400;
+  line-height: calc(20 * var(--pu));
+}
+
+.frame .phone .ask {
+  color: #f2f2f2;
+  font-size: calc(17.152 * var(--pu));
+  font-weight: 700;
+  line-height: calc(25.728 * var(--pu));
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* an option card: 1px #474747, r12, 12 in; picked = indigo fill + 2px indigo edge (the extra
+   pixel is an inset shadow so the card never changes size) */
+.option {
+  display: flex;
+  flex-direction: column;
+  gap: calc(8 * var(--pu));
+  padding: calc(12 * var(--pu));
+  border: 1px solid #474747;
+  border-radius: calc(12 * var(--pu));
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.optionOn {
+  border-color: #385cff;
+  background: #010a33;
+  box-shadow: inset 0 0 0 1px #385cff;
+}
+
+/* the "click": a quick press as an option is picked */
+.explore .optionOn {
+  animation: optionPress 320ms var(--ease-out);
+}
+
+@keyframes optionPress {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.975);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.optionHead {
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--pu));
+}
+
+.radioWrap {
+  position: relative;
+  display: flex;
+}
+
+.radio {
+  display: block;
+  flex: none;
+  width: calc(16 * var(--pu));
+  height: calc(16 * var(--pu));
+}
+
+.radioDot {
+  transition: opacity 180ms ease;
+}
+
+/* a soft ring that blooms out of the radio when it's tapped */
+.tapRing {
+  position: absolute;
+  inset: calc(-6 * var(--pu));
+  border-radius: 50%;
+  background: rgba(56, 92, 255, 0.35);
+  pointer-events: none;
+  animation: tapRing 600ms var(--ease-out) both;
+}
+
+@keyframes tapRing {
+  from {
+    opacity: 1;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+.optionLabel {
+  font-size: calc(14 * var(--pu));
+  line-height: calc(20 * var(--pu));
+  white-space: nowrap;
+}
+
+.frame .phone .caption {
+  color: #919191;
+  font-size: calc(12 * var(--pu));
+  line-height: calc(16 * var(--pu));
+}
+
+/* batched rows: 42 × 52 tickets 8 apart, a white rule between batches */
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(8 * var(--pu));
+}
+
+.divider {
+  flex: none;
+  align-self: center;
+  width: 1px;
+  height: calc(45 * var(--pu));
+  background: #fff;
+}
+
+.ticket {
+  position: relative;
+  flex: none;
+  display: block;
+  width: calc(42 * var(--pu));
+  height: calc(52 * var(--pu));
+}
+
+.ticket svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ticketNum {
+  position: absolute;
+  top: calc(16 * var(--pu));
+  left: 0;
+  right: 0;
+  font-size: calc(14 * var(--pu));
+  line-height: calc(20 * var(--pu));
+  text-align: center;
+}
+
+/* the custom batch's smaller tickets (32.219 × 39.89) */
+.ticketSm {
+  width: calc(32.219 * var(--pu));
+  height: calc(39.89 * var(--pu));
+}
+
+.ticketSm .ticketNum {
+  top: calc(12.27 * var(--pu));
+  font-size: calc(10.74 * var(--pu));
+  line-height: calc(15.342 * var(--pu));
+}
+
+/* custom batching: "Batch n" label, and 28 below it a 324-wide row with − / + at its ends */
+.batches {
+  position: relative;
+  width: calc(324 * var(--pu));
+}
+
+.frame .phone .batchLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #f2f2f2;
+  font-size: calc(12 * var(--pu));
+  line-height: calc(16 * var(--pu));
+  white-space: nowrap;
+}
+
+.stepper {
+  position: absolute;
+  top: calc(28 * var(--pu));
+  left: 0;
+  width: calc(324 * var(--pu));
+  height: calc(39.89 * var(--pu));
+}
+
+.stepBtn {
+  position: absolute;
+  top: calc(8 * var(--pu));
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: calc(24 * var(--pu));
+  height: calc(24 * var(--pu));
+  border: 0.545px solid #919191;
+  border-radius: calc(6.545 * var(--pu));
+  font-size: calc(12.923 * var(--pu));
+  font-weight: 400;
+  line-height: 1;
+  transition: background-color 200ms ease;
+}
+
+.minus {
+  left: 0;
+}
+
+.plus {
+  left: calc(300 * var(--pu));
+}
+
+/* the tap on − / + */
+.pressed {
+  animation: btnPress 360ms var(--ease-out);
+}
+
+@keyframes btnPress {
+  0% {
+    transform: scale(1);
+    background-color: rgba(255, 255, 255, 0);
+  }
+  30% {
+    transform: scale(0.85);
+    background-color: rgba(255, 255, 255, 0.22);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgba(255, 255, 255, 0);
+  }
+}
+
+/* tickets placed by transform from the row's left edge (so they can glide when a batch changes) */
+.slot {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.ticketLayer {
+  position: absolute;
+  top: calc(28 * var(--pu));
+  left: 0;
+}
+
+.moving {
+  transition: transform 560ms var(--ease-in-out);
+}
+
+/* ── final design screens: 402 × 790 ─────────────────────────────────────────────── */
+.final {
+  display: block;
+  width: calc(402 * var(--pu));
+  height: calc(790 * var(--pu));
+}
+
+.close {
+  position: absolute;
+  top: calc(15.35 * var(--pu));
+  left: calc(370.99 * var(--pu));
+  width: calc(21.44 * var(--pu));
+  height: calc(21.44 * var(--pu));
+}
+
+.event {
+  position: absolute;
+  top: calc(32.35 * var(--pu));
+  left: 0;
+  right: 0;
+  height: calc(85.76 * var(--pu));
+}
+
+.artist {
+  position: absolute;
+  top: 0;
+  left: calc(25.73 * var(--pu));
+  width: calc(85.76 * var(--pu));
+  height: calc(85.76 * var(--pu));
+  border-radius: calc(8.576 * var(--pu));
+  object-fit: cover;
+}
+
+.eventText {
+  position: absolute;
+  top: calc(8.58 * var(--pu));
+  left: calc(128.64 * var(--pu));
+  white-space: nowrap;
+}
+
+.frame .phone .eventName {
+  color: #f2f2f2;
+  font-size: calc(17.152 * var(--pu));
+  font-weight: 700;
+  line-height: calc(25.728 * var(--pu));
+  letter-spacing: 0;
+}
+
+.frame .phone .eventMeta {
+  color: #d1d5db;
+  font-size: calc(15.008 * var(--pu));
+  font-weight: 400;
+  line-height: calc(21.44 * var(--pu));
+  letter-spacing: 0;
+}
+
+.timer {
+  position: absolute;
+  top: calc(12.86 * var(--pu));
+  left: calc(316.25 * var(--pu));
+  width: calc(60.032 * var(--pu));
+  height: calc(60.032 * var(--pu));
+}
+
+.timer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.timer span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(12.864 * var(--pu));
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* 1px gray-700 rule with the purple → indigo progress over its first half */
+.progress {
+  position: absolute;
+  top: calc(135.26 * var(--pu));
+  left: 0;
+  right: 0;
+  height: calc(4.288 * var(--pu));
+  border-top: 1px solid #374151;
+}
+
+.progress span {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 51.2%;
+  height: calc(4 * var(--pu));
+  background: linear-gradient(to right, #9710ff, #2600ff);
+}
+
+.tabs {
+  position: absolute;
+  top: calc(148.13 * var(--pu));
+  left: 0;
+  right: 0;
+  height: calc(21.44 * var(--pu));
+  color: #919191;
+  font-size: calc(15.008 * var(--pu));
+  font-weight: 400;
+  line-height: calc(21.44 * var(--pu));
+  letter-spacing: 0;
+}
+
+.tabs span {
+  position: absolute;
+  top: 0;
+}
+
+.tabs span:nth-child(1) {
+  left: 8.58%;
+}
+
+.tabs span:nth-child(2) {
+  left: 42.85%;
+}
+
+.tabs span:nth-child(3) {
+  left: 78.84%;
+  color: #9ca3af;
+}
+
+.tabs .tabOn {
+  color: #fff;
+  font-weight: 700;
+}
+
+.badge {
+  position: absolute;
+  top: calc(200.38 * var(--pu));
+  left: calc(169.77 * var(--pu));
+  width: calc(62.46 * var(--pu));
+  height: calc(36.74 * var(--pu));
+}
+
+.finalBody {
+  position: absolute;
+  top: calc(255.17 * var(--pu));
+  left: 0;
+  width: calc(402 * var(--pu));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: calc(18 * var(--pu));
+  padding: calc(8 * var(--pu)) calc(24 * var(--pu)) 0;
+}
+
+.frame .phone .finalTitle {
+  font-size: calc(16 * var(--pu));
+  font-weight: 700;
+  line-height: calc(24 * var(--pu));
+  text-align: center;
+}
+
+.fOption {
+  display: flex;
+  flex-direction: column;
+  gap: calc(8 * var(--pu));
+  padding: calc(12 * var(--pu));
+  border: 1px solid #474747;
+  border-radius: calc(12 * var(--pu));
+}
+
+.fOptionLight {
+  border-color: #767676;
+}
+
+/* rows of the outlined tickets: 8 apart (with a faint rule between, for Default), or 2 apart */
+.fRow {
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--pu));
+  padding: 1px;
+}
+
+.fRowTight {
+  gap: calc(2 * var(--pu));
+}
+
+/* Default: six tickets and five rules, spaced to fill the card exactly */
+.fRowSplit,
+.fCell {
+  gap: calc(7.35 * var(--pu));
+}
+
+.fCell {
+  display: flex;
+  align-items: center;
+}
+
+.fDivider {
+  width: 0.5px;
+  height: calc(52 * var(--pu));
+  background: #7d7d7d;
+}
+
+.oTicket {
+  display: block;
+  flex: none;
+  box-sizing: content-box;
+  width: calc(42 * var(--pu));
+  height: calc(52 * var(--pu));
+}
+
+.oTicket svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.delivery {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: calc(354 * var(--pu));
+  height: calc(128 * var(--pu));
+  border: 1px solid #474747;
+  border-radius: calc(12 * var(--pu));
+}
+
+.frame .phone .deliveryNote {
+  width: calc(350.414 * var(--pu));
+  color: #e4e4e4;
+  font-size: calc(14 * var(--pu));
+  font-weight: 400;
+  line-height: calc(20 * var(--pu));
+}
+
+.deliveryNote b {
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explore .optionOn,
+  .tapRing,
+  .pressed {
+    animation: none;
+  }
+  .moving {
+    transition: none;
+  }
+}

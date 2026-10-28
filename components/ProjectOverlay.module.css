@@ -534,6 +534,12 @@
   border-radius: calc(24 * var(--pu));
 }
 
+/* three stops (Figma 129:212): three equal columns across the box */
+.cvFlow[data-count="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-inline: 0;
+}
+
 .cvStep {
   position: relative;
   display: flex;
@@ -704,6 +710,122 @@
 }
 
 .cvFigure figcaption {
+  font-size: max(13px, calc(20 * var(--pu)));
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+/* Figma 131:232: three 425 × 319 cards, 2px ink r24, spread across · "BLOCKER n" Bold 20/25 over
+   its title Medium 20/25, centred ~30 down · then a Light 36/36 line, centred, ~19 under */
+.cvBlockers {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(19.5 * var(--pu));
+}
+
+.cvBlocker {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(19 * var(--pu));
+  box-sizing: border-box;
+  min-height: calc(319 * var(--pu));
+  padding: calc(30 * var(--pu)) calc(20 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+  text-align: center;
+}
+
+.section .cvBlockerHead {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: max(12px, calc(20 * var(--pu)));
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.cvBlockerHead b {
+  font-weight: 700;
+}
+
+.section .cvBlockerText {
+  margin: 0;
+  font-size: max(18px, calc(36 * var(--pu)));
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* Figma 135:252: the sketch (645 × 470, r24) beside three 571-wide cards that share its height,
+   24 apart · card: Bold 20/25 title 40 down, Light 36/36 line under it, 29 in · caption 12 below */
+.cvSketch {
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 * var(--pu));
+  margin: 0;
+}
+
+.cvSketchRow {
+  display: flex;
+  align-items: stretch;
+  gap: calc(24 * var(--pu));
+}
+
+.cvSketchImg {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 645 / 470;
+  height: auto;
+  border-radius: calc(24 * var(--pu));
+  object-fit: cover;
+}
+
+.cvSketchEmpty {
+  background: #d9d9d9;
+}
+
+.cvSketchCards {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: calc(24 * var(--pu));
+  width: calc(571 / 1314 * 100%);
+}
+
+.cvSketchCard {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(12 * var(--pu));
+  padding: 0 calc(29 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
+.section .cvSketchTitle {
+  margin: 0;
+  font-size: max(12px, calc(20 * var(--pu)));
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.section .cvSketchText {
+  margin: 0;
+  font-size: max(18px, calc(36 * var(--pu)));
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.cvSketch figcaption {
   font-size: max(13px, calc(20 * var(--pu)));
   line-height: 1.25;
   letter-spacing: -0.03em;

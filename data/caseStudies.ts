@@ -39,6 +39,17 @@ export type CaseBlock =
     }
   // images with captions under them, side by side when more than one
   | { type: "figures"; items: { image: CaseImage; caption?: string }[] }
+  // a row of bordered cards: bold label + medium title over a big light line, centred (Figma 131:232)
+  | { type: "blockers"; items: { label: string; title: string; text: string; w: number }[] }
+  // a photo beside a stack of bordered cards (bold title, big light line), caption under (Figma 135:252)
+  | {
+      type: "sketch";
+      image?: CaseImage;
+      caption: string;
+      items: { title: string; text: string }[];
+    }
+  // phone screens built in code, in a bordered frame (components/TicketmasterPhones.tsx)
+  | { type: "phones"; screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[] }
   // a not-yet-written section
   | { type: "placeholder" };
 
@@ -527,7 +538,123 @@ const crowdvolt: CaseSection[] = [
     ],
   },
   // still to come (named in the Figma Aisle Directory)
-  { name: "Tickermaster Flow", blocks: [{ type: "placeholder" }] },
+  // Figma 129:100
+  {
+    name: "Ticketmaster Flow",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Ticketmaster Flow",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "Simplifying a complicated ticket transfer process that involves external systems",
+            body: "Since CrowdVolt connects users through their external wallets, the UX differs depending on where the user’s tickets live and how ticket transfers work on that platform. Ticketmaster has an especially complicated process since they do not allow auto-transfer of tickets in some scenarios.",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "The Problem",
+        blocks: [
+          {
+            type: "callout",
+            text: "The manual ticket transfer process is complicated, but we need it to be smooth for the user",
+            body: "The manual transfer process involves sending tickets to the CrowdVolt inventory and CrowdVolt sends it to the buyer",
+          },
+          {
+            type: "flow",
+            steps: ["Seller’s Ticketmaster Account", "CrowdVolt Inventory", "Buyer’s Ticketmaster Account"],
+          },
+          {
+            type: "blockers",
+            items: [
+              {
+                label: "Blocker 1",
+                title: "Send all tickets at once",
+                text: "Fast for the seller, but the tickets can only be sold together as one bundle.",
+                w: 270,
+              },
+              {
+                label: "Blocker 2",
+                title: "Send individual tickets",
+                text: "Each ticket can sell on its own, but every ticket needs its own email, which gets messy",
+                w: 293,
+              },
+              {
+                label: "Blocker 3",
+                title: "Make tickets sellable",
+                text: "Sells best, because buyers can pick how many they want, but it takes more steps",
+                w: 309,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "The Drawing Board",
+        blocks: [
+          {
+            type: "callout",
+            text: "I started mapping out the happy path to understand the optimal user flow",
+            body: "Our platform is used in many different real-world situations, so I prioritized the factors that matter most in each one",
+          },
+          {
+            type: "sketch",
+            caption: "Sample lo-fi user flow",
+            items: [
+              { title: "Users often buy last-minute at a busy venue", text: "Efficient flow" },
+              { title: "Users do not read fine-print", text: "Ease of comprehension" },
+              { title: "Users are protective to personal info", text: "Trust built into flow" },
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Exploration",
+        blocks: [
+          {
+            type: "callout",
+            text: "The existing system used text-based instructions which conflicted with ease of comprehension and an efficient flow",
+            body: "I iterated on visual based artifacts to help users understand how the grouping of their tickets would affect their sales. My initial exploration included a comprehensive visual multiple choice system that gives the user full liberty on how they want to sell their tickets.",
+          },
+          { type: "phones", screens: ["explore-4", "explore-6"] },
+          {
+            type: "callout",
+            text: "The major problem:",
+            body: "Giving the users full liberty also means they would have to fully comprehend the system. This conflicts with ease of comprehension and a fast flow, which will cause users to inherently not trust the flow since they need to go through so much copy and decision making.",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Final Design Decision",
+        blocks: [
+          {
+            type: "callout",
+            text: "The final design implementation includes predetermined choices and plain language",
+            body: "Preventing confusion and having a quick flow was the priority, so I had to give users just the right amount of autonomy and also use plain language that make the use feel assured and understood.",
+          },
+          { type: "phones", screens: ["final-sell", "final-delivery"] },
+        ],
+      },
+      {
+        type: "group",
+        label: "Post-Launch Care",
+        blocks: [
+          {
+            type: "callout",
+            text: "We launched a beta and watched how initial users navigated the new flow",
+            body: "This resulted in minor copy changes and changes in the actual ticket transfer instruction to increase trustability. Having post-launch iteration is super important to make sure our intentions come across the way we intended to.",
+          },
+        ],
+      },
+    ],
+  },
   { name: "Graphics", blocks: [{ type: "placeholder" }] },
   { name: "Play", blocks: [{ type: "placeholder" }] },
   { name: "Impacts", blocks: [{ type: "placeholder" }] },

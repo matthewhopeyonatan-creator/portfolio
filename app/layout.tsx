@@ -25,6 +25,15 @@ const atelierFleur = localFont({
   display: "swap",
 });
 
+// CrowdVolt's own UI faces, only for the product screens rebuilt in its case study
+// (components/TicketmasterPhones.tsx) — not preloaded, they're far down a popup
+const spaceGrotesk = localFont({
+  src: [{ path: "./fonts/SpaceGrotesk-Variable.woff2", weight: "300 700", style: "normal" }],
+  variable: "--font-cv",
+  display: "swap",
+  preload: false,
+});
+
 export const metadata: Metadata = {
   title: "Matthew Hope — Product Designer",
   description:
@@ -37,7 +46,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${hostGrotesk.variable} ${atelierFleur.variable}`}>
+    <html lang="en" className={`${hostGrotesk.variable} ${atelierFleur.variable} ${spaceGrotesk.variable}`}>
       <body>
         <CartProvider>
           <SmoothScroll />

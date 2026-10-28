@@ -7,6 +7,7 @@ import Lenis from "lenis";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
 import SiteHeader from "@/components/SiteHeader";
+import TicketmasterPhones from "@/components/TicketmasterPhones";
 import { addView } from "@/lib/visit";
 import styles from "./ProjectOverlay.module.css";
 
@@ -165,6 +166,54 @@ function Block({ b }: { b: CaseBlock }) {
           ))}
         </div>
       );
+    case "blockers":
+      return (
+        <div className={styles.cvBlockers}>
+          {b.items.map((it) => (
+            <div key={it.label} className={styles.cvBlocker}>
+              <p className={styles.cvBlockerHead}>
+                <b>{it.label}</b>
+                <span>{it.title}</span>
+              </p>
+              <p className={styles.cvBlockerText} style={{ maxWidth: `calc(${it.w} * var(--pu))` }}>
+                {it.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      );
+    case "sketch":
+      return (
+        <figure className={styles.cvSketch}>
+          <div className={styles.cvSketchRow}>
+            {b.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className={styles.cvSketchImg}
+                src={b.image.src}
+                alt={b.image.alt}
+                width={b.image.w}
+                height={b.image.h}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div className={`${styles.cvSketchImg} ${styles.cvSketchEmpty}`} aria-hidden="true" />
+            )}
+            <div className={styles.cvSketchCards}>
+              {b.items.map((it) => (
+                <div key={it.title} className={styles.cvSketchCard}>
+                  <p className={styles.cvSketchTitle}>{it.title}</p>
+                  <p className={styles.cvSketchText}>{it.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <figcaption>{b.caption}</figcaption>
+        </figure>
+      );
+    case "phones":
+      return <TicketmasterPhones screens={b.screens} />;
     case "placeholder":
       return (
         <>
@@ -342,6 +391,7 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     <div
       ref={ref}
       className={styles.cvFlow}
+      data-count={n}
       role="img"
       aria-label={b.steps
         .map((s, i) => (b.skip?.includes(i) ? `${s} (skipped)` : s))
