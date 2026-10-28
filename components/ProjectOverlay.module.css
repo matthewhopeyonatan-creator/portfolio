@@ -715,12 +715,13 @@
   letter-spacing: -0.03em;
 }
 
-/* graphics grid (Figma 152:2372): three 409.83 × 546.44 tiles spread across 1314, rows 42 apart,
+/* graphics / photo grid (Figma 152:2372): three 409.83 × 546.44 tiles spread across 1314, rows the
+   same 42.25 apart as the columns,
    60 under the intro group */
 .cvGallery {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--gallery-gap, 42) * var(--pu)); /* Play's photos: 60 */
+  gap: calc(42.25 * var(--pu)); /* rows sit as far apart as the columns */
   margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
 }
 

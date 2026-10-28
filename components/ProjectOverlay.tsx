@@ -29,7 +29,7 @@ type Img = { src: string; w: number; h: number; alt: string };
  * reaches the screen: the posters rise a little and fade up out of a soft blur. A tile waits for its
  * image (fetched early, well before the grid scrolls in) so it never comes in empty.
  */
-function Gallery({ images, gap }: { images: Img[]; gap?: number }) {
+function Gallery({ images }: { images: Img[] }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const rows = ref.current?.querySelectorAll<HTMLElement>("[data-row]");
@@ -68,11 +68,7 @@ function Gallery({ images, gap }: { images: Img[]; gap?: number }) {
     if (el?.complete && el.naturalWidth) el.parentElement!.dataset.loaded = "";
   };
   return (
-    <div
-      ref={ref}
-      className={styles.cvGallery}
-      style={gap ? ({ ["--gallery-gap" as string]: gap } as React.CSSProperties) : undefined}
-    >
+    <div ref={ref} className={styles.cvGallery}>
       {rows.map((row, r) => (
         <div key={r} className={styles.cvGalleryRow} data-row="">
           {row.map((im) => (
@@ -289,7 +285,7 @@ function Block({ b }: { b: CaseBlock }) {
     case "phones":
       return <TicketmasterPhones screens={b.screens} />;
     case "gallery":
-      return <Gallery images={b.images} gap={b.gap} />;
+      return <Gallery images={b.images} />;
     case "wins":
       return (
         <div className={styles.cvWins}>

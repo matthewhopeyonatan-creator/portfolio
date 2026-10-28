@@ -53,7 +53,7 @@ export type CaseBlock =
   // phone screens built in code, in a bordered frame (components/TicketmasterPhones.tsx)
   | { type: "phones"; screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[] }
   // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
-  | { type: "gallery"; images: CaseImage[]; gap?: number }
+  | { type: "gallery"; images: CaseImage[] }
   // a 48px heading over a stack of bordered 36px lines (Figma 166:2459)
   | { type: "wins"; title: string; items: string[] }
   // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
@@ -732,7 +732,6 @@ const crowdvolt: CaseSection[] = [
       },
       {
         type: "gallery",
-        gap: 60,
         images: [
           "CrowdVolt neon sign over the bar, lit by rows of candles",
           "The launch party bar under hanging plants and the CrowdVolt sign",
