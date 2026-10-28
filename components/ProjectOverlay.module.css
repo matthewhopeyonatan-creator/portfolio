@@ -748,10 +748,11 @@
   object-fit: cover;
   transform: translate3d(0, 8%, 0) scale(1.06);
   filter: blur(10px);
+  /* the blur clears over the same span as the sweep, so the art sharpens as it's uncovered */
   transition:
     transform 1300ms var(--ease-intro),
-    filter 900ms var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 90ms + 120ms);
+    filter 1000ms var(--ease-in-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
 }
 
 [data-revealed] > .cvTile[data-loaded] {
