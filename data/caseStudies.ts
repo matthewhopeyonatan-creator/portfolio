@@ -52,6 +52,8 @@ export type CaseBlock =
       type: "phones";
       screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[];
     }
+  // Shmood's onboarding screens rebuilt in code, two to a row (components/ShmoodScreens.tsx)
+  | { type: "screens"; screens: ("welcome" | "story" | "aesthetic" | "designer")[] }
   // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
   | { type: "gallery"; images: CaseImage[] }
   // a 48px heading over a stack of bordered 36px lines (Figma 166:2459)
@@ -209,12 +211,12 @@ const shmood: CaseSection[] = [
     ],
   },
   {
-    name: "Design",
+    name: "Onboarding",
     ownLabel: true,
     blocks: [
       {
         type: "group",
-        label: "Design",
+        label: "Onboarding",
         accent: true,
         blocks: [
           {
@@ -230,7 +232,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            body: "From the team’s user research and ideation, I was able to identify 3 core value that the onboarding experience had to have",
+            text: "From the team’s user research and ideation, I was able to identify 3 core value that the onboarding experience had to have",
           },
           {
             type: "boxes",
@@ -316,16 +318,7 @@ const shmood: CaseSection[] = [
             type: "callout",
             body: "After sign in, the animated onboarding flow is initiated with the user being welcomed into Shmood’s world. This flow is fully automated and made to welcome users.",
           },
-          {
-            type: "figures",
-            rise: true,
-            items: [
-              fig(img("10", 766, 471, "Onboarding: Welcome, Matthew")),
-              fig(
-                img("11", 765, 470, "Onboarding: Your story shapes our design"),
-              ),
-            ],
-          },
+          { type: "screens", screens: ["welcome", "story"] },
         ],
       },
       {
@@ -336,28 +329,7 @@ const shmood: CaseSection[] = [
             type: "callout",
             body: "I elevated the generic questionnaire form into an interactive and compelling experience where users indicate their preferences and background in regards to creativity.",
           },
-          {
-            type: "figures",
-            rise: true,
-            items: [
-              fig(
-                img(
-                  "12",
-                  478,
-                  294,
-                  "Questionnaire: Which aesthetic speaks to you?",
-                ),
-              ),
-              fig(
-                img(
-                  "13",
-                  765,
-                  470,
-                  "Questionnaire: What type of designer are you?",
-                ),
-              ),
-            ],
-          },
+          { type: "screens", screens: ["aesthetic", "designer"] },
         ],
       },
       {
@@ -386,9 +358,16 @@ const shmood: CaseSection[] = [
           },
         ],
       },
+    ],
+  },
+  {
+    name: "User Dashboard",
+    ownLabel: true,
+    blocks: [
       {
         type: "group",
         label: "User Dashboard",
+        accent: true,
         blocks: [
           {
             type: "callout",

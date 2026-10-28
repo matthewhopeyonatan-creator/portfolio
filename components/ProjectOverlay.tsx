@@ -13,6 +13,7 @@ import Lenis from "lenis";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
 import SiteHeader from "@/components/SiteHeader";
+import ShmoodScreens from "@/components/ShmoodScreens";
 import TicketmasterPhones from "@/components/TicketmasterPhones";
 import { addView } from "@/lib/visit";
 import styles from "./ProjectOverlay.module.css";
@@ -274,6 +275,8 @@ function Block({ b }: { b: CaseBlock }) {
       );
     case "phones":
       return <TicketmasterPhones screens={b.screens} />;
+    case "screens":
+      return <ShmoodScreens screens={b.screens} />;
     case "gallery":
       return <Gallery images={b.images} />;
     case "wins":
