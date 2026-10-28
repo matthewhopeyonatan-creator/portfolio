@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { RotateCcw } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
 import { loadReceipt, mostViewed, saveReceipt, visitMinutes, type Receipt as R } from "@/lib/visit";
@@ -26,6 +26,7 @@ const stamp = (t: number) => {
 export default function Receipt() {
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
+  const feed = useRef<HTMLDivElement>(null);
   const marker = useMarker();
   const [shareNote, setShareNote] = useState("");
 
@@ -34,6 +35,16 @@ export default function Receipt() {
     if (saved) setReceipt(saved);
     else setReceipt({ items: [], minutes: visitMinutes(), mostViewed: mostViewed(), at: Date.now() });
   }, []);
+
+  // how far the slip has to start below its resting place to sit just under the bottom of the
+  // window — the print animation feeds it up from there (--feed, measured before the first paint)
+  const ready = !!receipt;
+  useLayoutEffect(() => {
+    const el = feed.current;
+    const stage = el?.parentElement;
+    if (!el || !stage) return;
+    el.style.setProperty("--feed", `${Math.ceil(window.innerHeight - stage.getBoundingClientRect().top)}px`);
+  }, [ready]);
 
   if (!receipt) return <main className={styles.page} />;
 
@@ -107,7 +118,7 @@ export default function Receipt() {
           <Image className={`${styles.tomato} ${styles.tomatoRight}`} src="/receipt/tomato-right.svg" alt="" width={719} height={674} unoptimized priority />
           <Image className={`${styles.tomato} ${styles.tomatoLeft}`} src="/receipt/tomato-left.svg" alt="" width={903} height={815} unoptimized priority />
         </div>
-        <div className={styles.print}>
+        <div ref={feed} className={styles.print}>
           <Tilt className={styles.tilt}>
             <div ref={slip} className={styles.slip} {...marker.handlers}>
               {/* the red marker people can draw on the receipt with (useMarker) */}
