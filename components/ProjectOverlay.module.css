@@ -730,15 +730,18 @@
   column-gap: calc(42.25 * var(--pu));
 }
 
-/* the tile is uncovered from its bottom edge upward (clip-path) while the art inside rises a
-   touch and comes into focus out of a soft blur; neighbours follow left to right */
+/* a whole row comes in together: each poster rises a little, fading up out of a soft blur that
+   clears as it settles */
 .cvTile {
   aspect-ratio: 409.833 / 546.444;
   overflow: hidden;
-  background: #fff;
-  clip-path: inset(100% 0 0 0);
-  transition: clip-path 1000ms var(--ease-in-out);
-  transition-delay: calc(var(--i, 0) * 90ms);
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  filter: blur(14px);
+  transition:
+    opacity 900ms var(--ease-out),
+    transform 1200ms var(--ease-intro),
+    filter 1100ms var(--ease-out);
 }
 
 .cvTile img {
@@ -746,39 +749,19 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: translate3d(0, 8%, 0) scale(1.06);
-  filter: blur(10px);
-  /* the blur clears over the same span as the sweep, so the art sharpens as it's uncovered */
-  transition:
-    transform 1300ms var(--ease-intro),
-    filter 1000ms var(--ease-in-out);
-  transition-delay: calc(var(--i, 0) * 90ms);
 }
 
 [data-revealed] > .cvTile[data-loaded] {
-  clip-path: inset(0 0 0 0);
-}
-
-[data-revealed] > .cvTile[data-loaded] img {
+  opacity: 1;
   transform: none;
   filter: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cvTile {
-    clip-path: none;
-    opacity: 0;
-    transition: opacity 400ms var(--ease-out);
-  }
-
-  .cvTile img {
     transform: none;
     filter: none;
-    transition: none;
-  }
-
-  [data-revealed] > .cvTile[data-loaded] {
-    opacity: 1;
+    transition: opacity 400ms var(--ease-out);
   }
 }
 

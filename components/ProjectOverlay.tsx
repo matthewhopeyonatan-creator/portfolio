@@ -25,10 +25,9 @@ const lockScroll = (on: boolean) => {
 type Img = { src: string; w: number; h: number; alt: string };
 
 /**
- * Graphics grid (Figma 152:2372): rows of three 3:4 tiles. Each row sweeps up into view the first
- * time it scrolls on screen: the tile is uncovered from the bottom edge upward while the artwork
- * inside settles out of a soft blur. Tiles in a row follow one another left to right, and a tile
- * waits for its image so it never sweeps in empty.
+ * Graphics grid (Figma 152:2372): rows of three 3:4 tiles. Each row comes in as one the moment it
+ * reaches the screen: the posters rise a little and fade up out of a soft blur. A tile waits for its
+ * image (fetched early, well before the grid scrolls in) so it never comes in empty.
  */
 function Gallery({ images }: { images: Img[] }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -43,10 +42,25 @@ function Gallery({ images }: { images: Img[] }) {
           io.unobserve(e.target);
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
+      // fire as soon as a row's top edge reaches the bottom of the screen
+      { rootMargin: "0px 0px 0px 0px", threshold: 0 },
     );
     rows.forEach((r) => io.observe(r));
-    return () => io.disconnect();
+    // start fetching the art well before the grid arrives, so a row never waits on its images
+    const imgs = ref.current!.querySelectorAll("img");
+    const pre = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        imgs.forEach((im) => (im.loading = "eager"));
+        pre.disconnect();
+      },
+      { rootMargin: "150% 0px 150% 0px" },
+    );
+    pre.observe(ref.current!);
+    return () => {
+      io.disconnect();
+      pre.disconnect();
+    };
   }, []);
   const rows: Img[][] = [];
   for (let i = 0; i < images.length; i += 3) rows.push(images.slice(i, i + 3));
@@ -57,8 +71,8 @@ function Gallery({ images }: { images: Img[] }) {
     <div ref={ref} className={styles.cvGallery}>
       {rows.map((row, r) => (
         <div key={r} className={styles.cvGalleryRow} data-row="">
-          {row.map((im, i) => (
-            <div key={im.src} className={styles.cvTile} style={{ ["--i" as string]: i }}>
+          {row.map((im) => (
+            <div key={im.src} className={styles.cvTile}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 ref={loaded}
