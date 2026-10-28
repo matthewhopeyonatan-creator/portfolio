@@ -28,21 +28,22 @@ const LOGO: Box = [38, 32, 200, 100];
 const TRACK: Box = [968.5, 104.5, 395, 33.8];
 
 // the collage, back to front — the line sits between the third and fourth picture
+// (boxes are the part of each picture that shows inside the frame)
 const STORY_BACK: { src: string; alt: string; box: Box }[] = [
   {
     src: "c1",
     alt: "Magenta poster of interlocking rings",
-    box: [123, 1112, 426.2, 489.2],
+    box: [123, 1112, 426.2, 321],
   },
   {
     src: "c2",
     alt: "COBOL programming course poster",
-    box: [1687, 875, 428.2, 745.5],
+    box: [1687, 875, 428.2, 558],
   },
   {
     src: "c3",
     alt: "Vintage Japanese fashion magazine page",
-    box: [1166, -166, 359, 553.3],
+    box: [1166, 0, 359, 387.3],
   },
 ];
 const STORY_FRONT: { src: string; alt: string; box: Box }[] = [
