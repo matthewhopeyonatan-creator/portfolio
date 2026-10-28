@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Lenis from "lenis";
@@ -29,11 +35,18 @@ type Img = { src: string; w: number; h: number; alt: string };
  * reaches the screen: the posters rise a little and fade up out of a soft blur. A tile waits for its
  * image (fetched early, well before the grid scrolls in) so it never comes in empty.
  */
-function Gallery({ images }: { images: Img[] }) {
-  const ref = useRef<HTMLDivElement>(null);
+/**
+ * Rows that rise into view (the Graphics posters, Play photos, and Shmood's figures): each
+ * [data-row] inside `ref` (or `ref` itself) gets data-revealed the moment its top edge reaches the
+ * bottom of the screen, and every image inside starts loading well before it gets there.
+ */
+function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true) {
   useEffect(() => {
-    const rows = ref.current?.querySelectorAll<HTMLElement>("[data-row]");
-    if (!rows) return;
+    const el = ref.current;
+    if (!el || !on) return;
+    const rows = el.matches("[data-row]")
+      ? [el]
+      : [...el.querySelectorAll<HTMLElement>("[data-row]")];
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -42,12 +55,10 @@ function Gallery({ images }: { images: Img[] }) {
           io.unobserve(e.target);
         }
       },
-      // fire as soon as a row's top edge reaches the bottom of the screen
       { rootMargin: "0px 0px 0px 0px", threshold: 0 },
     );
     rows.forEach((r) => io.observe(r));
-    // start fetching the art well before the grid arrives, so a row never waits on its images
-    const imgs = ref.current!.querySelectorAll("img");
+    const imgs = el.querySelectorAll("img");
     const pre = new IntersectionObserver(
       ([e]) => {
         if (!e.isIntersecting) return;
@@ -56,17 +67,26 @@ function Gallery({ images }: { images: Img[] }) {
       },
       { rootMargin: "150% 0px 150% 0px" },
     );
-    pre.observe(ref.current!);
+    pre.observe(el);
     return () => {
       io.disconnect();
       pre.disconnect();
     };
-  }, []);
+  }, [ref, on]);
+}
+
+/** marks an image's wrapper loaded (so a rising tile never comes in empty) */
+const markLoaded = (el: HTMLImageElement | null) => {
+  if (el?.complete && el.naturalWidth) el.parentElement!.dataset.loaded = "";
+};
+const onLoaded = (e: React.SyntheticEvent<HTMLImageElement>) =>
+  (e.currentTarget.parentElement!.dataset.loaded = "");
+
+function Gallery({ images }: { images: Img[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useRowReveal(ref);
   const rows: Img[][] = [];
   for (let i = 0; i < images.length; i += 3) rows.push(images.slice(i, i + 3));
-  const loaded = (el: HTMLImageElement | null) => {
-    if (el?.complete && el.naturalWidth) el.parentElement!.dataset.loaded = "";
-  };
   return (
     <div ref={ref} className={styles.cvGallery}>
       {rows.map((row, r) => (
@@ -75,14 +95,14 @@ function Gallery({ images }: { images: Img[] }) {
             <div key={im.src} className={styles.cvTile}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                ref={loaded}
+                ref={markLoaded}
                 src={im.src}
                 alt={im.alt}
                 width={im.w}
                 height={im.h}
                 loading="lazy"
                 decoding="async"
-                onLoad={(e) => (e.currentTarget.parentElement!.dataset.loaded = "")}
+                onLoad={onLoaded}
               />
             </div>
           ))}
@@ -92,59 +112,43 @@ function Gallery({ images }: { images: Img[] }) {
   );
 }
 
+/** Images with captions side by side; with `rise`, the row comes in like the gallery's. */
+function Figures({ b }: { b: Extract<CaseBlock, { type: "figures" }> }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useRowReveal(ref, !!b.rise);
+  return (
+    <div
+      ref={ref}
+      className={styles.cvFigures}
+      data-count={b.items.length}
+      data-row={b.rise ? "" : undefined}
+    >
+      {b.items.map((f) => (
+        <figure
+          key={f.image.src}
+          className={`${styles.cvFigure} ${b.rise ? styles.cvRise : ""}`}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            ref={b.rise ? markLoaded : undefined}
+            onLoad={b.rise ? onLoaded : undefined}
+            src={f.image.src}
+            alt={f.image.alt}
+            width={f.image.w}
+            height={f.image.h}
+            loading="lazy"
+            decoding="async"
+          />
+          {f.caption ? <figcaption>{f.caption}</figcaption> : null}
+        </figure>
+      ))}
+    </div>
+  );
+}
+
 /** One piece of a case study (see data/caseStudies.ts). */
 function Block({ b }: { b: CaseBlock }) {
-  const pic = (im: { src: string; w: number; h: number; alt: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={im.src}
-      alt={im.alt}
-      width={im.w}
-      height={im.h}
-      loading="lazy"
-      decoding="async"
-      className={styles.csImg}
-    />
-  );
   switch (b.type) {
-    case "h":
-      return <h3 className={styles.sectionTitle}>{b.text}</h3>;
-    case "sub":
-      return <h4 className={styles.csSub}>{b.text}</h4>;
-    case "kicker":
-      return <p className={styles.csKicker}>{b.text}</p>;
-    case "lead":
-      return <p className={styles.csLead}>{b.text}</p>;
-    case "p":
-      return <p>{b.text}</p>;
-    case "list":
-      return (
-        <ul className={styles.csList}>
-          {b.items.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-      );
-    case "chips":
-      return (
-        <ul className={styles.csChips}>
-          {b.items.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-      );
-    case "img":
-      return <figure className={styles.csFigure}>{pic(b.image)}</figure>;
-    case "row":
-      return (
-        <div className={styles.csRow}>
-          {b.images.map((im) => (
-            <figure key={im.src} className={styles.csFigure}>
-              {pic(im)}
-            </figure>
-          ))}
-        </div>
-      );
     case "logos":
       return (
         <div className={styles.csLogos}>
@@ -157,18 +161,6 @@ function Block({ b }: { b: CaseBlock }) {
               width={im.w}
               height={im.h}
             />
-          ))}
-        </div>
-      );
-    case "cards":
-      return (
-        <div className={styles.csCards}>
-          {b.items.map((c) => (
-            <div key={c.title} className={styles.csCard}>
-              {c.image ? pic(c.image) : null}
-              <p className={styles.csCardTitle}>{c.title}</p>
-              <p>{c.text}</p>
-            </div>
           ))}
         </div>
       );
@@ -201,8 +193,13 @@ function Block({ b }: { b: CaseBlock }) {
     case "callout":
       return (
         <div className={styles.cvText}>
-          <p className={styles.cvCallout}>{b.text}</p>
-          {b.body ? <p className={styles.cvBody}>{b.body}</p> : null}
+          {b.text ? <p className={styles.cvCallout}>{b.text}</p> : null}
+          {/* a blank line in the body starts a new paragraph */}
+          {b.body?.split("\n\n").map((t) => (
+            <p key={t} className={styles.cvBody}>
+              {t}
+            </p>
+          ))}
         </div>
       );
     case "embed":
@@ -218,24 +215,7 @@ function Block({ b }: { b: CaseBlock }) {
     case "flow":
       return <Flow b={b} />;
     case "figures":
-      return (
-        <div className={styles.cvFigures} data-count={b.items.length}>
-          {b.items.map((f) => (
-            <figure key={f.image.src} className={styles.cvFigure}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={f.image.src}
-                alt={f.image.alt}
-                width={f.image.w}
-                height={f.image.h}
-                loading="lazy"
-                decoding="async"
-              />
-              {f.caption ? <figcaption>{f.caption}</figcaption> : null}
-            </figure>
-          ))}
-        </div>
-      );
+      return <Figures b={b} />;
     case "blockers":
       return (
         <div className={styles.cvBlockers}>
@@ -245,7 +225,10 @@ function Block({ b }: { b: CaseBlock }) {
                 <b>{it.label}</b>
                 <span>{it.title}</span>
               </p>
-              <p className={styles.cvBlockerText} style={{ maxWidth: `calc(${it.w} * var(--pu))` }}>
+              <p
+                className={styles.cvBlockerText}
+                style={{ maxWidth: `calc(${it.w} * var(--pu))` }}
+              >
                 {it.text}
               </p>
             </div>
@@ -268,7 +251,10 @@ function Block({ b }: { b: CaseBlock }) {
                 decoding="async"
               />
             ) : (
-              <div className={`${styles.cvSketchImg} ${styles.cvSketchEmpty}`} aria-hidden="true" />
+              <div
+                className={`${styles.cvSketchImg} ${styles.cvSketchEmpty}`}
+                aria-hidden="true"
+              />
             )}
             <div className={styles.cvSketchCards}>
               {b.items.map((it) => (
@@ -289,10 +275,25 @@ function Block({ b }: { b: CaseBlock }) {
     case "wins":
       return (
         <div className={styles.cvWins}>
-          <p className={styles.cvCallout}>{b.title}</p>
+          {b.title ? <p className={styles.cvCallout}>{b.title}</p> : null}
           {b.items.map((t) => (
             <div key={t} className={styles.cvWin}>
               <p>{t}</p>
+            </div>
+          ))}
+        </div>
+      );
+    case "boxes":
+      return (
+        <div className={styles.cvBoxes}>
+          {b.items.map((it) => (
+            <div key={it.title ?? it.text} className={styles.cvBox}>
+              {it.title ? (
+                <p className={styles.cvBoxTitle}>{it.title}</p>
+              ) : null}
+              <p className={it.title ? styles.cvBoxText : styles.cvBoxSolo}>
+                {it.text}
+              </p>
             </div>
           ))}
         </div>
@@ -330,8 +331,14 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
   const [centres, setCentres] = useState<{ x: number; y: number }[]>([]);
   const [size, setSize] = useState(0);
   // loop state: which dots are filled, where the ball is, which skipped dot is shaking it off
-  const [filled, setFilled] = useState<number[]>(animated ? [] : b.steps.map((_, i) => i));
-  const [ball, setBall] = useState<{ at: number; dur: number; on: boolean }>({ at: 0, dur: 0, on: false });
+  const [filled, setFilled] = useState<number[]>(
+    animated ? [] : b.steps.map((_, i) => i),
+  );
+  const [ball, setBall] = useState<{ at: number; dur: number; on: boolean }>({
+    at: 0,
+    dur: 0,
+    on: false,
+  });
   const [rejecting, setRejecting] = useState<number[]>([]);
   const [rejectKey, setRejectKey] = useState(0);
   const [inView, setInView] = useState(false);
@@ -357,7 +364,9 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.25 }); // loops whenever it’s on screen
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
+      threshold: 0.25,
+    }); // loops whenever it’s on screen
     io.observe(el);
     return () => {
       ro.disconnect();
@@ -379,7 +388,8 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
     if (!inView) return;
     // the ball hops dot to dot; it sails straight over a skipped dot, which shakes it off
     const timers: number[] = [];
-    const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    const at = (ms: number, fn: () => void) =>
+      timers.push(window.setTimeout(fn, ms));
     const LEG = 380; // ms per dot of travel
     const run = () => {
       let t = 0;
@@ -440,7 +450,9 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
   useEffect(() => {
     const el = ref.current;
     if (!deciding || !el) return;
-    const io = new IntersectionObserver(([e]) => setFInView(e.isIntersecting), { threshold: 0.25 });
+    const io = new IntersectionObserver(([e]) => setFInView(e.isIntersecting), {
+      threshold: 0.25,
+    });
     io.observe(el);
     return () => io.disconnect();
   }, [deciding]);
@@ -722,7 +734,11 @@ export default function ProjectOverlay({
           transform: `translate(${tx}px, ${ty}px) scale(${k})`,
           clipPath: `inset(${iy}px ${ix}px)`,
         },
-        { transformOrigin: "0 0", transform: "none", clipPath: "inset(0px 0px)" },
+        {
+          transformOrigin: "0 0",
+          transform: "none",
+          clipPath: "inset(0px 0px)",
+        },
       ],
       { duration: 520, easing: "cubic-bezier(0.77, 0, 0.175, 1)" }, // --ease-in-out
     );
@@ -798,7 +814,11 @@ export default function ProjectOverlay({
                 e.stopPropagation();
                 close(() => {
                   // "/#section" or "#section": a section of the main page, glide to it
-                  const hash = href.startsWith("/#") ? href.slice(1) : href.startsWith("#") ? href : "";
+                  const hash = href.startsWith("/#")
+                    ? href.slice(1)
+                    : href.startsWith("#")
+                      ? href
+                      : "";
                   if (hash) {
                     const t = document.createElement("a");
                     t.href = hash;

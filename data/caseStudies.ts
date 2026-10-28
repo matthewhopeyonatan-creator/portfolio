@@ -7,26 +7,14 @@
 export type CaseImage = { src: string; w: number; h: number; alt: string };
 
 export type CaseBlock =
-  | { type: "h"; text: string } // heading inside a section
-  | { type: "sub"; text: string } // smaller heading
-  | { type: "kicker"; text: string } // small label
-  | { type: "lead"; text: string } // big statement line
-  | { type: "p"; text: string }
-  | { type: "list"; items: string[] }
-  | { type: "chips"; items: string[] }
-  | { type: "img"; image: CaseImage }
-  | { type: "row"; images: CaseImage[] } // side by side
   | { type: "logos"; images: CaseImage[] }
-  | {
-      type: "cards";
-      items: { title: string; text: string; image?: CaseImage }[];
-    }
   | { type: "link"; text: string; href: string }
   // ── CrowdVolt-style blocks (Figma 64:381) ──
   // a labelled group: small uppercase label (red for a section's opening label), then its blocks
   | { type: "group"; label?: string; accent?: boolean; blocks: CaseBlock[] }
-  // big 48px statement with an optional 24px line under it
-  | { type: "callout"; text: string; body?: string }
+  // big 48px statement with an optional 24px line under it (either can stand alone; a blank
+  // line in the body starts a new paragraph)
+  | { type: "callout"; text?: string; body?: string }
   // live website in a rounded window
   | { type: "embed"; url: string; title: string; ratio: number }
   // step diagram: labels over dots, optional "+FRICTION" tags after given steps (0-based)
@@ -40,9 +28,16 @@ export type CaseBlock =
       loop?: boolean;
     }
   // images with captions under them, side by side when more than one
-  | { type: "figures"; items: { image: CaseImage; caption?: string }[] }
+  | {
+      type: "figures";
+      items: { image: CaseImage; caption?: string }[];
+      rise?: boolean;
+    }
   // a row of bordered cards: bold label + medium title over a big light line, centred (Figma 131:232)
-  | { type: "blockers"; items: { label: string; title: string; text: string; w: number }[] }
+  | {
+      type: "blockers";
+      items: { label: string; title: string; text: string; w: number }[];
+    }
   // a photo beside a stack of bordered cards (bold title, big light line), caption under (Figma 135:252)
   | {
       type: "sketch";
@@ -51,11 +46,16 @@ export type CaseBlock =
       items: { title: string; text: string }[];
     }
   // phone screens built in code, in a bordered frame (components/TicketmasterPhones.tsx)
-  | { type: "phones"; screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[] }
+  | {
+      type: "phones";
+      screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[];
+    }
   // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
   | { type: "gallery"; images: CaseImage[] }
   // a 48px heading over a stack of bordered 36px lines (Figma 166:2459)
-  | { type: "wins"; title: string; items: string[] }
+  | { type: "wins"; title?: string; items: string[] }
+  // a row of bordered cards: an optional bold uppercase title over a light line
+  | { type: "boxes"; items: { title?: string; text: string }[] }
   // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
   | { type: "statement"; lines: string[] }
   // a not-yet-written section
@@ -75,87 +75,116 @@ const img = (n: string, w: number, h: number, alt: string): CaseImage => ({
   alt,
 });
 
+// laid out the CrowdVolt way: a red label opening each section, labelled groups of a big
+// statement over a lighter line, bordered boxes instead of bullet lists, figures that rise in
+const fig = (image: CaseImage, caption?: string) => ({ image, caption });
+
 const shmood: CaseSection[] = [
   {
     name: "Context",
+    ownLabel: true,
     blocks: [
-      { type: "h", text: "What is Shmood?" },
       {
-        type: "p",
-        text: "Shmood is a project management tool that bridges the gap between designers and clients, offering a unified platform where creativity thrives through centralized resources, smart communication, and AI-powered feedback synthesis.",
-      },
-      { type: "kicker", text: "Backed by" },
-      {
-        type: "logos",
-        images: [
-          img("02", 438, 110, "Entrepreneur First"),
-          img("03", 480, 181, "Transpose Platform"),
-          img("04", 394, 88, "Common Magic"),
+        type: "group",
+        label: "Context",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "How might we simplify creative collaboration by uniting client feedback into a seamless workflow for designers?",
+            body: "So what am I doing? Streamlining and maximizing the startup’s features and value propositions.",
+          },
+          {
+            type: "wins",
+            items: [
+              "Identifying areas of opportunity to ideate new features and build the best platform for designers",
+              "Creating an improved homepage-to-platform experience to get users excited to use the platform",
+            ],
+          },
         ],
       },
-      { type: "h", text: "Project Context" },
       {
-        type: "lead",
-        text: "How might we simplify creative collaboration by uniting client feedback into a seamless workflow for designers?",
-      },
-      {
-        type: "list",
-        items: [
-          "IDENTIFYING areas of opportunity to ideate new features and build the best platform for DESIGNERS.",
-          "CREATING an improved homepage-to-platform experience To get users excited to use the platform.",
+        type: "group",
+        label: "What is Shmood?",
+        blocks: [
+          {
+            type: "callout",
+            text: "A project management tool that bridges the gap between designers and clients",
+            body: "Shmood offers a unified platform where creativity thrives through centralized resources, smart communication, and AI-powered feedback synthesis.",
+          },
         ],
       },
-      { type: "sub", text: "So what am I doing?" },
       {
-        type: "p",
-        text: "Streamlining and maximizing the startup's features and value propositions",
+        type: "group",
+        label: "Backed by",
+        blocks: [
+          {
+            type: "logos",
+            images: [
+              img("02", 438, 110, "Entrepreneur First"),
+              img("03", 480, 181, "Transpose Platform"),
+              img("04", 394, 88, "Common Magic"),
+            ],
+          },
+        ],
       },
     ],
   },
   {
     name: "Research",
+    ownLabel: true,
     blocks: [
-      { type: "h", text: "User Research" },
       {
-        type: "lead",
-        text: "Interviews with 30 creatives in over 10 industries",
-      },
-      {
-        type: "p",
-        text: "We wanted to gain insights on the how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
-      },
-      {
-        type: "img",
-        image: img(
-          "05",
-          1504,
-          604,
-          "Four research insights: feedback is scattered, communication is key, emphasizing UVP, ensuring trust in AI",
-        ),
-      },
-      { type: "h", text: "Competitor Analysis" },
-      {
-        type: "lead",
-        text: "We wanted to MAINTAIN Shmood’s unique value proposition",
-      },
-      {
-        type: "p",
-        text: "We researched 6+ companies that provide project management solutions for creatives and found some opportunity areas for Shmood:",
-      },
-      {
-        type: "cards",
-        items: [
+        type: "group",
+        label: "Research",
+        accent: true,
+        blocks: [
           {
-            title: "AI used to optimize feedback",
-            text: "Most platforms collect feedback but fail to organize it into actionable insights or address the communication gap between designers and clients. Thoughtful AI integration could revolutionize this process.",
+            type: "callout",
+            text: "Interviews with 30 creatives in over 10 industries",
+            body: "We wanted to gain insights on the how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
           },
           {
-            title: "Centralizing creative tools",
-            text: "Designers usually incorporate multiple digital tools into their workflow. With Shmood, they can centralize designs, collect feedback, manage their projects, and case their work all in one seamless platform.",
+            type: "figures",
+            rise: true,
+            items: [
+              fig(
+                img(
+                  "05",
+                  1504,
+                  604,
+                  "Four research insights: feedback is scattered, communication is key, emphasizing UVP, ensuring trust in AI",
+                ),
+              ),
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Competitor Analysis",
+        blocks: [
+          {
+            type: "callout",
+            text: "We wanted to maintain Shmood’s unique value proposition",
+            body: "We researched 6+ companies that provide project management solutions for creatives and found some opportunity areas for Shmood:",
           },
           {
-            title: "Client and designer-friendly",
-            text: "Allowing easy and straightforward user experiences for both designers and their clients so that designers can focus on delivering high quality work, while clients can quickly leave helpful feedback and oversee progress.",
+            type: "boxes",
+            items: [
+              {
+                title: "AI used to optimize feedback",
+                text: "Most platforms collect feedback but fail to organize it into actionable insights or address the communication gap between designers and clients. Thoughtful AI integration could revolutionize this process.",
+              },
+              {
+                title: "Centralizing creative tools",
+                text: "Designers usually incorporate multiple digital tools into their workflow. With Shmood, they can centralize designs, collect feedback, manage their projects, and case their work all in one seamless platform.",
+              },
+              {
+                title: "Client and designer-friendly",
+                text: "Allowing easy and straightforward user experiences for both designers and their clients so that designers can focus on delivering high quality work, while clients can quickly leave helpful feedback and oversee progress.",
+              },
+            ],
           },
         ],
       },
@@ -163,206 +192,328 @@ const shmood: CaseSection[] = [
   },
   {
     name: "Design",
+    ownLabel: true,
     blocks: [
-      { type: "h", text: "Feature Ownership" },
       {
-        type: "lead",
-        text: "I took ownership over Shmood’s onboarding experience and user dashboard",
-      },
-      {
-        type: "p",
-        text: "I wanted to present Shmood’s creative and quirky energy to capture new and prospecting users. As our team was also able to create multitudes of new products for Shmood, I was also responsible for creating a centralized system that will house all of the products efficiently.",
-      },
-      { type: "h", text: "Onboarding Experience" },
-      {
-        type: "p",
-        text: "From the team’s user research and ideation, I was able to identify 3 core value that the onboarding experience had to have",
-      },
-      {
-        type: "chips",
-        items: [
-          "User Engagement",
-          "Clear Value Proposition",
-          "For Designers, By Designers",
-        ],
-      },
-      { type: "lead", text: "I started dreaming.*ੈ✩‧₊˚.. and ideating..." },
-      {
-        type: "p",
-        text: "As I began ideating solutions to address user pain points and flow requirements, I was unafraid to challenge convention and aimed to push for creative solutions.  This is how I created my low-fis.",
-      },
-      {
-        type: "cards",
-        items: [
+        type: "group",
+        label: "Design",
+        accent: true,
+        blocks: [
           {
-            title: "Tell a story",
-            text: "Physical Cards with original designs or designs that is made by the Shmood community",
-            image: img(
-              "06",
-              1668,
-              2157,
-              "Lo-fi sketch: after-initial onboarding and a physical Shmood board",
-            ),
-          },
-          {
-            title: "Communicate Value",
-            text: "Onboarding video that clearly states the value proposition of Shmood to new users",
-            image: img(
-              "07",
-              1668,
-              2157,
-              "Lo-fi sketch: onboarding animation and Shmood board",
-            ),
-          },
-          {
-            title: "Personalization",
-            text: "Adding customizable experiences through physical designer care package, cards, onboarding survey",
-            image: img(
-              "08",
-              1668,
-              2157,
-              "Lo-fi sketch: physical care package with merch, cards and stickers",
-            ),
+            type: "callout",
+            text: "I took ownership over Shmood’s onboarding experience and user dashboard",
+            body: "I wanted to present Shmood’s creative and quirky energy to capture new and prospecting users. As our team was also able to create multitudes of new products for Shmood, I was also responsible for creating a centralized system that will house all of the products efficiently.",
           },
         ],
       },
-      { type: "kicker", text: "*ੈ✩‧₊˚Brand Vision Ideation*ੈ✩‧₊˚" },
-      { type: "img", image: img("09", 2000, 553, "Brand vision mood board") },
-      { type: "h", text: "Final Onboarding Experience" },
       {
-        type: "p",
-        text: "My objective for designing the onboarding flow was to communicate a cohesive product story for early access users to easily understand Shmood’s mission, features, differentiation, and impact, while making them feel welcomed in a community.",
-      },
-      {
-        type: "p",
-        text: "As observed through our user interviews and analysis of competing product onboarding flows, I needed to prioritize conciseness, creativity and wit in both the visual design, and UX. I also had to work within the constraints of what is feasible and realistic for the company at this scale.",
-      },
-      { type: "sub", text: "Introduction" },
-      {
-        type: "p",
-        text: "After sign in, the animated onboarding flow is initiated with the user being welcomed into Shmood’s world. This flow is fully automated and made to welcome users.",
-      },
-      {
-        type: "row",
-        images: [
-          img("10", 766, 471, "Onboarding: Welcome, Matthew"),
-          img("11", 765, 470, "Onboarding: Your story shapes our design"),
-        ],
-      },
-      { type: "sub", text: "Questionnaire" },
-      {
-        type: "p",
-        text: "I elevated the generic questionnaire form into an interactive and compelling experience where users indicate their preferences and background in regards to creativity.",
-      },
-      {
-        type: "row",
-        images: [
-          img("12", 478, 294, "Questionnaire: Which aesthetic speaks to you?"),
-          img("13", 765, 470, "Questionnaire: What type of designer are you?"),
-        ],
-      },
-      { type: "sub", text: "Digital Personalized Cards" },
-      {
-        type: "p",
-        text: "Introducing Shmood IDs. I invented a new paradigm to represent the different abstract creative archetypes. I settled on using fruit as a cute and concise way to associate each type of designer with the connotations they bring to the table. Through this creative approach, I wanted to foster user curiosity and platform loyalty.",
-      },
-      {
-        type: "row",
-        images: [
-          img("14", 406, 254, "Shmood ID card, back: Early Access Member"),
-          img("15", 406, 254, "Shmood ID card, front, with a lemon"),
-        ],
-      },
-      { type: "h", text: "User Dashboard" },
-      {
-        type: "p",
-        text: "In order to address the issue of disorganized workflows in projects, I designed a dashboard that integrated feedback, design files, and Shmood boards (Shmood’s version of ideation mood boards) in a unified workspace. This supported designers by:",
-      },
-      {
-        type: "list",
-        items: [
-          "Providing a high level overview of project progress and key action items",
-          "Insuring streamlined access to all necessary resources, all in one place",
-        ],
-      },
-      { type: "sub", text: "Initial Ideas" },
-      {
-        type: "p",
-        text: "I decided to create a dashboard with widgets for each part of the project and feedback process, aiming to display as much related information as possible.",
-      },
-      { type: "p", text: "This included the following widgets:" },
-      {
-        type: "chips",
-        items: [
-          "Project Goals & Timeline",
-          "Feedback Center",
-          "Client Overview",
-          "Ideation Center",
-          "Your Notes",
-          "Design Files",
+        type: "group",
+        label: "Onboarding Experience",
+        blocks: [
+          {
+            type: "callout",
+            body: "From the team’s user research and ideation, I was able to identify 3 core value that the onboarding experience had to have",
+          },
+          {
+            type: "boxes",
+            items: [
+              { text: "User Engagement" },
+              { text: "Clear Value Proposition" },
+              { text: "For Designers, By Designers" },
+            ],
+          },
         ],
       },
       {
-        type: "img",
-        image: img("16", 2000, 1761, "Initial dashboard with six widgets"),
-      },
-      { type: "sub", text: "Final Dashboard Prototype" },
-      {
-        type: "p",
-        text: "However, I realized that too many widgets on the dashboard can lead to a cognitive overload for the users, distracting users from the key tasks and Shmood’s value proposition: Feedback Forms and Shmood Boards.",
-      },
-      {
-        type: "p",
-        text: "I decided to keep the relevant widgets and consolidate others to make a more impactful dashboard experience.",
-      },
-      {
-        type: "list",
-        items: [
-          "Project Overview: Provides designers with a clear and concise view of project progress",
-          "Your Files: Easily access all key design files and assets",
-          "Feedback Center: Share and receive feedback from clients in a streamlined way",
-          "Your Boards: A space for designers to ideate, create Shmood boards, and case their work",
+        type: "group",
+        label: "Ideation",
+        blocks: [
+          {
+            type: "callout",
+            text: "I started dreaming.*ੈ✩‧₊˚.. and ideating...",
+            body: "As I began ideating solutions to address user pain points and flow requirements, I was unafraid to challenge convention and aimed to push for creative solutions. This is how I created my low-fis.",
+          },
+          {
+            type: "figures",
+            rise: true,
+            items: [
+              fig(
+                img(
+                  "06",
+                  1668,
+                  2157,
+                  "Lo-fi sketch: after-initial onboarding and a physical Shmood board",
+                ),
+                "Tell a story: physical cards with original designs or designs that is made by the Shmood community",
+              ),
+              fig(
+                img(
+                  "07",
+                  1668,
+                  2157,
+                  "Lo-fi sketch: onboarding animation and Shmood board",
+                ),
+                "Communicate value: an onboarding video that clearly states the value proposition of Shmood to new users",
+              ),
+              fig(
+                img(
+                  "08",
+                  1668,
+                  2157,
+                  "Lo-fi sketch: physical care package with merch, cards and stickers",
+                ),
+                "Personalization: adding customizable experiences through physical designer care package, cards, onboarding survey",
+              ),
+            ],
+          },
         ],
       },
       {
-        type: "img",
-        image: img(
-          "17",
-          2000,
-          1304,
-          "Final dashboard prototype for a DCC Branding project",
-        ),
+        type: "group",
+        label: "*ੈ✩‧₊˚Brand Vision Ideation*ੈ✩‧₊˚",
+        blocks: [
+          {
+            type: "figures",
+            rise: true,
+            items: [fig(img("09", 2000, 553, "Brand vision mood board"))],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Final Onboarding Experience",
+        blocks: [
+          {
+            type: "callout",
+            text: "A cohesive product story that makes early access users feel welcomed in a community",
+            body: "My objective for designing the onboarding flow was to communicate a cohesive product story for early access users to easily understand Shmood’s mission, features, differentiation, and impact, while making them feel welcomed in a community.\n\nAs observed through our user interviews and analysis of competing product onboarding flows, I needed to prioritize conciseness, creativity and wit in both the visual design, and UX. I also had to work within the constraints of what is feasible and realistic for the company at this scale.",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Introduction",
+        blocks: [
+          {
+            type: "callout",
+            body: "After sign in, the animated onboarding flow is initiated with the user being welcomed into Shmood’s world. This flow is fully automated and made to welcome users.",
+          },
+          {
+            type: "figures",
+            rise: true,
+            items: [
+              fig(img("10", 766, 471, "Onboarding: Welcome, Matthew")),
+              fig(
+                img("11", 765, 470, "Onboarding: Your story shapes our design"),
+              ),
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Questionnaire",
+        blocks: [
+          {
+            type: "callout",
+            body: "I elevated the generic questionnaire form into an interactive and compelling experience where users indicate their preferences and background in regards to creativity.",
+          },
+          {
+            type: "figures",
+            rise: true,
+            items: [
+              fig(
+                img(
+                  "12",
+                  478,
+                  294,
+                  "Questionnaire: Which aesthetic speaks to you?",
+                ),
+              ),
+              fig(
+                img(
+                  "13",
+                  765,
+                  470,
+                  "Questionnaire: What type of designer are you?",
+                ),
+              ),
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Digital Personalized Cards",
+        blocks: [
+          {
+            type: "callout",
+            text: "Introducing Shmood IDs",
+            body: "I invented a new paradigm to represent the different abstract creative archetypes. I settled on using fruit as a cute and concise way to associate each type of designer with the connotations they bring to the table. Through this creative approach, I wanted to foster user curiosity and platform loyalty.",
+          },
+          {
+            type: "figures",
+            rise: true,
+            items: [
+              fig(
+                img(
+                  "14",
+                  406,
+                  254,
+                  "Shmood ID card, back: Early Access Member",
+                ),
+              ),
+              fig(img("15", 406, 254, "Shmood ID card, front, with a lemon")),
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "User Dashboard",
+        blocks: [
+          {
+            type: "callout",
+            text: "Feedback, design files and Shmood boards in one unified workspace",
+            body: "In order to address the issue of disorganized workflows in projects, I designed a dashboard that integrated feedback, design files, and Shmood boards (Shmood’s version of ideation mood boards) in a unified workspace. This supported designers by:",
+          },
+          {
+            type: "wins",
+            items: [
+              "Providing a high level overview of project progress and key action items",
+              "Insuring streamlined access to all necessary resources, all in one place",
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Initial Ideas",
+        blocks: [
+          {
+            type: "callout",
+            body: "I decided to create a dashboard with widgets for each part of the project and feedback process, aiming to display as much related information as possible. This included the following widgets:",
+          },
+          {
+            type: "boxes",
+            items: [
+              { text: "Project Goals & Timeline" },
+              { text: "Feedback Center" },
+              { text: "Client Overview" },
+            ],
+          },
+          {
+            type: "boxes",
+            items: [
+              { text: "Ideation Center" },
+              { text: "Your Notes" },
+              { text: "Design Files" },
+            ],
+          },
+          {
+            type: "figures",
+            rise: true,
+            items: [
+              fig(img("16", 2000, 1761, "Initial dashboard with six widgets")),
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Final Dashboard Prototype",
+        blocks: [
+          {
+            type: "callout",
+            body: "However, I realized that too many widgets on the dashboard can lead to a cognitive overload for the users, distracting users from the key tasks and Shmood’s value proposition: Feedback Forms and Shmood Boards.\n\nI decided to keep the relevant widgets and consolidate others to make a more impactful dashboard experience.",
+          },
+          {
+            type: "boxes",
+            items: [
+              {
+                title: "Project Overview",
+                text: "Provides designers with a clear and concise view of project progress",
+              },
+              {
+                title: "Your Files",
+                text: "Easily access all key design files and assets",
+              },
+            ],
+          },
+          {
+            type: "boxes",
+            items: [
+              {
+                title: "Feedback Center",
+                text: "Share and receive feedback from clients in a streamlined way",
+              },
+              {
+                title: "Your Boards",
+                text: "A space for designers to ideate, create Shmood boards, and case their work",
+              },
+            ],
+          },
+          {
+            type: "figures",
+            rise: true,
+            items: [
+              fig(
+                img(
+                  "17",
+                  2000,
+                  1304,
+                  "Final dashboard prototype for a DCC Branding project",
+                ),
+              ),
+            ],
+          },
+        ],
       },
     ],
   },
   {
-    name: "Reflecting",
+    name: "Impacts",
+    ownLabel: true,
     blocks: [
-      { type: "h", text: "Design Impacts" },
       {
-        type: "list",
-        items: [
-          "My designs along with the team's entire design ecosystem was validated by Shmood's lead engineer and CEO for further implementation.",
-          "Creation of dashboard decreased friction in understanding when tested by the internal design team.",
-          "The onboarding I created was received well by designers in Shmood and Cornell University and had 34/37 people understanding the value proposition of the platform.",
-        ],
-      },
-      { type: "h", text: "Final Reflections" },
-      {
-        type: "p",
-        text: "I was able to explore and soar through the world of creative expression, yet also ground myself with data driven designs. Through the features I have ownership over, I learned so much about the balance between aesthetics and functionality. If I had more time with this project, I would",
-      },
-      {
-        type: "list",
-        items: [
-          "Measure the impacts through user testing. Since I had so many mid-fis and had to narrow down features, I would like to conduct A/B testing to see how these designs would play out in real life.",
-          "Explore more of in the physical space to see how it can be done regardless of constraints.",
-          "Create for non traditional designers, especially for the onboarding as I want my onboarding experience to be effective and appealing to groups beyond who we interviewed.",
+        type: "group",
+        label: "Impacts",
+        accent: true,
+        blocks: [
+          {
+            type: "wins",
+            title: "Design Impacts",
+            items: [
+              "My designs along with the team's entire design ecosystem was validated by Shmood's lead engineer and CEO for further implementation.",
+              "Creation of dashboard decreased friction in understanding when tested by the internal design team.",
+              "The onboarding I created was received well by designers in Shmood and Cornell University and had 34/37 people understanding the value proposition of the platform.",
+            ],
+          },
         ],
       },
       {
-        type: "p",
-        text: "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
+        type: "group",
+        label: "Final Reflections",
+        blocks: [
+          {
+            type: "callout",
+            body: "I was able to explore and soar through the world of creative expression, yet also ground myself with data driven designs. Through the features I have ownership over, I learned so much about the balance between aesthetics and functionality. If I had more time with this project, I would",
+          },
+          {
+            type: "wins",
+            items: [
+              "Measure the impacts through user testing. Since I had so many mid-fis and had to narrow down features, I would like to conduct A/B testing to see how these designs would play out in real life.",
+              "Explore more of in the physical space to see how it can be done regardless of constraints.",
+              "Create for non traditional designers, especially for the onboarding as I want my onboarding experience to be effective and appealing to groups beyond who we interviewed.",
+            ],
+          },
+        ],
+      },
+      {
+        type: "statement",
+        lines: [
+          "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
+        ],
       },
       {
         type: "link",
@@ -574,7 +725,11 @@ const crowdvolt: CaseSection[] = [
           },
           {
             type: "flow",
-            steps: ["Seller’s Ticketmaster Account", "CrowdVolt Inventory", "Buyer’s Ticketmaster Account"],
+            steps: [
+              "Seller’s Ticketmaster Account",
+              "CrowdVolt Inventory",
+              "Buyer’s Ticketmaster Account",
+            ],
             loop: true,
           },
           {
@@ -621,9 +776,18 @@ const crowdvolt: CaseSection[] = [
             },
             caption: "Sample lo-fi user flow",
             items: [
-              { title: "Users often buy last-minute at a busy venue", text: "Efficient flow" },
-              { title: "Users do not read fine-print", text: "Ease of comprehension" },
-              { title: "Users are protective to personal info", text: "Trust built into flow" },
+              {
+                title: "Users often buy last-minute at a busy venue",
+                text: "Efficient flow",
+              },
+              {
+                title: "Users do not read fine-print",
+                text: "Ease of comprehension",
+              },
+              {
+                title: "Users are protective to personal info",
+                text: "Trust built into flow",
+              },
             ],
           },
         ],
