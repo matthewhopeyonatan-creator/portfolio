@@ -113,6 +113,38 @@ function Gallery({ images }: { images: Img[] }) {
   );
 }
 
+/** The live site in its window, rising in out of a soft blur like the figures once it has loaded. */
+function Embed({ b }: { b: { url: string; title: string; ratio: number } }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const win = useRef<HTMLDivElement>(null);
+  useRowReveal(ref);
+  useEffect(() => {
+    // a slow or blocked site still comes in (as the grey loading window) rather than never
+    const t = setTimeout(() => {
+      if (win.current) win.current.dataset.loaded = "";
+    }, 2500);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <div ref={ref} data-row="">
+      <div
+        ref={win}
+        className={`${styles.cvEmbed} ${styles.cvRise}`}
+        style={{ aspectRatio: b.ratio }}
+      >
+        <iframe
+          src={b.url}
+          title={b.title}
+          referrerPolicy="no-referrer-when-downgrade"
+          onLoad={() => {
+            if (win.current) win.current.dataset.loaded = "";
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 /** Images with captions side by side; with `rise`, the row comes in like the gallery's. */
 function Figures({ b }: { b: Extract<CaseBlock, { type: "figures" }> }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -204,15 +236,7 @@ function Block({ b }: { b: CaseBlock }) {
         </div>
       );
     case "embed":
-      return (
-        <div className={styles.cvEmbed} style={{ aspectRatio: b.ratio }}>
-          <iframe
-            src={b.url}
-            title={b.title}
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-      );
+      return <Embed b={b} />;
     case "flow":
       return <Flow b={b} />;
     case "figures":
