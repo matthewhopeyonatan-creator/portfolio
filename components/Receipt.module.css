@@ -69,9 +69,10 @@
   }
 }
 
-/* ── entrance, step 1: it prints — fed up out of the bottom edge of the screen the way a receipt
-   printer does it: slow, in uneven bursts with little stalls between them, easing to a stop.
-   The page clips it, so it appears to come out of a slot under the window. ── */
+/* ── entrance, step 1: it prints — fed up out of the bottom edge of the screen like a receipt
+   printer warming up: the first half catches and stalls in short jerky bursts, then the feed
+   finds its pace and runs smoothly, settling to a stop. The page clips it, so it appears to come
+   out of a slot under the window. ── */
 .print {
   position: relative;
   animation: printIn 3400ms backwards;
@@ -79,64 +80,44 @@
 
 @keyframes printIn {
   0% {
-    transform: translateY(100svh);
+    transform: translateY(calc(1 * 100svh));
     animation-timing-function: var(--ease-in-out);
   }
-  8% {
-    transform: translateY(calc(0.88 * 100svh));
+  7% {
+    transform: translateY(calc(0.93 * 100svh));
     animation-timing-function: linear;
   }
-  12% {
-    transform: translateY(calc(0.88 * 100svh));
+  13% {
+    transform: translateY(calc(0.93 * 100svh));
     animation-timing-function: var(--ease-in-out);
   }
-  21% {
-    transform: translateY(calc(0.74 * 100svh));
+  19% {
+    transform: translateY(calc(0.86 * 100svh));
     animation-timing-function: linear;
   }
-  24% {
-    transform: translateY(calc(0.74 * 100svh));
+  26% {
+    transform: translateY(calc(0.86 * 100svh));
     animation-timing-function: var(--ease-in-out);
   }
-  33% {
-    transform: translateY(calc(0.62 * 100svh));
+  32% {
+    transform: translateY(calc(0.78 * 100svh));
     animation-timing-function: linear;
   }
-  39% {
-    transform: translateY(calc(0.62 * 100svh));
+  37% {
+    transform: translateY(calc(0.78 * 100svh));
     animation-timing-function: var(--ease-in-out);
   }
-  48% {
-    transform: translateY(calc(0.47 * 100svh));
+  43% {
+    transform: translateY(calc(0.7 * 100svh));
     animation-timing-function: linear;
   }
-  51% {
-    transform: translateY(calc(0.47 * 100svh));
-    animation-timing-function: var(--ease-in-out);
-  }
-  60% {
-    transform: translateY(calc(0.35 * 100svh));
+  47% {
+    transform: translateY(calc(0.7 * 100svh));
     animation-timing-function: linear;
   }
-  65% {
-    transform: translateY(calc(0.35 * 100svh));
-    animation-timing-function: var(--ease-in-out);
-  }
-  74% {
-    transform: translateY(calc(0.22 * 100svh));
-    animation-timing-function: linear;
-  }
-  77% {
-    transform: translateY(calc(0.22 * 100svh));
-    animation-timing-function: var(--ease-in-out);
-  }
-  87% {
-    transform: translateY(calc(0.1 * 100svh));
-    animation-timing-function: linear;
-  }
-  90% {
-    transform: translateY(calc(0.1 * 100svh));
-    animation-timing-function: var(--ease-in-out);
+  88% {
+    transform: translateY(calc(0.08 * 100svh));
+    animation-timing-function: var(--ease-out);
   }
   100% {
     transform: none;
