@@ -22,6 +22,62 @@ const lockScroll = (on: boolean) => {
   window.dispatchEvent(new CustomEvent("scroll-lock", { detail: on }));
 };
 
+type Img = { src: string; w: number; h: number; alt: string };
+
+/**
+ * Graphics grid (Figma 152:2372): rows of three 3:4 tiles. Each row sweeps up into view the first
+ * time it scrolls on screen: the tile is uncovered from the bottom edge upward while the artwork
+ * inside settles out of a soft blur. Tiles in a row follow one another left to right, and a tile
+ * waits for its image so it never sweeps in empty.
+ */
+function Gallery({ images }: { images: Img[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const rows = ref.current?.querySelectorAll<HTMLElement>("[data-row]");
+    if (!rows) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          (e.target as HTMLElement).dataset.revealed = "";
+          io.unobserve(e.target);
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
+    );
+    rows.forEach((r) => io.observe(r));
+    return () => io.disconnect();
+  }, []);
+  const rows: Img[][] = [];
+  for (let i = 0; i < images.length; i += 3) rows.push(images.slice(i, i + 3));
+  const loaded = (el: HTMLImageElement | null) => {
+    if (el?.complete && el.naturalWidth) el.parentElement!.dataset.loaded = "";
+  };
+  return (
+    <div ref={ref} className={styles.cvGallery}>
+      {rows.map((row, r) => (
+        <div key={r} className={styles.cvGalleryRow} data-row="">
+          {row.map((im, i) => (
+            <div key={im.src} className={styles.cvTile} style={{ ["--i" as string]: i }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                ref={loaded}
+                src={im.src}
+                alt={im.alt}
+                width={im.w}
+                height={im.h}
+                loading="lazy"
+                decoding="async"
+                onLoad={(e) => (e.currentTarget.parentElement!.dataset.loaded = "")}
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /** One piece of a case study (see data/caseStudies.ts). */
 function Block({ b }: { b: CaseBlock }) {
   const pic = (im: { src: string; w: number; h: number; alt: string }) => (
@@ -214,6 +270,8 @@ function Block({ b }: { b: CaseBlock }) {
       );
     case "phones":
       return <TicketmasterPhones screens={b.screens} />;
+    case "gallery":
+      return <Gallery images={b.images} />;
     case "placeholder":
       return (
         <>

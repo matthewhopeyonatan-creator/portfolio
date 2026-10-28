@@ -52,6 +52,8 @@ export type CaseBlock =
     }
   // phone screens built in code, in a bordered frame (components/TicketmasterPhones.tsx)
   | { type: "phones"; screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[] }
+  // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
+  | { type: "gallery"; images: CaseImage[] }
   // a not-yet-written section
   | { type: "placeholder" };
 
@@ -664,7 +666,50 @@ const crowdvolt: CaseSection[] = [
       },
     ],
   },
-  { name: "Graphics", blocks: [{ type: "placeholder" }] },
+  // Figma 152:1476
+  {
+    name: "Graphics",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Graphics",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "A collection of visual assets I created for CrowdVolt",
+            body: "Being at a startup means I have to take on multiple roles, one of which I had large ownership over was graphics and social media. The following are examples of visual assets I created for social media, print, and interface purposes.",
+          },
+        ],
+      },
+      {
+        type: "gallery",
+        images: [
+          "Solara poster",
+          "Head Trip festival lineup poster",
+          "Carlita artist of the month graphic",
+          "Solomun special event at Pacha poster",
+          "Solara with 2nd Wave artist spotlight",
+          "New Music Friday graphic",
+          "Rüfüs Du Sol artist of the month graphic",
+          "What to expect event graphic",
+          "Buddy Buddy coffee hiring poster",
+          "Volt Radio monthly recap graphic",
+          "Solid Grooves giveaway graphic",
+          "Brunello artist of the month graphic",
+          "CrowdVolt Re:wind underground SF poster",
+          "Rave essentials graphic",
+          "CrowdVolt Re:wind at Nook SF poster",
+        ].map((alt, i) => ({
+          src: `/projects/crowdvolt/graphics/g${String(i + 1).padStart(2, "0")}.webp`,
+          w: 1080,
+          h: 1440,
+          alt,
+        })),
+      },
+    ],
+  },
   { name: "Play", blocks: [{ type: "placeholder" }] },
   { name: "Impacts", blocks: [{ type: "placeholder" }] },
 ];

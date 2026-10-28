@@ -715,6 +715,72 @@
   letter-spacing: -0.03em;
 }
 
+/* graphics grid (Figma 152:2372): three 409.83 × 546.44 tiles spread across 1314, rows 42 apart,
+   60 under the intro group */
+.cvGallery {
+  display: flex;
+  flex-direction: column;
+  gap: calc(42 * var(--pu));
+  margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
+}
+
+.cvGalleryRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: calc(42.25 * var(--pu));
+}
+
+/* the tile is uncovered from its bottom edge upward (clip-path) while the art inside rises a
+   touch and comes into focus out of a soft blur; neighbours follow left to right */
+.cvTile {
+  aspect-ratio: 409.833 / 546.444;
+  overflow: hidden;
+  background: #fff;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1000ms var(--ease-in-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.cvTile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate3d(0, 8%, 0) scale(1.06);
+  filter: blur(10px);
+  transition:
+    transform 1300ms var(--ease-intro),
+    filter 900ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 90ms + 120ms);
+}
+
+[data-revealed] > .cvTile[data-loaded] {
+  clip-path: inset(0 0 0 0);
+}
+
+[data-revealed] > .cvTile[data-loaded] img {
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cvTile {
+    clip-path: none;
+    opacity: 0;
+    transition: opacity 400ms var(--ease-out);
+  }
+
+  .cvTile img {
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  [data-revealed] > .cvTile[data-loaded] {
+    opacity: 1;
+  }
+}
+
 /* Figma 131:232: three 425 × 319 cards, 2px ink r24, spread across · "BLOCKER n" Bold 20/25 over
    its title Medium 20/25, centred ~30 down · then a Light 36/36 line, centred, ~19 under */
 .cvBlockers {
