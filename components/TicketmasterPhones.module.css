@@ -500,13 +500,16 @@
 }
 
 .fDivider {
-  /* a whole-pixel rule (0.5px rendered at different weights depending on where it landed);
-     the colour is dimmed to keep the hairline's lightness */
+  /* a soft 2px rule (fading out to each side) carrying the same amount of grey as a 1px line.
+     A hard 1px line renders crisp or smeared across two pixels depending on exactly where it
+     lands, so neighbouring rules looked different shades; this profile looks the same wherever
+     it falls. The negative margins keep the spacing a 1px rule had. */
   flex: none;
-  width: 1px;
+  width: 2px;
+  margin-inline: -0.5px;
   height: calc(52 * var(--pu));
   height: round(calc(52 * var(--pu)), 1px);
-  background: #464646;
+  background: linear-gradient(90deg, transparent, #464646 50%, transparent);
 }
 
 .oTicket {

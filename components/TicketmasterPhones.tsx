@@ -380,47 +380,6 @@ const FINAL_OPTIONS = [
   { label: "All or nothing", caption: "Buyer can only take all tickets at once" },
 ];
 
-/**
- * Nudges each hairline onto a whole device pixel. A 1px rule that lands between pixels is
- * smeared across two and reads lighter than its neighbours, so without this some of the
- * Default row's dividers looked brighter than others depending on window width / zoom.
- */
-function useSnapRules(ref: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const root = ref.current;
-    if (!root) return;
-    let raf = 0;
-    const snap = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const dpr = window.devicePixelRatio || 1;
-        root.querySelectorAll<HTMLElement>("[data-snap]").forEach((el) => {
-          // a whole number of device pixels wide (1px is 1.5 device px at 150% zoom) …
-          el.style.width = `${Math.max(1, Math.round(dpr)) / dpr}px`;
-          // … starting on a whole device pixel. Shifted with margin, not transform, so the browser
-          // still lays it out (and pixel-snaps it) like any other box
-          el.style.marginLeft = "";
-          const x = el.getBoundingClientRect().left * dpr;
-          const off = Math.round(x) - x;
-          if (Math.abs(off) > 0.01) el.style.marginLeft = `${off / dpr}px`;
-        });
-      });
-    };
-    snap();
-    const ro = new ResizeObserver(snap);
-    ro.observe(root);
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && snap());
-    io.observe(root);
-    window.addEventListener("resize", snap);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      io.disconnect();
-      window.removeEventListener("resize", snap);
-    };
-  }, [ref]);
-}
-
 function FinalSell() {
   // nothing picked in the Figma frame (-1); the loop picks each in turn
   const [sel, setSel] = useState(-1);
@@ -439,7 +398,6 @@ function FinalSell() {
     },
     () => setSel(-1),
   );
-  useSnapRules(ref);
   const tickets = (k: number) =>
     [0, 1, 2, 3, 4, 5].map((i) => {
       const t = <OutlineTicket orange={k === 1 && i === 5} />;
@@ -450,7 +408,7 @@ function FinalSell() {
       );
       return k === 0 ? (
         <span key={i} className={styles.fCell}>
-          {i ? <span className={styles.fDivider} data-snap="" aria-hidden="true" /> : null}
+          {i ? <span className={styles.fDivider} aria-hidden="true" /> : null}
           {lift}
         </span>
       ) : (
