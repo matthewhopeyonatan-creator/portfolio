@@ -607,6 +607,12 @@ const crowdvolt: CaseSection[] = [
           },
           {
             type: "sketch",
+            image: {
+              src: "/projects/crowdvolt/tm-sketch.webp",
+              w: 700,
+              h: 511,
+              alt: "Hand-drawn lo-fi user flow sketch of the ticket transfer screens",
+            },
             caption: "Sample lo-fi user flow",
             items: [
               { title: "Users often buy last-minute at a busy venue", text: "Efficient flow" },

@@ -62,12 +62,13 @@ function OutlineTicket({ orange }: { orange?: boolean }) {
           </clipPath>
         </defs>
         <path d={ROUNDED} fill={orange ? "#331100" : "#041F99"} fillOpacity="0.64" />
-        {/* a 1px stroke inside the outline: a 2px stroke clipped to the shape */}
+        {/* a 1px stroke inside the outline: a 2px screen-pixel stroke clipped to the shape */}
         <path
           d={ROUNDED}
           fill="none"
           stroke={orange ? "#FE5600" : "#002CFF"}
           strokeWidth="2"
+          vectorEffect="non-scaling-stroke"
           clipPath={`url(#${id})`}
         />
       </svg>

@@ -1,6 +1,6 @@
 /**
  * What the receipt knows about a visit: when it started, and how long each thing was looked at
- * (a project's case study, a poster up close, a sticker's story). Kept in sessionStorage, so it
+ * (a project's case study or a sticker's story). Kept in sessionStorage, so it
  * belongs to this tab and survives refreshes.
  */
 const START = "hopes-grocer-visit-start";

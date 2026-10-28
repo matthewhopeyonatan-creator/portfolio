@@ -478,17 +478,20 @@
   display: flex;
   align-items: center;
   gap: calc(8 * var(--pu));
+  gap: round(calc(8 * var(--pu)), 1px);
   padding: 1px;
 }
 
 .fRowTight {
   gap: calc(2 * var(--pu));
+  gap: round(calc(2 * var(--pu)), 1px);
 }
 
 /* Default: six tickets and five rules, spaced to fill the card exactly */
 .fRowSplit,
 .fCell {
   gap: calc(7.35 * var(--pu));
+  gap: round(calc(7.35 * var(--pu)), 1px);
 }
 
 .fCell {
@@ -497,9 +500,13 @@
 }
 
 .fDivider {
-  width: 0.5px;
+  /* a whole-pixel rule (0.5px rendered at different weights depending on where it landed);
+     the colour is dimmed to keep the hairline's lightness */
+  flex: none;
+  width: 1px;
   height: calc(52 * var(--pu));
-  background: #7d7d7d;
+  height: round(calc(52 * var(--pu)), 1px);
+  background: #464646;
 }
 
 .oTicket {
@@ -508,6 +515,9 @@
   box-sizing: content-box;
   width: calc(42 * var(--pu));
   height: calc(52 * var(--pu));
+  /* whole-pixel boxes so every ticket's outline lands on the same pixel phase */
+  width: round(calc(42 * var(--pu)), 1px);
+  height: round(calc(52 * var(--pu)), 1px);
 }
 
 .oTicket svg {

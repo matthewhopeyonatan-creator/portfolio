@@ -157,8 +157,6 @@ export const cartCatalog: {
   name: string;
   image?: string;
   sticker?: boolean;
-  /** a Grocer's Selects poster (portrait art) */
-  poster?: boolean;
 }[] = [
   ...projects.map((p) => ({
     key: p.slug,
@@ -285,17 +283,6 @@ export const pastExperiences: {
   { org: "Design Consulting Cornell", role: "Graphics Chair", dates: "Jan 2024 – May 2025", logo: "/experience/design-consulting-cornell.png", blurb: "Cornell University’s only industry-facing design consultancy, partnering with clients like Google, Microsoft, and Chase on semester-long design projects" },
   { org: "LOKO", role: "Graphics Chair", dates: "Aug 2023 – May 2025", logo: "/experience/loko.png", blurb: "Cornell University’s K-hip-hop and K-pop dance team, drawing 500 attendees to its annual showcase" },
 ];
-
-// posters picked up from the shelf (clicking one opens it up close and drops it in the cart)
-export const posterKey = (src: string) => src.replace(/^.*\/(.*)\.webp$/, "$1");
-cartCatalog.push(
-  ...grocersSelects.map((g) => ({
-    key: posterKey(g.src),
-    name: g.title,
-    image: g.src,
-    poster: true,
-  })),
-);
 
 /** Catalog page aisles (Figma 122:925). Each opens its own popup; `#slug` links straight to one. */
 export const catalogAisles = [

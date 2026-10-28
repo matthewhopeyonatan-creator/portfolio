@@ -50,10 +50,10 @@ implements his designs faithfully.
   - `SiteHeader` / `SiteFooter` — navbar hides on scroll down, shows on scroll up
   - `ProjectCard` → `ProjectOverlay` — tray with plastic-wrap peel; opens the "Nutrition Facts"
     popup, which can expand to a full-screen case study (`?project=slug` restores it on refresh)
-  - `GrocersSelects` — poster shelf; click zooms a close-up (`PosterView`) and adds to cart
+  - `GrocersSelects` — poster shelf (display only: posters aren't clickable and don't go in the cart)
   - `Catalog` — aisle list; each aisle opens a popup addressed by hash (`/catalog#graphics`)
   - `cart/` — `CartContext` (sessionStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to check out: saves a receipt, empties the cart, goes to `/receipt`)
-  - `Receipt` (Figma 146:168) + `Tilt` (card that tips under the pointer) — the receipt lists the basket, a Notes box the visitor types into, the thing they looked at longest (case study, poster close-up or sticker story) and their total time on the site (`lib/visit.ts`); visitors can draw on it with a red marker (`useMarker`, the tilt lies flat while drawing; a clear icon fades in at the slip's top-right once there is ink, left out of the download); download (PNG via `html-to-image`) / share
+  - `Receipt` (Figma 146:168) + `Tilt` (card that tips under the pointer) — the receipt lists the basket, a Notes box the visitor types into, the thing they looked at longest (case study or sticker story) and their total time on the site (`lib/visit.ts`); visitors can draw on it with a red marker (`useMarker`, the tilt lies flat while drawing; a clear icon fades in at the slip's top-right once there is ink, left out of the download); download (PNG via `html-to-image`) / share
   - `TicketmasterPhones` — CrowdVolt's ticket-batching screens rebuilt in code for the case study's
     Ticketmaster Flow (Figma 129:100): two loop while on screen (options get clicked through; a ticket
     moves between custom batches; the final choices get clicked through, each acting out what it means; the delivery ticket is sent off and the next slides in). Space Grotesk (`--font-cv`) is
