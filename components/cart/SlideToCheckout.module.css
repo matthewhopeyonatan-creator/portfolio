@@ -15,6 +15,7 @@
   overflow: hidden;
   /* the drag is the control; the browser mustn't treat it as a pan */
   touch-action: none;
+  cursor: grab; /* the whole box is the grip */
   -webkit-user-select: none;
   user-select: none;
 }
@@ -70,6 +71,7 @@
   outline-offset: 4px;
 }
 
+.track[data-held],
 .track[data-held] .grip {
   cursor: grabbing;
 }
@@ -114,6 +116,7 @@
   transition-delay: 120ms;
 }
 
+.track[data-done],
 .track[data-done] .grip {
   cursor: default;
 }

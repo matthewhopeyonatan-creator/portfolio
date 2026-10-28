@@ -10,17 +10,29 @@ import styles from "./SlideToCheckout.module.css";
  * The ground it has covered is the same ink as the handle, so it reads as one block stretching
  * out of its corner and wiping the label as it goes. Past ~85% (or a quick flick) it commits:
  * the ink fills the box, "checking out" appears, and onConfirm rings up the receipt. Short of that it springs
- * back. Keyboard: the handle is a button — Enter / Space checks out straight away.
+ * back. A press anywhere in the box grabs the handle. Keyboard: the handle is a button — Enter / Space checks out straight away.
  */
-export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }) {
+export default function SlideToCheckout({
+  onConfirm,
+}: {
+  onConfirm: () => void;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const gripRef = useRef<HTMLButtonElement>(null);
   const x = useMotionValue(0);
   const [held, setHeld] = useState(false);
   const [done, setDone] = useState(false);
-  const drag = useRef<{ startX: number; startT: number; max: number; from: number } | null>(null);
+  const drag = useRef<{
+    id: number;
+    startX: number;
+    max: number;
+    from: number;
+    // the last few pointer samples, for the speed at release
+    trail: { x: number; t: number }[];
+  } | null>(null);
 
-  const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduce = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const travel = () => {
     const t = trackRef.current;
     const g = gripRef.current;
@@ -51,23 +63,35 @@ export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }
       x.set(max);
       finish();
     } else {
-      animate(x, max, { type: "spring", duration: 0.35, bounce: 0 }).then(finish);
+      animate(x, max, { type: "spring", duration: 0.35, bounce: 0 }).then(
+        finish,
+      );
     }
   }, [onConfirm, x]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (done || e.button !== 0 || drag.current) return; // one pointer at a time
-    const grip = gripRef.current;
-    if (!grip || !grip.contains(e.target as Node)) return; // only the handle starts a drag
+    // a press anywhere in the box picks the handle up from wherever it is — so a second try
+    // while it is still springing home, or a press on the label, still slides
+    e.preventDefault();
     trackRef.current?.setPointerCapture(e.pointerId);
     x.stop();
-    drag.current = { startX: e.clientX, startT: performance.now(), max: travel(), from: x.get() };
+    drag.current = {
+      id: e.pointerId,
+      startX: e.clientX,
+      max: travel(),
+      from: x.get(),
+      trail: [{ x: e.clientX, t: performance.now() }],
+    };
     setHeld(true);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
     const d = drag.current;
-    if (!d) return;
+    if (!d || e.pointerId !== d.id) return;
+    const now = performance.now();
+    d.trail.push({ x: e.clientX, t: now });
+    while (d.trail.length > 2 && now - d.trail[0].t > 100) d.trail.shift();
     let v = d.from + (e.clientX - d.startX);
     // rubber-band past either end instead of hitting a wall
     if (v < 0) v = -Math.sqrt(-v) * 2;
@@ -77,13 +101,26 @@ export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }
 
   const onPointerUp = (e: React.PointerEvent) => {
     const d = drag.current;
-    if (!d) return;
+    if (!d || e.pointerId !== d.id) return;
     drag.current = null;
     setHeld(false);
-    trackRef.current?.releasePointerCapture(e.pointerId);
-    const moved = e.clientX - d.startX;
-    const velocity = moved / Math.max(1, performance.now() - d.startT); // px per ms
-    if (x.get() >= d.max * 0.85 || (velocity > 0.6 && x.get() > d.max * 0.4)) {
+    const t = trackRef.current;
+    if (t?.hasPointerCapture(e.pointerId)) t.releasePointerCapture(e.pointerId);
+    // speed over the last ~100ms, so a flick counts however long the press lasted
+    const first = d.trail[0];
+    const velocity =
+      (e.clientX - first.x) / Math.max(16, performance.now() - first.t); // px per ms
+    // a drag that began on the label can run the finger to the end of the box before the handle
+    // gets there — the finger reaching the end counts too
+    const edge = t
+      ? t.getBoundingClientRect().right - (gripRef.current?.offsetWidth ?? 0)
+      : Infinity;
+    const v = x.get();
+    if (
+      v >= d.max * 0.85 ||
+      (velocity > 0.4 && v > d.max * 0.4) ||
+      (e.clientX >= edge && v > d.max * 0.5)
+    ) {
       commit();
     } else if (reduce()) {
       x.set(0);
@@ -103,11 +140,20 @@ export default function SlideToCheckout({ onConfirm }: { onConfirm: () => void }
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        onLostPointerCapture={onPointerUp}
       >
-        <motion.span className={styles.say} style={{ opacity: sayOpacity }} aria-hidden="true">
+        <motion.span
+          className={styles.say}
+          style={{ opacity: sayOpacity }}
+          aria-hidden="true"
+        >
           slide to checkout
         </motion.span>
-        <motion.span className={styles.wash} style={{ width: washW }} aria-hidden="true" />
+        <motion.span
+          className={styles.wash}
+          style={{ width: washW }}
+          aria-hidden="true"
+        />
         <motion.button
           ref={gripRef}
           type="button"
