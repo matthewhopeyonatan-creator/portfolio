@@ -173,7 +173,10 @@ const stickers: Record<
       name: "Design Meetup",
       // the triangle only — its empty corners sit over the Fatboy sticker
       hit: "20.7% 72%, 24.2% 59%, 36.2% 24.2%, 38.7% 17.1%, 42.2% 13.5%, 46.9% 14.3%, 70.4% 41%, 83.6% 56.1%, 85.2% 61.5%, 82.4% 65.1%, 77.9% 66.1%, 38.7% 73.8%, 28.5% 75.8%, 22.8% 74.9%",
-      title: "Design Meetup",
+      title: "Finding Footing in the City",
+      story:
+        "Design Meetup was founded by friends I had from college, and I was seeing the impact it could have on designers throughout the country. I joined events shortly after its conception, and I ended up joining as a graphic lead in hopes of contributing to this wonderful cause, helping creatives find their footing in big cities, just like how it helped me find my footing in the crazy world of design. Design Meetup has lead me to amazing people who anchor me as a creative and taught me that things are more achievable when done in unison.",
+      lessons: ["Communication", "Collaboration", "Community"],
     },
   ],
   mid: [
