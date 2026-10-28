@@ -289,7 +289,7 @@ export const pastExperiences: {
  * `preview` is the picture that rides beside the cursor while it is over the aisle (Figma 166:3428).
  */
 export const catalogAisles = [
-  { slug: "graphics", label: "Graphics", preview: "/catalog/previews/graphics.webp" },
+  { slug: "graphics", label: "Graphics", preview: "/catalog/previews/graphics-solara.webp" },
   { slug: "florals", label: "Florals" },
   { slug: "cooking", label: "Cooking" },
   { slug: "events", label: "Events" },
