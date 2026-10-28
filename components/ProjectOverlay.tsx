@@ -305,9 +305,7 @@ function Block({ b }: { b: CaseBlock }) {
       return (
         <div className={styles.cvStatement}>
           {b.lines.map((t) => (
-            <p key={t} className={styles.cvCallout}>
-              {t}
-            </p>
+            <p key={t}>{t}</p>
           ))}
         </div>
       );

@@ -766,7 +766,7 @@
 }
 
 /* Impacts (Figma 166:2459): a 48 heading, then 2px ink r24 boxes 16 apart, 24/32 padding,
-   Regular 36/35 · the two lists sit 48 apart · the closing lines 60 under them, a blank line apart */
+   Regular 36/35 · the two lists sit 48 apart · the closing lines 60 under them */
 .cvWins {
   display: flex;
   flex-direction: column;
@@ -796,6 +796,15 @@
   flex-direction: column;
   gap: calc(50 * var(--pu));
   margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
+}
+
+/* Figma 166:3336: Light 32 on a 50 line, a blank line between */
+.section .cvStatement p {
+  margin: 0;
+  font-size: max(18px, calc(32 * var(--pu)));
+  font-weight: 300;
+  line-height: 1.5625; /* 50 / 32 */
+  letter-spacing: -0.03em;
 }
 
 /* Figma 131:232: three 425 × 319 cards, 2px ink r24, spread across · "BLOCKER n" Bold 20/25 over
