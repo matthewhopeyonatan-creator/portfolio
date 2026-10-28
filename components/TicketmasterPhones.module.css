@@ -469,9 +469,6 @@
   border-radius: calc(12 * var(--pu));
 }
 
-.fOptionLight {
-  border-color: #767676;
-}
 
 /* rows of the outlined tickets: 8 apart (with a faint rule between, for Default), or 2 apart */
 .fRow {

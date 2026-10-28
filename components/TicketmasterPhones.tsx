@@ -423,7 +423,7 @@ function FinalSell() {
           <div
             key={o.label}
             data-demo={k}
-            className={`${styles.fOption} ${k === 1 ? styles.fOptionLight : ""} ${sel === k ? styles.fOn : ""}`}
+            className={`${styles.fOption} ${sel === k ? styles.fOn : ""}`}
           >
             <div className={styles.optionHead}>
               <span className={styles.radioWrap}>
