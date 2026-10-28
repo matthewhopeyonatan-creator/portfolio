@@ -95,14 +95,14 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "How might we simplify creative collaboration by uniting client feedback into a seamless workflow for designers?",
-            body: "So what am I doing? Streamlining and maximizing the startup’s features and value propositions.",
+            text: "How might we create a onboarding process that communicates high design standards and unify the platform's various products?",
+            body: "Streamlining and maximizing the startup’s features and value propositions.",
           },
           {
             type: "wins",
             items: [
+              "Creating an improved onboarding experience to get users excited to use the platform",
               "Identifying areas of opportunity to ideate new features and build the best platform for designers",
-              "Creating an improved homepage-to-platform experience to get users excited to use the platform",
             ],
           },
         ],
@@ -114,7 +114,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "A project management tool that bridges the gap between designers and clients",
-            body: "Shmood offers a unified platform where creativity thrives through centralized resources, smart communication, and AI-powered feedback synthesis.",
+            body: "Shmood offers a unified platform where creativity thrives through centralized resources, smart communication, and AI-powered feedback synthesis. Backed by Entrepreneurs First.",
           },
         ],
       },
@@ -145,7 +145,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "Interviews with 30 creatives in over 10 industries",
+            text: "Conducted interviews with 30 creatives in over 10 industries",
             body: "We wanted to gain insights on the how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
           },
           {
@@ -493,10 +493,10 @@ const shmood: CaseSection[] = [
       },
       {
         type: "group",
-        label: "Final Reflections",
         blocks: [
           {
             type: "callout",
+            text: "Final Reflections",
             body: "I was able to explore and soar through the world of creative expression, yet also ground myself with data driven designs. Through the features I have ownership over, I learned so much about the balance between aesthetics and functionality. If I had more time with this project, I would",
           },
           {
