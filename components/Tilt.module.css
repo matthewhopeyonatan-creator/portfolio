@@ -4,7 +4,7 @@
    transition them, or the two would fight. */
 .frame {
   position: relative;
-  perspective: 1400px;
+  perspective: 1200px;
 }
 
 .card {

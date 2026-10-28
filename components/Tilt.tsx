@@ -14,7 +14,7 @@ import styles from "./Tilt.module.css";
 export default function Tilt({
   children,
   className = "",
-  max = 5, // degrees at the very edge
+  max = 8, // degrees at the very edge
 }: {
   children: React.ReactNode;
   className?: string;
@@ -40,13 +40,13 @@ export default function Tilt({
     const paint = () => {
       const { x, y, on } = now;
       c.style.transform = `rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg)`;
-      c.style.boxShadow = `${(-x * 14).toFixed(1)}px ${(18 - y * 10).toFixed(1)}px ${40 + on * 20}px rgba(40, 40, 40, ${(0.08 + on * 0.1).toFixed(3)})`;
+      c.style.boxShadow = `${(-x * 24).toFixed(1)}px ${(20 - y * 16).toFixed(1)}px ${40 + on * 28}px rgba(40, 40, 40, ${(0.08 + on * 0.14).toFixed(3)})`;
       const px = 50 + x * 50;
       const py = 50 + y * 50;
       s.style.opacity = on.toFixed(3);
       s.style.background =
-        `radial-gradient(circle at ${px}% ${py}%, rgba(40, 40, 40, 0.06), transparent 45%),` +
-        `radial-gradient(circle at ${100 - px}% ${100 - py}%, rgba(255, 255, 255, 0.22), transparent 45%)`;
+        `radial-gradient(circle at ${px}% ${py}%, rgba(40, 40, 40, 0.08), transparent 45%),` +
+        `radial-gradient(circle at ${100 - px}% ${100 - py}%, rgba(255, 255, 255, 0.3), transparent 45%)`;
     };
 
     const tick = () => {
