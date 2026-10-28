@@ -117,25 +117,26 @@
   pointer-events: auto;
 }
 
-/* ── rows: start at y201, 125 tall, 24 apart, no rules; thumb 127×125 r12; title 32 at x156 ── */
+/* ── rows (Figma 166:3396): framed boxes 611×124 at x27 from y201, 22 apart, 2px ink border;
+   title 32 at (29, 21), quantity at (29, 62) ── */
 .list {
   flex: 1;
   display: flex;
   flex-direction: column;
-  --row-gap: calc(24 * var(--cu));
+  --row-gap: calc(22 * var(--cu));
   gap: var(--row-gap);
   margin: 0;
-  padding: calc(62 * var(--cu)) calc(48 * var(--cu)) calc(24 * var(--cu));
+  padding: calc(62 * var(--cu)) calc(48 * var(--cu)) calc(24 * var(--cu)) calc(27 * var(--cu));
   overflow-y: auto;
   list-style: none;
   overscroll-behavior: contain;
 }
 
 .row {
-  display: flex;
-  align-items: flex-start;
-  gap: calc(29 * var(--cu));
-  min-height: calc(125 * var(--cu));
+  flex: none;
+  box-sizing: border-box;
+  min-height: calc(124 * var(--cu));
+  border: 2px solid var(--color-ink);
   animation: rowIn 420ms var(--ease-out) both;
 }
 
@@ -146,42 +147,12 @@
   }
 }
 
-.thumb {
-  flex: none;
-  width: calc(127 * var(--cu));
-  height: calc(125 * var(--cu));
-  overflow: hidden;
-  border-radius: calc(12 * var(--cu));
-  background: #717171;
-}
-
-/* stickers sit whole on their own — no tile behind them */
-.thumbSticker {
-  display: grid;
-  place-items: center;
-  overflow: visible;
-  background: none;
-}
-
-.thumbSticker img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-}
-
-.thumb img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
+/* Figma measures from the box's outer edge, so the 2px border comes off the padding */
 .details {
   display: flex;
   flex-direction: column;
-  gap: calc(-2 * var(--cu));
   min-width: 0;
-  padding-top: calc(24 * var(--cu));
+  padding: calc(21 * var(--cu) - 2px) calc(29 * var(--cu) - 2px) calc(24 * var(--cu) - 2px);
 }
 
 .name {
@@ -194,7 +165,6 @@
   display: flex;
   align-items: center;
   gap: calc(33 * var(--cu));
-  margin-left: calc(-6 * var(--cu));
 }
 
 .step {

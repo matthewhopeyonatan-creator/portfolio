@@ -142,14 +142,6 @@ export default function CartDrawer() {
             <ul className={styles.list} data-lenis-prevent>
               {lines.map(({ item, qty }) => (
                 <li key={item.key} className={styles.row}>
-                  <div
-                    className={`${styles.thumb} ${item.sticker ? styles.thumbSticker : ""}`}
-                  >
-                    {item.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={item.image} alt="" />
-                    ) : null}
-                  </div>
                   <div className={styles.details}>
                     <p className={styles.name}>{item.name}</p>
                     <div className={styles.qty}>
