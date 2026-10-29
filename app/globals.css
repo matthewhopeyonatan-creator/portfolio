@@ -52,10 +52,12 @@
   --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
 }
 
-/* Dark mode (homepage for now — lib/theme.ts): near-black #141414 with off-white ink */
+/* Dark mode (lib/theme.ts): near-black #141414 with off-white ink; "paper" (the receipt slip,
+   its buttons) a step up from the page */
 html[data-theme="dark"] {
   --color-bg: #141414;
   --color-ink: #edece9;
+  --color-paper: #1f1f1f;
   --ink-rgb: 237, 236, 233;
   color-scheme: dark;
 }

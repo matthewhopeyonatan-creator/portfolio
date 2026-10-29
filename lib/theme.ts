@@ -3,9 +3,9 @@
 import { useSyncExternalStore } from "react";
 
 /**
- * Dark mode — homepage only for now. The choice is kept per visitor (localStorage) and applied as
- * <html data-theme="dark"> while the homepage is open; the inline script in app/layout.tsx sets it
- * before first paint so a returning visitor never sees a light flash.
+ * Dark mode, site-wide. The choice is kept per visitor (localStorage) and applied as
+ * <html data-theme="dark">; the inline script in app/layout.tsx sets it before first paint so a
+ * returning visitor never sees a light flash. The switch itself lives on the landing.
  */
 export type Theme = "light" | "dark";
 
@@ -23,16 +23,6 @@ function apply(theme: Theme) {
   const root = document.documentElement;
   if (theme === "dark") root.dataset.theme = "dark";
   else delete root.dataset.theme;
-}
-
-/** put the stored choice on the page (homepage mount) */
-export function applyStoredTheme() {
-  apply(readStoredTheme());
-}
-
-/** leave the homepage: the other pages are light-only for now */
-export function clearTheme() {
-  delete document.documentElement.dataset.theme;
 }
 
 export function setTheme(theme: Theme) {

@@ -52,10 +52,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
-        {/* dark mode is homepage-only for now: put a returning visitor's choice on before paint */}
+        {/* dark mode: put a returning visitor's choice on before paint */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(location.pathname==="/"&&localStorage.getItem("hg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`,
+            __html: `try{if(localStorage.getItem("hg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`,
           }}
         />
       </head>

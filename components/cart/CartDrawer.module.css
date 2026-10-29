@@ -194,7 +194,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .step:hover {
-    background: rgba(40, 40, 40, 0.08);
+    background: rgba(var(--ink-rgb), 0.08);
   }
 }
 

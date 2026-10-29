@@ -7,6 +7,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
 import { loadReceipt, mostViewed, saveReceipt, visitMinutes, type Receipt as R } from "@/lib/visit";
+import { useTheme } from "@/lib/theme";
 import styles from "./Receipt.module.css";
 
 /**
@@ -24,6 +25,7 @@ const stamp = (t: number) => {
 };
 
 export default function Receipt() {
+  const dark = useTheme() === "dark";
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
   const feed = useRef<HTMLDivElement>(null);
@@ -66,7 +68,8 @@ export default function Receipt() {
     const { toBlob } = await import("html-to-image");
     return toBlob(node, {
       pixelRatio: 2,
-      backgroundColor: "#ffffff",
+      // the slip's own paper colour, so a dark-mode receipt saves dark
+      backgroundColor: getComputedStyle(node).backgroundColor || "#ffffff",
       filter: (n) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)),
     });
   };
@@ -114,9 +117,9 @@ export default function Receipt() {
       <div className={styles.stage}>
         {/* blurred tomatoes behind the slip (Figma 146:168), placed relative to it in receipt px */}
         <div className={styles.tomatoes} aria-hidden="true">
-          <Image className={`${styles.tomato} ${styles.tomatoBack}`} src="/receipt/tomato-back.svg" alt="" width={622} height={645} unoptimized priority />
-          <Image className={`${styles.tomato} ${styles.tomatoRight}`} src="/receipt/tomato-right.svg" alt="" width={719} height={674} unoptimized priority />
-          <Image className={`${styles.tomato} ${styles.tomatoLeft}`} src="/receipt/tomato-left.svg" alt="" width={903} height={815} unoptimized priority />
+          <Image className={`${styles.tomato} ${styles.tomatoBack}`} src={`/receipt/${dark ? "dark/" : ""}tomato-back.svg`} alt="" width={622} height={645} unoptimized priority />
+          <Image className={`${styles.tomato} ${styles.tomatoRight}`} src={`/receipt/${dark ? "dark/" : ""}tomato-right.svg`} alt="" width={719} height={674} unoptimized priority />
+          <Image className={`${styles.tomato} ${styles.tomatoLeft}`} src={`/receipt/${dark ? "dark/" : ""}tomato-left.svg`} alt="" width={903} height={815} unoptimized priority />
         </div>
         <div ref={feed} className={styles.print}>
           <Tilt className={styles.tilt}>

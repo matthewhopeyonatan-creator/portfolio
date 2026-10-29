@@ -336,12 +336,12 @@
 }
 
 .note::placeholder {
-  color: rgba(40, 40, 40, 0.45);
+  color: rgba(var(--ink-rgb), 0.45);
 }
 
 .note:focus-visible {
   text-decoration: underline;
-  text-decoration-color: rgba(40, 40, 40, 0.3);
+  text-decoration-color: rgba(var(--ink-rgb), 0.3);
   text-underline-offset: 0.2em;
 }
 
