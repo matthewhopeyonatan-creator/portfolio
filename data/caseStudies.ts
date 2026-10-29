@@ -402,7 +402,18 @@ const shmood: CaseSection[] = [
             type: "figures",
             rise: true,
             items: [
-              fig(img("16", 2000, 1761, "Initial dashboard with six widgets")),
+              fig({
+                src: "/projects/shmood/dashboard/initial-empty.webp",
+                w: 1200,
+                h: 1095,
+                alt: "Shmood's initial dashboard before any feedback has come in",
+              }),
+              fig({
+                src: "/projects/shmood/dashboard/initial-filled.webp",
+                w: 1200,
+                h: 1063,
+                alt: "Shmood's initial dashboard filled in with notes, design files and feedback",
+              }),
             ],
           },
         ],
