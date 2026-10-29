@@ -7,7 +7,7 @@ implements his designs faithfully.
 - Figma file: `DbnQGTZoiTkrrOSdZe2pk1` (desktop frame is 1728px wide)
 - Repo: `matthewhopeyonatan-creator/portfolio` (branch `main`)
 - Hosting: Vercel project `prj_B4zwQpO3ISVDqxZxeWGtSUZpbhKP` — production deploys from `main`
-- Live: matthew-hope.com (www redirects to it; DNS on Google Cloud DNS, A @ 76.76.21.21, CNAME www → cname.vercel-dns.com) · also portfolio-ivory-one-okvhn31le5.vercel.app. Old Framer paths /crowdvolt, /shmood, /inky redirect in `next.config.ts`
+- Live: hopesgrocer.com (www redirects to it; DNS on Squarespace, A @ 76.76.21.21, CNAME www → cname.vercel-dns.com) · also portfolio-ivory-one-okvhn31le5.vercel.app. matthew-hope.com (old Framer domain, Google Cloud DNS) is still attached to the Vercel project but Matthew wants it inactive. Old Framer paths /crowdvolt, /shmood, /inky redirect in `next.config.ts`
 
 ## Matthew's rules — follow these every time
 
