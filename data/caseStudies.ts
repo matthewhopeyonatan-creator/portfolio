@@ -118,20 +118,6 @@ const shmood: CaseSection[] = [
           },
         ],
       },
-      {
-        type: "group",
-        label: "Backed by",
-        blocks: [
-          {
-            type: "logos",
-            images: [
-              img("02", 438, 110, "Entrepreneur First"),
-              img("03", 480, 181, "Transpose Platform"),
-              img("04", 394, 88, "Common Magic"),
-            ],
-          },
-        ],
-      },
     ],
   },
   {
