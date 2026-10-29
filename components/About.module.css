@@ -2,7 +2,7 @@
    from the navbar rule, with the first gap equal to the side margin like the homepage headline.
    Type: Host Grotesk — Light 36 body (−3% tracking), Bold 174.51 titles (−5%). */
 .page {
-  padding-bottom: calc(390 * var(--u)); /* to the footer's rule */
+  padding-bottom: calc(254 * var(--u)); /* to the footer's rule */
   color: var(--color-ink);
 }
 
@@ -121,7 +121,7 @@
 }
 
 .snapSunset {
-  object-position: 50% 80%; /* the orange band over the water */
+  object-position: 50% 90%; /* the orange band over the water */
   left: var(--gutter);
   top: calc(561 * var(--u));
 }
@@ -133,11 +133,122 @@
   line-height: calc(40 * var(--u));
 }
 
+/* ── experience + education (Figma 217:473–217:555) — a column of rows each: company Regular 36,
+   role Light 32 tucked 20 up under it, dates Light 32 on the right; 36 between rows. The two
+   section rules run off the page's edge on their outer side. ── */
+.career {
+  position: relative;
+  height: calc(1199 * var(--u));
+  margin-top: calc(181 * var(--u));
+}
+
+.career > * {
+  position: absolute;
+}
+
+.careerLabel {
+  font-size: max(18px, calc(36 * var(--u)));
+  font-weight: 300;
+  line-height: calc(40 * var(--u));
+  letter-spacing: -0.03em;
+}
+
+.workLabel {
+  left: var(--gutter);
+  top: 0;
+}
+
+.schoolLabel {
+  left: calc(902 * var(--u));
+  top: calc(590 * var(--u));
+}
+
+.careerRule {
+  width: calc(828 * var(--u));
+  height: 2px;
+  background: var(--color-ink);
+}
+
+.workRule {
+  left: calc(-47 * var(--u));
+  top: calc(61 * var(--u));
+}
+
+.schoolRule {
+  left: calc(902 * var(--u));
+  top: calc(653 * var(--u));
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: calc(36 * var(--u));
+}
+
+.workRows {
+  left: var(--gutter);
+  top: calc(86 * var(--u));
+  width: calc(716 * var(--u));
+}
+
+.schoolRows {
+  left: calc(902 * var(--u));
+  right: var(--gutter);
+  top: calc(676 * var(--u));
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "org dates"
+    "role .";
+  line-height: calc(55 * var(--u));
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.org {
+  grid-area: org;
+  font-size: max(18px, calc(36 * var(--u)));
+  font-weight: 400;
+}
+
+.role {
+  grid-area: role;
+  margin-top: calc(-20 * var(--u));
+  font-size: max(16px, calc(32 * var(--u)));
+  font-weight: 300;
+}
+
+.dates {
+  grid-area: dates;
+  font-size: max(16px, calc(32 * var(--u)));
+  font-weight: 300;
+  text-align: right;
+}
+
+.snapWork {
+  right: var(--gutter);
+  top: calc(5 * var(--u));
+  width: calc(340 * var(--u));
+  height: calc(465 * var(--u));
+  object-position: 50% 62%; /* him on the bridge */
+}
+
+.snapSchool {
+  left: var(--gutter);
+  top: calc(918 * var(--u));
+  width: calc(513 * var(--u));
+  height: calc(281 * var(--u));
+  object-position: 50% 64%; /* the rows of plants under the glass */
+}
+
 /* ── produce recs ── */
 .recs {
   position: relative;
   height: calc(312 * var(--u));
-  margin-top: calc(377 * var(--u));
+  margin-top: calc(101 * var(--u));
 }
 
 .recs > * {
@@ -163,7 +274,7 @@
 }
 
 .snapProduce {
-  object-position: 50% 74%; /* the tomatoes */
+  object-position: 50% 86%; /* the tomatoes */
   right: var(--gutter);
   top: calc(24 * var(--u));
 }
@@ -204,6 +315,7 @@
     margin-right: 12px;
   }
   .story,
+  .career,
   .recs {
     height: auto;
     margin-top: 48px;
@@ -213,8 +325,42 @@
     gap: 24px;
   }
   .story > *,
+  .career > *,
   .recs > * {
     position: static;
+  }
+  .careerRule {
+    width: auto;
+    margin: -12px calc(-1 * var(--gutter)) 0;
+  }
+  .workRule {
+    margin-right: 0;
+  }
+  .schoolRule {
+    margin-left: 0;
+  }
+  .schoolLabel {
+    margin-top: 24px;
+  }
+  .row {
+    line-height: 1.35;
+    white-space: normal;
+  }
+  .role {
+    margin-top: 0;
+  }
+  .dates {
+    padding-left: 12px;
+  }
+  .workRows,
+  .schoolRows {
+    width: auto;
+  }
+  .snap.snapWork {
+    aspect-ratio: 340 / 465;
+  }
+  .snap.snapSchool {
+    aspect-ratio: 513 / 281;
   }
   .interests,
   .tip {

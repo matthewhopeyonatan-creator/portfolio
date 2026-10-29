@@ -4,10 +4,44 @@ import styles from "./About.module.css";
 
 /**
  * The about page (Figma 122:925, 1728 wide). Laid out in Figma px (--u) from the frame: intro,
- * MATTHEW HOPE, the drifting photo strip, the things that have
- * stuck with him, a design tip, and Produce Recs.
+ * MATTHEW HOPE, the drifting photo strip, the things that have stuck with him, a design tip,
+ * experience and education, and Produce Recs.
  */
 const INTERESTS = ["cooking", "hiking", "graphic design", "hosting", "plants", "dancing", "travel"];
+
+// Figma 217:490 / 217:516 — newest first
+const WORK = [
+  { org: "25madison", role: "product design fellow", dates: "aug 26 - dec 26" },
+  { org: "CrowdVolt (YC24)", role: "product design intern", dates: "dec 25 - aug 26" },
+  { org: "The Philadelphia Inquirer", role: "contract product designer", dates: "jan 25 - may 25" },
+  { org: "Shmood (EF24)", role: "contract product designer", dates: "aug 24 - dec 24" },
+  { org: "Momentive Materials", role: "research intern", dates: "may 24 - aug 24" },
+  { org: "Takasago", role: "flavorist intern", dates: "jun 23 - jul 23" },
+];
+const SCHOOL = [
+  { org: "New York University", role: "m.s. integrated design", dates: "sep 25 - may 27" },
+  { org: "Cornell University", role: "b.s. agricultural sciences", dates: "aug 23 - may 25" },
+  { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23" },
+];
+
+function Rows({ items, className }: { items: typeof WORK; className: string }) {
+  return (
+    <ul className={`${styles.rows} ${className}`}>
+      {items.map((r, i) => (
+        <li
+          key={r.org}
+          className={styles.row}
+          data-reveal="up"
+          style={{ "--i": i } as React.CSSProperties}
+        >
+          <span className={styles.org}>{r.org}</span>
+          <span className={styles.role}>{r.role}</span>
+          <span className={styles.dates}>{r.dates}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function About() {
   const month = new Date().getMonth(); // when the page was built (refreshed daily, app/about)
@@ -62,6 +96,39 @@ export default function About() {
           <br />
           always remember pause and look at the sunset
         </p>
+      </section>
+
+      <section className={styles.career} aria-label="Experience and education">
+        <h2 className={`${styles.careerLabel} ${styles.workLabel}`} data-reveal="up">
+          Who built me professionally
+        </h2>
+        <span className={`${styles.careerRule} ${styles.workRule}`} aria-hidden="true" />
+        <Rows items={WORK} className={styles.workRows} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className={`${styles.snap} ${styles.snapWork}`}
+          src="/about/work.webp"
+          alt="Matthew at his Cornell graduation, in a red stole on a wooden bridge"
+          width={340}
+          height={465}
+          loading="lazy"
+          data-reveal="up"
+        />
+        <h2 className={`${styles.careerLabel} ${styles.schoolLabel}`} data-reveal="up">
+          Where I found my footing
+        </h2>
+        <span className={`${styles.careerRule} ${styles.schoolRule}`} aria-hidden="true" />
+        <Rows items={SCHOOL} className={styles.schoolRows} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className={`${styles.snap} ${styles.snapSchool}`}
+          src="/about/school.webp"
+          alt="Rows of lettuce growing under a greenhouse roof"
+          width={513}
+          height={281}
+          loading="lazy"
+          data-reveal="up"
+        />
       </section>
 
       <section className={styles.recs} aria-labelledby="produce-recs">
