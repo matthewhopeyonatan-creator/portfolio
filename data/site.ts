@@ -66,31 +66,6 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "25madison",
-    title: "25madison",
-    subtitle: "Internal tool for streamlining branding",
-    tags: ["B2B", "AI tool", "Internal tool", "Startup incubation"],
-    href: "https://matthew-hope.com",
-    // Figma 21:136 / 78:2301: dark shot under the wrap, "sold out" banner across the pack
-    shot: "#111",
-    // Figma 80:2345: the 25m mark at (62, 67) and the arcs from x200 on the 487 × 274 shot
-    shotArt: [
-      {
-        src: "/projects/25madison-mark.svg",
-        left: 62.014,
-        top: 67,
-        width: 100.988,
-      },
-      {
-        src: "/projects/25madison-arcs.svg",
-        left: 200.008,
-        top: 0,
-        width: 288,
-      },
-    ],
-    soldOut: true,
-  },
-  {
     slug: "shmood",
     title: "Shmood",
     subtitle: "Onboarding and dashboard for creatives",
@@ -118,6 +93,31 @@ export const projects: Project[] = [
     ],
     href: "https://matthew-hope.com/inky",
     video: "/projects/inquirer.mp4",
+  },
+  {
+    slug: "25madison",
+    title: "25madison",
+    subtitle: "Internal tool for streamlining branding",
+    tags: ["B2B", "AI tool", "Internal tool", "Startup incubation"],
+    href: "https://matthew-hope.com",
+    // Figma 21:136 / 78:2301: dark shot under the wrap, "sold out" banner across the pack
+    shot: "#111",
+    // Figma 80:2345: the 25m mark at (62, 67) and the arcs from x200 on the 487 × 274 shot
+    shotArt: [
+      {
+        src: "/projects/25madison-mark.svg",
+        left: 62.014,
+        top: 67,
+        width: 100.988,
+      },
+      {
+        src: "/projects/25madison-arcs.svg",
+        left: 200.008,
+        top: 0,
+        width: 288,
+      },
+    ],
+    soldOut: true,
   },
 ];
 
