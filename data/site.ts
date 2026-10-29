@@ -259,28 +259,3 @@ export const grocersSelects: {
     src: "/graphics/poster-12.webp",
   },
 ];
-
-/** "Past experiences" (Figma 141:151): dates · role · company rows, two columns, in this order.
- * `dates` is optional until it's filled in for every entry. (`logo` is kept for reference; the
- * current design doesn't show it.) */
-/* `blurb` shows in the hover card (Figma 141:165) next to the logo; rows without one get no card */
-export const pastExperiences: {
-  org: string;
-  role: string;
-  dates?: string;
-  logo: string;
-  blurb?: string;
-}[] = [
-  // newest first, by start date
-  { org: "25madison", role: "Product Design Fellow", dates: "Aug 2026 – Present", logo: "/experience/25madison.png", blurb: "Venture capital and investment firm incubating AI companies in legacy industries" },
-  { org: "Design Meetup", role: "Graphics Lead", dates: "Jul 2026 – Present", logo: "/experience/design-meetup.png", blurb: "A design community of 10,000+ creatives across NYC, LA, and SF, hosting community and career-focused events" },
-  { org: "Fatboy Supperclub", role: "Graphics & Guest Experience", dates: "Jun 2026 – Present", logo: "/experience/fatboy.png", blurb: "An NYC supper club serving Chinese fusion food as a five-course, full-experience dinner" },
-  { org: "UX Club NYU", role: "UX Team Lead", dates: "May 2026 – Present", logo: "/experience/ux-club-nyu.png", blurb: "NYU’s premier UX design club, hosting events, competitions, and panels that connect early-career designers with industry professionals" },
-  { org: "Crowdvolt", role: "Product Design Intern", dates: "Dec 2025 – Aug 2026", logo: "/experience/crowdvolt.png", blurb: "YC-backed bid-ask marketplace for electronic music tickets, connecting buyers and sellers on a secure, community-driven platform" },
-  { org: "The Philadelphia Inquirer", role: "Product Designer (contract)", dates: "Jan 2025 – May 2025", logo: "/experience/philadelphia-inquirer.png", blurb: "Philadelphia’s largest media outlet, with over 15 million unique monthly visitors and 180,000 active users" },
-  { org: "Shmood", role: "Product Designer (contract)", dates: "Aug 2024 – Dec 2024", logo: "/experience/shmood.png", blurb: "Pre-seed creative tool backed by Entrepreneurs First, consolidating the feedback process between designers and their stakeholders" },
-  { org: "Design Consulting Cornell", role: "Graphics Chair", dates: "Jan 2024 – May 2025", logo: "/experience/design-consulting-cornell.png", blurb: "Cornell University’s only industry-facing design consultancy, partnering with clients like Google, Microsoft, and Chase on semester-long design projects" },
-  { org: "LOKO", role: "Graphics Chair", dates: "Aug 2023 – May 2025", logo: "/experience/loko.png", blurb: "Cornell University’s K-hip-hop and K-pop dance team, drawing 500 attendees to its annual showcase" },
-];
-
-

@@ -11,7 +11,9 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 0;
+  /* the shelf is the last thing on the page: its bottom rule and the footer's top rule share the
+     same 2px, rather than stacking into a 4px line */
+  margin: 0 0 -2px;
   padding: 0;
   list-style: none;
   background: var(--color-bg);
