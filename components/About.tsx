@@ -3,7 +3,7 @@ import styles from "./About.module.css";
 
 /**
  * The about page (Figma 122:925, 1728 wide). Laid out in Figma px (--u) from the frame: intro,
- * "Hope's gallery" up the right edge, MATTHEW HOPE, the drifting photo strip, the things that have
+ * MATTHEW HOPE, the drifting photo strip, the things that have
  * stuck with him, a design tip, and Produce Recs.
  */
 const INTERESTS = ["cooking", "hiking", "graphic design", "hosting", "plants", "dancing", "travel"];
@@ -17,9 +17,6 @@ export default function About() {
           Hi there, I’m a product designer that grew up in Jakarta, Indonesia. I take life through
           curiosity and the mindset to always be down to do something new. Hope you learn more about
           me here :)
-        </p>
-        <p className={styles.galleryLabel} aria-hidden="true">
-          Hope’s gallery
         </p>
         <h1 id="about-name" className={styles.name} data-reveal="up">
           MATTHEW HOPE

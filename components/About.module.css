@@ -20,7 +20,6 @@
 
 /* body copy — Light 36 */
 .intro,
-.galleryLabel,
 .storyText,
 .interests,
 .tip,
@@ -39,16 +38,6 @@
 .intro {
   width: calc(1038 * var(--u));
   line-height: calc(35 * var(--u));
-}
-
-/* up the right edge, reading top to bottom; it starts a margin under the light / dark switch */
-.galleryLabel {
-  position: absolute;
-  right: var(--gutter);
-  top: calc(var(--gutter) * 2 + max(48px, calc(84 * var(--u))) * 47.89 / 104.75);
-  writing-mode: vertical-rl;
-  line-height: calc(35 * var(--u));
-  white-space: nowrap;
 }
 
 .name {
@@ -198,9 +187,6 @@
   }
   .intro {
     padding-right: calc(var(--gutter) + 64px); /* clear of the switch */
-  }
-  .galleryLabel {
-    display: none;
   }
   /* MATTHEW HOPE fills the line between the margins */
   .name {
