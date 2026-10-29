@@ -7,7 +7,7 @@ implements his designs faithfully.
 - Figma file: `DbnQGTZoiTkrrOSdZe2pk1` (desktop frame is 1728px wide)
 - Repo: `matthewhopeyonatan-creator/portfolio` (branch `main`)
 - Hosting: Vercel project `prj_B4zwQpO3ISVDqxZxeWGtSUZpbhKP` — production deploys from `main`
-- Live: portfolio-ivory-one-okvhn31le5.vercel.app (old Framer site: matthew-hope.com)
+- Live: matthew-hope.com (www redirects to it; DNS on Google Cloud DNS, A @ 76.76.21.21, CNAME www → cname.vercel-dns.com) · also portfolio-ivory-one-okvhn31le5.vercel.app. Old Framer paths /crowdvolt, /shmood, /inky redirect in `next.config.ts`
 
 ## Matthew's rules — follow these every time
 
@@ -74,7 +74,7 @@ implements his designs faithfully.
 
 ## Navigation behaviour (keep working)
 
-- Navbar: about → external matthew-hope.com/about · projects → `/#seasonal-picks` (the catalog page was removed)
+- Navbar: about → `/about` · projects → `/#seasonal-picks` (the catalog page was removed)
 - Logo on `/` scrolls to top; elsewhere it links home. Cross-page section links land on the section.
 
 ## Motion

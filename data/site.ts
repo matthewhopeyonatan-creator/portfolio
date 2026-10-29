@@ -53,7 +53,7 @@ export const projects: Project[] = [
     title: "CrowdVolt",
     subtitle: "Multi-role design",
     tags: ["Consumer product", "Startup", "Front end code", "Mobile & web"],
-    href: "https://matthew-hope.com/crowdvolt",
+    href: "/?project=crowdvolt",
     video: "/projects/crowdvolt.mp4",
     intro:
       "CrowdVolt is an electronic music ticket marketplace. Over nine months, I worked across product, graphics, social media, and event planning. Being at an early-stage company meant I got to own pieces of a lot of different flows and jump between roles, and this page covers the highlights.",
@@ -90,15 +90,16 @@ export const projects: Project[] = [
       "User research",
       "Mobile app",
     ],
-    href: "https://matthew-hope.com/inky",
+    href: "/#seasonal-picks",
     video: "/projects/inquirer.mp4",
+    soldOut: true,
   },
   {
     slug: "25madison",
     title: "25madison",
     subtitle: "Internal tool for streamlining branding",
     tags: ["B2B", "AI tool", "Internal tool", "Startup incubation"],
-    href: "https://matthew-hope.com",
+    href: "/#seasonal-picks",
     // Figma 21:136 / 78:2301: dark shot under the wrap, "sold out" banner across the pack
     shot: "#111",
     // Figma 80:2345: the 25m mark at (62, 67) and the arcs from x200 on the 487 × 274 shot
