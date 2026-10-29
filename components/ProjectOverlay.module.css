@@ -982,6 +982,14 @@
   .expand {
     display: none;
   }
+  /* tapping a project opens it like a page: straight in, no popup rising over a dimmed page */
+  .backdrop {
+    display: none;
+  }
+  .frame,
+  .leaving .frame {
+    animation: none;
+  }
   .close,
   .close:not(:focus-visible) {
     right: 16px;

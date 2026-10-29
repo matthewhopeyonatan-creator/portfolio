@@ -689,7 +689,7 @@ export default function ProjectOverlay({
         lockScroll(false);
         onClose();
         if (then) requestAnimationFrame(() => requestAnimationFrame(then));
-      }, 240); // = --dur-exit
+      }, window.matchMedia("(max-width: 767px)").matches ? 0 : 240); // = --dur-exit; phones: a page, so it just goes
     },
     [leaving, onClose],
   );
