@@ -212,20 +212,34 @@
 
 .org {
   grid-area: org;
-  font-size: max(18px, calc(36 * var(--u)));
+  justify-self: start; /* the box hugs the name, so only the name itself opens the hover card */
+  position: relative;
+  font-size: max(18px, calc(32 * var(--u)));
   font-weight: 400;
+}
+
+/* a little hover margin around the name (an invisible pad, so nothing shifts) */
+.org::after {
+  content: "";
+  position: absolute;
+  inset: -14px -20px;
+}
+
+.hasCard {
+  cursor: default;
 }
 
 .role {
   grid-area: role;
-  margin-top: calc(-20 * var(--u));
-  font-size: max(16px, calc(32 * var(--u)));
+  margin-top: calc(-18 * var(--u));
+  font-size: max(14px, calc(24 * var(--u)));
   font-weight: 300;
 }
 
 .dates {
   grid-area: dates;
-  font-size: max(16px, calc(32 * var(--u)));
+  align-self: center;
+  font-size: max(14px, calc(24 * var(--u)));
   font-weight: 300;
   text-align: right;
 }
@@ -244,6 +258,72 @@
   width: calc(513 * var(--u));
   height: calc(281 * var(--u));
   object-position: 50% 64%; /* the rows of plants under the glass */
+}
+
+/* ── hover card on a company / school name — the one the homepage's experience list had (Figma
+   141:165): 386 wide, page colour, 2px ink border, r24, logo 70 round, blurb 20. It sits 18px
+   below-right of the cursor and trails it (CareerRows' useFollowCard). The outer box only moves;
+   the inner card fades and settles from 96% out of the corner nearest the cursor, and leaves
+   quicker than it arrives. Mouse only. ── */
+.hoverCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 70px 246px;
+  column-gap: 26px;
+  align-items: start;
+  box-sizing: border-box;
+  width: 386px;
+  padding: 20px;
+  border: var(--rule);
+  border-radius: 24px;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  opacity: 0;
+  transform: scale(0.96);
+  transform-origin: 0 0;
+  transition:
+    opacity 150ms var(--ease-out),
+    transform 150ms var(--ease-out);
+}
+
+/* no logo yet: just the line */
+.cardTextOnly {
+  grid-template-columns: 1fr;
+}
+
+.cardOn {
+  opacity: 1;
+  transform: none;
+  transition-duration: 200ms;
+}
+
+.cardLogo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.cardText {
+  margin: 0 !important;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .cardOn {
+    transform: none;
+  }
 }
 
 /* ── produce recs ── */

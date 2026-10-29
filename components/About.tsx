@@ -1,4 +1,5 @@
 import AboutGallery from "@/components/AboutGallery";
+import CareerRows, { type CareerRow } from "@/components/CareerRows";
 import { RecsList, RecsMonth } from "@/components/ProduceRecs";
 import styles from "./About.module.css";
 
@@ -10,18 +11,27 @@ import styles from "./About.module.css";
 const INTERESTS = ["cooking", "hiking", "graphic design", "hosting", "plants", "dancing", "travel"];
 
 // Figma 217:490 / 217:516 — newest first
-const WORK = [
-  { org: "25madison", role: "product design fellow", dates: "aug 26 - dec 26" },
-  { org: "CrowdVolt (YC24)", role: "product design intern", dates: "dec 25 - aug 26" },
-  { org: "The Philadelphia Inquirer", role: "contract product designer", dates: "jan 25 - may 25" },
-  { org: "Shmood (EF24)", role: "contract product designer", dates: "aug 24 - dec 24" },
-  { org: "Momentive Materials", role: "research intern", dates: "may 24 - aug 24" },
-  { org: "Takasago", role: "flavorist intern", dates: "jun 23 - jul 23" },
+const WORK: CareerRow[] = [
+  { org: "25madison", role: "product design fellow", dates: "aug 26 - dec 26", logo: "/about/logos/25madison.webp",
+    blurb: "Venture capital and investment firm incubating AI companies in legacy industries" },
+  { org: "CrowdVolt (YC24)", role: "product design intern", dates: "dec 25 - aug 26", logo: "/about/logos/crowdvolt.webp",
+    blurb: "YC-backed bid-ask marketplace for electronic music tickets, connecting buyers and sellers on a secure, community-driven platform" },
+  { org: "The Philadelphia Inquirer", role: "contract product designer", dates: "jan 25 - may 25", logo: "/about/logos/philadelphia-inquirer.webp",
+    blurb: "Philadelphia’s largest media outlet, with over 15 million unique monthly visitors and 180,000 active users" },
+  { org: "Shmood (EF24)", role: "contract product designer", dates: "aug 24 - dec 24", logo: "/about/logos/shmood.webp",
+    blurb: "Pre-seed creative tool backed by Entrepreneurs First, consolidating the feedback process between designers and their stakeholders" },
+  { org: "Momentive Materials", role: "research intern", dates: "may 24 - aug 24",
+    blurb: "Global maker of silicones and specialty materials" },
+  { org: "Takasago", role: "flavorist intern", dates: "jun 23 - jul 23",
+    blurb: "Japanese flavor and fragrance house, one of the largest in the world" },
 ];
-const SCHOOL = [
-  { org: "New York University", role: "m.s. integrated design", dates: "sep 25 - may 27" },
-  { org: "Cornell University", role: "b.s. agricultural sciences", dates: "aug 23 - may 25" },
-  { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23" },
+const SCHOOL: CareerRow[] = [
+  { org: "New York University", role: "m.s. integrated design", dates: "sep 25 - may 27",
+    blurb: "Private research university in New York City" },
+  { org: "Cornell University", role: "b.s. agricultural sciences", dates: "aug 23 - may 25",
+    blurb: "Ivy League university in Ithaca, New York" },
+  { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23",
+    blurb: "Community college in Pleasant Hill, California" },
 ];
 
 /** one of the page's still photos; it comes into focus out of a soft blur as it scrolls in
@@ -56,27 +66,6 @@ function Snap({
   );
 }
 
-function Rows({ items, className }: { items: typeof WORK; className: string }) {
-  return (
-    <ul className={`${styles.rows} ${className}`}>
-      {items.map((r, i) => (
-        <li
-          key={r.org}
-          className={styles.row}
-          data-reveal="up"
-          // starts just before it's on screen, the rows close behind each other, so the list is
-          // there to read as it arrives
-          data-reveal-early="ahead"
-          style={{ "--i": i * 0.5 } as React.CSSProperties}
-        >
-          <span className={styles.org}>{r.org}</span>
-          <span className={styles.role}>{r.role}</span>
-          <span className={styles.dates}>{r.dates}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export default function About() {
   const month = new Date().getMonth(); // when the page was built (refreshed daily, app/about)
@@ -85,8 +74,8 @@ export default function About() {
       <section className={styles.hello} aria-labelledby="about-name">
         <p className={styles.intro} data-reveal="up">
           Hi there, I’m a product designer that grew up in Jakarta, Indonesia. I take life through
-          curiosity and the mindset to always be down to do something new. Hope you learn more about
-          me here :)
+          the mindset to always be down to do something new. I always remind myself to thrive in any
+          situation I am in and have fun while I&apos;m at it. Hope you learn more about me here :)
         </p>
         <h1 id="about-name" className={styles.name} data-reveal="up">
           MATTHEW HOPE
@@ -117,13 +106,13 @@ export default function About() {
           Who built me professionally
         </h2>
         <span className={`${styles.careerRule} ${styles.workRule}`} aria-hidden="true" />
-        <Rows items={WORK} className={styles.workRows} />
+        <CareerRows items={WORK} className={styles.workRows} />
         <Snap className={styles.snapWork} src="/about/work.webp" alt="Matthew at his Cornell graduation, in a red stole on a wooden bridge" width={340} height={465} />
         <h2 className={`${styles.careerLabel} ${styles.schoolLabel}`} data-reveal="up" data-reveal-early="ahead">
           Where I found my footing
         </h2>
         <span className={`${styles.careerRule} ${styles.schoolRule}`} aria-hidden="true" />
-        <Rows items={SCHOOL} className={styles.schoolRows} />
+        <CareerRows items={SCHOOL} className={styles.schoolRows} />
         <Snap className={styles.snapSchool} src="/about/school.webp" alt="Rows of lettuce growing under a greenhouse roof" width={513} height={281} />
       </section>
 
