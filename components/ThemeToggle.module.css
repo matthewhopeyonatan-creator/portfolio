@@ -55,3 +55,25 @@
     transition: none;
   }
 }
+
+/* the other pages: same spot as on the landing — top right, a margin below the navbar (whatever
+   its height: the row sits in the flow right under it, taking no room) — and it scrolls away with
+   the page */
+.pageRow {
+  position: relative;
+  z-index: 10; /* under the navbar (50) and the catalog popups (45) */
+  height: 0;
+}
+
+.onPage {
+  position: absolute;
+  top: var(--gutter);
+  right: var(--gutter);
+  animation: toggleIn 600ms var(--ease-out) both;
+}
+
+@keyframes toggleIn {
+  from {
+    opacity: 0;
+  }
+}

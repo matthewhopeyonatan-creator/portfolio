@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { PageThemeToggle } from "@/components/ThemeToggle";
 import Catalog from "@/components/Catalog";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ export default function CatalogPage() {
   return (
     <>
       <SiteHeader />
+      <PageThemeToggle />
       <Catalog />
       <SiteFooter />
     </>

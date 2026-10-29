@@ -24,3 +24,12 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
     </button>
   );
 }
+
+/** the switch for pages without the landing's hero: top right, a margin under the navbar */
+export function PageThemeToggle() {
+  return (
+    <div className={styles.pageRow}>
+      <ThemeToggle className={styles.onPage} />
+    </div>
+  );
+}
