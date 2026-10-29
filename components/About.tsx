@@ -20,18 +20,15 @@ const WORK: CareerRow[] = [
     blurb: "Philadelphia’s largest media outlet, with over 15 million unique monthly visitors and 180,000 active users" },
   { org: "Shmood (EF24)", role: "contract product designer", dates: "aug 24 - dec 24", logo: "/about/logos/shmood.webp",
     blurb: "Pre-seed creative tool backed by Entrepreneurs First, consolidating the feedback process between designers and their stakeholders" },
-  { org: "Momentive Materials", role: "research intern", dates: "may 24 - aug 24",
+  { org: "Momentive Materials", role: "research intern", dates: "may 24 - aug 24", logo: "/about/logos/momentive.webp",
     blurb: "Global maker of silicones and specialty materials" },
-  { org: "Takasago", role: "flavorist intern", dates: "jun 23 - jul 23",
+  { org: "Takasago", role: "flavorist intern", dates: "jun 23 - jul 23", logo: "/about/logos/takasago.webp",
     blurb: "Japanese flavor and fragrance house, one of the largest in the world" },
 ];
 const SCHOOL: CareerRow[] = [
-  { org: "New York University", role: "m.s. integrated design", dates: "sep 25 - may 27",
-    blurb: "Private research university in New York City" },
-  { org: "Cornell University", role: "b.s. agricultural sciences", dates: "aug 23 - may 25",
-    blurb: "Ivy League university in Ithaca, New York" },
-  { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23",
-    blurb: "Community college in Pleasant Hill, California" },
+  { org: "New York University", role: "m.s. integrated design", dates: "sep 25 - may 27" },
+  { org: "Cornell University", role: "b.s. agricultural sciences", dates: "aug 23 - may 25" },
+  { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23" },
 ];
 
 /** one of the page's still photos; it comes into focus out of a soft blur as it scrolls in
