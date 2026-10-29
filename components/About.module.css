@@ -73,7 +73,7 @@
   flex: none;
   width: calc(545.881 * var(--u));
   height: calc(606.535 * var(--u));
-  margin-right: calc(20 * var(--u)); /* after every photo, so one set is exactly 7 steps wide */
+  margin-right: calc(20 * var(--u)); /* after every photo, so one set is exactly one step per photo wide */
   object-fit: cover;
   background: color-mix(in srgb, var(--color-ink) 8%, transparent); /* while it loads */
   pointer-events: none;
@@ -113,12 +113,15 @@
   background: color-mix(in srgb, var(--color-ink) 8%, transparent);
 }
 
+/* the photos are taller than their 479 × 213 windows: each keeps the part that matters */
 .snapInterests {
+  object-position: 50% 52%; /* the canyon rim under the sky */
   right: var(--gutter);
   top: calc(153 * var(--u));
 }
 
 .snapSunset {
+  object-position: 50% 80%; /* the orange band over the water */
   left: var(--gutter);
   top: calc(561 * var(--u));
 }
@@ -160,6 +163,7 @@
 }
 
 .snapProduce {
+  object-position: 50% 74%; /* the tomatoes */
   right: var(--gutter);
   top: calc(24 * var(--u));
 }

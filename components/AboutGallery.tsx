@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import styles from "./About.module.css";
 
 /**
- * "Hope's gallery" (Figma 217:352): seven 546 × 607 photos, 20 apart, running the full width.
+ * "Hope's gallery" (Figma 217:352): eight 546 × 607 photos, 20 apart, running the full width.
  * The strip drifts right to left, slowly and forever (the set is drawn twice, so it wraps without
  * a seam). Anyone can take it over: drag it (mouse or finger), or scroll sideways over it with a
  * trackpad / shift-wheel. When let go it glides on with the throw, then eases back into its drift.
@@ -12,13 +12,14 @@ import styles from "./About.module.css";
  * (it still moves under the visitor's own hand).
  */
 const PHOTOS = [
-  { src: "/about/gallery-1.webp", alt: "Snorkelling over a reef" },
+  { src: "/about/gallery-1.webp", alt: "Snorkelling over a reef with a friend" },
   { src: "/about/gallery-2.webp", alt: "Looking out over a hazy city at sunset" },
-  { src: "/about/gallery-3.webp", alt: "Skiing selfie on a snowy slope" },
-  { src: "/about/gallery-4.webp", alt: "Friends in the sea with a surfboard" },
-  { src: "/about/gallery-5.webp", alt: "Dancing on stage" },
-  { src: "/about/gallery-6.webp", alt: "Red rock canyon on a hike" },
-  { src: "/about/gallery-7.webp", alt: "Skateboarding selfie on a sunny street" },
+  { src: "/about/gallery-3.webp", alt: "A skiing selfie on a snowy slope at dusk" },
+  { src: "/about/gallery-4.webp", alt: "Surfboards in the shallows with a friend" },
+  { src: "/about/gallery-5.webp", alt: "Out on a run with a friend in mouse ears" },
+  { src: "/about/gallery-6.webp", alt: "Dancing on stage" },
+  { src: "/about/gallery-7.webp", alt: "Under a red rock overhang on a hike" },
+  { src: "/about/gallery-8.webp", alt: "On a cobbled street at night" },
 ];
 
 const DRIFT = 34; // Figma px per second, right to left

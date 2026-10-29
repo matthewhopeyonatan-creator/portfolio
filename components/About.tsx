@@ -1,4 +1,5 @@
 import AboutGallery from "@/components/AboutGallery";
+import { RecsList, RecsMonth } from "@/components/ProduceRecs";
 import styles from "./About.module.css";
 
 /**
@@ -7,9 +8,9 @@ import styles from "./About.module.css";
  * stuck with him, a design tip, and Produce Recs.
  */
 const INTERESTS = ["cooking", "hiking", "graphic design", "hosting", "plants", "dancing", "travel"];
-const PRODUCE = ["Produce 1", "Produce 1", "Produce 1", "Produce 1", "Produce 1"];
 
 export default function About() {
+  const month = new Date().getMonth(); // when the page was built (refreshed daily, app/about)
   return (
     <main className={styles.page}>
       <section className={styles.hello} aria-labelledby="about-name">
@@ -39,7 +40,7 @@ export default function About() {
         <img
           className={`${styles.snap} ${styles.snapInterests}`}
           src="/about/interests.webp"
-          alt="Looking out over the hills"
+          alt="Looking out over a canyon of orange rock spires"
           width={479}
           height={213}
           loading="lazy"
@@ -50,7 +51,7 @@ export default function About() {
         <img
           className={`${styles.snap} ${styles.snapSunset}`}
           src="/about/sunset.webp"
-          alt="Sunset over the water"
+          alt="An orange sunset over the water"
           width={479}
           height={213}
           loading="lazy"
@@ -69,14 +70,12 @@ export default function About() {
           <br />
           RECS
         </h2>
-        <p className={styles.month} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
-          [month]
-        </p>
+        <RecsMonth initial={month} style={{ "--i": 1 } as React.CSSProperties} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={`${styles.snap} ${styles.snapProduce}`}
           src="/about/produce.webp"
-          alt="Tomatoes and stone fruit at a market stall"
+          alt="Heirloom and cherry tomatoes at a market stall"
           width={479}
           height={213}
           loading="lazy"
@@ -85,11 +84,7 @@ export default function About() {
         />
       </section>
 
-      <ul className={styles.produce} data-reveal="up">
-        {PRODUCE.map((p, i) => (
-          <li key={i}>{p}</li>
-        ))}
-      </ul>
+      <RecsList initial={month} />
     </main>
   );
 }

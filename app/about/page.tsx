@@ -5,6 +5,9 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import { PageThemeToggle } from "@/components/ThemeToggle";
 import About from "@/components/About";
 
+// rebuilt daily, so Produce Recs' month and what's in season are right from the first paint
+export const revalidate = 86400;
+
 export const metadata: Metadata = {
   title: "About — hope’s grocer",
   description:
