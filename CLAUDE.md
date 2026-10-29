@@ -60,6 +60,11 @@ implements his designs faithfully.
     loaded only for these
   - `PastExperiences` — two columns of dates · role · company rows under 2px rules
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|ledger"` entrances, staggered by `--i`
+- Dark mode — `lib/theme.ts` (`useTheme`, `setTheme`) puts `<html data-theme="dark">` on every page; the
+  switch (`ThemeToggle`, Figma 210:5291 at 80%) sits top right of the landing. Dark tokens in
+  `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f`; write see-through ink as
+  `rgba(var(--ink-rgb), a)` so it flips. Tomatoes go blue via Figma's gradient map (210:5014: white ·
+  #1ABCFE · black by brightness), pre-rendered into `public/*/dark/`; stickers keep their colours
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating
   back home skips it (`shouldSkipIntro`, `.skip` in Hero)
 
