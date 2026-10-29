@@ -107,9 +107,18 @@
 
 .snap {
   display: block;
+  overflow: hidden;
   width: calc(479 * var(--u));
   height: calc(213 * var(--u));
+}
+
+/* the picture fills its frame; each frame says which part of its photo to keep (object-position) */
+.snap > img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  object-position: inherit;
   background: color-mix(in srgb, var(--color-ink) 8%, transparent);
 }
 

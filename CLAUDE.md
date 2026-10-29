@@ -57,7 +57,7 @@ implements his designs faithfully.
     Ticketmaster Flow (Figma 129:100): two loop while on screen (options get clicked through; a ticket
     moves between custom batches; the final choices get clicked through, each acting out what it means; the delivery ticket is sent off and the next slides in). Space Grotesk (`--font-cv`) is
     loaded only for these
-  - `RevealOnScroll` — `data-reveal="up|tray|swipe"` entrances, staggered by `--i`
+  - `RevealOnScroll` — `data-reveal="up|tray|swipe|wipe"` entrances (wipe: about-page photos, uncovered bottom-up inside their frame), staggered by `--i`
 - Dark mode — `lib/theme.ts` (`useTheme`, `setTheme`) puts `<html data-theme="dark">` on every page; the
   switch (`ThemeToggle`, Figma 210:5291 at 80%) sits top right of the landing. Dark tokens in
   `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f`, switch pill `--color-track`; they're

@@ -24,6 +24,31 @@ const SCHOOL = [
   { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23" },
 ];
 
+/** a photo in its frame: the frame holds the place (and is what the scroll reveal watches); the
+    picture inside is uncovered bottom-up when it arrives (data-reveal="wipe", globals.css) */
+function Snap({
+  className,
+  src,
+  alt,
+  width,
+  height,
+  style,
+}: {
+  className: string;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <span className={`${styles.snap} ${className}`} data-reveal="wipe" style={style}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} width={width} height={height} loading="lazy" />
+    </span>
+  );
+}
+
 function Rows({ items, className }: { items: typeof WORK; className: string }) {
   return (
     <ul className={`${styles.rows} ${className}`}>
@@ -70,27 +95,8 @@ export default function About() {
             <li key={t}>{t}</li>
           ))}
         </ul>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={`${styles.snap} ${styles.snapInterests}`}
-          src="/about/interests.webp"
-          alt="Looking out over a canyon of orange rock spires"
-          width={479}
-          height={213}
-          loading="lazy"
-          data-reveal="up"
-          style={{ "--i": 2 } as React.CSSProperties}
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={`${styles.snap} ${styles.snapSunset}`}
-          src="/about/sunset.webp"
-          alt="An orange sunset over the water"
-          width={479}
-          height={213}
-          loading="lazy"
-          data-reveal="up"
-        />
+        <Snap className={styles.snapInterests} src="/about/interests.webp" alt="Looking out over a canyon of orange rock spires" width={479} height={213} style={{ "--i": 2 } as React.CSSProperties} />
+        <Snap className={styles.snapSunset} src="/about/sunset.webp" alt="An orange sunset over the water" width={479} height={213} />
         <p className={styles.tip} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
           My design tip:
           <br />
@@ -104,31 +110,13 @@ export default function About() {
         </h2>
         <span className={`${styles.careerRule} ${styles.workRule}`} aria-hidden="true" />
         <Rows items={WORK} className={styles.workRows} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={`${styles.snap} ${styles.snapWork}`}
-          src="/about/work.webp"
-          alt="Matthew at his Cornell graduation, in a red stole on a wooden bridge"
-          width={340}
-          height={465}
-          loading="lazy"
-          data-reveal="up"
-        />
+        <Snap className={styles.snapWork} src="/about/work.webp" alt="Matthew at his Cornell graduation, in a red stole on a wooden bridge" width={340} height={465} />
         <h2 className={`${styles.careerLabel} ${styles.schoolLabel}`} data-reveal="up">
           Where I found my footing
         </h2>
         <span className={`${styles.careerRule} ${styles.schoolRule}`} aria-hidden="true" />
         <Rows items={SCHOOL} className={styles.schoolRows} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={`${styles.snap} ${styles.snapSchool}`}
-          src="/about/school.webp"
-          alt="Rows of lettuce growing under a greenhouse roof"
-          width={513}
-          height={281}
-          loading="lazy"
-          data-reveal="up"
-        />
+        <Snap className={styles.snapSchool} src="/about/school.webp" alt="Rows of lettuce growing under a greenhouse roof" width={513} height={281} />
       </section>
 
       <section className={styles.recs} aria-labelledby="produce-recs">
@@ -138,17 +126,7 @@ export default function About() {
           RECS
         </h2>
         <RecsMonth initial={month} style={{ "--i": 1 } as React.CSSProperties} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={`${styles.snap} ${styles.snapProduce}`}
-          src="/about/produce.webp"
-          alt="Heirloom and cherry tomatoes at a market stall"
-          width={479}
-          height={213}
-          loading="lazy"
-          data-reveal="up"
-          style={{ "--i": 2 } as React.CSSProperties}
-        />
+        <Snap className={styles.snapProduce} src="/about/produce.webp" alt="Heirloom and cherry tomatoes at a market stall" width={479} height={213} style={{ "--i": 2 } as React.CSSProperties} />
       </section>
 
       <RecsList initial={month} />

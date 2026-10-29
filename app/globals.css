@@ -275,6 +275,7 @@ html.modal-open {
    data-reveal="up"     rise + fade (section titles, caption rows)
    data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
    data-reveal="swipe"  posters: come into focus out of a soft blur, tag follows
+   data-reveal="wipe"   about-page photos: uncovered from the bottom up as they rise into place
    --i staggers an item after its neighbours */
 .reveal-ready [data-reveal] {
   opacity: 0;
@@ -335,6 +336,28 @@ html.modal-open {
   opacity: 1;
   transform: none;
   filter: none;
+}
+
+/* photos (about page) — a down-up swipe: the picture is uncovered from its bottom edge to its top
+   while it rises a little into place, so it seems to slide up out of a slot. No fade: the photo is
+   whole wherever it's uncovered. */
+.reveal-ready [data-reveal="wipe"] {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-ready [data-reveal="wipe"] > img {
+  clip-path: inset(100% 0 0 0);
+  transform: translateY(6%);
+  transition:
+    clip-path 900ms var(--ease-in-out),
+    transform 1100ms var(--ease-intro);
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+
+.reveal-ready [data-reveal="wipe"][data-revealed] > img {
+  clip-path: inset(0 0 0 0);
+  transform: none;
 }
 
 .reveal-ready [data-reveal][data-revealed] {
