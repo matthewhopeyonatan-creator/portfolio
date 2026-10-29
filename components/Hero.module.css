@@ -496,10 +496,13 @@
 @media (max-width: 767px) {
   .hero {
     --m: calc(100vw / 393);
-    --hero-h: calc(926 * var(--m));
+    /* the switch takes the top-right corner under the navbar (on the margin, like everywhere);
+       the whole composition sits that much lower */
+    --push: calc(18px + 14px);
+    --hero-h: calc(926 * var(--m) + var(--push));
   }
   .canvas {
-    top: 0;
+    top: var(--push);
     left: 0;
     width: 100%;
     height: var(--hero-h);
@@ -532,7 +535,7 @@
   /* 40 / 40, 353 wide on the 20 margin, 20 under the navbar; it wraps between phrases */
   .headline {
     left: calc(20 * var(--m));
-    top: calc(20 * var(--m));
+    top: calc(20 * var(--m) + var(--push));
     width: calc(353 * var(--m));
     font-size: calc(40 * var(--m));
     line-height: 1;
@@ -546,10 +549,10 @@
     display: inline-block;
     white-space: pre;
   }
-  /* the switch: under the headline (its five lines end at 220), on the right margin */
+  /* the switch: top right, a margin under the navbar */
   .themeToggle {
-    top: calc(236 * var(--m));
-    right: calc(20 * var(--m));
+    top: var(--gutter);
+    right: var(--gutter);
     bottom: auto;
   }
 }

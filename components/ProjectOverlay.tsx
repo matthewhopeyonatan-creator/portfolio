@@ -28,6 +28,9 @@ const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 /** Tells SmoothScroll to pause / resume the page while the popup is up. */
 const lockScroll = (on: boolean) => {
   document.documentElement.classList.toggle("modal-open", on);
+  // phones: the case study is a page of its own, so the page under it is put away (iOS otherwise
+  // draws the trays' playing videos through it)
+  document.documentElement.classList.toggle("project-open", on);
   window.dispatchEvent(new CustomEvent("scroll-lock", { detail: on }));
 };
 

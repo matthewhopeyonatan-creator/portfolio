@@ -998,10 +998,11 @@
   }
   /* ── Figma 231:1657 (393 wide): picture first, then the title, intro, the four facts in one
      column, then the sections — on 20px margins ── */
+  /* the switch has the top-right corner under the navbar; the picture starts below it */
   .intro {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-    padding: 20px 20px 0;
+    padding: calc(20px + 18px + 14px) 20px 0;
   }
   .hero {
     order: -1;
@@ -1047,9 +1048,9 @@
     line-height: 25px;
     letter-spacing: -0.04em;
   }
-  /* the switch sits on the title's line, at the right margin */
+  /* the switch: top right, a margin under the navbar */
   .frame .toggleSpot > * > * {
-    top: calc(20px + (100vw - 40px) * 225 / 353 + 29px + 11px);
+    top: 20px;
     right: 20px;
   }
   /* one column the full width (the tracker is hidden, so its column mustn't stay behind) */

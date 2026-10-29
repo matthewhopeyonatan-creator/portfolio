@@ -61,7 +61,7 @@ implements his designs faithfully.
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|blur"` entrances (blur: about-page photos, same as the case-study figures), staggered by `--i`
 - Dark mode — `lib/theme.ts` (`useTheme`, `setTheme`) puts `<html data-theme="dark">` on every page; the
   switch (`ThemeToggle`, Figma 210:5291 at 80%) sits top right of the landing. Dark tokens in
-  `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f`, switch pill `--color-track`; they're
+  `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f` (the switch's pill is the page colour); they're
   registered `@property` colours and the switch eases *them* once on `<html>`, so every colour
   changes in step — write see-through ink as `color-mix(in srgb, var(--color-ink) N%, transparent)`,
   never a hard-coded dark override. Single-colour icons (the cart) are CSS masks filled

@@ -160,7 +160,7 @@ const stickers: Record<
   right: [
     {
       src: "/home/sticker-fatboy.webp",
-      m: [145.9, 232.93, 143.87, 137.13],
+      m: [145.9, 262.93, 143.87, 137.13],
       w: 213.5,
       h: 203.5,
       x: 314.18,
@@ -176,7 +176,7 @@ const stickers: Record<
     },
     {
       src: "/home/sticker-design-meetup.webp",
-      m: [191.9, 117.92, 189.03, 189.03],
+      m: [186.9, 177.92, 189.03, 189.03],
       w: 280.5,
       h: 280.5,
       x: 383.18,
@@ -195,7 +195,7 @@ const stickers: Record<
   mid: [
     {
       src: "/home/sticker-nyu-2.webp",
-      m: [74.58, 624.44, 150.28, 158.36, 41.91],
+      m: [102.58, 672.44, 150.28, 158.36, 41.91],
       w: 223,
       h: 235,
       x: 397.07,

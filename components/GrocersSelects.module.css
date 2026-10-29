@@ -123,7 +123,7 @@
    and 20 around each poster (its caption 12 under it) */
 @media (max-width: 767px) {
   .titleRow {
-    padding-top: 32px;
+    padding-top: 24px;
   }
   .cell {
     padding: var(--gutter);
