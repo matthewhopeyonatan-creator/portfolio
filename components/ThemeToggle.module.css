@@ -57,7 +57,7 @@
    the page */
 .pageRow {
   position: relative;
-  z-index: 10; /* under the navbar (50) and the catalog popups (45) */
+  z-index: 10; /* under the navbar (50) */
   height: 0;
 }
 

@@ -1,5 +1,5 @@
 /* Figma 111:697 — 3 equal columns, 2px ink rules · poster 371 × 494, r24 · caption 16 below:
-   name + price Medium 20, source Light 16 (5 below) · "See full catalog" Light 16, centred.
+   name + price Medium 20, source Light 16 (5 below).
    Each cell is 576 wide, so the poster gets (576 − 371) / 2 = 102.5 on every side. */
 /* title row: same space above and below the letters (the row is boxed by rules on both sides) */
 .titleRow {
@@ -68,43 +68,8 @@
   font-weight: 300;
 }
 
-/* "See full catalog" sits just above the shelf's bottom rule, centred in the middle column, so
-   the column rules still run down and meet it */
-.shelf {
-  position: relative;
-}
-
-.more {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(2px + max(16px, calc(32 * var(--u))));
-  z-index: 1;
-  margin: 0;
-  pointer-events: none;
-  text-align: center;
-  font-size: max(13px, calc(16 * var(--u)));
-  font-weight: 300;
-}
-
-.more a {
-  color: var(--color-ink);
-  pointer-events: auto;
-}
-
-.more a:hover,
-.more a:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
 /* tablets: two across */
 @media (max-width: 1023px) {
-  /* no middle column here: the link goes back under the shelf */
-  .more {
-    position: static;
-    padding-top: 24px;
-  }
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -133,14 +98,13 @@
 }
 
 /* Desktop readability floors: on laptop widths the captions stop shrinking at a size that stays
-   easy to read (title 16 Medium over source 14 Light; "See full catalog" 14) */
+   easy to read (title 16 Medium over source 14 Light) */
 @media (min-width: 768px) {
   .title,
   .price {
     font-size: max(16px, calc(20 * var(--u)));
   }
-  .source,
-  .more {
+  .source {
     font-size: max(14px, calc(16 * var(--u)));
   }
 }

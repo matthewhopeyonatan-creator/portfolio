@@ -70,8 +70,8 @@ export default function SmoothScroll() {
     };
   }, []);
 
-  // a new page starts at the top, unless its #hash names a section on it (/catalog#graphics opens
-  // a popup — that isn't a place on the page, so it still starts at the top)
+  // a new page starts at the top, unless its #hash names a section on it (a hash that isn't a
+  // place on the page still starts at the top)
   const firstPath = useRef(true);
   useEffect(() => {
     const first = firstPath.current;

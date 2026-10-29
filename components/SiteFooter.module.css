@@ -150,7 +150,7 @@ a.social:focus-visible::after {
 }
 
 /* Desktop: the socials match the nav links (24 Bold caps) so the footer reads as one set of
-   links, and with the same type they sit on the same baseline as "catalog" */
+   links, and with the same type they sit on the same baseline as the last nav link */
 @media (min-width: 768px) {
   .social {
     font-size: max(17px, calc(24 * var(--u)));

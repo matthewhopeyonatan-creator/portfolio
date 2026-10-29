@@ -881,7 +881,7 @@ export default function ProjectOverlay({
                     if (!ask.detail.handled)
                       window.scrollTo({ top: 0, behavior: "smooth" });
                   } else {
-                    router.push(href); // another page of the site (e.g. the catalog)
+                    router.push(href); // another page of the site (e.g. the receipt)
                   }
                 });
               }}

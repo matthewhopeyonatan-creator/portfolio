@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { grocersSelects } from "@/data/site";
 import pageStyles from "@/app/page.module.css";
@@ -68,7 +67,7 @@ export default function GrocersSelects() {
           Grocer’s selects
         </h2>
       </div>
-      <div className={styles.shelf}>
+      <div>
         <ul ref={gridRef} className={styles.grid}>
           {grocersSelects.map((item) => (
             <li key={item.src} className={styles.cell}>
@@ -115,9 +114,6 @@ export default function GrocersSelects() {
             </li>
           ))}
         </ul>
-        <p className={styles.more} data-reveal="up">
-          <Link href="/catalog#graphics">See full catalog</Link>
-        </p>
       </div>
     </section>
   );

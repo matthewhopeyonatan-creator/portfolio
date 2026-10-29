@@ -42,8 +42,8 @@ implements his designs faithfully.
 
 ## Where things live
 
-- `app/page.tsx` home · `app/catalog/page.tsx` catalog · `app/receipt/page.tsx` checkout receipt · `app/globals.css` tokens + scroll reveals
-- `data/site.ts` — nav links, projects, posters (`grocersSelects`), cart catalog, catalog aisles
+- `app/page.tsx` home · `app/receipt/page.tsx` checkout receipt · `app/globals.css` tokens + scroll reveals
+- `data/site.ts` — nav links, projects, posters (`grocersSelects`), cart catalog
 - `data/caseStudies.ts` — project case-study content
 - `components/`
   - `Hero` — tomatoes, stickers (peel on hover → `StickerCard` story; each sticker's `name` is what the receipt shows as most viewed), Open-sign intro
@@ -51,7 +51,6 @@ implements his designs faithfully.
   - `ProjectCard` → `ProjectOverlay` — tray with plastic-wrap peel; opens the "Nutrition Facts"
     popup, which can expand to a full-screen case study (`?project=slug` restores it on refresh)
   - `GrocersSelects` — poster shelf (display only: posters aren't clickable and don't go in the cart)
-  - `Catalog` — aisle list; each aisle opens a popup addressed by hash (`/catalog#graphics`)
   - `cart/` — `CartContext` (sessionStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to check out: saves a receipt, empties the cart, goes to `/receipt`)
   - `Receipt` (Figma 146:168) + `Tilt` (card that tips under the pointer) — the receipt lists the basket, a Notes box the visitor types into, the thing they looked at longest (case study or sticker story) and their total time on the site (`lib/visit.ts`); visitors can draw on it with a red marker (`useMarker`, the tilt lies flat while drawing; a clear icon fades in at the slip's top-right once there is ink, left out of the download); download (PNG via `html-to-image`) / share
   - `TicketmasterPhones` — CrowdVolt's ticket-batching screens rebuilt in code for the case study's
@@ -65,7 +64,7 @@ implements his designs faithfully.
   `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f`, switch pill `--color-track`; they're
   registered `@property` colours and the switch eases *them* once on `<html>`, so every colour
   changes in step — write see-through ink as `color-mix(in srgb, var(--color-ink) N%, transparent)`,
-  never a hard-coded dark override. Single-colour icons (cart, catalog arrows) are CSS masks filled
+  never a hard-coded dark override. Single-colour icons (the cart) are CSS masks filled
   with `--color-ink`. Tomatoes go blue via Figma's gradient map (210:5014: white ·
   #1ABCFE · black by brightness), pre-rendered into `public/*/dark/`; stickers keep their colours.
   No View Transition (it froze the page and flashed), and no per-element colour transitions during
@@ -76,10 +75,8 @@ implements his designs faithfully.
 
 ## Navigation behaviour (keep working)
 
-- Navbar: about → external matthew-hope.com/about · projects → `/#seasonal-picks` · catalog → `/catalog`
-- "See full catalog" → `/catalog#graphics` (opens the Graphics popup, page at the top)
+- Navbar: about → external matthew-hope.com/about · projects → `/#seasonal-picks` (the catalog page was removed)
 - Logo on `/` scrolls to top; elsewhere it links home. Cross-page section links land on the section.
-- Catalog popups sit at z-index 45, under the navbar (50), so the bar stays clickable.
 
 ## Motion
 
