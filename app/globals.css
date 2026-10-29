@@ -256,6 +256,7 @@ html:not([data-intro="done"]) #seasonal-picks {
 @media (max-width: 767px) {
   :root {
     --gutter: 20px;
+    --header-h: 64px; /* one row: the logo and the menu button */
   }
 }
 

@@ -48,6 +48,7 @@ implements his designs faithfully.
 - `components/`
   - `Hero` — tomatoes, stickers (peel on hover → `StickerCard` story; each sticker's `name` is what the receipt shows as most viewed), Open-sign intro
   - `SiteHeader` / `SiteFooter` — navbar hides on scroll down, shows on scroll up
+  - `MenuDrawer` — phones: the navbar is the logo + three lines; they open this cart-style sheet (about, projects, your cart → swaps to the cart). Over an open case study its links fire `overlay:navigate` so the case study closes first
   - `ProjectCard` → `ProjectOverlay` — tray with plastic-wrap peel; opens the "Nutrition Facts"
     popup, which can expand to a full-screen case study (`?project=slug` restores it on refresh)
   - `GrocersSelects` — poster shelf (display only: posters aren't clickable and don't go in the cart)

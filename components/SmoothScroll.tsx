@@ -43,8 +43,10 @@ export default function SmoothScroll() {
       const hash = href.replace(/^\//, "");
       const target = document.querySelector(hash);
       if (!(target instanceof HTMLElement)) return;
+      // preventDefault is enough to stop Next's <Link> jumping there (it skips prevented clicks);
+      // the click still reaches the link's own onClick, so a sheet it sits in (the cart, the
+      // phone menu) can close itself
       e.preventDefault();
-      e.stopPropagation(); // Next's <Link> would otherwise jump there instantly
       lenis.scrollTo(target, { duration: 1.4, force: true });
       history.replaceState(null, "", hash);
     };

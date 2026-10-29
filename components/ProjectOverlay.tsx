@@ -697,6 +697,43 @@ export default function ProjectOverlay({
     [leaving, onClose],
   );
 
+  // leave the case study for somewhere else on the site: close first (the page is locked under
+  // it), then go — used by its navbar's links and by the phone menu's
+  const goTo = useCallback(
+    (href: string) => {
+      close(() => {
+                  // "/#section" or "#section": a section of the main page, glide to it
+                  const hash = href.startsWith("/#")
+                    ? href.slice(1)
+                    : href.startsWith("#")
+                      ? href
+                      : "";
+                  if (hash) {
+                    const t = document.createElement("a");
+                    t.href = hash;
+                    document.body.appendChild(t);
+                    t.click(); // SmoothScroll glides to the section
+                    t.remove();
+                  } else if (href === "/" || href === "") {
+                    const ask = new CustomEvent("scroll-to-top", {
+                      detail: { handled: false },
+                    });
+                    window.dispatchEvent(ask);
+                    if (!ask.detail.handled)
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    router.push(href); // another page of the site (e.g. the receipt)
+                  }
+      });
+    },
+    [close, router],
+  );
+  useEffect(() => {
+    const onNav = (e: Event) => goTo((e as CustomEvent<string>).detail);
+    window.addEventListener("overlay:navigate", onNav);
+    return () => window.removeEventListener("overlay:navigate", onNav);
+  }, [goTo]);
+
   useEffect(() => {
     lockScroll(true);
     frameRef.current?.focus({ preventScroll: true });
@@ -872,30 +909,7 @@ export default function ProjectOverlay({
                 // under the popup: close first, then go there
                 e.preventDefault();
                 e.stopPropagation();
-                close(() => {
-                  // "/#section" or "#section": a section of the main page, glide to it
-                  const hash = href.startsWith("/#")
-                    ? href.slice(1)
-                    : href.startsWith("#")
-                      ? href
-                      : "";
-                  if (hash) {
-                    const t = document.createElement("a");
-                    t.href = hash;
-                    document.body.appendChild(t);
-                    t.click(); // SmoothScroll glides to the section
-                    t.remove();
-                  } else if (href === "/" || href === "") {
-                    const ask = new CustomEvent("scroll-to-top", {
-                      detail: { handled: false },
-                    });
-                    window.dispatchEvent(ask);
-                    if (!ask.detail.handled)
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                  } else {
-                    router.push(href); // another page of the site (e.g. the receipt)
-                  }
-                });
+                goTo(href);
               }}
             >
               <SiteHeader />

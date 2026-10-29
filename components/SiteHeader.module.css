@@ -151,15 +151,52 @@
   mask: url("/home/cart.png") center / contain no-repeat;
 }
 
+/* phones only: the menu button (three lines) */
+.menuButton {
+  display: none;
+}
+
 @media (max-width: 767px) {
+  /* hope's grocer on the left, the three lines on the right; the links and the cart live in the
+     menu (MenuDrawer) */
   .header {
     grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "logo cart"
-      "nav nav";
-    row-gap: 2px;
+    grid-template-areas: "logo menu";
     height: auto;
-    padding: 10px var(--gutter) 8px;
+    min-height: 56px;
+    padding: 10px var(--gutter);
+  }
+
+  .header > .nav,
+  .header > .cart {
+    display: none;
+  }
+
+  .menuButton {
+    grid-area: menu;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px; /* the lines sit on the margin; the rest is tap area */
+    padding: 0 10px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transition: transform var(--dur-press) var(--ease-out);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .menuButton:active {
+    transform: scale(0.94);
+  }
+
+  .menuButton span {
+    display: block;
+    height: 2px;
+    background: var(--color-ink);
   }
 
   .logo {

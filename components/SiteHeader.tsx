@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import { navLinks } from "@/data/site";
 import { shouldSkipIntro } from "@/lib/intro";
+import { openMenu } from "@/components/MenuDrawer";
 import styles from "./SiteHeader.module.css";
 
 /** Hide on scroll down, show on scroll up — always visible near the top of the page. */
@@ -132,6 +133,13 @@ export default function SiteHeader({ intro = false }: { intro?: boolean }) {
       </Link>
 
       <CartButton />
+
+      {/* phones: the links and the cart move into a menu behind three lines */}
+      <button type="button" className={styles.menuButton} onClick={openMenu} aria-label="Open the menu">
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+      </button>
     </header>
   );
 }

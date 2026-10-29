@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/cart/CartContext";
 import CartDrawer from "@/components/cart/CartDrawer";
+import MenuDrawer from "@/components/MenuDrawer";
 import SmoothScroll from "@/components/SmoothScroll";
 
 const hostGrotesk = localFont({
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartProvider>
           <SmoothScroll />
           {children}
+          <MenuDrawer />
           <CartDrawer />
         </CartProvider>
       </body>

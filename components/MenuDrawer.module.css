@@ -1,0 +1,210 @@
+/* Phones: the navbar's menu — built like the cart (CartDrawer.module.css): an 88vw page-colour
+   sheet with a 2px ink edge sliding in from the right over a dimmed page, the caps sign running
+   off its top, then framed rows (2px ink, 22 apart) — here one per destination. Inside, 1 design
+   px = --cu, as in the cart. */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 99; /* just under the cart, which takes over from it */
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 500ms;
+}
+
+.open {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 40, 40, 0.35);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.open .backdrop {
+  opacity: 1;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 88vw; /* leaves a strip of the page to tap to close */
+  container-type: inline-size;
+  border-left: 2px solid var(--color-ink);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  transform: translate3d(100%, 0, 0);
+  transition: transform 500ms var(--ease-drawer);
+}
+
+.open .panel {
+  transform: translate3d(0, 0, 0);
+}
+
+.inner {
+  --cu: calc(100cqw / 686);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── head: "MENU" in the cart sign's caps, running off the top, scrolling ── */
+.head {
+  position: relative;
+  flex: none;
+}
+
+.marquee {
+  overflow-x: clip;
+  overflow-y: visible;
+  white-space: nowrap;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 9s linear infinite;
+}
+
+.run {
+  display: flex;
+  flex: none;
+}
+
+.word {
+  flex: none;
+  padding-right: 0.28em;
+  font-size: calc(196.656 * var(--cu));
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  text-box: trim-both cap alphabetic;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 8px 14px;
+  border: 2px solid var(--color-ink);
+  background: var(--color-bg);
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── rows: the cart's framed boxes, one link each ── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: calc(22 * var(--cu));
+  margin: 0;
+  padding: calc(62 * var(--cu)) calc(48 * var(--cu)) 0 calc(27 * var(--cu));
+  list-style: none;
+}
+
+.row {
+  border: 2px solid var(--color-ink);
+}
+
+/* each row slides in a beat after the one above as the sheet opens */
+.open .row {
+  animation: rowIn 420ms var(--ease-out) calc(120ms + var(--i, 0) * 50ms) both;
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: calc(124 * var(--cu));
+  padding: 0 calc(29 * var(--cu) - 2px);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform var(--dur-press) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.item:active {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+.item:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+  outline: none;
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* the navbar's cart drawing, in whatever colour the row's text is */
+.cartIcon {
+  display: block;
+  width: 30px;
+  aspect-ratio: 227 / 146;
+  background-color: currentColor;
+  -webkit-mask: url("/home/cart.png") center / contain no-repeat;
+  mask: url("/home/cart.png") center / contain no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .backdrop {
+    transition-duration: 1ms;
+  }
+  .open .row {
+    animation: fadeIn 200ms ease both;
+  }
+  .track {
+    animation: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
