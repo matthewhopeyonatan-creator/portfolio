@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import styles from "./ShmoodDashboard.module.css";
 
 /**
  * Shmood's final dashboard rebuilt in code for its case study (Figma 206:3616, "Dashboard Final").
  * A 1512 × 982 frame laid out in frame px (`--d`, from its own width) so it stays sharp at every
- * size. Static — it's the finished screen.
+ * size. While it's on show, the "Needs review" requests arrive one by one as if coming in live,
+ * hold, clear, and arrive again.
  */
 const DIR = "/projects/shmood/dashboard";
 
@@ -54,9 +56,50 @@ function CardHead({ icon, title }: { icon: string; title: string }) {
   );
 }
 
+/** rows get data-in one at a time while the screen is on show; all clear, then it repeats */
+function useArrivals() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const rows = [...el.querySelectorAll<HTMLElement>("[data-arrive]")];
+    const timers: number[] = [];
+    const clear = () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      timers.length = 0;
+    };
+    const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    const ARRIVE = 700; // gap between requests coming in
+    const HOLD = 3600; // full list on show
+    const run = () => {
+      rows.forEach((r, i) => at(600 + i * ARRIVE, () => r.setAttribute("data-in", "")));
+      const end = 600 + (rows.length - 1) * ARRIVE + HOLD;
+      at(end, () => rows.forEach((r) => r.removeAttribute("data-in")));
+      at(end + 700, run);
+    };
+    el.dataset.live = "";
+    const io = new IntersectionObserver(
+      ([e]) => {
+        clear();
+        if (e.isIntersecting) run();
+        else rows.forEach((r) => r.removeAttribute("data-in"));
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      clear();
+    };
+  }, []);
+  return ref;
+}
+
 export default function ShmoodDashboard() {
+  const ref = useArrivals();
   return (
     <div
+      ref={ref}
       className={styles.screen}
       role="img"
       aria-label="Shmood's final dashboard for a DCC Branding project: project overview, files, feedback center and boards"
@@ -190,7 +233,7 @@ export default function ShmoodDashboard() {
               <div className={styles.reviews}>
                 <div className={styles.label}>Needs review</div>
                 {REVIEWS.map((r) => (
-                  <div key={r.title} className={styles.review} data-tone={r.tone}>
+                  <div key={r.title} className={styles.review} data-tone={r.tone} data-arrive="">
                     <span className={styles.badge}>
                       <b>{r.days}</b>
                       DAYS

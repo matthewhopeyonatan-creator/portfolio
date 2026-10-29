@@ -395,6 +395,38 @@
   white-space: nowrap;
 }
 
+/* arrivals: each request rises in out of a soft blur; they leave together, quicker */
+[data-live] .review {
+  opacity: 0;
+  transform: translate3d(0, calc(12 * var(--d)), 0) scale(0.97);
+  filter: blur(calc(4 * var(--d)));
+  transition:
+    opacity var(--dur-exit) var(--ease-out),
+    transform var(--dur-exit) var(--ease-out),
+    filter var(--dur-exit) var(--ease-out);
+}
+
+[data-live] .review[data-in] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 500ms var(--ease-out),
+    transform 600ms var(--ease-intro),
+    filter 500ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-live] .review,
+  [data-live] .review[data-in] {
+    transform: none;
+    filter: none;
+  }
+  [data-live] .review[data-in] {
+    transition: opacity 400ms var(--ease-out);
+  }
+}
+
 .review[data-tone="red"] {
   background: #fef5f5;
 }
