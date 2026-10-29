@@ -96,7 +96,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "How might we create a onboarding process that communicates high design standards and unify the platform's various products?",
-            body: "Streamlining and maximizing the startup’s features and value propositions.",
+            body: "The main goal is streamlining and maximizing the startup’s features and value propositions, in a non-traditional way.",
           },
           {
             type: "wins",
@@ -131,7 +131,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "Conducted interviews with 30 creatives in over 10 industries",
+            text: "We conducted interviews with 30 creatives in over 10 industries",
             body: "We wanted to gain insights on the how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
           },
           {
@@ -141,25 +141,25 @@ const shmood: CaseSection[] = [
               {
                 label: "Insight 1",
                 title: "Feedback is Scattered",
-                text: "Designers expressed frustration in how unorganized and inefficient the feedback process can be. With so many channels of communication, feedback is lost, and designs are stuck in limbo.",
+                text: "Designers expressed frustration in how unorganized and inefficient the feedback process can be.",
                 w: 560,
               },
               {
                 label: "Insight 2",
                 title: "Communication is Key",
-                text: "“Can you make it pop?” -- a designer’s worst nightmare in the form of feedback. Clients often struggle articulating what they want-- this communication issue often derails project progress.",
+                text: "“Can you make it pop?” a designer’s worst nightmare in the form of feedback. Clients often struggle articulating what they want.",
                 w: 560,
               },
               {
                 label: "Insight 3",
                 title: "Emphasizing UVP",
-                text: "What does it take for designers to adopt a completely new workflow and set of tools? While challenging, the key is communicating UVP. Shmood’s onboarding process must be compelling and personalized to connect with new users and gain loyalty.",
+                text: "Shmood’s onboarding process must be compelling and personalized to connect with new users and gain loyalty.",
                 w: 560,
               },
               {
                 label: "Insight 4",
                 title: "Ensuring Trust in AI",
-                text: "Designers are skeptical about AI generating creative work, citing concerns over style, misinterpretation, and ethics. However, they are open to using AI for the tedious stuff, like organizing and synthesizing feedback and keeping track of deliverables.",
+                text: "Designers are skeptical about AI generating creative work, citing concerns over style, misinterpretation, and ethics.",
                 w: 560,
               },
             ],
@@ -488,7 +488,7 @@ const shmood: CaseSection[] = [
           {
             type: "wins",
             items: [
-              "Measure the impacts through user testing. Since I had so many mid-fis and had to narrow down features, I would like to conduct A/B testing to see how these designs would play out in real life.",
+              "Measure the impacts through user testing.",
               "Explore more of in the physical space to see how it can be done regardless of constraints.",
               "Create for non traditional designers, especially for the onboarding as I want my onboarding experience to be effective and appealing to groups beyond who we interviewed.",
             ],
