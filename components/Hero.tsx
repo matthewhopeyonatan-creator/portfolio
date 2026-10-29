@@ -4,6 +4,8 @@ import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/lib/theme";
 import { useCart } from "@/components/cart/CartContext";
 import { stickerItems } from "@/data/site";
 import styles from "./Hero.module.css";
@@ -218,6 +220,7 @@ function Sticker({
   onOpen: OpenSticker;
   away: boolean;
 }) {
+  const dark = useTheme() === "dark";
   return (
     <button
       type="button"
@@ -239,7 +242,7 @@ function Sticker({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className={styles.stickerFace}
-        src={s.src}
+        src={themed(s.src, dark)}
         alt=""
         draggable={false}
       />
@@ -247,7 +250,7 @@ function Sticker({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={styles.stickerFlap}
-          src={s.src}
+          src={themed(s.src, dark)}
           alt=""
           draggable={false}
         />
@@ -270,6 +273,10 @@ const headlineLines = [[0, 1], [2, 3], [4]];
 
 type TomatoKey = keyof typeof tomatoes;
 
+/** dark mode shows the tomatoes and stickers through Figma's gradient map (210:5014), pre-rendered
+    into /home/dark/ with the same ramp: white · #1ABCFE · black by brightness */
+const themed = (src: string, dark: boolean) => (dark ? src.replace("/home/", "/home/dark/") : src);
+
 function Tomato({
   id,
   onLoad,
@@ -282,6 +289,7 @@ function Tomato({
   activeSrc?: string;
 }) {
   const t = tomatoes[id];
+  const dark = useTheme() === "dark";
   return (
     <div
       className={`${styles.layer} ${styles.tomato}`}
@@ -297,7 +305,7 @@ function Tomato({
       }
     >
       <Image
-        src={t.src}
+        src={themed(t.src, dark)}
         alt=""
         width={t.w}
         height={t.h}
@@ -491,6 +499,9 @@ export default function Hero() {
           </span>
         ))}
       </p>
+
+      {/* Figma 210:5291 — light / dark switch, top right of the landing */}
+      <ThemeToggle className={styles.themeToggle} />
 
       {card && (
         <StickerCard

@@ -265,8 +265,22 @@
   opacity: 0;
 }
 
+/* Figma 210:5291 — the light / dark switch, top right on the side margin, as far below the navbar
+   rule as the margin (like the headline). Fades in with the headline. */
+.themeToggle {
+  position: absolute;
+  top: var(--gutter);
+  right: var(--gutter);
+  z-index: 3;
+  opacity: 0;
+}
+
+.play .themeToggle {
+  animation: fadeIn 600ms var(--ease-out) var(--text-delay) both;
+}
+
 .phrase {
-  color: rgba(40, 40, 40, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   transition: color 450ms ease;
 }
 
@@ -455,6 +469,11 @@
   .canvas {
     top: var(--stack);
   }
+  /* the headline runs nearly the full width here, so the switch sits at the band's lower right */
+  .themeToggle {
+    top: auto;
+    bottom: var(--gutter);
+  }
   /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
   .cue {
     display: none;
@@ -511,7 +530,7 @@
    (large-text minimum is 3:1; 50% was 2.9:1). Phones to be handled separately. */
 @media (min-width: 768px) {
   .phrase {
-    color: rgba(40, 40, 40, 0.56);
+    color: rgba(var(--ink-rgb), 0.56);
   }
   /* (restated here so the highlight still wins over the dimmed colour above) */
   .phraseOn {

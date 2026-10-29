@@ -16,6 +16,7 @@
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;
+  --ink-rgb: 40, 40, 40; /* for see-through ink: rgba(var(--ink-rgb), a) */
   --color-accent: #91230a; /* deep tomato red — hero pill + footer */
   --color-paper: #fff;
   --rule: 2px solid var(--color-ink);
@@ -49,6 +50,21 @@
   --font-sans-stack: var(--font-sans), "Host Grotesk", system-ui, sans-serif;
   /* Atelier Fleur has no curly apostrophe; the browser falls back to Georgia for it, like Figma does */
   --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
+}
+
+/* Dark mode (homepage for now — lib/theme.ts): near-black #141414 with off-white ink */
+html[data-theme="dark"] {
+  --color-bg: #141414;
+  --color-ink: #edece9;
+  --ink-rgb: 237, 236, 233;
+  color-scheme: dark;
+}
+
+/* switching themes: one soft crossfade of the whole page */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 450ms;
+  animation-timing-function: var(--ease-out);
 }
 
 *,

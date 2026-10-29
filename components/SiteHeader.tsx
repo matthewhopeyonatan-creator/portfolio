@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
+import { useTheme } from "@/lib/theme";
 import { navLinks } from "@/data/site";
 import { shouldSkipIntro } from "@/lib/intro";
 import styles from "./SiteHeader.module.css";
@@ -62,6 +63,7 @@ function useIntro(enabled: boolean) {
 
 function CartButton() {
   const { open, count, addedTick } = useCart();
+  const dark = useTheme() === "dark";
   return (
     <button
       type="button"
@@ -75,7 +77,7 @@ function CartButton() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         key={addedTick}
-        src="/home/cart.png"
+        src={dark ? "/home/dark/cart.png" : "/home/cart.png"}
         alt=""
         width={57}
         height={37}
