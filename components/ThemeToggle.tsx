@@ -1,6 +1,6 @@
 "use client";
 
-import { setTheme, useTheme } from "@/lib/theme";
+import { prepareTheme, setTheme, useTheme } from "@/lib/theme";
 import styles from "./ThemeToggle.module.css";
 
 /**
@@ -18,6 +18,9 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       aria-checked={dark}
       aria-label="Dark mode"
       className={`${styles.toggle} ${className}`}
+      // reaching for the switch starts loading the other theme's pictures
+      onPointerEnter={() => prepareTheme(dark ? "light" : "dark")}
+      onFocus={() => prepareTheme(dark ? "light" : "dark")}
       onClick={() => setTheme(dark ? "light" : "dark")}
     >
       <span className={styles.knob} aria-hidden="true" />

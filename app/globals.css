@@ -65,8 +65,19 @@ html[data-theme="dark"] {
 /* switching themes: one soft crossfade of the whole page */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 450ms;
-  animation-timing-function: var(--ease-out);
+  animation-duration: 500ms;
+  animation-timing-function: var(--ease-in-out);
+}
+
+/* the new theme fades in over the old one (rather than both fading through each other, which
+   dims the page midway); the old one simply stays put underneath */
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
 }
 
 *,
