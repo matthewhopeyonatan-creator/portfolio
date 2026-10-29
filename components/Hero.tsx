@@ -1,7 +1,6 @@
 "use client";
 
 import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -307,17 +306,21 @@ function Tomato({
         // wait until the picture is decoded too, so nothing stutters once the drop starts
         onFirstReady={onLoad}
         render={(v) => (
-          <Image
+          // served as-is: the optimiser's downscale + re-encode put visible blocks in the soft
+          // gradients. Phones get a 900px copy (a clean Lanczos downscale of the same render,
+          // still 2× + at their size); everything wider gets the full render.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             key={v.className}
             ref={v.imgRef}
             src={v.src}
+            srcSet={`${v.src.replace(/\.webp$/, "-900.webp")} 900w, ${v.src} ${t.w}w`}
+            sizes="(max-width: 767px) 70vw, 100vw"
             alt=""
             width={t.w}
             height={t.h}
-            priority={v.className === "theme-light"}
-            // served as-is: the optimiser's downscale + re-encode put visible blocks in the soft
-            // gradients; the source renders are already sized for 2× screens
-            unoptimized
+            decoding="async"
+            fetchPriority={v.className === "theme-light" ? "high" : "auto"}
             onLoad={v.onLoad}
             data-ready={v.ready ? "" : undefined}
             className={`${styles.tomatoImg} ${v.className}`}

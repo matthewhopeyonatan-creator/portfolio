@@ -181,6 +181,13 @@
     font-size: 14px;
   }
 
+  /* a finger-sized tap area around each link, without moving anything */
+  .nav a {
+    display: inline-block;
+    padding: 12px 10px;
+    margin: -12px -10px;
+  }
+
   .cartIcon {
     width: 26px;
   }

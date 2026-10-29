@@ -640,6 +640,16 @@
   }
 }
 
+/* phones: the two screens stack, each as wide as the column allows (402 + the frame's padding) */
+@media (max-width: 767px) {
+  .frame {
+    --pu: calc((100vw - 32px - 4px) / 450);
+    flex-direction: column;
+    gap: 24px;
+    border-radius: 16px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .explore .optionOn,
   .tapRing,

@@ -1010,9 +1010,77 @@
     height: auto;
     aspect-ratio: 860 / 532;
   }
-  .study {
-    grid-template-columns: 1fr;
+  /* one column the full width (the tracker is hidden, so its column mustn't stay behind) */
+  .study,
+  .expanded .study {
+    grid-template-columns: minmax(0, 1fr);
     padding: 32px 16px 80px;
+  }
+  .sections {
+    gap: 72px;
+  }
+  /* step diagrams: labels wrap inside their column instead of running into the next */
+  .cvFlow {
+    padding: 28px 8px 34px;
+  }
+  .cvStepLabel {
+    font-size: 11px;
+    line-height: 1.25;
+    padding: 0 2px;
+  }
+  .cvDot {
+    width: 32px;
+    height: 32px;
+  }
+  .cvFriction {
+    bottom: 16px;
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+  /* cards that sit side by side on desktop stack */
+  .cvBlockers {
+    flex-direction: column;
+  }
+  .cvBlocker {
+    min-height: 0;
+    padding: 20px 16px;
+  }
+  .cvSketchRow {
+    flex-direction: column;
+  }
+  .cvSketchCards {
+    width: 100%;
+  }
+  .cvSketchCard {
+    padding: 16px;
+  }
+  .cvBox,
+  .cvWin {
+    padding: 16px 20px;
+  }
+  .cvBox,
+  .cvWin,
+  .cvBlocker,
+  .cvSketchCard,
+  .cvFlow,
+  .cvEmbed,
+  .cvFigure img,
+  .cvSketchImg,
+  .hero {
+    border-radius: 16px;
+  }
+  .section .cvWin p,
+  .section .cvBlockerText,
+  .section .cvSketchText,
+  .section .cvBoxSolo {
+    font-size: 18px;
+    line-height: 1.15;
+  }
+  .cvGallery {
+    gap: 10px;
+  }
+  .cvGalleryRow {
+    column-gap: 10px;
   }
   .toc {
     display: none;
@@ -1023,8 +1091,14 @@
   .cvBoxes {
     grid-auto-flow: row;
   }
+  .cvBlockers,
+  .cvBlockers[data-count="4"] {
+    flex-wrap: nowrap;
+    gap: 16px;
+  }
+  .cvBlockers > .cvBlocker,
   .cvBlockers[data-count="4"] > .cvBlocker {
-    flex-basis: 100%;
+    flex: none;
   }
 }
 

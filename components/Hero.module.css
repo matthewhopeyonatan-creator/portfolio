@@ -477,6 +477,10 @@
   .canvas {
     top: var(--stack);
   }
+  /* the longest line fits between the margins on the narrowest phones */
+  .headline {
+    font-size: min(20px, (100vw - 2 * var(--gutter)) * 0.0625);
+  }
   /* the headline runs nearly the full width here, so the switch sits at the band's lower right */
   .themeToggle {
     top: auto;

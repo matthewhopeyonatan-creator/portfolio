@@ -160,3 +160,24 @@ a.social:focus-visible::after {
     margin-bottom: 0; /* same type now, so nav and socials share a baseline */
   }
 }
+
+/* phones: finger-sized tap areas on the links, without moving anything */
+@media (max-width: 767px) {
+  .navLink,
+  .social {
+    padding: 8px 0;
+    margin: -8px 0;
+  }
+  .social {
+    padding-inline: 8px;
+    margin-inline: -8px;
+  }
+  .navLink::after,
+  a.social::after {
+    bottom: 8px;
+  }
+  a.social::after {
+    left: 8px;
+    right: 8px;
+  }
+}

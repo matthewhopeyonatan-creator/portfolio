@@ -262,6 +262,15 @@
   .panel {
     width: 88vw; /* leaves a strip of the page to tap to close */
   }
+  .step {
+    width: 40px;
+    height: 40px;
+    margin: -6px;
+  }
+  .step svg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
