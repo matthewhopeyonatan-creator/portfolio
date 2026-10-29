@@ -69,7 +69,7 @@
 .siteNav {
   position: sticky;
   top: 0;
-  z-index: 3;
+  z-index: 20; /* above everything in the case study, the light / dark switch (10) included */
 }
 
 .siteNav > header {
