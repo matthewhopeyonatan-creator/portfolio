@@ -13,7 +13,7 @@ implements his designs faithfully.
 
 1. **Never pure black.** The ink colour is `#282828` (`--color-ink`). No `#000`, no `black`, no
    `rgba(0,0,0,…)` in new code — use `rgba(40, 40, 40, …)`.
-2. **40px side margins** (`--gutter`; 16px on phones). Everything lines up on them. Vertical gaps
+2. **40px side margins** (`--gutter`; 20px on phones). Everything lines up on them. Vertical gaps
    that sit against a margin should visually match it (e.g. the hero headline's gap under the
    navbar equals the side margin at every window size).
 3. **Don't change what he's already defined.** Only touch what the request is about. If a fix

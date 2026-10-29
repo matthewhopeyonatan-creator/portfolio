@@ -253,7 +253,7 @@ export default function StickerCard({
             />
           </svg>
         </button>
-        <div ref={cardRef} className={styles.card}>
+        <div ref={cardRef} className={styles.card} data-lenis-prevent>
           <div className={styles.media} aria-hidden="true">
             {sticker.photos?.length ? <Photos srcs={sticker.photos} /> : null}
           </div>

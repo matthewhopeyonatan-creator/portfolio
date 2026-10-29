@@ -47,6 +47,7 @@ function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true, layou
   useEffect(() => {
     const el = ref.current;
     if (!el || !on) return;
+    const scroller = el.closest<HTMLElement>("[data-lenis-prevent]");
     const rows = el.matches("[data-row]")
       ? [el]
       : [...el.querySelectorAll<HTMLElement>("[data-row]")];
@@ -58,7 +59,9 @@ function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true, layou
           io.unobserve(e.target);
         }
       },
-      { rootMargin: "0px 0px 0px 0px", threshold: 0 },
+      // measured against the case study's own scroller (it clips what's below its fold, so
+      // against the window nothing down there would ever count as close)
+      { root: scroller, rootMargin: "0px 0px 0px 0px", threshold: 0 },
     );
     rows.forEach((r) => io.observe(r));
     const imgs = el.querySelectorAll("img");
@@ -68,7 +71,7 @@ function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true, layou
         imgs.forEach((im) => (im.loading = "eager"));
         pre.disconnect();
       },
-      { rootMargin: "150% 0px 150% 0px" },
+      { root: scroller, rootMargin: "250% 0px 250% 0px" },
     );
     pre.observe(el);
     return () => {

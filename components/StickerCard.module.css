@@ -258,6 +258,9 @@
     max-height: calc(100svh - 140px);
     padding: 24px;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
   .media {
     position: relative;

@@ -220,7 +220,8 @@
 @media (max-width: 767px) {
   .card {
     min-height: 0;
-    padding: 26px 20px 45px;
+    /* the same 24 above the tray and below the tags, on the 20 margins */
+    padding: 24px var(--gutter);
   }
 
   .tray {

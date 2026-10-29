@@ -47,9 +47,9 @@
 }
 
 @media (max-width: 767px) {
-  /* Figma 231:1707: 36 caps, centred, the rule ~22 under the letters */
+  /* 36 caps, centred, with the same 32 above and below the letters */
   .sectionTitleRow {
-    padding: 24px 0 22px;
+    padding: 32px 0;
   }
   .sectionTitle {
     font-size: 36px;

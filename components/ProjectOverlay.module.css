@@ -1069,9 +1069,9 @@
      labelled groups 60 apart */
   .section .cvLabel,
   .sectionLabel {
-    font-size: 20px !important;
+    font-size: 18px !important;
     font-weight: 500;
-    line-height: 25px;
+    line-height: 23px;
     letter-spacing: -0.03em;
   }
   .cvGroup {
@@ -1084,14 +1084,14 @@
     gap: 16px;
   }
   .section .cvCallout {
-    font-size: 32px;
-    line-height: 32px;
+    font-size: 28px;
+    line-height: 29px;
     letter-spacing: -0.03em;
   }
   .section > p:not(.sectionLabel):not(.cvLabel),
   .section .cvBody,
   .section .cvStatement p {
-    font-size: 20px;
+    font-size: 18px;
     line-height: normal;
     letter-spacing: -0.03em;
   }
@@ -1117,7 +1117,7 @@
     min-height: 2.5em;
     font-size: 11px;
     line-height: 1.25;
-    padding: 0 2px;
+    padding: 0 7px;
   }
   .cvStep {
     gap: 16px;
@@ -1185,8 +1185,14 @@
   .section .cvBlockerText,
   .section .cvSketchText,
   .section .cvBoxSolo {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.15;
+  }
+  .section .cvBoxText {
+    font-size: 18px;
+  }
+  .section .cvBlockers[data-small] .cvBlockerText {
+    font-size: 16px;
   }
   .cvGallery {
     gap: 10px;

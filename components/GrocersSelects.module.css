@@ -118,3 +118,17 @@
     border-right: 2px solid transparent;
   }
 }
+
+/* phones: one poster a row on the 20 margins, the same 32 around the title as Seasonal picks,
+   and 20 around each poster (its caption 12 under it) */
+@media (max-width: 767px) {
+  .titleRow {
+    padding-top: 32px;
+  }
+  .cell {
+    padding: var(--gutter);
+  }
+  .caption {
+    margin-top: 12px;
+  }
+}

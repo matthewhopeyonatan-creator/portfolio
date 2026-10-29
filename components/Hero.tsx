@@ -473,10 +473,15 @@ export default function Hero() {
   const tomatoProps = { onLoad, onOpen: openCard, activeSrc: card?.s.src };
   // after a card closes, focus goes back to the sticker that opened it (once it's visible again)
   const lastOrigin = useRef<HTMLElement | null>(null);
+  // — only when it was opened from the keyboard: after a tap or a click, putting focus back would
+  // just draw a focus ring around the sticker
+  const byKeyboard = useRef(false);
   useEffect(() => {
-    if (card) lastOrigin.current = card.el;
-    else if (lastOrigin.current) {
-      lastOrigin.current.focus({ preventScroll: true });
+    if (card) {
+      lastOrigin.current = card.el;
+      byKeyboard.current = card.el.matches(":focus-visible");
+    } else if (lastOrigin.current) {
+      if (byKeyboard.current) lastOrigin.current.focus({ preventScroll: true });
       lastOrigin.current = null;
     }
   }, [card]);

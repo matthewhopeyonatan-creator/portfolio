@@ -255,7 +255,7 @@ html:not([data-intro="done"]) #seasonal-picks {
 
 @media (max-width: 767px) {
   :root {
-    --gutter: 16px;
+    --gutter: 20px;
   }
 }
 
