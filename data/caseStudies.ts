@@ -54,6 +54,8 @@ export type CaseBlock =
     }
   // Shmood's onboarding screens rebuilt in code, two to a row (components/ShmoodScreens.tsx)
   | { type: "screens"; screens: ("welcome" | "story" | "aesthetic" | "designer")[] }
+  // Shmood's final dashboard rebuilt in code, rising in like a figure (components/ShmoodDashboard.tsx)
+  | { type: "dashboard" }
   // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
   | { type: "gallery"; images: CaseImage[] }
   // a 48px heading over a stack of bordered 36px lines (Figma 166:2459)
@@ -439,20 +441,8 @@ const shmood: CaseSection[] = [
               },
             ],
           },
-          {
-            type: "figures",
-            rise: true,
-            items: [
-              fig(
-                img(
-                  "17",
-                  2000,
-                  1304,
-                  "Final dashboard prototype for a DCC Branding project",
-                ),
-              ),
-            ],
-          },
+          // the final dashboard rebuilt in code (components/ShmoodDashboard.tsx, Figma 206:3616)
+          { type: "dashboard" },
         ],
       },
     ],
