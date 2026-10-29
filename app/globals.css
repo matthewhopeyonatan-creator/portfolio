@@ -39,12 +39,35 @@
   initial-value: #d9d9d9;
 }
 
+/* the receipt's tilt shading (components/Tilt.tsx): shadow at full strength (Tilt scales it), the
+   dent under the pointer, the rim of light at its mirror */
+@property --tilt-shadow {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(40, 40, 40, 0.4);
+}
+
+@property --tilt-dent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(40, 40, 40, 0.08);
+}
+
+@property --tilt-rim {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.3);
+}
+
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;
   --color-accent: #91230a; /* deep tomato red — hero pill + footer */
   --color-paper: #fff;
   --color-track: #d9d9d9; /* the light / dark switch's pill */
+  --tilt-shadow: rgba(40, 40, 40, 0.4);
+  --tilt-dent: rgba(40, 40, 40, 0.08);
+  --tilt-rim: rgba(255, 255, 255, 0.3);
   --rule: 2px solid var(--color-ink);
 
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */
@@ -85,6 +108,10 @@ html[data-theme="dark"] {
   --color-ink: #edece9;
   --color-paper: #1f1f1f;
   --color-track: #2a2a2a;
+  /* on a dark page a shadow has to be darker than the page, and a dark slip catches far less light */
+  --tilt-shadow: rgba(6, 6, 6, 1);
+  --tilt-dent: rgba(6, 6, 6, 0.22);
+  --tilt-rim: rgba(237, 236, 233, 0.05);
   color-scheme: dark;
 }
 
@@ -97,7 +124,10 @@ html.theme-fade {
     --color-bg 450ms ease,
     --color-ink 450ms ease,
     --color-paper 450ms ease,
-    --color-track 450ms ease;
+    --color-track 450ms ease,
+    --tilt-shadow 450ms ease,
+    --tilt-dent 450ms ease,
+    --tilt-rim 450ms ease;
 }
 
 html.theme-fade *:not([class*="knob"]):not(.theme-light):not(.theme-dark),

@@ -40,13 +40,15 @@ export default function Tilt({
     const paint = () => {
       const { x, y, on } = now;
       c.style.transform = `rotateX(${(-y * max).toFixed(2)}deg) rotateY(${(x * max).toFixed(2)}deg)`;
-      c.style.boxShadow = `${(-x * 24).toFixed(1)}px ${(20 - y * 16).toFixed(1)}px ${40 + on * 28}px rgba(40, 40, 40, ${(0.08 + on * 0.14).toFixed(3)})`;
+      // shading colours come from the theme (globals.css --tilt-*): a light page gets a soft ink
+      // shadow and a bright rim, a dark one a shadow darker than the page and only a faint rim
+      c.style.boxShadow = `${(-x * 24).toFixed(1)}px ${(20 - y * 16).toFixed(1)}px ${40 + on * 28}px color-mix(in srgb, var(--tilt-shadow) ${((0.08 + on * 0.14) * 250).toFixed(1)}%, transparent)`;
       const px = 50 + x * 50;
       const py = 50 + y * 50;
       s.style.opacity = on.toFixed(3);
       s.style.background =
-        `radial-gradient(circle at ${px}% ${py}%, rgba(40, 40, 40, 0.08), transparent 45%),` +
-        `radial-gradient(circle at ${100 - px}% ${100 - py}%, rgba(255, 255, 255, 0.3), transparent 45%)`;
+        `radial-gradient(circle at ${px}% ${py}%, var(--tilt-dent), transparent 45%),` +
+        `radial-gradient(circle at ${100 - px}% ${100 - py}%, var(--tilt-rim), transparent 45%)`;
     };
 
     const tick = () => {
