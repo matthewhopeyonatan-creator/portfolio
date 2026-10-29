@@ -220,7 +220,6 @@ function Sticker({
   onOpen: OpenSticker;
   away: boolean;
 }) {
-  const dark = useTheme() === "dark";
   return (
     <button
       type="button"
@@ -242,7 +241,7 @@ function Sticker({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className={styles.stickerFace}
-        src={themed(s.src, dark)}
+        src={s.src}
         alt=""
         draggable={false}
       />
@@ -250,7 +249,7 @@ function Sticker({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={styles.stickerFlap}
-          src={themed(s.src, dark)}
+          src={s.src}
           alt=""
           draggable={false}
         />
@@ -273,7 +272,7 @@ const headlineLines = [[0, 1], [2, 3], [4]];
 
 type TomatoKey = keyof typeof tomatoes;
 
-/** dark mode shows the tomatoes and stickers through Figma's gradient map (210:5014), pre-rendered
+/** dark mode shows the tomatoes (not the stickers) through Figma's gradient map (210:5014), pre-rendered
     into /home/dark/ with the same ramp: white · #1ABCFE · black by brightness */
 const themed = (src: string, dark: boolean) => (dark ? src.replace("/home/", "/home/dark/") : src);
 

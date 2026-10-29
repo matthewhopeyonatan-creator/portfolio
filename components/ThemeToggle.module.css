@@ -1,8 +1,8 @@
-/* Figma 210:5291 — 104.75 × 47.89 pill, #D9D9D9, 1.5px inside stroke; 38.16 knob in ink, 6px in
+/* Figma 210:5291 (at 80%) — 104.75 × 47.89 pill, #D9D9D9, 1.5px inside stroke; 38.16 knob in ink, 6px in
    from the left. In Figma px (--u) with a floor for small screens. Dark: the knob travels to the
    right end and the pill takes the dark palette. */
 .toggle {
-  --tw: max(56px, calc(104.75 * var(--u)));
+  --tw: max(48px, calc(84 * var(--u))); /* Figma 104.75, taken down a fifth */
   --th: calc(var(--tw) * 47.89 / 104.75);
   --kd: calc(var(--th) * 38.16 / 47.89);
   --kin: calc((var(--th) - var(--kd)) / 2);
