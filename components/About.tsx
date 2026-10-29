@@ -4,7 +4,7 @@ import styles from "./About.module.css";
 
 /**
  * The about page (Figma 122:925, 1728 wide). Laid out in Figma px (--u) from the frame: intro,
- * MATTHEW HOPE, the drifting photo strip, the things that have stuck with him, a design tip,
+ * MATTHEW HOPE, the drifting photo strip, the things that have stuck with him, the sunset line,
  * experience and education, and Produce Recs.
  */
 const INTERESTS = ["cooking", "hiking", "graphic design", "hosting", "plants", "dancing", "travel"];
@@ -24,8 +24,8 @@ const SCHOOL = [
   { org: "Diablo Valley College", role: "a.s. chemistry", dates: "aug 21 - may 23" },
 ];
 
-/** a photo in its frame: the frame holds the place (and is what the scroll reveal watches); the
-    picture inside is uncovered bottom-up when it arrives (data-reveal="wipe", globals.css) */
+/** one of the page's still photos; it comes into focus out of a soft blur as it scrolls in
+    (data-reveal="blur", globals.css — the same entrance as the case-study figures) */
 function Snap({
   className,
   src,
@@ -42,10 +42,17 @@ function Snap({
   style?: React.CSSProperties;
 }) {
   return (
-    <span className={`${styles.snap} ${className}`} data-reveal="wipe" style={style}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} width={width} height={height} loading="lazy" />
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className={`${styles.snap} ${className}`}
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading="lazy"
+      data-reveal="blur"
+      style={style}
+    />
   );
 }
 
@@ -57,7 +64,10 @@ function Rows({ items, className }: { items: typeof WORK; className: string }) {
           key={r.org}
           className={styles.row}
           data-reveal="up"
-          style={{ "--i": i } as React.CSSProperties}
+          // starts just before it's on screen, the rows close behind each other, so the list is
+          // there to read as it arrives
+          data-reveal-early="ahead"
+          style={{ "--i": i * 0.5 } as React.CSSProperties}
         >
           <span className={styles.org}>{r.org}</span>
           <span className={styles.role}>{r.role}</span>
@@ -98,20 +108,18 @@ export default function About() {
         <Snap className={styles.snapInterests} src="/about/interests.webp" alt="Looking out over a canyon of orange rock spires" width={479} height={213} style={{ "--i": 2 } as React.CSSProperties} />
         <Snap className={styles.snapSunset} src="/about/sunset.webp" alt="An orange sunset over the water" width={479} height={213} />
         <p className={styles.tip} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
-          My design tip:
-          <br />
           always remember pause and look at the sunset
         </p>
       </section>
 
       <section className={styles.career} aria-label="Experience and education">
-        <h2 className={`${styles.careerLabel} ${styles.workLabel}`} data-reveal="up">
+        <h2 className={`${styles.careerLabel} ${styles.workLabel}`} data-reveal="up" data-reveal-early="ahead">
           Who built me professionally
         </h2>
         <span className={`${styles.careerRule} ${styles.workRule}`} aria-hidden="true" />
         <Rows items={WORK} className={styles.workRows} />
         <Snap className={styles.snapWork} src="/about/work.webp" alt="Matthew at his Cornell graduation, in a red stole on a wooden bridge" width={340} height={465} />
-        <h2 className={`${styles.careerLabel} ${styles.schoolLabel}`} data-reveal="up">
+        <h2 className={`${styles.careerLabel} ${styles.schoolLabel}`} data-reveal="up" data-reveal-early="ahead">
           Where I found my footing
         </h2>
         <span className={`${styles.careerRule} ${styles.schoolRule}`} aria-hidden="true" />

@@ -275,7 +275,7 @@ html.modal-open {
    data-reveal="up"     rise + fade (section titles, caption rows)
    data-reveal="tray"   project trays: rise with a slight tilt that settles as they land
    data-reveal="swipe"  posters: come into focus out of a soft blur, tag follows
-   data-reveal="wipe"   about-page photos: uncovered from the bottom up as they rise into place
+   data-reveal="blur"   about-page photos: come into focus out of a soft blur
    --i staggers an item after its neighbours */
 .reveal-ready [data-reveal] {
   opacity: 0;
@@ -338,26 +338,20 @@ html.modal-open {
   filter: none;
 }
 
-/* photos (about page) — a down-up swipe: the picture is uncovered from its bottom edge to its top
-   while it rises a little into place, so it seems to slide up out of a slot. No fade: the photo is
-   whole wherever it's uncovered. */
-.reveal-ready [data-reveal="wipe"] {
-  opacity: 1;
-  transform: none;
-}
-
-.reveal-ready [data-reveal="wipe"] > img {
-  clip-path: inset(100% 0 0 0);
-  transform: translateY(6%);
+/* photos (about page) — come into focus: a soft blur clears as the photo fades up a little into
+   place (the same entrance as the case-study figures, ProjectOverlay .cvRise) */
+.reveal-ready [data-reveal="blur"] {
+  transform: translate3d(0, 40px, 0);
+  filter: blur(14px);
   transition:
-    clip-path 900ms var(--ease-in-out),
-    transform 1100ms var(--ease-intro);
+    opacity 900ms var(--ease-out),
+    transform 1200ms var(--ease-intro),
+    filter 1100ms var(--ease-out);
   transition-delay: calc(var(--i, 0) * 110ms);
 }
 
-.reveal-ready [data-reveal="wipe"][data-revealed] > img {
-  clip-path: inset(0 0 0 0);
-  transform: none;
+.reveal-ready [data-reveal="blur"][data-revealed] {
+  filter: none;
 }
 
 .reveal-ready [data-reveal][data-revealed] {

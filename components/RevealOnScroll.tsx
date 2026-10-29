@@ -34,15 +34,31 @@ export default function RevealOnScroll() {
       },
       { rootMargin: "0px 0px -8% 0px", threshold: 0 },
     );
+    // data-reveal-early="ahead": starts a little before it reaches the screen (while still ~10% of a
+    // screen below), so it's already arriving as it scrolls into view (the about page's lists)
+    const ioAhead = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          (e.target as HTMLElement).dataset.revealed = "";
+          ioAhead.unobserve(e.target);
+        }
+      },
+      { rootMargin: "0px 0px 10% 0px", threshold: 0 },
+    );
     document
       .querySelectorAll('[data-reveal]:not([data-reveal="swipe"]):not([data-reveal-early])')
       .forEach((el) => io.observe(el));
     document
-      .querySelectorAll('[data-reveal="swipe"], [data-reveal-early]')
+      .querySelectorAll('[data-reveal="swipe"], [data-reveal-early]:not([data-reveal-early="ahead"])')
       .forEach((el) => ioNow.observe(el));
+    document
+      .querySelectorAll('[data-reveal-early="ahead"]')
+      .forEach((el) => ioAhead.observe(el));
     return () => {
       io.disconnect();
       ioNow.disconnect();
+      ioAhead.disconnect();
     };
   }, []);
   return null;
