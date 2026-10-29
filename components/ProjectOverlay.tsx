@@ -43,7 +43,7 @@ type Img = { src: string; w: number; h: number; alt: string };
  * [data-row] inside `ref` (or `ref` itself) gets data-revealed the moment its top edge reaches the
  * bottom of the screen, and every image inside starts loading well before it gets there.
  */
-function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true) {
+function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true, layout = 0) {
   useEffect(() => {
     const el = ref.current;
     if (!el || !on) return;
@@ -75,7 +75,7 @@ function useRowReveal(ref: React.RefObject<HTMLElement | null>, on = true) {
       io.disconnect();
       pre.disconnect();
     };
-  }, [ref, on]);
+  }, [ref, on, layout]);
 }
 
 /** marks an image's wrapper loaded (so a rising tile never comes in empty) */
@@ -87,9 +87,18 @@ const onLoaded = (e: React.SyntheticEvent<HTMLImageElement>) =>
 
 function Gallery({ images }: { images: Img[] }) {
   const ref = useRef<HTMLDivElement>(null);
-  useRowReveal(ref);
+  // three to a row; two on phones
+  const [perRow, setPerRow] = useState(3);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const set = () => setPerRow(mq.matches ? 2 : 3);
+    set();
+    mq.addEventListener("change", set);
+    return () => mq.removeEventListener("change", set);
+  }, []);
+  useRowReveal(ref, true, perRow);
   const rows: Img[][] = [];
-  for (let i = 0; i < images.length; i += 3) rows.push(images.slice(i, i + 3));
+  for (let i = 0; i < images.length; i += perRow) rows.push(images.slice(i, i + perRow));
   return (
     <div ref={ref} className={styles.cvGallery}>
       {rows.map((row, r) => (

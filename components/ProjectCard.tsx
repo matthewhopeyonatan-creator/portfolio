@@ -159,11 +159,23 @@ export default function ProjectCard({ project }: { project: Project }) {
           <p className={styles.subtitle}>{project.subtitle}</p>
         </div>
         <ul className={styles.tags} aria-label="Tags">
-          {project.tags.map((tag) => (
-            <li key={tag} className={styles.tag}>
-              {tag}
-            </li>
-          ))}
+          {/* in pairs: on phones each pair is its own row (Figma 231:1707); elsewhere the pairs
+              dissolve into one wrapping row */}
+          {project.tags
+            .reduce<string[][]>((rows, tag, i) => {
+              if (i % 2 === 0) rows.push([tag]);
+              else rows[rows.length - 1].push(tag);
+              return rows;
+            }, [])
+            .map((pair) => (
+              <li key={pair[0]} className={styles.tagPair}>
+                {pair.map((tag) => (
+                  <span key={tag} className={styles.tag}>
+                    {tag}
+                  </span>
+                ))}
+              </li>
+            ))}
         </ul>
       </div>
     </>

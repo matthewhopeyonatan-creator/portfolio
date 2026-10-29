@@ -28,6 +28,7 @@ const tomatoes = {
     dh: 645,
     opacity: 0.7,
     order: 3,
+    m: null,
   },
   right: {
     src: "/home/tomato-right-base.webp",
@@ -39,6 +40,7 @@ const tomatoes = {
     dh: 673.5,
     opacity: 0.9,
     order: 2,
+    m: [51.04, 506.96, 484.52, 453.86, 26.23],
   },
   mid: {
     src: "/home/tomato-mid-base.webp",
@@ -50,6 +52,7 @@ const tomatoes = {
     dh: 789.5,
     opacity: 1,
     order: 1,
+    m: [0, 0, 393, 1, 0, "bare"],
   },
   left: {
     src: "/home/tomato-left-base.webp",
@@ -61,6 +64,7 @@ const tomatoes = {
     dh: 848.5,
     opacity: 1,
     order: 0,
+    m: [-183.99, 179.43, 541.8, 515.96, 0],
   },
 };
 
@@ -73,6 +77,9 @@ const stickers: Record<
   string,
   {
     src: string;
+    /** phone layout (Figma 231:1707, 393 wide): x, y, w, h [, rotation°] in phone px from the
+        tomato's phone box */
+    m?: number[];
     w: number;
     h: number;
     x: number;
@@ -94,6 +101,7 @@ const stickers: Record<
   left: [
     {
       src: "/home/sticker-crowdvolt-ycw24.webp",
+      m: [166, 166.56, 136.88, 116.81],
       w: 225.1,
       h: 192.1,
       x: 200,
@@ -109,6 +117,7 @@ const stickers: Record<
     },
     {
       src: "/home/sticker-jakarta.webp",
+      m: [276.99, 238.99, 155.85, 152.02],
       w: 256.3,
       h: 250,
       x: 438,
@@ -124,6 +133,7 @@ const stickers: Record<
     },
     {
       src: "/home/sticker-cornell.webp",
+      m: [374.9, 186.57, 85.13, 107.45],
       w: 140,
       h: 176.7,
       x: 599,
@@ -150,6 +160,7 @@ const stickers: Record<
   right: [
     {
       src: "/home/sticker-fatboy.webp",
+      m: [145.9, 232.93, 143.87, 137.13],
       w: 213.5,
       h: 203.5,
       x: 314.18,
@@ -165,6 +176,7 @@ const stickers: Record<
     },
     {
       src: "/home/sticker-design-meetup.webp",
+      m: [191.9, 117.92, 189.03, 189.03],
       w: 280.5,
       h: 280.5,
       x: 383.18,
@@ -183,6 +195,7 @@ const stickers: Record<
   mid: [
     {
       src: "/home/sticker-nyu-2.webp",
+      m: [74.58, 624.44, 150.28, 158.36, 41.91],
       w: 223,
       h: 235,
       x: 397.07,
@@ -233,6 +246,9 @@ function Sticker({
           "--sw": s.w,
           "--sh": s.h,
           "--pd": s.peel,
+          ...(s.m
+            ? { "--mx": s.m[0], "--my": s.m[1], "--mw": s.m[2], "--mh": s.m[3], "--mr": `${s.m[4] ?? 0}deg` }
+            : {}),
           ...(s.hit ? { "--hit": `polygon(${s.hit})` } : {}),
         } as React.CSSProperties
       }
@@ -286,7 +302,7 @@ function Tomato({
   const t = tomatoes[id];
   return (
     <div
-      className={`${styles.layer} ${styles.tomato} theme-pair`}
+      className={`${styles.layer} ${styles.tomato} theme-pair ${t.m ? "" : styles.offPhone} ${t.m?.[5] === "bare" ? styles.bareOnPhone : ""}`}
       style={
         {
           "--x": t.x,
@@ -295,6 +311,11 @@ function Tomato({
           "--h": t.dh,
           "--o": t.opacity,
           "--i": t.order,
+          // phone layout (Figma 231:1707): box in phone px (1/393 of the width) + the turn that
+          // tomato takes there
+          ...(t.m
+            ? { "--mx": t.m[0], "--my": t.m[1], "--mw": t.m[2], "--mh": t.m[3], "--mr": `${t.m[4]}deg` }
+            : {}),
         } as React.CSSProperties
       }
     >

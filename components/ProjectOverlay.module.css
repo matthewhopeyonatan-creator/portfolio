@@ -1101,10 +1101,18 @@
   .cvFlow {
     padding: 28px 8px 34px;
   }
+  /* every label gets two lines' room, so the dots (and the ball's path) sit in one straight row */
   .cvStepLabel {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 2.5em;
     font-size: 11px;
     line-height: 1.25;
     padding: 0 2px;
+  }
+  .cvStep {
+    gap: 16px;
   }
   .cvDot {
     width: 32px;
@@ -1112,12 +1120,12 @@
   }
   /* the "+FRICTION" tags drop below the dots (between them there's no room on a phone) */
   .cvFriction {
-    bottom: -22px;
+    bottom: -30px;
     padding: 3px 6px;
     font-size: 10px;
   }
   .cvFlow:has(.cvFriction) {
-    padding-bottom: 50px;
+    padding-bottom: 58px;
   }
   /* cards that sit side by side on desktop stack */
   .cvBlockers {
@@ -1125,13 +1133,25 @@
   }
   .cvBlocker {
     min-height: 0;
-    padding: 20px 16px;
+    padding: 20px;
   }
+  .section .cvBlockerText {
+    max-width: none !important;
+  }
+  /* the caption goes right under the lo-fi sketch, then the cards */
   .cvSketchRow {
-    flex-direction: column;
+    display: contents;
+  }
+  .cvSketchImg {
+    order: 1;
+  }
+  .cvSketch figcaption {
+    order: 2;
   }
   .cvSketchCards {
+    order: 3;
     width: 100%;
+    margin-top: 12px;
   }
   .cvSketchCard {
     padding: 16px;
@@ -1164,6 +1184,7 @@
     gap: 10px;
   }
   .cvGalleryRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 10px;
   }
   .toc {

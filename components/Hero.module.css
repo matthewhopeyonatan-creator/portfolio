@@ -477,10 +477,6 @@
   .canvas {
     top: var(--stack);
   }
-  /* the longest line fits between the margins on the narrowest phones */
-  .headline {
-    font-size: min(20px, (100vw - 2 * var(--gutter)) * 0.0625);
-  }
   /* the headline runs nearly the full width here, so the switch sits at the band's lower right */
   .themeToggle {
     top: auto;
@@ -489,6 +485,72 @@
   /* the band isn't full-screen here, so a "scroll down" cue would just sit on the artwork */
   .cue {
     display: none;
+  }
+}
+
+/* ── Phones: Figma 231:1707 (393 wide). The band is its own little artboard, scaled to the screen
+   width (--m = one phone px): the headline across the top on 20px margins, then two tomatoes —
+   the big one with CrowdVolt, Jakarta and Cornell, the second with NYU, Fatboy and Design
+   Meetup — running off the sides. Positions come from the tomatoes / stickers' `m` boxes in
+   Hero.tsx; the stickers keep their Figma size here. ── */
+@media (max-width: 767px) {
+  .hero {
+    --m: calc(100vw / 393);
+    --hero-h: calc(926 * var(--m));
+  }
+  .canvas {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--hero-h);
+  }
+  .tomato {
+    left: calc(var(--mx) * var(--m));
+    top: calc(var(--my) * var(--m));
+    width: calc(var(--mw) * var(--m));
+    height: calc(var(--mh) * var(--m));
+  }
+  /* the second tomato is the desktop one turned to its phone angle */
+  .tomatoImg {
+    transform: rotate(var(--mr, 0deg));
+  }
+  /* not part of the phone composition */
+  .offPhone {
+    display: none;
+  }
+  /* only its sticker (NYU) is used here */
+  .bareOnPhone .tomatoImg {
+    visibility: hidden;
+  }
+  .sticker {
+    left: calc(var(--mx) * var(--m));
+    top: calc(var(--my) * var(--m));
+    width: calc(var(--mw) * var(--m));
+    height: calc(var(--mh) * var(--m));
+    transform: rotate(var(--mr, 0deg));
+  }
+  /* 40 / 40, 353 wide on the 20 margin, 20 under the navbar; it wraps between phrases */
+  .headline {
+    left: calc(20 * var(--m));
+    top: calc(20 * var(--m));
+    width: calc(353 * var(--m));
+    font-size: calc(40 * var(--m));
+    line-height: 1;
+    white-space: normal;
+  }
+  .line {
+    white-space: normal;
+  }
+  /* a phrase never splits; lines break between phrases */
+  .phrase {
+    display: inline-block;
+    white-space: pre;
+  }
+  /* the switch: under the headline (its five lines end at 220), on the right margin */
+  .themeToggle {
+    top: calc(236 * var(--m));
+    right: calc(20 * var(--m));
+    bottom: auto;
   }
 }
 

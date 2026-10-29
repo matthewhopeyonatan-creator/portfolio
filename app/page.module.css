@@ -47,6 +47,13 @@
 }
 
 @media (max-width: 767px) {
+  /* Figma 231:1707: 36 caps, centred, the rule ~22 under the letters */
+  .sectionTitleRow {
+    padding: 24px 0 22px;
+  }
+  .sectionTitle {
+    font-size: 36px;
+  }
   .grid {
     grid-template-columns: 1fr;
   }
