@@ -1,0 +1,256 @@
+/* About page — Figma 122:925 (1728 wide), sizes in Figma px (--u). Vertical positions are measured
+   from the navbar rule, with the first gap equal to the side margin like the homepage headline.
+   Type: Host Grotesk — Light 36 body (−3% tracking), Bold 174.51 titles (−5%). */
+.page {
+  padding-bottom: calc(390 * var(--u)); /* to the footer's rule */
+  color: var(--color-ink);
+}
+
+.page p,
+.page h1,
+.page h2,
+.page ul {
+  margin: 0;
+}
+
+.page ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* body copy — Light 36 */
+.intro,
+.galleryLabel,
+.storyText,
+.interests,
+.tip,
+.produce {
+  font-size: max(18px, calc(36 * var(--u)));
+  font-weight: 300;
+  letter-spacing: -0.03em;
+}
+
+/* ── hello ── */
+.hello {
+  position: relative;
+  padding: var(--gutter) var(--gutter) 0;
+}
+
+.intro {
+  width: calc(1038 * var(--u));
+  line-height: calc(35 * var(--u));
+}
+
+/* up the right edge, reading top to bottom; it starts a margin under the light / dark switch */
+.galleryLabel {
+  position: absolute;
+  right: var(--gutter);
+  top: calc(var(--gutter) * 2 + max(48px, calc(84 * var(--u))) * 47.89 / 104.75);
+  writing-mode: vertical-rl;
+  line-height: calc(35 * var(--u));
+  white-space: nowrap;
+}
+
+.name {
+  margin-top: calc(175 * var(--u)) !important;
+  font-size: max(56px, calc(174.51 * var(--u)));
+  font-weight: 700;
+  line-height: 1.3295; /* the box ends exactly on the gallery, as in Figma */
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+
+/* ── gallery strip (AboutGallery) ── */
+.gallery {
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y; /* up/down swipes scroll the page; sideways ones move the strip */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gallery[data-dragging] {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.photo {
+  display: block;
+  flex: none;
+  width: calc(545.881 * var(--u));
+  height: calc(606.535 * var(--u));
+  margin-right: calc(20 * var(--u)); /* after every photo, so one set is exactly 7 steps wide */
+  object-fit: cover;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent); /* while it loads */
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* ── the things that stuck ── */
+.story {
+  position: relative;
+  height: calc(774 * var(--u));
+  margin-top: calc(79 * var(--u));
+}
+
+.story > * {
+  position: absolute;
+}
+
+.storyText {
+  left: var(--gutter);
+  top: 0;
+  width: calc(722 * var(--u));
+  line-height: calc(40 * var(--u));
+}
+
+.interests {
+  right: calc(560 * var(--u));
+  top: calc(140 * var(--u));
+  text-align: right;
+  line-height: calc(55 * var(--u));
+}
+
+.snap {
+  display: block;
+  width: calc(479 * var(--u));
+  height: calc(213 * var(--u));
+  object-fit: cover;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.snapInterests {
+  right: var(--gutter);
+  top: calc(153 * var(--u));
+}
+
+.snapSunset {
+  left: var(--gutter);
+  top: calc(561 * var(--u));
+}
+
+.tip {
+  right: var(--gutter);
+  top: calc(694 * var(--u));
+  text-align: right;
+  line-height: calc(40 * var(--u));
+}
+
+/* ── produce recs ── */
+.recs {
+  position: relative;
+  height: calc(312 * var(--u));
+  margin-top: calc(377 * var(--u));
+}
+
+.recs > * {
+  position: absolute;
+}
+
+.recsTitle {
+  left: var(--gutter);
+  top: calc(12 * var(--u));
+  font-size: max(56px, calc(174.51 * var(--u)));
+  font-weight: 700;
+  line-height: calc(150 * var(--u));
+  letter-spacing: -0.05em;
+}
+
+.month {
+  left: calc(807 * var(--u));
+  top: 0;
+  font-size: max(22px, calc(55.632 * var(--u)));
+  font-weight: 400;
+  line-height: calc(47.819 * var(--u));
+  letter-spacing: -0.05em;
+}
+
+.snapProduce {
+  right: var(--gutter);
+  top: calc(24 * var(--u));
+}
+
+.produce {
+  display: flex;
+  justify-content: space-between;
+  margin-top: calc(127 * var(--u)) !important;
+  padding: 0 var(--gutter) !important;
+  line-height: calc(47.819 * var(--u));
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+
+/* ── phones: one column, in reading order ── */
+@media (max-width: 767px) {
+  .page {
+    padding-bottom: 96px;
+  }
+  .intro,
+  .storyText {
+    width: auto;
+    padding-right: var(--gutter);
+    line-height: 1.2;
+  }
+  .intro {
+    padding-right: calc(var(--gutter) + 64px); /* clear of the switch */
+  }
+  .galleryLabel {
+    display: none;
+  }
+  /* MATTHEW HOPE fills the line between the margins */
+  .name {
+    margin-top: 48px !important;
+    font-size: calc((100vw - 2 * var(--gutter)) / 7.2);
+    line-height: 1.25;
+  }
+  .photo {
+    width: 64vw;
+    height: calc(64vw * 606.535 / 545.881);
+    margin-right: 12px;
+  }
+  .story,
+  .recs {
+    height: auto;
+    margin-top: 48px;
+    padding: 0 var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .story > *,
+  .recs > * {
+    position: static;
+  }
+  .interests,
+  .tip {
+    text-align: left;
+    line-height: 1.5;
+  }
+  .tip {
+    line-height: 1.2;
+  }
+  .snap {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 479 / 213;
+  }
+  .recsTitle {
+    font-size: 56px;
+    line-height: 0.9;
+  }
+  .month {
+    order: -1;
+  }
+  .produce {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    margin-top: 32px !important;
+    line-height: 1.3;
+  }
+}

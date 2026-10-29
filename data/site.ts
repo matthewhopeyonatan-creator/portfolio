@@ -1,6 +1,6 @@
 // Site-wide links. Placeholders point at the current Framer site until the new pages exist.
 export const navLinks = [
-  { label: "about", href: "https://matthew-hope.com/about" },
+  { label: "about", href: "/about" },
   { label: "projects", href: "/#seasonal-picks" },
 ];
 
