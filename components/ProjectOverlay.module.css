@@ -988,36 +988,114 @@
     clip-path: none;
     opacity: 1;
   }
+  /* ── Figma 231:1657 (393 wide): picture first, then the title, intro, the four facts in one
+     column, then the sections — on 20px margins ── */
   .intro {
-    grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 28px 16px 40px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 20px 20px 0;
+  }
+  .hero {
+    order: -1;
+    height: auto;
+    aspect-ratio: 353 / 225;
   }
   .introText {
     min-height: 0;
+    margin-top: 29px;
+  }
+  .title {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: normal;
   }
   .lead {
     max-width: none;
-    margin-top: 12px;
-    line-height: 1.3;
+    margin-top: 14px;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 22px;
+    letter-spacing: -0.04em;
   }
   .facts {
-    grid-template-columns: 1fr 1fr;
-    row-gap: 16px;
-    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 48px;
   }
-  .hero {
-    height: auto;
-    aspect-ratio: 860 / 532;
+  /* Figma's order: Timeline, Project Type, Role, Team */
+  .fact:nth-child(2) {
+    order: 3;
+  }
+  .fact:nth-child(3) {
+    order: 2;
+  }
+  .fact:nth-child(4) {
+    order: 4;
+  }
+  .fact dt,
+  .fact dd {
+    font-size: 20px;
+    line-height: 25px;
+    letter-spacing: -0.04em;
+  }
+  /* the switch sits on the title's line, at the right margin */
+  .frame .toggleSpot > * > * {
+    top: calc(20px + (100vw - 40px) * 225 / 353 + 29px + 11px);
+    right: 20px;
   }
   /* one column the full width (the tracker is hidden, so its column mustn't stay behind) */
   .study,
   .expanded .study {
     grid-template-columns: minmax(0, 1fr);
-    padding: 32px 16px 80px;
+    padding: 88px 20px 96px;
+    border-top: 0;
   }
   .sections {
-    gap: 72px;
+    gap: 88px;
+  }
+  .section {
+    gap: 24px;
+  }
+  /* section text — label Medium 20/25, callout Regular 32/32, body Regular 20, 16 apart; the
+     labelled groups 60 apart */
+  .section .cvLabel,
+  .sectionLabel {
+    font-size: 20px !important;
+    font-weight: 500;
+    line-height: 25px;
+    letter-spacing: -0.03em;
+  }
+  .cvGroup {
+    gap: 24px;
+  }
+  .cvGroup + .cvGroup {
+    margin-top: 36px;
+  }
+  .cvText {
+    gap: 16px;
+  }
+  .section .cvCallout {
+    font-size: 32px;
+    line-height: 32px;
+    letter-spacing: -0.03em;
+  }
+  .section > p:not(.sectionLabel):not(.cvLabel),
+  .section .cvBody,
+  .section .cvStatement p {
+    font-size: 20px;
+    line-height: normal;
+    letter-spacing: -0.03em;
+  }
+  .cvFigures,
+  .cvSketch,
+  .cvWins,
+  .cvBoxes {
+    gap: 16px;
+  }
+  .cvFigure figcaption,
+  .cvSketch figcaption {
+    font-size: 16px;
   }
   /* step diagrams: labels wrap inside their column instead of running into the next */
   .cvFlow {
@@ -1032,10 +1110,14 @@
     width: 32px;
     height: 32px;
   }
+  /* the "+FRICTION" tags drop below the dots (between them there's no room on a phone) */
   .cvFriction {
-    bottom: 16px;
-    padding: 4px 6px;
+    bottom: -22px;
+    padding: 3px 6px;
     font-size: 10px;
+  }
+  .cvFlow:has(.cvFriction) {
+    padding-bottom: 50px;
   }
   /* cards that sit side by side on desktop stack */
   .cvBlockers {
@@ -1065,15 +1147,17 @@
   .cvFlow,
   .cvEmbed,
   .cvFigure img,
-  .cvSketchImg,
-  .hero {
+  .cvSketchImg {
     border-radius: 16px;
+  }
+  .hero {
+    border-radius: 24px;
   }
   .section .cvWin p,
   .section .cvBlockerText,
   .section .cvSketchText,
   .section .cvBoxSolo {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.15;
   }
   .cvGallery {

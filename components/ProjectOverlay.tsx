@@ -914,7 +914,11 @@ export default function ProjectOverlay({
             </header>
           )}
           {/* full screen reads as a page of its own, so it gets the page's light / dark switch */}
-          {expanded && <PageThemeToggle />}
+          {expanded && (
+            <div className={styles.toggleSpot}>
+              <PageThemeToggle />
+            </div>
+          )}
 
           {/* title section — Figma: title 40 SemiBold, intro Light 24/25 (487 wide), four facts; image 860×532 r24 */}
           <section className={styles.intro}>
