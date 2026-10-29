@@ -228,6 +228,12 @@
   opacity: 0.88;
 }
 
+/* dark slip: multiply would sink the mint ink into the dark paper — screen is its light-on-dark
+   twin, so the ink glows and the type still shows through it */
+:global(html[data-theme="dark"]) .ink {
+  mix-blend-mode: screen;
+}
+
 .logo {
   margin: 0 0 calc(20 * var(--ru));
   font-family: var(--font-display-stack);

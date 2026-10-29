@@ -1,11 +1,14 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTheme } from "@/lib/theme";
 
-const INK = "#e82c2c"; // red felt-tip; drawn solid, the canvas itself is multiplied over the print (CSS)
+// red felt-tip on the light slip, mint on the dark one; drawn solid — the canvas itself is blended
+// over the print (CSS: multiplied on light, screened on dark, so the type shows through either way)
+const INK = { light: "#e82c2c", dark: "#00dba4" } as const;
 
 /**
- * A red marker for drawing on the receipt: press anywhere on it (not in the Notes box or on a link)
+ * A marker for drawing on the receipt (red; mint #00DBA4 in dark mode): press anywhere on it (not in the Notes box or on a link)
  * and drag. Strokes are smoothed through the midpoints of the pointer's path, get a touch thinner
  * when you move fast (like a real felt-tip), and sit on a canvas laid over the slip — so they're in
  * the downloaded image too. The canvas follows the slip's size and keeps what's drawn.
@@ -16,6 +19,20 @@ export default function useMarker() {
   const stroke = useRef<{ id: number; pts: { x: number; y: number; t: number }[]; w: number } | null>(null);
 
   const ctx = () => cv.current?.getContext("2d") ?? null;
+  const theme = useTheme();
+  const ink = INK[theme];
+
+  // switching theme recolours what's already on the slip (every drawn pixel keeps its shape)
+  useEffect(() => {
+    const c = cv.current;
+    const g = ctx();
+    if (!c || !g || !c.width) return;
+    g.save();
+    g.globalCompositeOperation = "source-in";
+    g.fillStyle = ink;
+    g.fillRect(0, 0, c.width, c.height);
+    g.restore();
+  }, [ink]);
 
   // size the canvas to the slip (in device pixels), keeping whatever is already drawn
   const fit = useCallback(() => {
@@ -69,7 +86,7 @@ export default function useMarker() {
     // a dot, so a single press still leaves a mark
     const g = ctx();
     if (g) {
-      g.fillStyle = INK;
+      g.fillStyle = ink;
       g.beginPath();
       g.arc(p.x, p.y, base / 2, 0, Math.PI * 2);
       g.fill();
@@ -85,7 +102,7 @@ export default function useMarker() {
     const last = pts[pts.length - 1];
     if (Math.hypot(p.x - last.x, p.y - last.y) < 1) return;
     pts.push(p);
-    g.strokeStyle = INK;
+    g.strokeStyle = ink;
     g.lineCap = "round";
     g.lineJoin = "round";
     if (pts.length === 2) {
