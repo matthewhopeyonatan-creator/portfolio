@@ -119,7 +119,7 @@ export default function Receipt() {
           <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
             <ThemedPair
               light="/receipt/tomato-back.svg"
-              dark="/receipt/dark/tomato-back.svg"
+              dark="/receipt/dark/tomato-back.webp"
               render={(v) => (
                 <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoBack} ${v.className}`} src={v.src} alt="" width={622} height={645} unoptimized priority={v.className === "theme-light"} />
               )}
@@ -128,7 +128,7 @@ export default function Receipt() {
           <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
             <ThemedPair
               light="/receipt/tomato-right.svg"
-              dark="/receipt/dark/tomato-right.svg"
+              dark="/receipt/dark/tomato-right.webp"
               render={(v) => (
                 <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoRight} ${v.className}`} src={v.src} alt="" width={719} height={674} unoptimized priority={v.className === "theme-light"} />
               )}
@@ -137,7 +137,7 @@ export default function Receipt() {
           <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
             <ThemedPair
               light="/receipt/tomato-left.svg"
-              dark="/receipt/dark/tomato-left.svg"
+              dark="/receipt/dark/tomato-left.webp"
               render={(v) => (
                 <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoLeft} ${v.className}`} src={v.src} alt="" width={903} height={815} unoptimized priority={v.className === "theme-light"} />
               )}

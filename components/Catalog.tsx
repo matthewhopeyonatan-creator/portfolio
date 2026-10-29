@@ -58,7 +58,7 @@ export default function Catalog() {
           <div className={`${styles.tomatoRot} theme-pair`}>
             <ThemedPair
               light="/catalog/tomato-4.svg"
-              dark="/catalog/dark/tomato-4.svg"
+              dark="/catalog/dark/tomato-4.webp"
               render={(v) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -80,7 +80,7 @@ export default function Catalog() {
           <div className={`${styles.tomatoRot} theme-pair`}>
             <ThemedPair
               light="/catalog/tomato-5.svg"
-              dark="/catalog/dark/tomato-5.svg"
+              dark="/catalog/dark/tomato-5.webp"
               render={(v) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
