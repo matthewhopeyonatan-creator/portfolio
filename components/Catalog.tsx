@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { catalogAisles } from "@/data/site";
+import ThemedPair from "@/components/ThemedPair";
 import { useTheme } from "@/lib/theme";
 import styles from "./Catalog.module.css";
 
@@ -56,24 +57,46 @@ export default function Catalog() {
     <main className={styles.page}>
       <div className={styles.tomatoes} aria-hidden="true">
         <div className={`${styles.tomato} ${styles.tomatoBack}`}>
-          <div className={styles.tomatoRot}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`/catalog/${dark ? "dark/" : ""}tomato-4.svg`}
-              alt=""
-              width={1344}
-              height={1291}
+          <div className={`${styles.tomatoRot} theme-pair`}>
+            <ThemedPair
+              light="/catalog/tomato-4.svg"
+              dark="/catalog/dark/tomato-4.svg"
+              render={(v) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={v.className}
+                  ref={v.imgRef}
+                  src={v.src}
+                  alt=""
+                  width={1344}
+                  height={1291}
+                  onLoad={v.onLoad}
+                  data-ready={v.ready ? "" : undefined}
+                  className={v.className}
+                />
+              )}
             />
           </div>
         </div>
         <div className={`${styles.tomato} ${styles.tomatoFront}`}>
-          <div className={styles.tomatoRot}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`/catalog/${dark ? "dark/" : ""}tomato-5.svg`}
-              alt=""
-              width={1520}
-              height={1455}
+          <div className={`${styles.tomatoRot} theme-pair`}>
+            <ThemedPair
+              light="/catalog/tomato-5.svg"
+              dark="/catalog/dark/tomato-5.svg"
+              render={(v) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={v.className}
+                  ref={v.imgRef}
+                  src={v.src}
+                  alt=""
+                  width={1520}
+                  height={1455}
+                  onLoad={v.onLoad}
+                  data-ready={v.ready ? "" : undefined}
+                  className={v.className}
+                />
+              )}
             />
           </div>
         </div>

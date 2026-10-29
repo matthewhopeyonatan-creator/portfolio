@@ -7,7 +7,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
 import { loadReceipt, mostViewed, saveReceipt, visitMinutes, type Receipt as R } from "@/lib/visit";
-import { useTheme } from "@/lib/theme";
+import ThemedPair from "@/components/ThemedPair";
 import styles from "./Receipt.module.css";
 
 /**
@@ -25,7 +25,6 @@ const stamp = (t: number) => {
 };
 
 export default function Receipt() {
-  const dark = useTheme() === "dark";
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
   const feed = useRef<HTMLDivElement>(null);
@@ -117,9 +116,33 @@ export default function Receipt() {
       <div className={styles.stage}>
         {/* blurred tomatoes behind the slip (Figma 146:168), placed relative to it in receipt px */}
         <div className={styles.tomatoes} aria-hidden="true">
-          <Image className={`${styles.tomato} ${styles.tomatoBack}`} src={`/receipt/${dark ? "dark/" : ""}tomato-back.svg`} alt="" width={622} height={645} unoptimized priority />
-          <Image className={`${styles.tomato} ${styles.tomatoRight}`} src={`/receipt/${dark ? "dark/" : ""}tomato-right.svg`} alt="" width={719} height={674} unoptimized priority />
-          <Image className={`${styles.tomato} ${styles.tomatoLeft}`} src={`/receipt/${dark ? "dark/" : ""}tomato-left.svg`} alt="" width={903} height={815} unoptimized priority />
+          <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
+            <ThemedPair
+              light="/receipt/tomato-back.svg"
+              dark="/receipt/dark/tomato-back.svg"
+              render={(v) => (
+                <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoBack} ${v.className}`} src={v.src} alt="" width={622} height={645} unoptimized priority={v.className === "theme-light"} />
+              )}
+            />
+          </div>
+          <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
+            <ThemedPair
+              light="/receipt/tomato-right.svg"
+              dark="/receipt/dark/tomato-right.svg"
+              render={(v) => (
+                <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoRight} ${v.className}`} src={v.src} alt="" width={719} height={674} unoptimized priority={v.className === "theme-light"} />
+              )}
+            />
+          </div>
+          <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
+            <ThemedPair
+              light="/receipt/tomato-left.svg"
+              dark="/receipt/dark/tomato-left.svg"
+              render={(v) => (
+                <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoLeft} ${v.className}`} src={v.src} alt="" width={903} height={815} unoptimized priority={v.className === "theme-light"} />
+              )}
+            />
+          </div>
         </div>
         <div ref={feed} className={styles.print}>
           <Tilt className={styles.tilt}>

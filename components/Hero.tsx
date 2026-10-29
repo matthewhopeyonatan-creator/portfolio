@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
 import ThemeToggle from "@/components/ThemeToggle";
-import { useTheme } from "@/lib/theme";
+import ThemedPair from "@/components/ThemedPair";
 import { useCart } from "@/components/cart/CartContext";
 import { stickerItems } from "@/data/site";
 import styles from "./Hero.module.css";
@@ -272,9 +272,6 @@ const headlineLines = [[0, 1], [2, 3], [4]];
 
 type TomatoKey = keyof typeof tomatoes;
 
-/** dark mode shows the tomatoes (not the stickers) through Figma's gradient map (210:5014), pre-rendered
-    into /home/dark/ with the same ramp: white · #1ABCFE · black by brightness */
-const themed = (src: string, dark: boolean) => (dark ? src.replace("/home/", "/home/dark/") : src);
 
 function Tomato({
   id,
@@ -288,10 +285,9 @@ function Tomato({
   activeSrc?: string;
 }) {
   const t = tomatoes[id];
-  const dark = useTheme() === "dark";
   return (
     <div
-      className={`${styles.layer} ${styles.tomato}`}
+      className={`${styles.layer} ${styles.tomato} theme-pair`}
       style={
         {
           "--x": t.x,
@@ -303,23 +299,30 @@ function Tomato({
         } as React.CSSProperties
       }
     >
-      <Image
-        src={themed(t.src, dark)}
-        alt=""
-        width={t.w}
-        height={t.h}
-        priority
-        // served as-is: the optimiser's downscale + re-encode put visible blocks in the soft
-        // gradients; the source renders are already sized for 2× screens
-        unoptimized
-        onLoad={(e) => {
-          // wait until the image is decoded too, so nothing stutters once the drop starts
-          const img = e.currentTarget;
-          (img.decode ? img.decode() : Promise.resolve())
-            .catch(() => {})
-            .then(onLoad);
-        }}
-        className={styles.tomatoImg}
+      {/* light / dark versions crossfade on the theme switch; dark mode shows the tomatoes
+          through Figma's gradient map (210:5014), pre-rendered into /home/dark/ */}
+      <ThemedPair
+        light={t.src}
+        dark={t.src.replace("/home/", "/home/dark/")}
+        // wait until the picture is decoded too, so nothing stutters once the drop starts
+        onFirstReady={onLoad}
+        render={(v) => (
+          <Image
+            key={v.className}
+            ref={v.imgRef}
+            src={v.src}
+            alt=""
+            width={t.w}
+            height={t.h}
+            priority={v.className === "theme-light"}
+            // served as-is: the optimiser's downscale + re-encode put visible blocks in the soft
+            // gradients; the source renders are already sized for 2× screens
+            unoptimized
+            onLoad={v.onLoad}
+            data-ready={v.ready ? "" : undefined}
+            className={`${styles.tomatoImg} ${v.className}`}
+          />
+        )}
       />
       {stickers[id]?.map((s) => (
         <Sticker key={s.src} s={s} onOpen={onOpen} away={activeSrc === s.src} />

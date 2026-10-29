@@ -62,22 +62,66 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
-/* switching themes: one soft crossfade of the whole page */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 500ms;
-  animation-timing-function: var(--ease-in-out);
+/* switching themes (lib/theme.ts): for that moment every colour eases across in place, together.
+   The switch's knob keeps its own slide. */
+html.theme-fade,
+html.theme-fade *:not([class*="knob"]):not(.theme-light):not(.theme-dark),
+html.theme-fade *::before,
+html.theme-fade *::after {
+  transition-property: background-color, color, border-color, outline-color, text-decoration-color,
+    fill, stroke, box-shadow !important;
+  transition-duration: 450ms !important;
+  transition-timing-function: var(--ease-in-out) !important;
+  transition-delay: 0s !important;
 }
 
-/* the new theme fades in over the old one (rather than both fading through each other, which
-   dims the page midway); the old one simply stays put underneath */
-::view-transition-old(root) {
-  animation: none;
+/* pictures with a light and a dark version, both on the page (components/ThemedPair.tsx): each
+   theme's own version shows once it has loaded — fading in on top — while the outgoing one holds a
+   moment, then lets go; until the incoming one is ready, the one on screen stays. Opacity on their
+   own layers, so the crossfade runs on the graphics card. (.theme-pair-filter: where a picture
+   already fades in with its own opacity animation — the receipt — the same thing through
+   filter: opacity(), so the two never fight.) */
+.theme-light,
+.theme-dark {
+  --tp-off: 0;
+  --tp-on: 1;
+  opacity: var(--tp-off);
+  will-change: opacity;
+  transition: opacity 450ms var(--ease-in-out);
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  mix-blend-mode: normal;
+html:not([data-theme="dark"]) .theme-light[data-ready],
+html[data-theme="dark"] .theme-dark[data-ready] {
+  opacity: var(--tp-on);
+  z-index: 1;
+}
+
+html:not([data-theme="dark"]) .theme-pair:not(:has(> .theme-light[data-ready])) > .theme-dark[data-ready],
+html[data-theme="dark"] .theme-pair:not(:has(> .theme-dark[data-ready])) > .theme-light[data-ready] {
+  opacity: var(--tp-on);
+}
+
+html:not([data-theme="dark"]) .theme-dark,
+html[data-theme="dark"] .theme-light {
+  transition-duration: 250ms;
+  transition-delay: 300ms;
+}
+
+/* the filter variant: same rules, carried by filter instead of opacity */
+.theme-pair-filter > .theme-light,
+.theme-pair-filter > .theme-dark {
+  opacity: unset;
+  will-change: auto;
+  filter: opacity(0);
+  transition-property: filter;
+}
+
+html:not([data-theme="dark"]) .theme-pair-filter > .theme-light[data-ready],
+html[data-theme="dark"] .theme-pair-filter > .theme-dark[data-ready],
+html:not([data-theme="dark"]) .theme-pair-filter:not(:has(> .theme-light[data-ready])) > .theme-dark[data-ready],
+html[data-theme="dark"] .theme-pair-filter:not(:has(> .theme-dark[data-ready])) > .theme-light[data-ready] {
+  opacity: unset;
+  filter: opacity(1);
 }
 
 *,

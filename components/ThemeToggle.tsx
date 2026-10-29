@@ -19,8 +19,9 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       aria-label="Dark mode"
       className={`${styles.toggle} ${className}`}
       // reaching for the switch starts loading the other theme's pictures
-      onPointerEnter={() => prepareTheme(dark ? "light" : "dark")}
-      onFocus={() => prepareTheme(dark ? "light" : "dark")}
+      onPointerEnter={prepareTheme}
+      onPointerDown={prepareTheme}
+      onFocus={prepareTheme}
       onClick={() => setTheme(dark ? "light" : "dark")}
     >
       <span className={styles.knob} aria-hidden="true" />

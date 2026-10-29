@@ -25,72 +25,57 @@ function apply(theme: Theme) {
   else delete root.dataset.theme;
 }
 
-// the pictures that have a dark version (public/**/dark/): tomatoes, the cart, catalog arrows
-const THEMED = /\/(home|catalog|receipt)\/(dark\/)?(tomato-[\w-]+\.(webp|svg)|cart\.png|arrow\.svg)$/;
+const FADE = 450; // ms — the colours and the tomatoes change together
 
-function themedImages() {
-  return [...document.images].filter((img) =>
-    THEMED.test(new URL(img.currentSrc || img.src, location.href).pathname),
+/* The tomatoes keep both versions on the page, stacked (ThemedPair / .theme-pair in globals.css),
+   so the switch is a plain crossfade and nothing has to load or decode at the moment of the
+   click. The other theme's versions are "warmed" — put on the page to load quietly — when the
+   visitor reaches for the switch, or once the page has settled. */
+let warm = false;
+const warmSubs = new Set<() => void>();
+
+export function prepareTheme() {
+  if (warm) return;
+  warm = true;
+  warmSubs.forEach((f) => f());
+}
+
+export function useWarm() {
+  return useSyncExternalStore(
+    (f) => {
+      warmSubs.add(f);
+      return () => warmSubs.delete(f);
+    },
+    () => warm,
+    () => false,
   );
 }
 
-/** a picture's version for a theme */
-function swapped(src: string, theme: Theme) {
-  const url = new URL(src, location.href);
-  url.pathname = url.pathname.replace(/\/dark\//, "/");
-  if (theme === "dark") url.pathname = url.pathname.replace(/\/(home|catalog|receipt)\//, "/$1/dark/");
-  return url.href;
-}
-
-const warmed = new Set<string>();
-
-/** start fetching + decoding the other theme's pictures on this page (when the switch is reached
-    for), so the change never waits on the network */
-export function prepareTheme(theme: Theme) {
-  for (const img of themedImages()) {
-    const href = swapped(img.currentSrc || img.src, theme);
-    if (warmed.has(href)) continue;
-    warmed.add(href);
-    const pre = new Image();
-    pre.decoding = "async";
-    pre.src = href;
-    pre.decode?.().catch(() => {});
+if (typeof window !== "undefined") {
+  // dark on arrival: the light versions are already coming with the page, keep them
+  if (document.documentElement.dataset.theme === "dark") warm = true;
+  // with a mouse, warm up once the page has loaded and gone quiet
+  else if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const later = () => setTimeout(prepareTheme, 2500);
+    if (document.readyState === "complete") later();
+    else addEventListener("load", later, { once: true });
   }
 }
 
-// (not requestAnimationFrame: the browser holds drawing while a view transition gets ready)
-const tick = () => new Promise<void>((r) => setTimeout(r, 0));
-
-/** after the switch: let React swap the pictures' sources, then wait until they're decoded */
-async function picturesReady() {
-  await tick();
-  await tick();
-  const pending = themedImages().map((img) =>
-    img.complete && img.naturalWidth ? Promise.resolve() : (img.decode?.() ?? Promise.resolve()).catch(() => {}),
-  );
-  // never hold the page for long: after 1.2s the fade goes ahead anyway
-  await Promise.race([Promise.all(pending), new Promise((r) => setTimeout(r, 1200))]);
-}
+let settle = 0;
 
 export function setTheme(theme: Theme) {
   try {
     localStorage.setItem(THEME_KEY, theme);
   } catch {}
-  const doc = document as Document & {
-    startViewTransition?: (cb: () => Promise<void>) => unknown;
-  };
-  // one soft crossfade of the whole page — colours and pictures together, once the new pictures
-  // are ready — rather than every colour changing on its own and the tomatoes popping in after.
-  // (A crossfade is already the gentle version, so it stays for reduced motion too.)
-  if (!doc.startViewTransition) {
-    apply(theme);
-    return;
-  }
-  prepareTheme(theme);
-  doc.startViewTransition(async () => {
-    apply(theme);
-    await picturesReady();
-  });
+  prepareTheme(); // (a tap on a phone never hovered the switch first)
+  // every colour eases across in place for this moment (globals.css, html.theme-fade) — no page
+  // snapshot, so nothing freezes and the switch's knob slides the moment it's clicked
+  const root = document.documentElement;
+  root.classList.add("theme-fade");
+  apply(theme);
+  window.clearTimeout(settle);
+  settle = window.setTimeout(() => root.classList.remove("theme-fade"), FADE + 100);
 }
 
 function subscribe(onChange: () => void) {
@@ -99,7 +84,7 @@ function subscribe(onChange: () => void) {
   return () => mo.disconnect();
 }
 
-const getTheme = (): Theme =>
+export const getTheme = (): Theme =>
   document.documentElement.dataset.theme === "dark" ? "dark" : "light";
 
 /** the theme currently on the page */
