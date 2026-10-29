@@ -25,7 +25,7 @@
 .grid {
   position: relative;
   z-index: 1;
-  background: var(--color-bg); /* tomato overflow stops at the rule above the trays */
+  /* see-through: the tomatoes carry on past the rule, behind the trays */
   border-top: var(--rule);
   display: grid;
   grid-template-columns: 1fr 1fr;

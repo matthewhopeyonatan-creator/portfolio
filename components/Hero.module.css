@@ -16,21 +16,28 @@
      top at artboard y≈221, i.e. 740 above the bottom) stays 16px clear of the headline; the
      small tomato's top (y≈72) then always clears the navbar too. */
   --hl-bottom: calc(var(--gutter) + 2.7425 * max(20px, 64 * var(--u)));
-  --tu: max(
-    var(--u),
-    min(
-      var(--u) * 1.25,
-      var(--screen-h) / 961,
-      (var(--screen-h) - var(--hl-bottom) - 16px) / 740
-    )
+  --tu: min(
+    max(
+      var(--u),
+      min(
+        var(--u) * 1.25,
+        var(--screen-h) / 961,
+        (var(--screen-h) - var(--hl-bottom) - 16px) / 740
+      )
+    ),
+    /* …and never so big that the stickers (artboard y 376 → 835, plus room for the peel) can't
+       sit between the headline and the trays with --sticker-gap either side. On a short window
+       the tomatoes shrink a little instead. */
+    (var(--hero-h) - var(--hl-bottom) - 2 * var(--sticker-gap)) / 475
   );
   /* the tomatoes run off the bottom of the screen like in Figma; the band carries on just far
      enough below it for their faded bottoms (to artboard y≈1060) before "Seasonal picks" */
   /* the project trays peek up from the bottom of the screen: the band stops --peek short of it,
      and the tomatoes are lifted (--lift) so less of them runs off underneath */
-  --peek: max(120px, calc(190 * var(--u)));
-  --lift: calc(var(--peek) * 0.6);
+  --peek: max(80px, calc(127 * var(--u)));
+  --lift: max(72px, calc(114 * var(--u)));
   --hero-h: calc(var(--screen-h) - var(--peek));
+  --sticker-gap: 24px;
 
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.8s
@@ -69,7 +76,13 @@
 .canvas {
   --hu: var(--tu); /* everything in the artboard uses the tomato scale */
   position: absolute;
-  top: calc(max(0px, calc(var(--screen-h) - 961 * var(--hu))) - var(--lift));
+  /* lifted, but kept where every sticker clears the headline above and the trays below
+     (top sticker at artboard y≈376, bottom one ends ≈835; 8 and 16 more for the peel) */
+  top: clamp(
+    calc(var(--hl-bottom) + var(--sticker-gap) - 368 * var(--hu)),
+    calc(max(0px, calc(var(--screen-h) - 961 * var(--hu))) - var(--lift)),
+    calc(var(--hero-h) - var(--sticker-gap) - 851 * var(--hu))
+  );
   /* centred: when the artboard is scaled past the window width it trims evenly at both sides */
   left: calc(864 * (var(--u) - var(--tu)));
   width: calc(1728 * var(--hu));
