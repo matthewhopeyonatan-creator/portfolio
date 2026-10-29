@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
-import { useTheme } from "@/lib/theme";
 import { navLinks } from "@/data/site";
 import { shouldSkipIntro } from "@/lib/intro";
 import styles from "./SiteHeader.module.css";
@@ -63,7 +62,6 @@ function useIntro(enabled: boolean) {
 
 function CartButton() {
   const { open, count, addedTick } = useCart();
-  const dark = useTheme() === "dark";
   return (
     <button
       type="button"
@@ -74,13 +72,10 @@ function CartButton() {
       <span className={styles.navLink}>
         your cart{count ? <span className={styles.cartCount}> ({count})</span> : null}
       </span>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* the cart drawing (Figma) in the ink colour, so it follows the theme with the text */}
+      <span
         key={addedTick}
-        src={dark ? "/home/dark/cart.png" : "/home/cart.png"}
-        alt=""
-        width={57}
-        height={37}
+        aria-hidden="true"
         className={`${styles.cartIcon} ${addedTick ? styles.cartHop : ""}`}
       />
     </button>

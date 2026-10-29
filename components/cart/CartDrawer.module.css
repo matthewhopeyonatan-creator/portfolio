@@ -194,7 +194,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .step:hover {
-    background: rgba(var(--ink-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   }
 }
 

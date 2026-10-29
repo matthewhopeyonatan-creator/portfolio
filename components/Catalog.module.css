@@ -236,10 +236,10 @@
   .aisle:hover:active {
     transform: scale(1.03);
   }
-  .aisle:hover .arrow img:first-child {
+  .aisle:hover .arrow i:first-child {
     transform: translate(130%, -130%);
   }
-  .aisle:hover .arrow img:last-child {
+  .aisle:hover .arrow i:last-child {
     transform: none;
     transition-delay: 60ms;
   }
@@ -262,7 +262,10 @@
   margin: -2px;
 }
 
-.arrow img {
+.arrow i {
+  background-color: var(--color-ink);
+  -webkit-mask: url("/catalog/arrow.svg") center / contain no-repeat;
+  mask: url("/catalog/arrow.svg") center / contain no-repeat;
   position: absolute;
   inset: 2px;
   width: calc(100% - 4px);
@@ -271,15 +274,15 @@
 }
 
 /* the waiting arrow sits off the bottom-left corner */
-.arrow img:last-child {
+.arrow i:last-child {
   transform: translate(-130%, 130%);
 }
 
-.aisle:focus-visible .arrow img:first-child {
+.aisle:focus-visible .arrow i:first-child {
   transform: translate(130%, -130%);
 }
 
-.aisle:focus-visible .arrow img:last-child {
+.aisle:focus-visible .arrow i:last-child {
   transform: none;
   transition-delay: 60ms;
 }
@@ -389,7 +392,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .aisle,
-  .arrow img {
+  .arrow i {
     transition: none;
   }
   .tomato,

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { catalogAisles } from "@/data/site";
 import ThemedPair from "@/components/ThemedPair";
-import { useTheme } from "@/lib/theme";
 import styles from "./Catalog.module.css";
 
 type Aisle = (typeof catalogAisles)[number];
@@ -18,7 +17,6 @@ const isSlug = (s: string): s is Slug =>
  * in the URL hash, so /catalog#graphics lands with the Graphics popup already up.
  */
 export default function Catalog() {
-  const dark = useTheme() === "dark";
   const [open, setOpen] = useState<Slug | null>(null);
   const preview = useHoverPreview();
 
@@ -123,10 +121,9 @@ export default function Catalog() {
               <span>{a.label}</span>
               {/* two arrows: on hover the first flies off up-right and the second follows in */}
               <span className={styles.arrow} aria-hidden="true">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/catalog/${dark ? "dark/" : ""}arrow.svg`} alt="" width={31} height={31} />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/catalog/${dark ? "dark/" : ""}arrow.svg`} alt="" width={31} height={31} />
+                {/* the arrow (Figma) in the ink colour, so it follows the theme with the text */}
+                <i />
+                <i />
               </span>
             </a>
           </li>

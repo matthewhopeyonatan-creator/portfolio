@@ -13,12 +13,38 @@
   initial-value: 0px;
 }
 
+/* the theme colours are registered so they can ease from one theme to the other at the top of the
+   page (html.theme-fade), with everything that uses them following in exact step */
+@property --color-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #edece9;
+}
+
+@property --color-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #282828;
+}
+
+@property --color-paper {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fff;
+}
+
+@property --color-track {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d9d9d9;
+}
+
 :root {
   --color-bg: #edece9;
   --color-ink: #282828;
-  --ink-rgb: 40, 40, 40; /* for see-through ink: rgba(var(--ink-rgb), a) */
   --color-accent: #91230a; /* deep tomato red — hero pill + footer */
   --color-paper: #fff;
+  --color-track: #d9d9d9; /* the light / dark switch's pill */
   --rule: 2px solid var(--color-ink);
 
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */
@@ -58,26 +84,31 @@ html[data-theme="dark"] {
   --color-bg: #141414;
   --color-ink: #edece9;
   --color-paper: #1f1f1f;
-  --ink-rgb: 237, 236, 233;
+  --color-track: #2a2a2a;
   color-scheme: dark;
 }
 
-/* switching themes (lib/theme.ts): for that moment every colour eases across in place, together.
-   The switch's knob keeps its own slide. */
-html.theme-fade,
+/* switching themes (lib/theme.ts): the theme colours themselves ease across, once, here at the
+   top — every text, rule and background reads them, so it all changes in exact step. Anything's own
+   colour transition is held off for that moment (it would only trail behind the shared fade). The
+   switch's knob keeps its slide; the tomato pairs keep their crossfade. */
+html.theme-fade {
+  transition:
+    --color-bg 450ms ease,
+    --color-ink 450ms ease,
+    --color-paper 450ms ease,
+    --color-track 450ms ease;
+}
+
 html.theme-fade *:not([class*="knob"]):not(.theme-light):not(.theme-dark),
 html.theme-fade *::before,
 html.theme-fade *::after {
-  transition-property: background-color, color, border-color, outline-color, text-decoration-color,
-    fill, stroke, box-shadow !important;
-  transition-duration: 450ms !important;
-  transition-timing-function: var(--ease-in-out) !important;
-  transition-delay: 0s !important;
+  transition: none !important;
 }
 
 /* pictures with a light and a dark version, both on the page (components/ThemedPair.tsx): each
-   theme's own version shows once it has loaded — fading in on top — while the outgoing one holds a
-   moment, then lets go; until the incoming one is ready, the one on screen stays. Opacity on their
+   theme's own version shows once it has loaded — fading in on top — while the outgoing one lets go
+   in the second half, both ending with the colours; until the incoming one is ready, the one on screen stays. Opacity on their
    own layers, so the crossfade runs on the graphics card. (.theme-pair-filter: where a picture
    already fades in with its own opacity animation — the receipt — the same thing through
    filter: opacity(), so the two never fight.) */
@@ -87,7 +118,7 @@ html.theme-fade *::after {
   --tp-on: 1;
   opacity: var(--tp-off);
   will-change: opacity;
-  transition: opacity 450ms var(--ease-in-out);
+  transition: opacity 450ms ease;
 }
 
 html:not([data-theme="dark"]) .theme-light[data-ready],
@@ -103,8 +134,8 @@ html[data-theme="dark"] .theme-pair:not(:has(> .theme-dark[data-ready])) > .them
 
 html:not([data-theme="dark"]) .theme-dark,
 html[data-theme="dark"] .theme-light {
-  transition-duration: 250ms;
-  transition-delay: 300ms;
+  transition-duration: 300ms;
+  transition-delay: 150ms;
 }
 
 /* the filter variant: same rules, carried by filter instead of opacity */

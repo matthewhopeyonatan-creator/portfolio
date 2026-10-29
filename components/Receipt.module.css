@@ -336,12 +336,12 @@
 }
 
 .note::placeholder {
-  color: rgba(var(--ink-rgb), 0.45);
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
 }
 
 .note:focus-visible {
   text-decoration: underline;
-  text-decoration-color: rgba(var(--ink-rgb), 0.3);
+  text-decoration-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
   text-underline-offset: 0.2em;
 }
 

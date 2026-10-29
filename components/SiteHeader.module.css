@@ -143,8 +143,12 @@
 }
 
 .cartIcon {
+  display: block;
   width: clamp(26px, 1.9vw, 34px);
-  height: auto;
+  aspect-ratio: 227 / 146;
+  background-color: var(--color-ink);
+  -webkit-mask: url("/home/cart.png") center / contain no-repeat;
+  mask: url("/home/cart.png") center / contain no-repeat;
 }
 
 @media (max-width: 767px) {
