@@ -14,22 +14,16 @@ export default function Home() {
       <SiteHeader intro />
       <main>
         <Hero />
-        <section id="seasonal-picks" aria-labelledby="seasonal-picks-title">
-          <div className={styles.sectionTitleRow}>
-            <h2
-              id="seasonal-picks-title"
-              className={styles.sectionTitle}
-              data-reveal="up"
-            >
-              Seasonal picks
-            </h2>
-          </div>
+        <section id="seasonal-picks" aria-label="Seasonal picks">
           <ul className={styles.grid}>
             {projects.map((project, i) => (
               <li key={project.slug} className={styles.cell}>
                 {/* the card rises in, the right-hand one a beat after the left */}
                 <div
                   data-reveal="tray"
+                  // the top row peeks up from the bottom of the first screen, so it rises in
+                  // as soon as any of it shows
+                  data-reveal-early={i < 2 ? "" : undefined}
                   style={{ "--i": i % 2 } as React.CSSProperties}
                 >
                   <ProjectCard project={project} />

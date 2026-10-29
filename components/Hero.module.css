@@ -26,7 +26,11 @@
   );
   /* the tomatoes run off the bottom of the screen like in Figma; the band carries on just far
      enough below it for their faded bottoms (to artboard y≈1060) before "Seasonal picks" */
-  --hero-h: max(var(--screen-h), calc(var(--screen-h) + 99 * var(--tu)), calc(1060 * var(--tu)));
+  /* the project trays peek up from the bottom of the screen: the band stops --peek short of it,
+     and the tomatoes are lifted (--lift) so less of them runs off underneath */
+  --peek: max(120px, calc(190 * var(--u)));
+  --lift: calc(var(--peek) * 0.6);
+  --hero-h: calc(var(--screen-h) - var(--peek));
 
   /* load sequence timing (all measured from when the sequence starts)
      1. Open sign drops in big at the centre, swings, then falls out the bottom   0 → 2.8s
@@ -65,7 +69,7 @@
 .canvas {
   --hu: var(--tu); /* everything in the artboard uses the tomato scale */
   position: absolute;
-  top: max(0px, calc(var(--screen-h) - 961 * var(--hu)));
+  top: calc(max(0px, calc(var(--screen-h) - 961 * var(--hu))) - var(--lift));
   /* centred: when the artboard is scaled past the window width it trims evenly at both sides */
   left: calc(864 * (var(--u) - var(--tu)));
   width: calc(1728 * var(--hu));
@@ -376,6 +380,7 @@
 /* ── "start shopping" cue — bottom-centre of the screen, 24px up ── */
 /* stays 24px above the bottom of the first screen, even when the band runs taller */
 .cue {
+  display: none; /* the trays peeking up from the bottom do the cue's job */
   position: absolute;
   left: 50%;
   bottom: calc(var(--hero-h) - var(--screen-h) + 24px);
