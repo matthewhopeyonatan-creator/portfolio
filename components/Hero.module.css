@@ -325,11 +325,14 @@
 /* ── Open sign — drops in, then swings left/right and settles ─────────────────────── */
 /* 256×232 (Figma render). Hung centred above the name: the string's apex (47.1% across) sits on
    the artboard's centre line, and it swings from that point. */
+/* The sign is laid out at the size it's shown at (the intro's ~60% of the screen — Hero.tsx's
+   start() then measures a scale of ~1), so it's drawn sharp rather than blown up from a small
+   picture. It only appears during the intro; where it sits before that doesn't matter. */
 .sign {
-  --sign-w: 166; /* Figma 256, scaled to 65% */
-  left: calc((864 - var(--sign-w) * 0.471) * var(--hu));
-  top: calc(176 * var(--hu)); /* keeps the same gap above the title at this size */
-  width: calc(var(--sign-w) * var(--hu));
+  --sign-px: min(60vw, 60vh * 768 / 696);
+  left: calc(50% - var(--sign-px) * 0.471);
+  top: calc(176 * var(--hu));
+  width: var(--sign-px);
   transform-origin: 47.1% 0.6%;
 }
 
@@ -616,4 +619,17 @@
   .cue {
     font-size: max(14px, calc(18 * var(--hu)));
   }
+}
+
+/* the Open sign: the dark-mode copy (white string) only shows in dark mode */
+.sign .signDark {
+  display: none;
+}
+
+:global(html[data-theme="dark"]) .sign .signDark {
+  display: block;
+}
+
+:global(html[data-theme="dark"]) .sign .signLight {
+  display: none;
 }

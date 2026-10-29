@@ -506,7 +506,10 @@ export default function Hero() {
           aria-hidden="true"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/home/open-sign.png" alt="" width={768} height={696} />
+          <img className={styles.signLight} src="/home/open-sign.png" alt="" width={768} height={696} />
+          {/* dark mode: the same sign, its string in the light ink so it shows on the dark page */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className={styles.signDark} src="/home/dark/open-sign.png" alt="" width={768} height={696} />
         </div>
       </div>
 
