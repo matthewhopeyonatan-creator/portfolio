@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { createPortal } from "react-dom";
+import { createPortal, preconnect } from "react-dom";
 import { useRouter } from "next/navigation";
 import Lenis from "lenis";
 import ReviewCheckboxes from "@/components/ReviewCheckboxes";
@@ -144,32 +144,26 @@ function Dashboard() {
   );
 }
 
-/** The live site in its window, rising in out of a soft blur like the figures once it has loaded. */
+/** The live site in its window, rising in out of a soft blur like the figures. */
 function Embed({ b }: { b: { url: string; title: string; ratio: number } }) {
   const ref = useRef<HTMLDivElement>(null);
-  const win = useRef<HTMLDivElement>(null);
+  // the window rises in with the rest of the page as soon as it's reached — it doesn't wait for
+  // the whole site inside to finish loading (that waited on every one of its images and scripts);
+  // the site paints into the window as it arrives, over CrowdVolt's own near-black
   useRowReveal(ref);
-  useEffect(() => {
-    // a slow or blocked site still comes in (as the grey loading window) rather than never
-    const t = setTimeout(() => {
-      if (win.current) win.current.dataset.loaded = "";
-    }, 2500);
-    return () => clearTimeout(t);
-  }, []);
+  preconnect(new URL(b.url).origin);
   return (
     <div ref={ref} data-row="">
       <div
-        ref={win}
         className={`${styles.cvEmbed} ${styles.cvRise}`}
+        data-loaded=""
         style={{ "--ratio": b.ratio } as React.CSSProperties}
       >
         <iframe
           src={b.url}
           title={b.title}
+          loading="eager"
           referrerPolicy="no-referrer-when-downgrade"
-          onLoad={() => {
-            if (win.current) win.current.dataset.loaded = "";
-          }}
         />
       </div>
     </div>

@@ -421,7 +421,7 @@
   width: 100%;
   aspect-ratio: var(--ratio, 2.4);
   border-radius: calc(24 * var(--pu));
-  background: #767676;
+  background: #050505; /* CrowdVolt's page colour, so the site loading in doesn't flash grey */
 }
 
 .cvEmbed iframe {

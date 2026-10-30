@@ -1,5 +1,8 @@
 "use client";
 
+import { preconnect } from "react-dom";
+import { caseStudies } from "@/data/caseStudies";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/site";
@@ -129,6 +132,10 @@ function WrappedTray({
 }
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const warmEmbeds = () => {
+    const blocks = JSON.stringify(caseStudies[project.slug] ?? []);
+    for (const m of blocks.matchAll(/"type":"embed","url":"([^"]+)"/g)) preconnect(new URL(m[1]).origin);
+  };
   const external = project.href.startsWith("http");
   const { add } = useCart();
   const [open, setOpen] = useState(false);
@@ -194,6 +201,10 @@ export default function ProjectCard({ project }: { project: Project }) {
     <>
       <Link
         href={project.href}
+        // reaching for a project with a live site in its case study starts the connection to that
+        // site, so it's quicker to appear once the case study opens
+        onPointerEnter={warmEmbeds}
+        onTouchStart={warmEmbeds}
         onClick={(e) => {
           add(project.slug);
           // a plain click opens the project popup; cmd/ctrl-click still opens the page itself
