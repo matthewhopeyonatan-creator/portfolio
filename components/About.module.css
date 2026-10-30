@@ -389,9 +389,7 @@
     padding-right: var(--gutter);
     line-height: 1.2;
   }
-  .intro {
-    padding-right: calc(var(--gutter) + 64px); /* clear of the switch */
-  }
+
   /* the intro, then MATTHEW / HOPE on two lines, MATTHEW filling the width between the margins;
      the block is tall enough that the photo strip starts halfway down its photos at the bottom
      of the first screen */

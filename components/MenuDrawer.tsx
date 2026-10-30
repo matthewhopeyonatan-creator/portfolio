@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import { navLinks } from "@/data/site";
+import ThemeToggle from "@/components/ThemeToggle";
 import styles from "./MenuDrawer.module.css";
 
 /** SiteHeader's menu button (phones) opens the menu with this event. */
@@ -80,18 +81,10 @@ export default function MenuDrawer() {
             <h2 id="menu-title" className="visually-hidden">
               Menu
             </h2>
-            {/* the cart's LED-style sign: two identical runs slid left by one run, forever */}
-            <div className={styles.marquee} aria-hidden="true">
-              <div className={styles.track}>
-                {[0, 1].map((run) => (
-                  <span key={run} className={styles.run}>
-                    <span className={styles.word}>menu</span>
-                    <span className={styles.word}>menu</span>
-                    <span className={styles.word}>menu</span>
-                  </span>
-                ))}
-              </div>
-            </div>
+            {/* the cart's caps sign, standing still here */}
+            <p className={styles.word} aria-hidden="true">
+              menu
+            </p>
             {/* like the cart: tap outside or Esc closes it; this one shows on keyboard focus */}
             <button ref={closeRef} type="button" className={styles.close} onClick={close}>
               close
@@ -129,10 +122,12 @@ export default function MenuDrawer() {
                 <span>
                   your cart{count ? <span className={styles.count}> ({count})</span> : null}
                 </span>
-                <span aria-hidden="true" className={styles.cartIcon} />
               </button>
             </li>
           </ul>
+
+          {/* phones: the light / dark switch lives here, in the sheet's lower right corner */}
+          <ThemeToggle className={styles.toggle} />
         </div>
       </div>
     </div>

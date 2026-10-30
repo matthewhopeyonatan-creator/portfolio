@@ -81,9 +81,9 @@
   }
 }
 
-/* phones: a touch smaller, so the corner it takes barely moves anything */
+/* phones: the switch lives in the menu sheet (MenuDrawer), not on the pages */
 @media (max-width: 767px) {
-  .toggle {
-    --tw: 40px;
+  .pageRow {
+    display: none;
   }
 }

@@ -60,40 +60,15 @@
   flex: none;
 }
 
-.marquee {
-  overflow-x: clip;
-  overflow-y: visible;
-  white-space: nowrap;
-}
-
-.track {
-  display: flex;
-  width: max-content;
-  animation: scroll 9s linear infinite;
-}
-
-.run {
-  display: flex;
-  flex: none;
-}
-
 .word {
-  flex: none;
-  padding-right: 0.28em;
+  margin: 0;
+  padding-left: calc(var(--gutter) - 0.05em); /* the M's ink on the margin */
+  white-space: nowrap;
   font-size: calc(196.656 * var(--cu));
   font-weight: 500;
   line-height: 1;
   text-transform: uppercase;
   text-box: trim-both cap alphabetic;
-}
-
-@keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 .close {
@@ -177,14 +152,15 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* the navbar's cart drawing, in whatever colour the row's text is */
-.cartIcon {
-  display: block;
-  width: 30px;
-  aspect-ratio: 227 / 146;
-  background-color: currentColor;
-  -webkit-mask: url("/home/cart.png") center / contain no-repeat;
-  mask: url("/home/cart.png") center / contain no-repeat;
+/* the light / dark switch, in the sheet's lower right corner on the margins */
+.inner {
+  position: relative;
+}
+
+.toggle {
+  position: absolute;
+  right: var(--gutter);
+  bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -194,9 +170,6 @@
   }
   .open .row {
     animation: fadeIn 200ms ease both;
-  }
-  .track {
-    animation: none;
   }
 }
 
