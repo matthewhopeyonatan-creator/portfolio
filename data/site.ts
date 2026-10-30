@@ -6,9 +6,9 @@ export const navLinks = [
 
 // Footer social links. TODO: add the X handle.
 export const socialLinks = [
-  { label: "Email", href: "mailto:matthew.hope.yonatan@gmail.com" },
-  { label: "Instagram", href: "https://www.instagram.com/hoepey.ai" },
-  { label: "X", href: "" },
+  { label: "Email", href: "mailto:matthew.hope.yonatan@gmail.com?subject=HOPES%20GROCER" },
+  { label: "Instagram", href: "https://www.instagram.com/hopegoestoplay/" },
+  { label: "X", href: "https://x.com/matthopeyy" },
 ];
 
 export type Project = {
