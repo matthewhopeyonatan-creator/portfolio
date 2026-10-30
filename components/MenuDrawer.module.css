@@ -60,15 +60,54 @@
   flex: none;
 }
 
+/* The sign. What made the old one jitter: its size came from the sheet's container units while
+   the sheet itself was sliding (re-measured every frame), the caps were trimmed with text-box
+   (which some phones re-lay out mid-animation), and the loop ran even while the sheet was off
+   screen. Now: a fixed size in vw (the same 196.656 / 686 of the sheet's 88vw), a fixed-height
+   window cropping the caps, its own compositor layer, and it only runs while open. */
+.marquee {
+  --size: calc(88vw * 196.656 / 686);
+  height: calc(var(--size) * 0.7); /* the cap height: the letters sit on the top edge */
+  overflow: hidden;
+  contain: paint;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.open .track {
+  animation: scroll 9s linear infinite;
+}
+
+.run {
+  display: flex;
+  flex: none;
+}
+
 .word {
-  margin: 0;
-  padding-left: calc(var(--gutter) - 0.05em); /* the M's ink on the margin */
-  white-space: nowrap;
-  font-size: calc(196.656 * var(--cu));
+  display: block;
+  flex: none;
+  padding-right: 0.28em;
+  margin-top: calc(var(--size) * -0.15); /* the space above the caps in the font's line box */
+  font-size: var(--size);
   font-weight: 500;
   line-height: 1;
   text-transform: uppercase;
-  text-box: trim-both cap alphabetic;
+  white-space: nowrap;
+}
+
+@keyframes scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .close {
@@ -157,13 +196,17 @@
   position: relative;
 }
 
-.toggle {
+.inner .toggle {
+  --tw: 76px; /* bigger than the pages' one: it's the only switch on a phone */
   position: absolute;
   right: var(--gutter);
   bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .open .track {
+    animation: none;
+  }
   .panel,
   .backdrop {
     transition-duration: 1ms;

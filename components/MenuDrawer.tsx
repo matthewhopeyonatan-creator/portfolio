@@ -81,10 +81,20 @@ export default function MenuDrawer() {
             <h2 id="menu-title" className="visually-hidden">
               Menu
             </h2>
-            {/* the cart's caps sign, standing still here */}
-            <p className={styles.word} aria-hidden="true">
-              menu
-            </p>
+            {/* the cart's caps sign, running: two identical runs, the track slid left by exactly one
+                run, forever. It only runs while the sheet is open, and starts from the same place
+                each time. */}
+            <div className={styles.marquee} aria-hidden="true">
+              <div className={styles.track}>
+                {[0, 1].map((run) => (
+                  <span key={run} className={styles.run}>
+                    <span className={styles.word}>menu</span>
+                    <span className={styles.word}>menu</span>
+                    <span className={styles.word}>menu</span>
+                  </span>
+                ))}
+              </div>
+            </div>
             {/* like the cart: tap outside or Esc closes it; this one shows on keyboard focus */}
             <button ref={closeRef} type="button" className={styles.close} onClick={close}>
               close

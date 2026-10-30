@@ -499,10 +499,13 @@
 @media (max-width: 767px) {
   .hero {
     --m: calc(100vw / 393);
-    --hero-h: calc(926 * var(--m));
+    /* the headline is 32 (Figma had 40): its five lines are 40 shorter, and everything under
+       it moves up by that much */
+    --lift: calc(40 * var(--m));
+    --hero-h: calc(926 * var(--m) - var(--lift));
   }
   .canvas {
-    top: 0;
+    top: calc(-1 * var(--lift));
     left: 0;
     width: 100%;
     height: var(--hero-h);
@@ -537,7 +540,7 @@
     left: calc(20 * var(--m));
     top: calc(20 * var(--m));
     width: calc(353 * var(--m));
-    font-size: calc(40 * var(--m));
+    font-size: calc(32 * var(--m));
     line-height: 1;
     white-space: normal;
   }
