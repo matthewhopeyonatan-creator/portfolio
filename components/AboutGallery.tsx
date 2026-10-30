@@ -16,7 +16,7 @@ const PHOTOS = [
   { src: "/about/gallery-2.webp", alt: "Looking out over a hazy city at sunset" },
   { src: "/about/gallery-3.webp", alt: "A skiing selfie on a snowy slope at dusk" },
   { src: "/about/gallery-4.webp", alt: "Surfboards in the shallows with a friend" },
-  { src: "/about/gallery-5.webp", alt: "Out on a run with a friend in mouse ears" },
+  { src: "/about/gallery-5b.webp", alt: "Out on a run with a friend in mouse ears" },
   { src: "/about/gallery-6.webp", alt: "Dancing on stage" },
   { src: "/about/gallery-7.webp", alt: "Under a red rock overhang on a hike" },
   { src: "/about/gallery-8.webp", alt: "On a cobbled street at night" },
