@@ -22,7 +22,7 @@ const PHOTOS = [
   { src: "/about/gallery-8.webp", alt: "On a cobbled street at night" },
 ];
 
-const DRIFT = 34; // Figma px per second, right to left
+const DRIFT = 50; // Figma px per second, right to left
 
 export default function AboutGallery() {
   const strip = useRef<HTMLDivElement>(null);
