@@ -6,7 +6,7 @@ import { caseStudies } from "@/data/caseStudies";
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/site";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import ProjectOverlay from "@/components/ProjectOverlay";
 import styles from "./ProjectCard.module.css";
@@ -27,8 +27,22 @@ function WrappedTray({
   shotArt?: Project["shotArt"];
   soldOut?: boolean;
 }) {
+  // touch screens have no hover: there the plastic peels back on its own while the tray is in
+  // view, and wraps back up once it's scrolled away
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || soldOut) return;
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
+      rootMargin: "-25% 0px -25% 0px", // well into the screen, not just at its edge
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [soldOut]);
   return (
-    <div className={styles.tray}>
+    <div ref={ref} className={`${styles.tray} ${inView ? styles.peeled : ""}`}>
       {/* foam tray + shot: grow a touch on hover */}
       <div className={styles.goods}>
         <Image

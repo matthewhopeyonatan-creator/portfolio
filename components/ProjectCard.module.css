@@ -121,6 +121,17 @@
   transition: --wpeel 420ms var(--ease-out);
 }
 
+/* touch: the same peel, while the tray is in view (ProjectCard) */
+.peeled .wrap {
+  --wpeel: 58cqw;
+  transition-duration: 900ms;
+  transition-timing-function: var(--ease-peel);
+}
+
+.peeled .goods {
+  transform: scale(1.035);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .card:not(.static):hover .wrap {
     --wpeel: 58cqw;
@@ -270,10 +281,12 @@
   .card:not(.static):hover .tray,
   .card:not(.static):active .tray,
   .card:not(.static):hover:active .tray,
-  .card:not(.static):hover .goods {
+  .card:not(.static):hover .goods,
+  .peeled .goods {
     transform: none;
   }
-  .card:not(.static):hover .wrap {
+  .card:not(.static):hover .wrap,
+  .peeled .wrap {
     --wpeel: 0px;
   }
 }
