@@ -58,6 +58,7 @@ implements his designs faithfully.
     Ticketmaster Flow (Figma 129:100): two loop while on screen (options get clicked through; a ticket
     moves between custom batches; the final choices get clicked through, each acting out what it means; the delivery ticket is sent off and the next slides in). Space Grotesk (`--font-cv`) is
     loaded only for these
+  - `ReviewCheckboxes` — CrowdVolt's review popup (Figma 295:2889) rebuilt in code over its screenshot so it stays sharp when zoomed; loops on screen: zoom in on the bid-warning checkboxes, tick both (Place Offer lights up), zoom out, clear
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|blur"` entrances (blur: about-page photos, same as the case-study figures), staggered by `--i`
 - Dark mode — `lib/theme.ts` (`useTheme`, `setTheme`) puts `<html data-theme="dark">` on every page; the
   switch (`ThemeToggle`, Figma 210:5291 at 80%) sits top right of the landing. Dark tokens in

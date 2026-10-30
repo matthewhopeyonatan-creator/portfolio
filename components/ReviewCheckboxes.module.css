@@ -1,0 +1,379 @@
+/* CrowdVolt review popup with the bid-warning checkboxes (Figma 295:2008 / 295:2889). The window
+   is the screenshot's 1512 × 743 box; --f = one Figma px at its current width. The popup sits at
+   (500, 36), 512 × 670, and everything in it is placed in its own Figma px. CrowdVolt's UI is set
+   in Space Grotesk (--font-cv); its near-black is a hair off pure black, per the site's rule. */
+.window {
+  container-type: inline-size;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1512 / 743;
+  border-radius: calc(24 * var(--pu));
+  isolation: isolate; /* keeps the rounded clip while the stage inside is scaled (Safari) */
+}
+
+/* the whole screen; zooming scales it about the checkboxes' centre (x 756, y 591 → 50% / 79.5%)
+   and slides that spot to the middle. No will-change: the text is re-drawn sharp at the new size */
+.stage {
+  --f: calc(100cqw / 1512);
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  transition: transform 1400ms var(--ease-in-out);
+}
+
+.zoomed {
+  transform: translate3d(0, calc(-29.5% * 2.6), 0) scale(2.6);
+  transition-duration: 1600ms;
+}
+
+.window .backdrop {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.modal {
+  position: absolute;
+  left: calc(500 * var(--f));
+  top: calc(36 * var(--f));
+  width: calc(512 * var(--f));
+  height: calc(670 * var(--f));
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: calc(8 * var(--f));
+  box-shadow: inset 0 0 0 calc(1 * var(--f)) #fff;
+  background: #050505;
+  color: #fff;
+  font-family: var(--font-cv), "Space Grotesk", sans-serif;
+  letter-spacing: 0;
+}
+
+/* (divs, not paragraphs: the case study styles every paragraph and image in it) */
+.modal div {
+  position: absolute;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.modal svg {
+  position: absolute;
+  overflow: visible;
+}
+
+/* ── header ── */
+.modal .artist {
+  position: absolute;
+  display: block;
+  max-width: none;
+  left: calc(16 * var(--f));
+  top: calc(24 * var(--f));
+  width: calc(80 * var(--f));
+  height: calc(80 * var(--f));
+  border-radius: calc(8 * var(--f));
+  object-fit: cover;
+}
+
+.event {
+  left: calc(112 * var(--f));
+  top: calc(35.5 * var(--f));
+  font-size: calc(16 * var(--f));
+  font-weight: 700;
+  line-height: calc(24 * var(--f));
+  color: #f2f2f2;
+}
+
+.meta {
+  left: calc(112 * var(--f));
+  font-size: calc(14 * var(--f));
+  line-height: calc(20 * var(--f));
+  color: #adadad;
+}
+
+.date {
+  top: calc(60 * var(--f));
+}
+
+.venue {
+  top: calc(80 * var(--f));
+}
+
+.timer {
+  position: absolute;
+  left: calc(438 * var(--f));
+  top: calc(36 * var(--f));
+  width: calc(56 * var(--f));
+  height: calc(56 * var(--f));
+  display: grid;
+  place-items: center;
+  font-size: calc(12 * var(--f));
+  font-weight: 700;
+}
+
+.timer svg {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-dasharray: 1.6 3.3;
+  stroke-linecap: round;
+}
+
+.close {
+  left: calc(480 * var(--f));
+  top: calc(16 * var(--f));
+  width: calc(16 * var(--f));
+  height: calc(16 * var(--f));
+  fill: none;
+  stroke: #f2f2f2;
+  stroke-width: 1.4;
+  opacity: 0.7;
+}
+
+/* ── progress bar + steps ── */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(120 * var(--f));
+  height: calc(4 * var(--f));
+  box-shadow: inset 0 calc(1 * var(--f)) 0 #474747;
+}
+
+.progress span {
+  position: absolute;
+  left: 0;
+  top: calc(-1 * var(--f));
+  width: 89.57%;
+  height: calc(4 * var(--f));
+  background: linear-gradient(90deg, #9710ff 0%, #ff10c7 33.33%, #ff7a00 66.67%, #ffd600 100%);
+}
+
+.tab {
+  top: calc(132 * var(--f));
+  font-size: calc(14 * var(--f));
+  line-height: calc(20 * var(--f));
+  color: #919191;
+}
+
+.tabOn {
+  font-weight: 700;
+  color: #fff;
+}
+
+.heading {
+  left: 0;
+  right: 0;
+  top: calc(175.5 * var(--f));
+  font-size: calc(16 * var(--f));
+  font-weight: 700;
+  line-height: calc(24 * var(--f));
+  text-align: center;
+}
+
+/* ── order rows ── */
+.row {
+  position: absolute;
+  left: calc(32 * var(--f));
+  width: calc(446 * var(--f));
+  height: calc(57 * var(--f));
+  box-shadow: inset 0 calc(-1 * var(--f)) 0 rgba(217, 217, 217, 0.4);
+}
+
+.label,
+.value,
+.card {
+  left: 0;
+  font-size: calc(16 * var(--f));
+  line-height: calc(24 * var(--f));
+}
+
+.label {
+  top: 0;
+  font-weight: 500;
+}
+
+.value {
+  top: calc(24 * var(--f));
+  color: #c8c8c8;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: calc(16 * var(--f));
+  top: calc(30 * var(--f));
+  color: #919191;
+}
+
+.modal .card img {
+  display: block;
+  border-radius: 0;
+  width: calc(40 * var(--f));
+  height: calc(25.8 * var(--f));
+  border-radius: calc(6 * var(--f));
+}
+
+.bold {
+  font-size: calc(16 * var(--f));
+  font-weight: 700;
+  line-height: calc(24 * var(--f));
+}
+
+.subtotal {
+  left: calc(32 * var(--f));
+  top: calc(450.8 * var(--f));
+}
+
+.chevron {
+  left: calc(465 * var(--f));
+  top: calc(459 * var(--f));
+  width: calc(13 * var(--f));
+  height: calc(8 * var(--f));
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.6;
+}
+
+.total {
+  left: calc(32 * var(--f));
+  top: calc(498.8 * var(--f));
+  width: calc(446 * var(--f));
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ── the bid warning ── */
+.terms {
+  left: calc(64 * var(--f));
+  font-size: calc(14 * var(--f));
+  line-height: calc(20 * var(--f));
+  color: #c8c8c8;
+}
+
+.terms u {
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.15em;
+}
+
+.box {
+  position: absolute;
+  left: calc(32 * var(--f));
+  width: calc(20 * var(--f));
+  height: calc(20 * var(--f));
+  box-sizing: border-box;
+  border-radius: calc(4 * var(--f));
+  box-shadow: inset 0 0 0 calc(1 * var(--f)) #767676;
+  background: #050505;
+  transition:
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.box svg {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* the tick is drawn on, stroke by stroke */
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  transition: stroke-dashoffset 150ms ease;
+}
+
+.boxOn {
+  box-shadow: inset 0 0 0 calc(1 * var(--f)) #7933ff;
+  background: #7933ff;
+  animation: tick 320ms var(--ease-pop);
+}
+
+.boxOn svg {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 260ms var(--ease-out) 60ms;
+}
+
+@keyframes tick {
+  0% {
+    transform: scale(0.82);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* ── footer ── */
+.footRule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(597.8 * var(--f));
+  height: 0;
+  box-shadow: 0 0 0 calc(0.5 * var(--f)) rgba(117, 117, 117, 0.5);
+}
+
+.back,
+.place {
+  position: absolute;
+  top: calc(614.3 * var(--f));
+  height: calc(36 * var(--f));
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(6 * var(--f));
+  border-radius: 9999px;
+  font-size: calc(14 * var(--f));
+  font-weight: 500;
+  line-height: calc(20 * var(--f));
+}
+
+.back {
+  left: calc(16 * var(--f));
+  width: calc(118 * var(--f));
+  box-shadow: inset 0 0 0 calc(1 * var(--f)) #767676;
+}
+
+.place {
+  left: calc(142 * var(--f));
+  width: calc(352 * var(--f));
+  background: #7933ff;
+  opacity: 0.5;
+  transition: opacity 300ms ease;
+}
+
+/* both ticked: the offer can go in */
+.placeOn {
+  opacity: 1;
+}
+
+.place svg {
+  position: static;
+  width: calc(15 * var(--f));
+  height: calc(15 * var(--f));
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.4;
+}
+
+@media (max-width: 767px) {
+  .window {
+    border-radius: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .box,
+  .box svg,
+  .place {
+    transition: none;
+  }
+}

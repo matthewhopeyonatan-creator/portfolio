@@ -33,9 +33,8 @@ export type CaseBlock =
       items: {
         image: CaseImage;
         caption?: string;
-        /** once it's on screen, ease in on one spot: x / y = the spot's centre (0–1 of the
-            image), scale = how far in */
-        zoom?: { x: number; y: number; scale: number };
+        /** shown as a live, animated rebuild instead of the still (ReviewCheckboxes) */
+        live?: "review-checkboxes";
       }[];
       rise?: boolean;
     }
@@ -637,8 +636,8 @@ const crowdvolt: CaseSection[] = [
                   "Bid warning embedded in the review page as checkboxes",
                 ),
                 caption: "Embed to current page as checkbox",
-                // closes in on the checkboxes under the order total
-                zoom: { x: 0.4964, y: 0.8, scale: 2.6 },
+                // zooms in on the checkboxes, ticks them, zooms back out — on a loop
+                live: "review-checkboxes",
               },
             ],
           },

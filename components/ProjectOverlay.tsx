@@ -10,6 +10,7 @@ import {
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Lenis from "lenis";
+import ReviewCheckboxes from "@/components/ReviewCheckboxes";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
 import SiteHeader from "@/components/SiteHeader";
@@ -175,65 +176,6 @@ function Embed({ b }: { b: { url: string; title: string; ratio: number } }) {
   );
 }
 
-/**
- * A screenshot that, a beat after it's fully on screen, eases in on one spot (the bit worth
- * reading) and stays there; it goes back to the whole picture once it's scrolled away, so it
- * plays again next time. The move is one transform: the spot slides to the middle as it grows.
- */
-function ZoomImage({
-  image,
-  zoom,
-}: {
-  image: Img;
-  zoom: { x: number; y: number; scale: number };
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [zoomed, setZoomed] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let t = 0;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        window.clearTimeout(t);
-        if (e.intersectionRatio >= 0.9) t = window.setTimeout(() => setZoomed(true), 700);
-        else if (!e.isIntersecting) setZoomed(false);
-      },
-      { root: el.closest<HTMLElement>("[data-lenis-prevent]"), threshold: [0, 0.9] },
-    );
-    io.observe(el);
-    return () => {
-      window.clearTimeout(t);
-      io.disconnect();
-    };
-  }, []);
-  const { x, y, scale: s } = zoom;
-  return (
-    <div
-      ref={ref}
-      className={`${styles.cvZoom} ${zoomed ? styles.cvZoomOn : ""}`}
-      style={
-        {
-          "--zx": `${(0.5 - x) * s * 100}%`,
-          "--zy": `${(0.5 - y) * s * 100}%`,
-          "--zs": s,
-        } as React.CSSProperties
-      }
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={image.src}
-        alt={image.alt}
-        width={image.w}
-        height={image.h}
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-  );
-}
-
 /** Images with captions side by side; with `rise`, the row comes in like the gallery's. */
 function Figures({ b }: { b: Extract<CaseBlock, { type: "figures" }> }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -250,8 +192,8 @@ function Figures({ b }: { b: Extract<CaseBlock, { type: "figures" }> }) {
           key={f.image.src}
           className={`${styles.cvFigure} ${b.rise ? styles.cvRise : ""}`}
         >
-          {f.zoom ? (
-            <ZoomImage image={f.image} zoom={f.zoom} />
+          {f.live === "review-checkboxes" ? (
+            <ReviewCheckboxes alt={f.image.alt} />
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
             <img
