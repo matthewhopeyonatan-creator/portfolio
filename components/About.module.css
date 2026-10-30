@@ -40,6 +40,13 @@
   line-height: calc(35 * var(--u));
 }
 
+/* the big caps' letters start ~0.052em inside their box (the M's / P's side bearing), so they're
+   nudged out by that much: the ink, not the box, sits on the margin */
+.name,
+.recsTitle {
+  margin-left: -0.052em !important;
+}
+
 .name {
   margin-top: calc(175 * var(--u)) !important;
   font-size: max(56px, calc(174.51 * var(--u)));
@@ -397,7 +404,7 @@
   .name {
     margin-top: auto !important;
     padding-top: 40px;
-    font-size: calc((100vw - 2 * var(--gutter)) / 4.45);
+    font-size: calc((100vw - 2 * var(--gutter)) / 4.47);
     line-height: 0.9;
     padding-bottom: 0.08em;
     white-space: normal;
