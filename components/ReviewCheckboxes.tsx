@@ -8,7 +8,7 @@ import styles from "./ReviewCheckboxes.module.css";
  * behind is the screenshot; the popup itself is rebuilt in code (Figma 295:2889) so it stays sharp
  * when it's zoomed into. While it's on screen it loops: the whole screen, then an ease in on the
  * checkboxes, both get ticked (Place Offer lights up), a beat, then it eases back out and they
- * clear. Off screen it stops and starts over from the whole screen.
+ * clear. It starts zooming as soon as it's in view; off screen it stops and resets.
  */
 type Step = "wide" | "zoom" | "one" | "two" | "out";
 
@@ -41,11 +41,13 @@ export default function ReviewCheckboxes({ alt }: { alt: string }) {
       ([e]) => {
         window.clearTimeout(t);
         if (e.isIntersecting) {
-          i = 0;
+          // straight into the zoom the moment it's in view; the whole-screen beat only comes
+          // between loops
+          i = 1;
           run();
         } else setStep("wide");
       },
-      { root: el.closest<HTMLElement>("[data-lenis-prevent]"), threshold: 0.6 },
+      { root: el.closest<HTMLElement>("[data-lenis-prevent]"), threshold: 0.35 },
     );
     io.observe(el);
     return () => {
