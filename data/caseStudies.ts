@@ -30,7 +30,13 @@ export type CaseBlock =
   // images with captions under them, side by side when more than one
   | {
       type: "figures";
-      items: { image: CaseImage; caption?: string }[];
+      items: {
+        image: CaseImage;
+        caption?: string;
+        /** once it's on screen, ease in on one spot: x / y = the spot's centre (0–1 of the
+            image), scale = how far in */
+        zoom?: { x: number; y: number; scale: number };
+      }[];
       rise?: boolean;
     }
   // a row of bordered cards: bold label + medium title over a big light line, centred (Figma 131:232)
@@ -556,7 +562,7 @@ const crowdvolt: CaseSection[] = [
             type: "embed",
             url: "https://www.crowdvolt.com",
             title: "crowdvolt.com",
-            ratio: 1314 / 547,
+            ratio: 1314 / 820, // a taller window than Figma's 547, so more of the site shows
           },
         ],
       },
@@ -631,6 +637,8 @@ const crowdvolt: CaseSection[] = [
                   "Bid warning embedded in the review page as checkboxes",
                 ),
                 caption: "Embed to current page as checkbox",
+                // closes in on the checkboxes under the order total
+                zoom: { x: 0.4964, y: 0.8, scale: 2.6 },
               },
             ],
           },

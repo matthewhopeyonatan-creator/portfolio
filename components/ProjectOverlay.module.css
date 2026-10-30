@@ -419,6 +419,7 @@
 .cvEmbed {
   overflow: hidden;
   width: 100%;
+  aspect-ratio: var(--ratio, 2.4);
   border-radius: calc(24 * var(--pu));
   background: #767676;
 }
@@ -615,6 +616,26 @@
   width: 100%;
   height: auto;
   border-radius: calc(24 * var(--pu));
+}
+
+/* a screenshot that zooms in on one spot (ZoomImage): the frame keeps the picture's rounded box,
+   the picture moves inside it — slowly in, and straight back out once it's off screen */
+.cvZoom {
+  overflow: hidden;
+  border-radius: calc(24 * var(--pu));
+  /* rounded clipping that holds while the picture inside is scaled (Safari) */
+  isolation: isolate;
+}
+
+.cvFigure .cvZoom img {
+  border-radius: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.cvZoomOn img {
+  transform: translate3d(var(--zx), var(--zy), 0) scale(var(--zs));
+  transition: transform 1800ms var(--ease-in-out);
 }
 
 .cvFigure figcaption {
@@ -1174,6 +1195,7 @@
   .cvFlow,
   .cvEmbed,
   .cvFigure img,
+  .cvZoom,
   .cvSketchImg {
     border-radius: 16px;
   }
@@ -1192,6 +1214,11 @@
   }
   .section .cvBlockers[data-small] .cvBlockerText {
     font-size: 16px;
+  }
+  /* the live site in a phone-shaped window: at this width it shows its own mobile layout, so give
+     it a phone screen's proportions rather than the desktop letterbox */
+  .cvEmbed {
+    aspect-ratio: 9 / 16;
   }
   .cvGallery {
     gap: 10px;
