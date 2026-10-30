@@ -36,9 +36,17 @@ const spaceGrotesk = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Matthew Hope — Product Designer",
+  title: "hope’s grocer - Matthew Hope Portfolio",
   description:
     "Matthew Hope is a product designer in New York. Science-trained mind, designer's hands.",
+  // the card a shared link shows (iMessage, Slack, LinkedIn…)
+  openGraph: {
+    title: "hope’s grocer - Matthew Hope Portfolio",
+    description:
+      "Matthew Hope is a product designer in New York. Science-trained mind, designer's hands.",
+    siteName: "hope’s grocer",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
