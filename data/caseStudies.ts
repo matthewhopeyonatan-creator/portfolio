@@ -863,6 +863,9 @@ const crowdvolt: CaseSection[] = [
           "CrowdVolt Re:wind underground SF poster",
           "Rave essentials graphic",
           "CrowdVolt Re:wind at Nook SF poster",
+          "Solara venue spotlight at Bogart House poster",
+          "CrowdVolt SF $5 off your next purchase poster",
+          "Solomun two GA tickets giveaway poster",
         ].map((alt, i) => ({
           src: `/projects/crowdvolt/graphics/g${String(i + 1).padStart(2, "0")}.webp`,
           w: 1080,
