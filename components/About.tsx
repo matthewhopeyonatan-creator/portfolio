@@ -75,7 +75,7 @@ export default function About() {
           situation I am in and have fun while I&apos;m at it. Hope you learn more about me here :)
         </p>
         <h1 id="about-name" className={styles.name} data-reveal="up">
-          MATTHEW HOPE
+          MATTHEW<span className={styles.nameBreak}> </span>HOPE
         </h1>
       </section>
 

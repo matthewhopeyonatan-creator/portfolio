@@ -385,11 +385,27 @@
   .intro {
     padding-right: calc(var(--gutter) + 64px); /* clear of the switch */
   }
-  /* MATTHEW HOPE fills the line between the margins */
+  /* the intro, then MATTHEW / HOPE on two lines, MATTHEW filling the width between the margins;
+     the block is tall enough that the photo strip starts halfway down its photos at the bottom
+     of the first screen */
+  .hello {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--header-h) - 32vw * 606.535 / 545.881);
+    box-sizing: border-box;
+  }
   .name {
-    margin-top: 48px !important;
-    font-size: calc((100vw - 2 * var(--gutter)) / 7.2);
-    line-height: 1.25;
+    margin-top: auto !important;
+    padding-top: 40px;
+    font-size: calc((100vw - 2 * var(--gutter)) / 4.45);
+    line-height: 0.9;
+    padding-bottom: 0.08em;
+    white-space: normal;
+  }
+  .nameBreak {
+    display: block;
+    height: 0;
+    overflow: hidden;
   }
   .photo {
     width: 64vw;
