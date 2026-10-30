@@ -1,6 +1,6 @@
-/* Figma 111:697 — 3 equal columns, 2px ink rules · poster 371 × 494, r24 · caption 16 below:
-   name + price Medium 20, source Light 16 (5 below).
-   Each cell is 576 wide, so the poster gets (576 − 371) / 2 = 102.5 on every side. */
+/* Figma 111:697 — 3 equal columns, 2px ink rules · poster 371 × 494, r24, no captions.
+   Each cell is 576 wide, so the poster gets (576 − 371) / 2 = 102.5 on every side — the same
+   above and below, so it sits centred between the rules. */
 /* title row: same space above and below the letters (the row is boxed by rules on both sides) */
 .titleRow {
   padding-top: max(72px, calc(128 * var(--u)));
@@ -44,32 +44,6 @@
   object-fit: cover; /* videos fill the same 3:4 slot as the stills */
 }
 
-.caption {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  column-gap: 16px;
-  margin-top: calc(16 * var(--u));
-  color: var(--color-ink);
-  line-height: normal;
-}
-
-.title,
-.price {
-  font-size: max(15px, calc(20 * var(--u)));
-  font-weight: 500;
-}
-
-.price {
-  text-align: right;
-}
-
-.source {
-  grid-column: 1 / -1;
-  margin-top: calc(5 * var(--u));
-  font-size: max(12px, calc(16 * var(--u)));
-  font-weight: 300;
-}
-
 /* tablets: two across */
 @media (max-width: 1023px) {
   .grid {
@@ -99,36 +73,21 @@
   }
 }
 
-/* Desktop readability floors: on laptop widths the captions stop shrinking at a size that stays
-   easy to read (title 16 Medium over source 14 Light) */
-@media (min-width: 768px) {
-  .title,
-  .price {
-    font-size: max(16px, calc(20 * var(--u)));
-  }
-  .source {
-    font-size: max(14px, calc(16 * var(--u)));
-  }
-}
-
 /* three across: the last column has no rule on its right, so give it an invisible one — every
-   poster is then exactly the same width/height and the captions line up across the row */
+   poster is then exactly the same width/height across the row */
 @media (min-width: 1024px) {
   .cell:nth-child(3n) {
     border-right: 2px solid transparent;
   }
 }
 
-/* phones: one poster a row on the 20 margins, the same 32 around the title as Seasonal picks,
-   and 20 around each poster (its caption 12 under it) */
+/* phones: one poster a row on the 20 margins, the same space around the title as Seasonal
+   picks, and 20 around each poster */
 @media (max-width: 767px) {
   .titleRow {
     padding-top: 24px;
   }
   .cell {
     padding: var(--gutter);
-  }
-  .caption {
-    margin-top: 12px;
   }
 }

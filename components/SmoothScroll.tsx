@@ -37,6 +37,8 @@ export default function SmoothScroll() {
       const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]');
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
       if (a.closest("[data-overlay-nav]")) return; // the project popup handles its own navbar
+      // a case study is open over the page: the link's own sheet closes it first, then goes
+      if (document.querySelector("[data-overlay-nav]")) return;
       const href = a.getAttribute("href")!;
       // "/#section" from another page is an ordinary page change
       if (href.startsWith("/") && window.location.pathname !== "/") return;
@@ -47,7 +49,18 @@ export default function SmoothScroll() {
       // the click still reaches the link's own onClick, so a sheet it sits in (the cart, the
       // phone menu) can close itself
       e.preventDefault();
-      lenis.scrollTo(target, { duration: 1.4, force: true });
+      // from inside the cart: wait for it to close and let the page go (starting Lenis again would
+      // cut a glide begun while it was held still)
+      const go = () => lenis.scrollTo(target, { duration: 1.4, force: true });
+      const html = document.documentElement;
+      if (html.classList.contains("cart-open") || html.classList.contains("lenis-stopped")) {
+        const t0 = performance.now();
+        const wait = () =>
+          !html.classList.contains("lenis-stopped") || performance.now() - t0 > 600
+            ? go()
+            : requestAnimationFrame(wait);
+        requestAnimationFrame(wait);
+      } else go();
       history.replaceState(null, "", hash);
     };
     document.addEventListener("click", onClick, true); // capture: before React/Next handlers

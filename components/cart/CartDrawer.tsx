@@ -221,7 +221,16 @@ export default function CartDrawer() {
               <Link
                 className={styles.checkout}
                 href="/#seasonal-picks"
-                onClick={close}
+                onClick={(e) => {
+                  close();
+                  // over an open case study: it closes first, then goes to the projects itself
+                  if (document.querySelector("[data-overlay-nav]")) {
+                    e.preventDefault();
+                    window.dispatchEvent(
+                      new CustomEvent("overlay:navigate", { detail: "/#seasonal-picks" }),
+                    );
+                  }
+                }}
               >
                 start shopping
               </Link>

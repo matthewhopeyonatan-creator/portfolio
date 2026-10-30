@@ -105,11 +105,6 @@ export default function GrocersSelects() {
                   />
                 )}
                 </span>
-                <figcaption className={styles.caption}>
-                  <span className={styles.title}>{item.title}</span>
-                  <span className={styles.price}>{item.price}</span>
-                  <span className={styles.source}>{item.source}</span>
-                </figcaption>
               </figure>
             </li>
           ))}
