@@ -1,0 +1,171 @@
+/* Matthew's receipt log — plain and quick to scan, in the site's own colours and type */
+.page {
+  min-height: 100svh;
+  padding: var(--gutter);
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+.head {
+  padding-bottom: 24px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.title {
+  margin: 0;
+  font-size: max(36px, calc(64 * var(--u)));
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.sub {
+  margin: 8px 0 0;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.error {
+  margin: 24px 0 0;
+  color: #f93636;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statNum {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.statLabel {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.top ol {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  font-size: 15px;
+}
+
+.top span,
+.items span {
+  color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+}
+
+.empty {
+  margin: 40px 0;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.shot {
+  display: block;
+  align-self: start;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+  background: var(--color-paper);
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.noShot {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.meta {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.meta b {
+  font-weight: 600;
+}
+
+.items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 18px;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin: 0;
+  font-size: 15px;
+}
+
+.facts dt {
+  font-size: 12px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.note {
+  margin: 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--color-ink);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  font-size: 17px;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 767px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .row {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 16px;
+  }
+}

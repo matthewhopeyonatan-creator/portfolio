@@ -16,6 +16,8 @@ const INK = { light: "#e82c2c", dark: "#00dba4" } as const;
 export default function useMarker() {
   const cv = useRef<HTMLCanvasElement | null>(null);
   const [drawn, setDrawn] = useState(false); // anything on the slip yet (shows the clear button)
+  // goes up each time a stroke is finished or the slip is cleared (the receipt saves a copy then)
+  const [version, setVersion] = useState(0);
   const stroke = useRef<{ id: number; pts: { x: number; y: number; t: number }[]; w: number } | null>(null);
 
   const ctx = () => cv.current?.getContext("2d") ?? null;
@@ -129,6 +131,7 @@ export default function useMarker() {
     const s = stroke.current;
     if (!s || e.pointerId !== s.id) return;
     stroke.current = null;
+    setVersion((v) => v + 1);
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {}
@@ -138,12 +141,14 @@ export default function useMarker() {
     const c = cv.current;
     ctx()?.clearRect(0, 0, c?.width ?? 0, c?.height ?? 0);
     setDrawn(false);
+    setVersion((v) => v + 1);
   };
 
   return {
     canvas,
     clear,
     drawn,
+    version,
     handlers: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp },
   };
 }

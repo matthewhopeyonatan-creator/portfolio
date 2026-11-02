@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { cartCatalog } from "@/data/site";
-import { mostViewed, saveReceipt, visitMinutes } from "@/lib/visit";
+import { logReceipt, mostViewed, saveReceipt, visitMinutes, withId } from "@/lib/visit";
 import { useCart } from "./CartContext";
 import SlideToCheckout from "./SlideToCheckout";
 import styles from "./CartDrawer.module.css";
@@ -206,12 +206,14 @@ export default function CartDrawer() {
               <SlideToCheckout
                 onConfirm={() => {
                   // ring it up: the receipt keeps what was in the basket, then the basket empties
-                  saveReceipt({
+                  const receipt = withId({
                     items: lines.map((l) => ({ name: l.item.name, qty: l.qty })),
                     minutes: visitMinutes(),
                     mostViewed: mostViewed(),
                     at: Date.now(),
                   });
+                  saveReceipt(receipt);
+                  logReceipt(receipt); // the picture of the slip follows from the receipt page
                   clear();
                   close();
                   router.push("/receipt");

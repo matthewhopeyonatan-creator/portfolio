@@ -8,6 +8,8 @@ const VIEWS = "hopes-grocer-views";
 export const RECEIPT = "hopes-grocer-receipt";
 
 export type Receipt = {
+  /** this receipt's id in Matthew's receipt log (/admin/receipts) */
+  id?: string;
   items: { name: string; qty: number }[];
   minutes: number;
   mostViewed: string | null;
@@ -63,4 +65,36 @@ export function saveReceipt(r: Receipt) {
 
 export function loadReceipt(): Receipt | null {
   return read<Receipt | null>(RECEIPT, null);
+}
+
+const newId = () =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+
+/** gives a receipt its id in the log (once) */
+export function withId(r: Receipt): Receipt {
+  return r.id ? r : { ...r, id: newId() };
+}
+
+/**
+ * Sends a copy of a checked-out receipt to Matthew's receipt log (/admin/receipts): what was in
+ * the basket, the note, most viewed, time on site — and, when given, a picture of the slip as it
+ * looks (with any drawing on it). Best effort: if it fails, the visitor never notices.
+ */
+export function logReceipt(r: Receipt, image?: string, beacon = false) {
+  if (!r.id || !r.items.length) return;
+  const body = JSON.stringify({ ...r, image });
+  try {
+    if (beacon && navigator.sendBeacon) {
+      navigator.sendBeacon("/api/receipts", new Blob([body], { type: "application/json" }));
+      return;
+    }
+    fetch("/api/receipts", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body,
+      keepalive: body.length < 60000,
+    }).catch(() => {});
+  } catch {}
 }

@@ -6,7 +6,7 @@ import { RotateCcw } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
-import { loadReceipt, mostViewed, saveReceipt, visitMinutes, type Receipt as R } from "@/lib/visit";
+import { loadReceipt, logReceipt, mostViewed, saveReceipt, visitMinutes, withId, type Receipt as R } from "@/lib/visit";
 import ThemedPair from "@/components/ThemedPair";
 import styles from "./Receipt.module.css";
 
@@ -33,7 +33,11 @@ export default function Receipt() {
 
   useEffect(() => {
     const saved = loadReceipt();
-    if (saved) setReceipt(saved);
+    if (saved) {
+      const r = saved.items.length ? withId(saved) : saved;
+      if (r !== saved) saveReceipt(r);
+      setReceipt(r);
+    }
     else setReceipt({ items: [], minutes: visitMinutes(), mostViewed: mostViewed(), at: Date.now() });
   }, []);
 
@@ -46,6 +50,46 @@ export default function Receipt() {
     if (!el || !stage) return;
     el.style.setProperty("--feed", `${Math.ceil(window.innerHeight - stage.getBoundingClientRect().top)}px`);
   }, [ready]);
+
+  // Matthew's receipt log: once the slip has printed, and again a moment after each change to the
+  // note or the drawing, a picture of the slip as it looks goes with the receipt (logReceipt);
+  // leaving the page sends the latest note too
+  const latest = useRef(receipt);
+  latest.current = receipt;
+  const logged = !!receipt?.items.length;
+  useEffect(() => {
+    if (!logged) return;
+    let alive = true;
+    const t = window.setTimeout(
+      async () => {
+        const r = latest.current;
+        if (!r || !alive) return;
+        let image: string | undefined;
+        try {
+          const node = slip.current;
+          if (node) {
+            const { toPng } = await import("html-to-image");
+            image = await toPng(node, {
+              pixelRatio: 1,
+              backgroundColor: getComputedStyle(node).backgroundColor || "#ffffff",
+              filter: (n) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)),
+            });
+          }
+        } catch {}
+        if (alive) logReceipt(r, image);
+      },
+      marker.version === 0 && !receipt?.note ? 6000 : 2500,
+    );
+    return () => {
+      alive = false;
+      window.clearTimeout(t);
+    };
+  }, [logged, receipt?.note, marker.version]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const leave = () => latest.current && logReceipt(latest.current, undefined, true);
+    window.addEventListener("pagehide", leave);
+    return () => window.removeEventListener("pagehide", leave);
+  }, []);
 
   if (!receipt) return <main className={styles.page} />;
 
