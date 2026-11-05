@@ -71,7 +71,7 @@ implements his designs faithfully.
   No View Transition (it froze the page and flashed), and no per-element colour transitions during
   the switch (nested text trailed behind). Tomatoes use `ThemedPair`: both versions stacked, crossfaded with opacity; the other
   theme's set loads once warmed (hovering the switch, or 2.5s after load with a mouse)
-- Receipt log (Matthew only) — `/admin/receipts`: every checked-out receipt (basket, note, slip picture with any drawing, most viewed, time, rough location, device). `lib/visit.ts` `logReceipt` posts to `app/api/receipts` → private Vercel Blob store `hopes-grocer-receipts` (`receipts/<id>.json` + `.png`); `proxy.ts` puts `/admin` and `/api/admin` behind Basic auth with `ADMIN_PASSWORD` (any username)
+- Receipt log (Matthew only) — `/admin/receipts`: every checked-out receipt (basket, note, slip picture with any drawing, most viewed, time, rough location, device). `lib/visit.ts` `logReceipt` posts to `app/api/receipts` → private Vercel Blob store `hopes-grocer-receipts` (`receipts/<id>.json` + `.png`); `proxy.ts` puts `/admin` and `/api/admin` behind a sign-in page (`/admin/login` → `app/api/admin-login` checks `ADMIN_PASSWORD` and sets a hashed cookie, `lib/adminAuth.ts`)
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating
   back home skips it (`shouldSkipIntro`, `.skip` in Hero)
 
