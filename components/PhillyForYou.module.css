@@ -157,11 +157,13 @@
   height: calc(20.122 * var(--pu));
 }
 
+/* Figma's icon box with its stroke spilling 3.57% / 4.59% past each edge */
 .frame .save img {
   position: absolute;
-  inset: -3.57% -4.59%;
-  width: auto;
-  height: auto;
+  left: -4.59%;
+  top: -3.57%;
+  width: 109.18%;
+  height: 107.14%;
 }
 
 .frame .share {
@@ -188,10 +190,13 @@
 
 .frame .back img {
   position: absolute;
-  inset: -9.77% -19.53%;
+  left: -19.53%;
+  top: -9.77%;
+  width: 139.06%;
+  height: 119.54%;
 }
 
-.frame .fwd {
+.fwd {
   width: calc(5.12 * var(--pu));
   height: calc(10.24 * var(--pu));
 }

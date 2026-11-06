@@ -5,32 +5,27 @@ import styles from "./PhillyForYou.module.css";
 
 /**
  * The Inquirer's "Philly For You" feed for its case study's Final Designs (Figma 316:1390), rebuilt
- * in code: on the left the signed-in feed swipes up story to story like a short-video feed, ending
- * on its "you've reached the end" card, and loops; on the right, the paywall a free reader hits.
+ * in code: on the left the signed-in feed swipes up story to story like a short-video feed, round
+ * and round; on the right, the paywall a free reader hits.
  * Sized in --pu (1 Figma px in the popup). The feed only runs while it's on screen; with reduced
  * motion the stories crossfade instead of sliding.
  */
 
 const ART = "/projects/inquirer/pfy";
 
-type Slide = { kind: "story"; top: string } | { kind: "end" };
+// Figma's scrolling feed (316:1986): eight story variants, one above the next, swiped through
+// one at a time and round again (the yellow end-of-feed variant isn't part of the loop)
+const STORIES = 8;
 
-// Figma's variants: the first story opens on the cake, the rest on the second photo; then the end
-const SLIDES: Slide[] = [
-  { kind: "story", top: `${ART}/top-1.webp` },
-  { kind: "story", top: `${ART}/top-2.webp` },
-  { kind: "end" },
-];
-
-const HOLD = { story: 2200, end: 2800 }; // ms on each slide before the next swipe
+const HOLD = 2200; // ms on each story before the next swipe
 const SWIPE = 700; // ms, the swipe itself
 
-function Story({ top }: { top: string }) {
+function Story() {
   return (
     <div className={styles.slide}>
       <div className={styles.photos}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={top} alt="" width={320} height={190} />
+        <img src={`${ART}/top-1.webp`} alt="" width={320} height={190} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`${ART}/storefront.webp`} alt="" width={320} height={190} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -88,20 +83,6 @@ function Card({
   );
 }
 
-const EndCard = () => (
-  <div className={`${styles.slide} ${styles.yellow}`}>
-    <Card title="You’ve reached the end of Philly for You!" button="Read more" top={157} gap={16}>
-      <p className={styles.cardText}>
-        Check back in tomorrow for more curated articles. In the meantime, check out more articles
-        on your FYP.
-      </p>
-    </Card>
-  </div>
-);
-
-const SlideView = ({ s }: { s: Slide }) =>
-  s.kind === "end" ? <EndCard /> : <Story top={s.top} />;
-
 function Feed() {
   const ref = useRef<HTMLDivElement>(null);
   const [k, setK] = useState(0); // stories swiped so far; the current slide is k % length
@@ -116,8 +97,7 @@ function Feed() {
     let t = 0;
     let n = 0;
     const hold = () => {
-      const s = SLIDES[n % SLIDES.length];
-      t = window.setTimeout(swipe, s.kind === "end" ? HOLD.end : HOLD.story);
+      t = window.setTimeout(swipe, HOLD);
     };
     const swipe = () => {
       setSwiping(true);
@@ -148,25 +128,26 @@ function Feed() {
     };
   }, []);
 
-  const cur = SLIDES[k % SLIDES.length];
-  const next = SLIDES[(k + 1) % SLIDES.length];
+  // the story on screen and the one under it (keys keep each story's element as it moves up)
+  const cur = k % STORIES;
+  const next = (k + 1) % STORIES;
 
   return (
     <div ref={ref} className={`${styles.phone} ${styles.feed}`}>
       {reduced ? (
         // reduced motion: the next story fades in over the current one
         <div className={styles.fadeStack}>
-          <div className={styles.fadeSlide}>
-            <SlideView s={cur} />
+          <div key={cur} className={styles.fadeSlide}>
+            <Story />
           </div>
-          <div className={`${styles.fadeSlide} ${swiping ? styles.fadeIn : styles.fadeOut}`}>
-            <SlideView s={next} />
+          <div key={next} className={`${styles.fadeSlide} ${swiping ? styles.fadeIn : styles.fadeOut}`}>
+            <Story />
           </div>
         </div>
       ) : (
         <div className={`${styles.track} ${swiping ? styles.swiping : ""}`}>
-          <SlideView s={cur} />
-          <SlideView s={next} />
+          <Story key={cur} />
+          <Story key={next} />
         </div>
       )}
       {/* the feed's bar stays put over the stories */}
@@ -176,8 +157,8 @@ function Feed() {
           <img src={`${ART}/back.svg`} alt="" />
         </span>
         <p className={styles.barTitle}>Philly For You</p>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.fwd} src={`${ART}/forward.svg`} alt="" />
+        {/* the forward arrow is hidden in the design; its slot keeps the title centred */}
+        <span className={styles.fwd} />
       </div>
     </div>
   );
