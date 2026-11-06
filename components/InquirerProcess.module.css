@@ -225,44 +225,6 @@
   object-fit: cover;
 }
 
-/* "Philly For You" in Georgia over the photo, the back arrow at its left */
-.topBar {
-  position: absolute;
-  left: calc(36 * var(--pu));
-  top: calc(84 * var(--pu));
-  width: calc(319 * var(--pu));
-  height: calc(24 * var(--pu));
-}
-
-.frame .topBar p {
-  position: absolute;
-  left: 53.61%;
-  top: 0;
-  color: #fff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: calc(20 * var(--pu));
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
-
-.back {
-  position: absolute;
-  left: 0;
-  top: 12.5%;
-  width: 2.82%;
-  height: 75%;
-}
-
-.frame .back img {
-  position: absolute;
-  left: -18.52%;
-  top: -9.26%;
-  width: 137.04%;
-  height: 118.52%;
-}
-
 @media (max-width: 767px) {
   .frame {
     --pu: calc((100vw - 40px - 4px) / 460);

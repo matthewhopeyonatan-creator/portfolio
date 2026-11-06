@@ -99,20 +99,13 @@ export function FinalIsh({ reasons }: { reasons: string[] }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.storyShot}
-            src={`${ART}/finalish.webp`}
+            src={`${ART}/finalish-2x.webp`}
             alt="Philly For You story screen: a full-height photo cropped from a horizontal shot, with the headline, writer and save / share at the bottom"
-            width={562}
-            height={1082}
+            width={1124}
+            height={2164}
             loading="lazy"
             decoding="async"
           />
-          <div className={styles.topBar}>
-            <span className={styles.back}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`${ART}/back.svg`} alt="" />
-            </span>
-            <p>Philly For You</p>
-          </div>
         </div>
       </div>
       <Reasons items={reasons} />
