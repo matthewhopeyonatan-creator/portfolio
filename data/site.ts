@@ -90,9 +90,16 @@ export const projects: Project[] = [
       "User research",
       "Mobile app",
     ],
-    href: "/#seasonal-picks",
+    href: "/?project=inquirer",
     video: "/projects/inquirer.mp4",
-    soldOut: true,
+    intro:
+      "The Philadelphia Inquirer is Pennsylvania’s largest daily newspaper and media outlet with over 170,000 active users. My team and I worked with them to achieve a holistic audio experience and it’s edge cases. I ultimately owned a new personalization feature.",
+    facts: {
+      timeline: "Feb 2025 – May 2025",
+      role: "Contract Product Designer",
+      type: "Professional",
+      team: "2 PMs, 7 Product Designers",
+    },
   },
   {
     slug: "25madison",

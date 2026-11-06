@@ -35,6 +35,21 @@ const spaceGrotesk = localFont({
   preload: false,
 });
 
+// stand-ins for The Inquirer's own faces (Grot10 Condensed, Inquirer Headline) in its case
+// study's rebuilt screens (components/PhillyForYou.tsx)
+const inqCondensed = localFont({
+  src: [{ path: "./fonts/BarlowCondensed-Bold.woff2", weight: "700", style: "normal" }],
+  variable: "--font-inq-cond",
+  display: "swap",
+  preload: false,
+});
+const inqHeadline = localFont({
+  src: [{ path: "./fonts/SourceSerif4-Variable.woff2", weight: "200 900", style: "normal" }],
+  variable: "--font-inq-head",
+  display: "swap",
+  preload: false,
+});
+
 export const metadata: Metadata = {
   title: "hope’s grocer - Matthew Hope Portfolio",
   description:
@@ -57,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${hostGrotesk.variable} ${atelierFleur.variable} ${spaceGrotesk.variable}`}
+      className={`${hostGrotesk.variable} ${atelierFleur.variable} ${spaceGrotesk.variable} ${inqCondensed.variable} ${inqHeadline.variable}`}
       suppressHydrationWarning
     >
       <head>

@@ -10,6 +10,7 @@ import {
 import { createPortal, preconnect } from "react-dom";
 import { useRouter } from "next/navigation";
 import Lenis from "lenis";
+import PhillyForYou from "./PhillyForYou";
 import ReviewCheckboxes from "@/components/ReviewCheckboxes";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
@@ -368,6 +369,8 @@ function Block({ b }: { b: CaseBlock }) {
           ))}
         </div>
       );
+    case "philly":
+      return <PhillyForYou />;
     case "placeholder":
       return (
         <>

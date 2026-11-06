@@ -1,0 +1,324 @@
+/* The Inquirer's "Philly For You" screens (Figma 316:1390): two 320 × 568 phones in a bordered
+   frame, 120 apart. 1 Figma px = --pu. The Inquirer's own faces (Grot10, Grot10 Condensed,
+   Inquirer Headline) stand in as Host Grotesk, --font-inq-cond and --font-inq-head. The design's
+   black is a hair off pure black, per the site's rule. Selectors are two classes deep so the case
+   study's own paragraph and image styles don't reach in. */
+.frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(120 * var(--pu));
+  padding: calc(40 * var(--pu)) calc(24 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
+.phone {
+  position: relative;
+  flex: none;
+  width: calc(320 * var(--pu));
+  height: calc(568 * var(--pu));
+  overflow: hidden;
+  border-radius: calc(24 * var(--pu));
+  isolation: isolate; /* keeps the rounded clip while the stories slide inside (Safari) */
+  font-family: var(--font-sans), sans-serif;
+  text-align: left;
+}
+
+.frame p {
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.frame img {
+  display: block;
+  max-width: none;
+  border-radius: 0;
+}
+
+.feed {
+  background: #050505;
+  color: #fff;
+}
+
+.yellow {
+  background: #f0af11;
+}
+
+/* ── the feed: the current story and the next, stacked; a swipe slides both up one ── */
+.track {
+  display: flex;
+  flex-direction: column;
+}
+
+.swiping {
+  transform: translate3d(0, -50%, 0);
+  transition: transform 700ms var(--ease-drawer);
+}
+
+.slide {
+  position: relative;
+  flex: none;
+  width: calc(320 * var(--pu));
+  height: calc(568 * var(--pu));
+  overflow: hidden;
+}
+
+.feed .photos {
+  display: flex;
+  flex-direction: column;
+}
+
+.photos img {
+  width: calc(320 * var(--pu));
+  height: calc(190 * var(--pu));
+  object-fit: cover;
+  background: #1c1c1c;
+}
+
+.photos img:last-child {
+  height: calc(188 * var(--pu));
+}
+
+/* the story's title block, on a fade to black at the bottom */
+.title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(437 * var(--pu));
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: calc(16 * var(--pu));
+  background: linear-gradient(to bottom, rgba(5, 5, 5, 0), #050505);
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  width: calc(240 * var(--pu));
+}
+
+.frame .eyebrow {
+  font-size: calc(15 * var(--pu));
+  line-height: calc(15 * var(--pu));
+}
+
+.frame .headline {
+  margin-top: 0;
+  font-family: var(--font-inq-head), Georgia, serif;
+  font-size: calc(32 * var(--pu));
+  font-weight: 800;
+  line-height: calc(34 * var(--pu));
+  letter-spacing: -0.01em;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--pu));
+  height: calc(42 * var(--pu));
+  margin-top: calc(8 * var(--pu));
+}
+
+.frame .avatar {
+  width: calc(40 * var(--pu));
+  height: calc(40 * var(--pu));
+  border-radius: 50%;
+  background: #3a3a3a;
+}
+
+.frame .name,
+.frame .role {
+  font-size: calc(14 * var(--pu));
+  white-space: nowrap;
+}
+
+.frame .name {
+  line-height: calc(20 * var(--pu));
+}
+
+.frame .role {
+  line-height: calc(18 * var(--pu));
+  color: #b8b8b8;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(9.756 * var(--pu));
+}
+
+.save {
+  position: relative;
+  width: calc(15.65 * var(--pu));
+  height: calc(20.122 * var(--pu));
+}
+
+.frame .save img {
+  position: absolute;
+  inset: -3.57% -4.59%;
+  width: auto;
+  height: auto;
+}
+
+.frame .share {
+  width: calc(25 * var(--pu));
+  height: calc(25 * var(--pu));
+}
+
+/* the bar over the feed: back, "Philly For You", forward */
+.bar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(16 * var(--pu));
+}
+
+.back {
+  position: relative;
+  width: calc(5.12 * var(--pu));
+  height: calc(10.24 * var(--pu));
+}
+
+.frame .back img {
+  position: absolute;
+  inset: -9.77% -19.53%;
+}
+
+.frame .fwd {
+  width: calc(5.12 * var(--pu));
+  height: calc(10.24 * var(--pu));
+}
+
+.frame .barTitle {
+  width: calc(76 * var(--pu));
+  font-size: calc(12 * var(--pu));
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* ── the light card on the yellow (paywall, end of feed) ── */
+.card {
+  position: absolute;
+  left: calc(24 * var(--pu));
+  width: calc(271 * var(--pu));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(15 * var(--pu)) 0;
+  border-radius: calc(5 * var(--pu));
+  background: #f4f4f4;
+  color: #050505;
+}
+
+.frame .cardTitle {
+  width: calc(225 * var(--pu));
+  font-family: var(--font-inq-cond), "Arial Narrow", sans-serif;
+  font-size: calc(30 * var(--pu));
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.frame .cardText {
+  width: calc(225 * var(--pu));
+  font-size: calc(15 * var(--pu));
+  line-height: calc(20 * var(--pu));
+  text-align: center;
+}
+
+.frame .free {
+  min-height: calc(51 * var(--pu));
+}
+
+.cardText b {
+  font-weight: 700;
+}
+
+.cardText .link {
+  color: #1a6aff;
+  text-decoration: underline;
+}
+
+.perks {
+  width: calc(235 * var(--pu));
+  margin: 0;
+  padding: calc(5 * var(--pu)) 0 0;
+  list-style: none;
+}
+
+.perks li {
+  display: flex;
+  align-items: center;
+  gap: calc(10 * var(--pu));
+  padding-bottom: calc(5 * var(--pu));
+  font-size: calc(15 * var(--pu));
+  line-height: calc(20 * var(--pu));
+}
+
+.perks li span {
+  padding-top: calc(10 * var(--pu));
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.frame .perks img {
+  flex: none;
+  width: calc(24 * var(--pu));
+  height: calc(24 * var(--pu));
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(157 * var(--pu));
+  padding: calc(10 * var(--pu));
+  box-sizing: border-box;
+  border-radius: calc(5 * var(--pu));
+  background: #1a6aff;
+  color: #fff;
+  font-size: calc(18 * var(--pu));
+  font-weight: 700;
+  line-height: calc(20 * var(--pu));
+  white-space: nowrap;
+}
+
+/* ── reduced motion: crossfade instead of the swipe ── */
+.fadeStack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.fadeSlide {
+  position: absolute;
+  inset: 0;
+}
+
+.fadeOut {
+  opacity: 0;
+}
+
+.fadeIn {
+  opacity: 1;
+  transition: opacity 400ms ease;
+}
+
+@media (max-width: 767px) {
+  .frame {
+    --pu: calc((100vw - 40px - 4px) / 368);
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 0;
+    border-radius: 16px;
+  }
+}

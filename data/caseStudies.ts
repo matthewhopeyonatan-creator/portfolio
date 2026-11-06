@@ -69,6 +69,8 @@ export type CaseBlock =
   | { type: "boxes"; items: { title?: string; text: string }[] }
   // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
   | { type: "statement"; lines: string[] }
+  // The Inquirer's "Philly For You" feed and paywall rebuilt in code (components/PhillyForYou.tsx)
+  | { type: "philly" }
   // a not-yet-written section
   | { type: "placeholder" };
 
@@ -950,4 +952,88 @@ const crowdvolt: CaseSection[] = [
   },
 ];
 
-export const caseStudies: Record<string, CaseSection[]> = { shmood, crowdvolt };
+// Figma 316:264 — Matthew's copy, as written there. Research, Iterations and Impacts aren't
+// written yet.
+const inquirer: CaseSection[] = [
+  {
+    name: "Context",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Context",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "The Philadelphia Inquirer wanted to expand readership, enhance engagement, and diversify content.",
+            body: "The Philadelphia Inquirer came to our team needing us to design a holistic experience for their new audio format news. This also came with the needs to appeal to users across different generations and comfortability with technology. Designing a holistic experience does not only mean slapping on an audio option on every article, but also thinking about other features that feed into it, including personalization.",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "What is The Philadelphia Inquirer",
+        blocks: [
+          {
+            type: "callout",
+            text: "Pennsylvania’s largest media outlet",
+            body: "The Philadelphia is the third longest running media outlet in the United States and the largest one in the Philadelphia Metropolitan Area and Pennsylvania. They have 170,000 active users and are constantly looking to keep up with the ever changing news landscape.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "The Problem",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "The Problem",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "Falling behind in the news industry",
+            body: "Many news giants such as The NY Times, The Washington Post, and many more have started to incorporate audio and cross-device integration to keep up with the changing landscape of tech. This includes podcasts, text to speech, CarPlay, and many other forms of news that is outside the traditional text space. The Philadelphia Inquirer was falling behind and needed to keep up with this change.",
+          },
+          {
+            type: "callout",
+            text: "A dying viewership in Gen Z audiences",
+            body: "A large percentage of their users fall in the age range of Millennial or older, with outdated systems and an overall reading crisis mainly to blame. They needed to re-engage with younger generations to maintain their spot as a Pennsylvania powerhouse.",
+          },
+          {
+            type: "callout",
+            text: "Introduction of a subscription-based service",
+            body: "Readers weren’t hooked enough to pay. The Inquirer wanted its paywall to bring in more subscribers.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Final Designs",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Final Designs",
+        accent: true,
+        blocks: [
+          {
+            type: "callout",
+            text: "A daily feed of Philly news, cut down to swipeable stories picked for the user, limited through a pay-wall",
+            body: "I owned Philly For You, a swipeable short-form feed of each day’s stories, picked for each reader. It gives younger and overwhelmed readers an easy way into the news, and every story leads to the full article. Non subscribed users will get hit with a paywall as a way for nudging users to subscribe to access these premium features.",
+          },
+        ],
+      },
+      { type: "philly" },
+    ],
+  },
+  { name: "Research", blocks: [{ type: "placeholder" }] },
+  { name: "Iterations", blocks: [{ type: "placeholder" }] },
+  { name: "Impacts", blocks: [{ type: "placeholder" }] },
+];
+
+export const caseStudies: Record<string, CaseSection[]> = { shmood, crowdvolt, inquirer };
