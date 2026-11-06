@@ -312,7 +312,7 @@
 .sections {
   display: flex;
   flex-direction: column;
-  gap: calc(220 * var(--pu)); /* between sections */
+  gap: calc(165 * var(--pu)); /* between sections */
 }
 
 .section {
@@ -1060,7 +1060,7 @@
     border-top: 0;
   }
   .sections {
-    gap: 88px;
+    gap: 66px;
   }
   .section {
     gap: 24px;
