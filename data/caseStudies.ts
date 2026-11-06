@@ -533,12 +533,12 @@ const bidSteps = [
 // Figma 64:381 — Matthew's copy, as written there
 const crowdvolt: CaseSection[] = [
   {
-    name: "Overview",
+    name: "Context",
     ownLabel: true,
     blocks: [
       {
         type: "group",
-        label: "Overview",
+        label: "Context",
         accent: true,
         blocks: [
           {
