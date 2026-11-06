@@ -75,14 +75,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${hostGrotesk.variable} ${atelierFleur.variable} ${spaceGrotesk.variable} ${inqCondensed.variable} ${inqHeadline.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        {/* dark mode: put a returning visitor's choice on before paint */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem("hg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`,
-          }}
-        />
-      </head>
       <body>
         <CartProvider>
           <SmoothScroll />
