@@ -63,8 +63,12 @@ export type CaseBlock =
   | { type: "dashboard" }
   // a 3-across grid of 3:4 graphics that sweep up into view row by row (Figma 152:2372)
   | { type: "gallery"; images: CaseImage[] }
-  // a 48px heading over a stack of bordered 36px lines (Figma 166:2459)
-  | { type: "wins"; title?: string; items: string[] }
+  // a 48px heading over a stack of bordered 36px lines (Figma 166:2459); spaced: 24 apart, not 16
+  | { type: "wins"; title?: string; items: string[]; spaced?: boolean }
+  // three columns of bordered 36px cards, the picked ones filled in (Figma 318:3357)
+  | { type: "chips"; items: { text: string; on?: boolean }[] }
+  // The Inquirer's iteration frames, rebuilt in code (components/InquirerProcess.tsx)
+  | { type: "inq-midfi" | "inq-finalish"; reasons: string[] }
   // a row of bordered cards: an optional bold uppercase title over a light line
   | { type: "boxes"; items: { title?: string; text: string }[] }
   // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
@@ -952,8 +956,7 @@ const crowdvolt: CaseSection[] = [
   },
 ];
 
-// Figma 316:264 — Matthew's copy, as written there. Research, Iterations and Impacts aren't
-// written yet.
+// Figma 316:264 — Matthew's copy, as written there
 const inquirer: CaseSection[] = [
   {
     name: "Context",
@@ -1034,9 +1037,186 @@ const inquirer: CaseSection[] = [
       { type: "philly" },
     ],
   },
-  { name: "Research", blocks: [{ type: "placeholder" }] },
-  { name: "Iterations", blocks: [{ type: "placeholder" }] },
-  { name: "Impacts", blocks: [{ type: "placeholder" }] },
+  {
+    name: "Research",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Research",
+        accent: true,
+        blocks: [
+          {
+            type: "group",
+            label: "Competitor Analysis",
+            blocks: [
+              {
+                type: "callout",
+                text: "Before I honed down on engagement, our team looked at 30+ competitors to understand industry standards",
+                body: "We found 9 features that were standard across the industry, and I honed down on personalized news, discovery, and content prioritization to drive my future iterations.",
+              },
+              {
+                type: "chips",
+                // row by row, as the three columns read across
+                items: [
+                  { text: "Personalized News", on: true },
+                  { text: "Queues" },
+                  { text: "Content-first", on: true },
+                  { text: "Discovery", on: true },
+                  { text: "Timestamps" },
+                  { text: "Playlists" },
+                  { text: "Audio Entry Points" },
+                  { text: "Transcript Highlights" },
+                  { text: "Widgets" },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "User Interviews",
+        blocks: [
+          {
+            type: "callout",
+            text: "We interviewed over 25 users of different age ranges to understand their perception on news consumption",
+            body: "There were a plethora of insights that we found ranging from trust in AI to engagement, but these are the key findings that were core to my designs in personalization:",
+          },
+          {
+            type: "wins",
+            spaced: true,
+            items: [
+              "Gen Z users are often experience choice paralysis",
+              "Gen Z users want more visual-forward features",
+              "Millennial+ users seek multitasking abilities",
+              "Users want to stay informed without much effort",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Iterations",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Iterations",
+        accent: true,
+        blocks: [
+          {
+            type: "group",
+            label: "Lo-fis",
+            blocks: [
+              {
+                type: "callout",
+                text: "Exploration starts on paper",
+                body: "I started my process through sketches. At this point, the team was still figuring out what we needed to work on, so my iterations expanded beyond personalization. Pairing these lo-fi iterations with user research led me to spearhead the egagemtn layer.",
+              },
+              {
+                type: "figures",
+                rise: true,
+                items: [
+                  { image: { src: "/projects/inquirer/process/lofi-1.webp", w: 1600, h: 1132, alt: "Lo-fi sketches 1 and 2: a home screen and a visuals-first article layout" } },
+                  { image: { src: "/projects/inquirer/process/lofi-2.webp", w: 1600, h: 1132, alt: "Lo-fi sketch 3: a daily round-up you swipe through" } },
+                ],
+              },
+              {
+                type: "figures",
+                rise: true,
+                items: [
+                  { image: { src: "/projects/inquirer/process/lofi-3.webp", w: 644, h: 455, alt: "Lo-fi sketch 4: a For You page with news for you, news categories and previously listened" } },
+                  { image: { src: "/projects/inquirer/process/lofi-4.webp", w: 642, h: 455, alt: "Lo-fi sketch 5: entry points from a normal news page into a pop-up" } },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Mid-fis",
+        blocks: [
+          {
+            type: "callout",
+            text: "I designed two options for the Inquirer to review, focusing on visual cues, engagement, and ease of use",
+            body: "My first direction gave readers more control, with two layers of navigation: swipe across to change genres, and up or down to move through stories within it. Choosing their own path would have kept people more engaged and made the feed feel more personal. After reviewing it with the Inquirer team, we pulled it back for a few reasons:",
+          },
+          {
+            type: "inq-midfi",
+            reasons: [
+              "The 2 pronged navigation was not familiar",
+              "They did not have enough articles daily to fuel this many options",
+              "Not visually appealing",
+            ],
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Final-ish Design",
+        blocks: [
+          {
+            type: "callout",
+            text: "I removed the 2 prong navigation and stuck to a linear feed",
+            body: "News can feel overwhelming, so I wanted catching up to feel personal and familiar. I built on the short-form, swipe-through format most people already use regularly, so there’s nothing new to learn. There was on issue:",
+          },
+          { type: "inq-finalish", reasons: ["The Inquirer took only horizontal images"] },
+        ],
+      },
+      {
+        type: "group",
+        label: "Final Design (Again)",
+        blocks: [
+          {
+            type: "callout",
+            text: "The final design touches on user needs of removing choice paralysis, being more visual, and being low effort",
+            body: "This design was validated by the Inquirer team by fitting business needs, feasibility, and user needs. The designs were created based on the iPhone 4 screens, to make handoff to engineers smoother according to the Inquirer workflow.",
+          },
+          { type: "philly" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Impacts",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Impacts",
+        accent: true,
+        blocks: [
+          {
+            type: "wins",
+            title: "Personal Wins",
+            items: [
+              "My first time using an established design system",
+              "The design was fully validated by the Inquirer team",
+              "I was able to be involved in creating a full case study for this project",
+            ],
+          },
+          {
+            type: "wins",
+            title: "Impacts",
+            items: [
+              "The design was stored and then used to inspire features that are live on the Inquirer mobile app",
+              "I still maintain conversation and involvement with the Inquirer team in future design endeavors",
+            ],
+          },
+        ],
+      },
+      {
+        type: "statement",
+        lines: [
+          "Special thanks to the Inquirer team for a fulfilling project!",
+          "See the full case study here",
+        ],
+      },
+    ],
+  },
 ];
 
 export const caseStudies: Record<string, CaseSection[]> = { shmood, crowdvolt, inquirer };

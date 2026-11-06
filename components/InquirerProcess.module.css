@@ -1,0 +1,272 @@
+/* The Inquirer's iteration frames (Figma 318:3380, 319:4006): a 2px ink frame, 40 / 24 in, the
+   screens 120 apart, 60 above the red cards. 1 Figma px = --pu. The mid-fi screens are light
+   wireframes in both themes; their black is the site's ink, per its rule. Selectors are two
+   classes deep so the case study's own paragraph and image styles don't reach in. */
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: calc(60 * var(--pu));
+  padding: calc(40 * var(--pu)) calc(24 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(120 * var(--pu));
+}
+
+.frame p {
+  margin: 0;
+  letter-spacing: -0.011em;
+}
+
+.frame img {
+  display: block;
+  max-width: none;
+  border-radius: 0;
+}
+
+/* ── the team's pushback: red cards, white 36 on a 35 line ── */
+.reasons {
+  display: flex;
+  flex-direction: column;
+  gap: calc(24 * var(--pu));
+}
+
+.reason {
+  padding: calc(24 * var(--pu)) calc(32 * var(--pu));
+  border-radius: calc(24 * var(--pu));
+  background: #f93636;
+  color: #fff;
+}
+
+.frame .reason p {
+  font-size: max(18px, calc(36 * var(--pu)));
+  font-weight: 400;
+  line-height: 0.9722; /* 35 / 36 */
+  letter-spacing: -0.03em;
+}
+
+/* ── mid-fi screens: 402 × 874, #f5f5f5, r24, Helvetica ── */
+.screen {
+  position: relative;
+  flex: none;
+  width: calc(402 * var(--pu));
+  height: calc(874 * var(--pu));
+  overflow: hidden;
+  border-radius: calc(24 * var(--pu));
+  background: #f5f5f5;
+  color: #282828;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: left;
+}
+
+.screen > * {
+  position: absolute;
+}
+
+.card {
+  width: calc(265 * var(--pu));
+  height: calc(397 * var(--pu));
+  border-radius: calc(33 * var(--pu));
+  background: #d9d9d9;
+}
+
+/* the card being swiped away, tipped back and faded */
+.cardTilt {
+  left: calc(46.2 * var(--pu));
+  top: calc(26.9 * var(--pu));
+  opacity: 0.5;
+  transform: rotate(-6.06deg);
+}
+
+.cardFront {
+  left: calc(73 * var(--pu));
+  top: calc(238 * var(--pu));
+}
+
+.frame .tiltText {
+  left: calc(84.3 * var(--pu));
+  top: calc(323.8 * var(--pu));
+  width: calc(222 * var(--pu));
+  opacity: 0.5;
+  font-size: calc(25 * var(--pu));
+  line-height: 1;
+  transform: rotate(-6.06deg);
+}
+
+.frame .today {
+  left: 0;
+  right: 0;
+  top: calc(111 * var(--pu));
+  font-size: calc(30 * var(--pu));
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.frame .cardText {
+  left: calc(102 * var(--pu));
+  top: calc(532 * var(--pu));
+  width: calc(197 * var(--pu));
+  font-size: calc(25 * var(--pu));
+  line-height: 1;
+}
+
+.daily {
+  left: calc(148 * var(--pu));
+  top: calc(719 * var(--pu));
+  width: calc(116 * var(--pu));
+  height: calc(39 * var(--pu));
+  display: grid;
+  place-items: center;
+  padding-left: calc(3 * var(--pu));
+  box-sizing: border-box;
+  border-radius: calc(7 * var(--pu));
+  background: #d9d9d9;
+  font-size: calc(18 * var(--pu));
+  font-weight: 700;
+  line-height: 1;
+}
+
+.frame .forYou {
+  left: 0;
+  right: 0;
+  top: calc(64 * var(--pu));
+  font-size: calc(25 * var(--pu));
+  font-weight: 300;
+  line-height: 1;
+  text-align: center;
+}
+
+.forYou b {
+  font-weight: 700;
+}
+
+.frame .listen {
+  left: calc(42 * var(--pu));
+  top: calc(551 * var(--pu));
+  font-size: calc(25 * var(--pu));
+  font-weight: 300;
+  line-height: 1;
+}
+
+.frame .headline {
+  left: calc(42 * var(--pu));
+  top: calc(588 * var(--pu));
+  width: calc(268 * var(--pu));
+  font-size: calc(35 * var(--pu));
+  font-weight: 700;
+  line-height: 1;
+}
+
+.progress {
+  left: calc(91 * var(--pu));
+  top: calc(29 * var(--pu));
+  display: flex;
+  gap: calc(10 * var(--pu));
+}
+
+.progress span {
+  height: calc(5 * var(--pu));
+  border-radius: 50px;
+  background: #d9d9d9;
+}
+
+.progress .on {
+  background: #9f9f9f;
+}
+
+.frame .arrow {
+  left: calc(25 * var(--pu));
+  top: calc(22 * var(--pu));
+  width: calc(24 * var(--pu));
+  height: calc(24 * var(--pu));
+}
+
+.frame .dots {
+  top: calc(407 * var(--pu));
+  width: calc(8 * var(--pu));
+  height: calc(60 * var(--pu));
+}
+
+/* ── final-ish: the 562 × 1082 story screen ── */
+.story {
+  position: relative;
+  flex: none;
+  width: calc(562 * var(--pu));
+  height: calc(1082 * var(--pu));
+  overflow: hidden;
+  border-radius: calc(24 * var(--pu));
+  background: #050505;
+}
+
+.frame .storyShot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* "Philly For You" in Georgia over the photo, the back arrow at its left */
+.topBar {
+  position: absolute;
+  left: calc(36 * var(--pu));
+  top: calc(84 * var(--pu));
+  width: calc(319 * var(--pu));
+  height: calc(24 * var(--pu));
+}
+
+.frame .topBar p {
+  position: absolute;
+  left: 53.61%;
+  top: 0;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: calc(20 * var(--pu));
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.back {
+  position: absolute;
+  left: 0;
+  top: 12.5%;
+  width: 2.82%;
+  height: 75%;
+}
+
+.frame .back img {
+  position: absolute;
+  left: -18.52%;
+  top: -9.26%;
+  width: 137.04%;
+  height: 118.52%;
+}
+
+@media (max-width: 767px) {
+  .frame {
+    --pu: calc((100vw - 40px - 4px) / 460);
+    gap: 24px;
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+  .row {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .reasons {
+    gap: 12px;
+  }
+  .reason {
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+  .frame .reason p {
+    font-size: 18px;
+  }
+}

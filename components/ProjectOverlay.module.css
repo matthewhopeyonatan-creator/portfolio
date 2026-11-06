@@ -741,6 +741,41 @@
   gap: calc(16 * var(--pu));
 }
 
+.cvWinsSpaced {
+  gap: calc(24 * var(--pu));
+}
+
+/* Figma 318:3357: three columns of 100-tall bordered cards, Light 36, 24 apart; the picked ones
+   filled with the paper colour */
+.cvChips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(24 * var(--pu));
+}
+
+.cvChip {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: calc(100 * var(--pu));
+  padding: 0 calc(29 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
+.cvChipOn {
+  background: var(--color-paper);
+}
+
+.section .cvChip p {
+  margin: 0;
+  font-size: max(16px, calc(36 * var(--pu)));
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
 .cvWins + .cvWins {
   margin-top: calc(24 * var(--pu)); /* + the group's 24 = 48 */
 }
@@ -1174,6 +1209,22 @@
   .cvBox,
   .cvWin {
     padding: 16px 20px;
+  }
+  .cvChips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .cvChip {
+    height: 56px;
+    padding: 0 14px;
+    border-radius: 16px;
+  }
+  .section .cvChip p {
+    font-size: 16px;
+    white-space: normal;
+  }
+  .cvWinsSpaced {
+    gap: 16px;
   }
   .cvBoxed {
     padding: 16px;

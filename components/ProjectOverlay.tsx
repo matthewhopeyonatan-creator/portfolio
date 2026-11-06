@@ -11,6 +11,7 @@ import { createPortal, preconnect } from "react-dom";
 import { useRouter } from "next/navigation";
 import Lenis from "lenis";
 import PhillyForYou from "./PhillyForYou";
+import { FinalIsh, MidFi } from "./InquirerProcess";
 import ReviewCheckboxes from "@/components/ReviewCheckboxes";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
@@ -337,7 +338,7 @@ function Block({ b }: { b: CaseBlock }) {
       return <Gallery images={b.images} />;
     case "wins":
       return (
-        <div className={styles.cvWins}>
+        <div className={`${styles.cvWins} ${b.spaced ? styles.cvWinsSpaced : ""}`}>
           {b.title ? <p className={styles.cvCallout}>{b.title}</p> : null}
           {b.items.map((t) => (
             <div key={t} className={styles.cvWin}>
@@ -371,6 +372,20 @@ function Block({ b }: { b: CaseBlock }) {
       );
     case "philly":
       return <PhillyForYou />;
+    case "inq-midfi":
+      return <MidFi reasons={b.reasons} />;
+    case "inq-finalish":
+      return <FinalIsh reasons={b.reasons} />;
+    case "chips":
+      return (
+        <div className={styles.cvChips}>
+          {b.items.map((it) => (
+            <div key={it.text} className={`${styles.cvChip} ${it.on ? styles.cvChipOn : ""}`}>
+              <p>{it.text}</p>
+            </div>
+          ))}
+        </div>
+      );
     case "placeholder":
       return (
         <>
