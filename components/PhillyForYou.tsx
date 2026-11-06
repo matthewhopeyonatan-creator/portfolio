@@ -13,34 +13,76 @@ import styles from "./PhillyForYou.module.css";
 
 const ART = "/projects/inquirer/pfy";
 
-// Figma's scrolling feed (316:1986): eight story variants, one above the next, swiped through
-// one at a time and round again (the yellow end-of-feed variant isn't part of the loop)
-const STORIES = 8;
+// the feed's stories: Figma's story layout (316:1986), each with its own three photos (from
+// Wikimedia Commons, see public/projects/inquirer/pfy/CREDITS.md), headline and made-up byline
+type StoryData = {
+  category: string;
+  title: string;
+  author: string;
+  date: string;
+  photos: [string, string, string];
+};
+
+const STORIES: StoryData[] = [
+  {
+    category: "Food",
+    title: "New Restaurants Near You",
+    author: "Dana Whitfield",
+    date: "Nov 4, 2026",
+    photos: ["r1", "r2", "r3"],
+  },
+  {
+    category: "Today",
+    title: "Philadelphia Local Dog Saves the Day",
+    author: "Marcus Ortega",
+    date: "Nov 3, 2026",
+    photos: ["d1", "d2", "d3"],
+  },
+  {
+    category: "Politics",
+    title: "New Mayor Is Elected",
+    author: "Priya Raman",
+    date: "Nov 2, 2026",
+    photos: ["m1", "m2", "m3"],
+  },
+  {
+    category: "Food",
+    title: "Michelin Star Arrives in Philadelphia",
+    author: "Theo Calloway",
+    date: "Oct 31, 2026",
+    photos: ["s1", "s2", "s3"],
+  },
+  {
+    category: "Today",
+    title: "Highway Under Construction, Here’s What to Do",
+    author: "Jenna Brooks",
+    date: "Oct 30, 2026",
+    photos: ["h1", "h2", "h3"],
+  },
+];
 
 const HOLD = 2200; // ms on each story before the next swipe
 const SWIPE = 700; // ms, the swipe itself
 
-function Story() {
+function Story({ s }: { s: StoryData }) {
   return (
     <div className={styles.slide}>
       <div className={styles.photos}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`${ART}/top-1.webp`} alt="" width={320} height={190} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`${ART}/storefront.webp`} alt="" width={320} height={190} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`${ART}/dish.webp`} alt="" width={320} height={188} />
+        {s.photos.map((p, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={p} src={`${ART}/${p}.webp`} alt="" width={320} height={i === 2 ? 188 : 190} />
+        ))}
       </div>
       <div className={styles.title}>
         <div className={styles.article}>
-          <p className={styles.eyebrow}>Food</p>
-          <p className={styles.headline}>Article Title</p>
+          <p className={styles.eyebrow}>{s.category}</p>
+          <p className={styles.headline}>{s.title}</p>
           <div className={styles.author}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className={styles.avatar} src={`${ART}/avatar.webp`} alt="" width={40} height={40} />
             <div>
-              <p className={styles.name}>Craig Laban</p>
-              <p className={styles.role}>Staff Writer</p>
+              <p className={styles.name}>{s.author}</p>
+              <p className={styles.role}>{s.date}</p>
             </div>
           </div>
         </div>
@@ -57,7 +99,7 @@ function Story() {
   );
 }
 
-/** the light card on the Inquirer yellow: the paywall, or the feed's last card */
+/** the paywall's light card on the Inquirer yellow */
 function Card({
   title,
   children,
@@ -129,8 +171,8 @@ function Feed() {
   }, []);
 
   // the story on screen and the one under it (keys keep each story's element as it moves up)
-  const cur = k % STORIES;
-  const next = (k + 1) % STORIES;
+  const cur = k % STORIES.length;
+  const next = (k + 1) % STORIES.length;
 
   return (
     <div ref={ref} className={`${styles.phone} ${styles.feed}`}>
@@ -138,16 +180,16 @@ function Feed() {
         // reduced motion: the next story fades in over the current one
         <div className={styles.fadeStack}>
           <div key={cur} className={styles.fadeSlide}>
-            <Story />
+            <Story s={STORIES[cur]} />
           </div>
           <div key={next} className={`${styles.fadeSlide} ${swiping ? styles.fadeIn : styles.fadeOut}`}>
-            <Story />
+            <Story s={STORIES[next]} />
           </div>
         </div>
       ) : (
         <div className={`${styles.track} ${swiping ? styles.swiping : ""}`}>
-          <Story key={cur} />
-          <Story key={next} />
+          <Story key={cur} s={STORIES[cur]} />
+          <Story key={next} s={STORIES[next]} />
         </div>
       )}
       {/* the feed's bar stays put over the stories */}

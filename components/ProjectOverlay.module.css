@@ -745,6 +745,13 @@
   margin-top: calc(24 * var(--pu)); /* + the group's 24 = 48 */
 }
 
+/* a statement in its own bordered card (Figma 316:340) */
+.cvBoxed {
+  padding: calc(24 * var(--pu));
+  border: 2px solid var(--color-ink);
+  border-radius: calc(24 * var(--pu));
+}
+
 .cvWin {
   padding: calc(24 * var(--pu)) calc(32 * var(--pu));
   border: 2px solid var(--color-ink);
@@ -1168,7 +1175,11 @@
   .cvWin {
     padding: 16px 20px;
   }
+  .cvBoxed {
+    padding: 16px;
+  }
   .cvBox,
+  .cvBoxed,
   .cvWin,
   .cvBlocker,
   .cvSketchCard,

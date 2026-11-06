@@ -255,7 +255,7 @@ function Block({ b }: { b: CaseBlock }) {
       );
     case "callout":
       return (
-        <div className={styles.cvText}>
+        <div className={`${styles.cvText} ${b.boxed ? styles.cvBoxed : ""}`}>
           {b.text ? <p className={styles.cvCallout}>{b.text}</p> : null}
           {/* a blank line in the body starts a new paragraph */}
           {b.body?.split("\n\n").map((t) => (

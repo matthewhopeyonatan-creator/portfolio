@@ -81,12 +81,13 @@
   height: calc(188 * var(--pu));
 }
 
-/* the story's title block, on a fade to black at the bottom */
+/* the story's title block, on a fade to black, sitting on the bottom edge (Figma: 437 down for a
+   one-line headline; a longer one grows it upward) */
 .title {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(437 * var(--pu));
+  bottom: 0;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -108,9 +109,9 @@
 .frame .headline {
   margin-top: 0;
   font-family: var(--font-inq-head), Georgia, serif;
-  font-size: calc(32 * var(--pu));
+  font-size: calc(26 * var(--pu));
   font-weight: 800;
-  line-height: calc(34 * var(--pu));
+  line-height: calc(28 * var(--pu));
   letter-spacing: -0.01em;
 }
 
@@ -180,6 +181,8 @@
   align-items: center;
   justify-content: space-between;
   padding: calc(16 * var(--pu));
+  /* a soft shade so the bar stays legible over light photos */
+  background: linear-gradient(to bottom, rgba(5, 5, 5, 0.5), rgba(5, 5, 5, 0));
 }
 
 .back {

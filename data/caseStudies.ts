@@ -14,7 +14,7 @@ export type CaseBlock =
   | { type: "group"; label?: string; accent?: boolean; blocks: CaseBlock[] }
   // big 48px statement with an optional 24px line under it (either can stand alone; a blank
   // line in the body starts a new paragraph)
-  | { type: "callout"; text?: string; body?: string }
+  | { type: "callout"; text?: string; body?: string; /** in a bordered card (Figma 316:340) */ boxed?: boolean }
   // live website in a rounded window
   | { type: "embed"; url: string; title: string; ratio: number }
   // step diagram: labels over dots, optional "+FRICTION" tags after given steps (0-based)
@@ -995,16 +995,19 @@ const inquirer: CaseSection[] = [
         blocks: [
           {
             type: "callout",
+            boxed: true,
             text: "Falling behind in the news industry",
             body: "Many news giants such as The NY Times, The Washington Post, and many more have started to incorporate audio and cross-device integration to keep up with the changing landscape of tech. This includes podcasts, text to speech, CarPlay, and many other forms of news that is outside the traditional text space. The Philadelphia Inquirer was falling behind and needed to keep up with this change.",
           },
           {
             type: "callout",
+            boxed: true,
             text: "A dying viewership in Gen Z audiences",
             body: "A large percentage of their users fall in the age range of Millennial or older, with outdated systems and an overall reading crisis mainly to blame. They needed to re-engage with younger generations to maintain their spot as a Pennsylvania powerhouse.",
           },
           {
             type: "callout",
+            boxed: true,
             text: "Introduction of a subscription-based service",
             body: "Readers weren’t hooked enough to pay. The Inquirer wanted its paywall to bring in more subscribers.",
           },
