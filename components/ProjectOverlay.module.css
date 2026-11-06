@@ -759,8 +759,10 @@
   box-sizing: border-box;
   height: calc(100 * var(--pu));
   padding: 0 calc(29 * var(--pu));
+  overflow: hidden;
   border: 2px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
+  container-type: inline-size;
 }
 
 .cvChipOn {
@@ -769,7 +771,9 @@
 
 .section .cvChip p {
   margin: 0;
-  font-size: max(16px, calc(36 * var(--pu)));
+  /* never wider than its card: 28 at full size, shrinking with the card (the longest label,
+     "Transcript Highlights", is about 8.8em wide) */
+  font-size: max(13px, min(calc(28 * var(--pu)), 8.6cqi));
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -1239,7 +1243,7 @@
     border-radius: 16px;
   }
   .section .cvChip p {
-    font-size: 16px;
+    font-size: min(16px, 9.5cqi);
     white-space: normal;
   }
   .cvWinsSpaced {

@@ -18,6 +18,20 @@
   gap: calc(120 * var(--pu));
 }
 
+/* the screens are tall: they shrink to stay about two-thirds of the window high, so a whole one
+   fits on screen (the frame's own padding and cards keep the popup's scale) */
+.frame {
+  --pu-outer: var(--pu);
+}
+
+.fitMid {
+  --pu: min(var(--pu-outer), calc(68svh / 874));
+}
+
+.fitStory {
+  --pu: min(var(--pu-outer), calc(68svh / 1082));
+}
+
 .frame p {
   margin: 0;
   letter-spacing: -0.011em;
@@ -29,7 +43,7 @@
   border-radius: 0;
 }
 
-/* ── the team's pushback: red cards, white 32 on a 35 line ── */
+/* ── the team's pushback: red cards, white 28 ── */
 .reasons {
   display: flex;
   flex-direction: column;
@@ -44,9 +58,9 @@
 }
 
 .frame .reason p {
-  font-size: max(18px, calc(32 * var(--pu)));
+  font-size: max(16px, calc(28 * var(--pu)));
   font-weight: 400;
-  line-height: 1.09375; /* 35 / 32 */
+  line-height: 1.25;
   letter-spacing: -0.03em;
 }
 
@@ -66,6 +80,7 @@
 
 .screen > * {
   position: absolute;
+  overflow-wrap: anywhere; /* the placeholder gibberish breaks mid-word, as in Figma */
 }
 
 .card {
@@ -267,6 +282,6 @@
     border-radius: 16px;
   }
   .frame .reason p {
-    font-size: 18px;
+    font-size: 16px;
   }
 }

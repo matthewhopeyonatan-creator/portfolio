@@ -13,7 +13,13 @@
   border-radius: calc(24 * var(--pu));
 }
 
+/* the phones shrink to stay about two-thirds of the window high */
+.frame {
+  --pu-outer: var(--pu);
+}
+
 .phone {
+  --pu: min(var(--pu-outer), calc(68svh / 568));
   position: relative;
   flex: none;
   width: calc(320 * var(--pu));

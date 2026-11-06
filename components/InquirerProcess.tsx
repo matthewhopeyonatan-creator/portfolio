@@ -50,7 +50,7 @@ export function MidFi({ reasons }: { reasons: string[] }) {
   return (
     <div className={styles.frame}>
       <div
-        className={styles.row}
+        className={`${styles.row} ${styles.fitMid}`}
         role="img"
         aria-label="Two greyscale mid-fi screens: 'this is philly today', a stack of story cards swiped up with a daily button; and 'this is philly for you', a full-screen story with a 5:00 listen label"
       >
@@ -94,7 +94,7 @@ export function MidFi({ reasons }: { reasons: string[] }) {
 export function FinalIsh({ reasons }: { reasons: string[] }) {
   return (
     <div className={styles.frame}>
-      <div className={styles.row}>
+      <div className={`${styles.row} ${styles.fitStory}`}>
         <div className={styles.story}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
