@@ -227,7 +227,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: calc(40 * var(--pu));
   /* runs the full width, 40 in from each edge */
-  padding: calc(40 * var(--pu)) 40px calc(160 * var(--pu));
+  padding: calc(80 * var(--pu)) 40px calc(160 * var(--pu));
   border-top: 2px solid var(--color-ink);
 }
 
