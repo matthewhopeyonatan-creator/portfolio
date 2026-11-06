@@ -817,6 +817,25 @@
   letter-spacing: -0.03em;
 }
 
+/* "here": underlined, the line thinning on hover */
+.cvStatementLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.16em;
+  transition: opacity var(--dur-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cvStatementLink:hover {
+    opacity: 0.6;
+  }
+}
+
+.cvStatementLink:active {
+  opacity: 0.5;
+}
+
 /* Figma 131:232: three 425 × 319 cards, 2px ink r24, spread across · "BLOCKER n" Bold 20/25 over
    its title Medium 20/25, centred ~30 down · then a Light 36/36 line, centred, ~19 under */
 .cvBlockers {

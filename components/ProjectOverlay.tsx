@@ -365,9 +365,25 @@ function Block({ b }: { b: CaseBlock }) {
     case "statement":
       return (
         <div className={styles.cvStatement}>
-          {b.lines.map((t) => (
-            <p key={t}>{t}</p>
-          ))}
+          {b.lines.map((t, i) => {
+            const w = b.link?.word;
+            if (b.link && w && i === b.lines.length - 1 && t.endsWith(w)) {
+              return (
+                <p key={t}>
+                  {t.slice(0, -w.length)}
+                  <a
+                    className={styles.cvStatementLink}
+                    href={b.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {w}
+                  </a>
+                </p>
+              );
+            }
+            return <p key={t}>{t}</p>;
+          })}
         </div>
       );
     case "philly":

@@ -72,7 +72,12 @@ export type CaseBlock =
   // a row of bordered cards: an optional bold uppercase title over a light line
   | { type: "boxes"; items: { title?: string; text: string }[] }
   // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
-  | { type: "statement"; lines: string[] }
+  | {
+      type: "statement";
+      lines: string[];
+      /** the last line's closing word links out (e.g. "here" → the full case study) */
+      link?: { word: string; href: string };
+    }
   // The Inquirer's "Philly For You" feed and paywall rebuilt in code (components/PhillyForYou.tsx)
   | { type: "philly" }
   // a not-yet-written section
@@ -1214,6 +1219,7 @@ const inquirer: CaseSection[] = [
           "Special thanks to the Inquirer team for a fulfilling project!",
           "See the full case study here",
         ],
+        link: { word: "here", href: "https://www.behance.net/gallery/229681591/Inquirer-x-DCC-SP25" },
       },
     ],
   },
