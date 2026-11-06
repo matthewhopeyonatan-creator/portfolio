@@ -75,7 +75,7 @@ export const projects: Project[] = [
       "Shmood is an AI-powered creative management tool: a project management platform that bridges the gap between designers and clients through centralized resources, smart communication, and AI-powered feedback synthesis. I owned its onboarding experience and user dashboard.",
     facts: {
       timeline: "Aug 2024 – Dec 2024",
-      role: "Product Designer",
+      role: "Contract Product Designer",
       type: "Professional",
       team: "2 PMs, 5 Product Designers",
     },
