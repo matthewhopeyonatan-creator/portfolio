@@ -1,6 +1,6 @@
 # Philly For You mock-up photos (Inquirer case study)
 
-From Wikimedia Commons, resized to 800px wide WebP. Avatar and icons are from Matthew's Figma file.
+From Wikimedia Commons, resized to 800px wide WebP. Icons are from Matthew's Figma file. The writers' faces (author-*.webp) are AI-generated people from thispersondoesnotexist.com, not real people.
 
 | File | Source | Author | License |
 | --- | --- | --- | --- |

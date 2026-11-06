@@ -19,6 +19,8 @@ type StoryData = {
   category: string;
   title: string;
   author: string;
+  /** made-up face (generated, not a real person) for the made-up writer */
+  face: string;
   date: string;
   photos: [string, string, string];
 };
@@ -28,6 +30,7 @@ const STORIES: StoryData[] = [
     category: "Food",
     title: "New Restaurants Near You",
     author: "Dana Whitfield",
+    face: "author-dana",
     date: "Nov 4, 2026",
     photos: ["r1", "r2", "r3"],
   },
@@ -35,6 +38,7 @@ const STORIES: StoryData[] = [
     category: "Today",
     title: "Philadelphia Local Dog Saves the Day",
     author: "Marcus Ortega",
+    face: "author-marcus",
     date: "Nov 3, 2026",
     photos: ["d1", "d2", "d3"],
   },
@@ -42,6 +46,7 @@ const STORIES: StoryData[] = [
     category: "Politics",
     title: "New Mayor Is Elected",
     author: "Priya Raman",
+    face: "author-priya",
     date: "Nov 2, 2026",
     photos: ["m1", "m2", "m3"],
   },
@@ -49,6 +54,7 @@ const STORIES: StoryData[] = [
     category: "Food",
     title: "Michelin Star Arrives in Philadelphia",
     author: "Theo Calloway",
+    face: "author-theo",
     date: "Oct 31, 2026",
     photos: ["s1", "s2", "s3"],
   },
@@ -56,6 +62,7 @@ const STORIES: StoryData[] = [
     category: "Today",
     title: "Highway Under Construction, Here’s What to Do",
     author: "Jenna Brooks",
+    face: "author-jenna",
     date: "Oct 30, 2026",
     photos: ["h1", "h2", "h3"],
   },
@@ -79,7 +86,7 @@ function Story({ s }: { s: StoryData }) {
           <p className={styles.headline}>{s.title}</p>
           <div className={styles.author}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className={styles.avatar} src={`${ART}/avatar.webp`} alt="" width={40} height={40} />
+            <img className={styles.avatar} src={`${ART}/${s.face}.webp`} alt="" width={40} height={40} />
             <div>
               <p className={styles.name}>{s.author}</p>
               <p className={styles.role}>{s.date}</p>
