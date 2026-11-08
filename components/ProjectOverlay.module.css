@@ -312,7 +312,7 @@
 .sections {
   display: flex;
   flex-direction: column;
-  gap: calc(165 * var(--pu)); /* between sections */
+  gap: calc(110 * var(--pu)); /* between sections */
 }
 
 .section {
@@ -379,7 +379,7 @@
 }
 
 .cvGroup + .cvGroup {
-  margin-top: calc(20 * var(--pu)); /* + the section's 20 = 40 between labelled subsections */
+  margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
 }
 
 .section .cvLabel {
@@ -1128,7 +1128,7 @@
     border-top: 0;
   }
   .sections {
-    gap: 66px;
+    gap: 44px;
   }
   .section {
     gap: 24px;
@@ -1146,7 +1146,7 @@
     gap: 24px;
   }
   .cvGroup + .cvGroup {
-    margin-top: 16px;
+    margin-top: 36px;
   }
   .cvText {
     gap: 16px;
