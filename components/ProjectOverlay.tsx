@@ -3,7 +3,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -643,23 +642,10 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
   );
 }
 
-function ExpandIcon({ expanded }: { expanded: boolean }) {
-  // four corner arrows: pointing out to expand, pointing in to shrink back
-  const out =
-    "M3 3h9M3 3v9M3 3l10 10 M35 3h-9M35 3v9M35 3L25 13 M3 35h9M3 35v-9M3 35l10-10 M35 35h-9M35 35v-9M35 35L25 25";
-  const inn =
-    "M13 13H4M13 13V4M13 13L3 3 M25 13h9M25 13V4M25 13L35 3 M13 25H4M13 25v9M13 25L3 35 M25 25h9M25 25v9M25 25l10 10";
-  return (
-    <svg viewBox="0 0 38 38" fill="none" aria-hidden="true">
-      <path d={expanded ? inn : out} stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
-}
-
 /**
- * Project popup (Figma 64:317). Opens over the page as a card with the project's title section;
- * the corner button expands it to fill the screen, revealing the full case study with an
- * "On this page" tracker on the left. Esc / clicking outside closes it.
+ * Project case study (Figma 64:317, full screen). Opening a project goes straight to its full-screen
+ * case study, read as a page of its own (the site's navbar on top, the Aisle Directory tracker on
+ * the left, ?project=slug in the address bar). Esc / back closes it.
  */
 export default function ProjectOverlay({
   project,
@@ -671,13 +657,8 @@ export default function ProjectOverlay({
   /** reopened from ?project=… on a refresh: start full screen, on the current history entry */
   fromUrl?: boolean;
 }) {
-  // phones get the whole case study straight away (the popup is a full-screen sheet there)
-  const [expanded, setExpanded] = useState(
-    () =>
-      fromUrl ||
-      (typeof window !== "undefined" &&
-        window.matchMedia("(max-width: 767px)").matches),
-  );
+  // always the full case study (the old card "preview" step was dropped)
+  const expanded = true;
   // opened from the address bar: the "page" entry already exists (it's the one we loaded on)
   const ownsUrl = useRef(fromUrl);
   // time spent in this case study, for the checkout receipt's "most viewed"
@@ -784,22 +765,14 @@ export default function ProjectOverlay({
   }, [close]);
 
   useEffect(() => {
-    if (ownsUrl.current) {
-      // shrinking a project we loaded straight onto: it's no longer a "page"
-      if (!expanded) {
-        ownsUrl.current = false;
-        history.replaceState(history.state, "", window.location.pathname);
-      }
-      return;
-    }
-    if (!expanded || pushed.current) return;
+    if (ownsUrl.current || pushed.current) return;
     history.pushState(
       { ...(history.state ?? {}), projectPage: project.slug },
       "",
       `?project=${project.slug}`,
     );
     pushed.current = true;
-  }, [expanded, project.slug]);
+  }, [project.slug]);
 
   useEffect(() => {
     const onPop = () => {
@@ -829,52 +802,6 @@ export default function ProjectOverlay({
     onScroll();
     root.addEventListener("scroll", onScroll, { passive: true });
     return () => root.removeEventListener("scroll", onScroll);
-  }, [expanded]);
-
-  // card ⇄ full screen (FLIP): the layout switches in one go, then the frame is drawn back over
-  // where it was and eased into place with transform + clip-path only — the case study inside
-  // never re-lays out mid-move, so it stays smooth however long the page is.
-  const flipFrom = useRef<DOMRect | null>(null);
-  const toggle = () => {
-    if (expanded) {
-      lenisRef.current?.scrollTo(0, { immediate: true });
-      frameRef.current?.scrollTo({ top: 0 });
-    }
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      flipFrom.current = frameRef.current?.getBoundingClientRect() ?? null;
-    }
-    setExpanded((x) => !x);
-  };
-
-  useLayoutEffect(() => {
-    const el = frameRef.current;
-    const from = flipFrom.current;
-    flipFrom.current = null;
-    if (!el || !from) return;
-    const to = el.getBoundingClientRect();
-    if (!to.width || !to.height) return;
-    // scale evenly (no squashing) so the new layout covers the old box, centre it on the old
-    // box, and clip off the overhang
-    const k = Math.max(from.width / to.width, from.height / to.height);
-    const tx = from.left + from.width / 2 - (to.left + (to.width * k) / 2);
-    const ty = from.top + from.height / 2 - (to.top + (to.height * k) / 2);
-    const ix = (to.width * k - from.width) / (2 * k);
-    const iy = (to.height * k - from.height) / (2 * k);
-    el.animate(
-      [
-        {
-          transformOrigin: "0 0",
-          transform: `translate(${tx}px, ${ty}px) scale(${k})`,
-          clipPath: `inset(${iy}px ${ix}px)`,
-        },
-        {
-          transformOrigin: "0 0",
-          transform: "none",
-          clipPath: "inset(0px 0px)",
-        },
-      ],
-      { duration: 520, easing: "cubic-bezier(0.77, 0, 0.175, 1)" }, // --ease-in-out
-    );
   }, [expanded]);
 
   const jump = (i: number) => {
@@ -950,31 +877,7 @@ export default function ProjectOverlay({
             >
               <SiteHeader />
             </div>
-          ) : (
-            <header className={styles.header}>
-              <span className={styles.logo}>
-                <b>{project.title} Nutrition Facts</b>
-              </span>
-              <button
-                type="button"
-                className={styles.expand}
-                onClick={toggle}
-                aria-label={
-                  expanded ? "Shrink back to a card" : "Expand to full screen"
-                }
-                aria-pressed={expanded}
-              >
-                <ExpandIcon expanded={expanded} />
-              </button>
-              <button
-                type="button"
-                className={styles.close}
-                onClick={() => close()}
-              >
-                Close
-              </button>
-            </header>
-          )}
+          ) : null}
           {/* full screen reads as a page of its own, so it gets the page's light / dark switch */}
           {expanded && (
             <div className={styles.toggleSpot}>

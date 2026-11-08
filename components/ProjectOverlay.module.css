@@ -76,83 +76,6 @@
   position: relative;
 }
 
-/* ── header ─────────────────────────────────────────────────────────────────────── */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: calc(84 * var(--pu));
-  min-height: 52px;
-  padding: 0 40px;
-  border-bottom: 2px solid var(--color-ink);
-  background: var(--color-bg);
-}
-
-.logo {
-  font-family: var(--font-display-stack);
-  font-size: max(22px, calc(36 * var(--pu)));
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.logo b {
-  font-weight: 700;
-}
-
-
-.expand {
-  display: grid;
-  place-items: center;
-  width: max(28px, calc(38 * var(--pu)));
-  height: max(28px, calc(38 * var(--pu)));
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-  transition: transform var(--dur-press) var(--ease-out);
-}
-
-.expand:active {
-  transform: scale(0.92);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .expand:hover {
-    transform: scale(1.08);
-  }
-  .expand:hover:active {
-    transform: scale(1);
-  }
-}
-
-.expand svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-/* keyboard / screen-reader close; click outside or Esc otherwise */
-.close {
-  position: absolute;
-  right: calc(100 * var(--pu));
-  padding: 4px 8px;
-  border: 0;
-  background: var(--color-bg);
-  font: inherit;
-  font-size: 15px;
-  color: inherit;
-  cursor: pointer;
-}
-
-.close:not(:focus-visible) {
-  clip-path: inset(50%);
-  opacity: 0;
-}
-
 /* ── title section ──────────────────────────────────────────────────────────────── */
 .intro {
   display: grid;
@@ -1048,9 +971,6 @@
     border-width: 0;
     overflow-y: auto;
   }
-  .expand {
-    display: none;
-  }
   /* tapping a project opens it like a page: straight in, no popup rising over a dimmed page */
   .backdrop {
     display: none;
@@ -1058,12 +978,6 @@
   .frame,
   .leaving .frame {
     animation: none;
-  }
-  .close,
-  .close:not(:focus-visible) {
-    right: 16px;
-    clip-path: none;
-    opacity: 1;
   }
   /* ── Figma 231:1657 (393 wide): picture first, then the title, intro, the four facts in one
      column, then the sections — on 20px margins ── */

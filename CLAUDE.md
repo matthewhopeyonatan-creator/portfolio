@@ -49,8 +49,9 @@ implements his designs faithfully.
   - `Hero` — tomatoes, stickers (peel on hover → `StickerCard` story; each sticker's `name` is what the receipt shows as most viewed), Open-sign intro
   - `SiteHeader` / `SiteFooter` — navbar hides on scroll down, shows on scroll up
   - `MenuDrawer` — phones: the navbar is the logo + three lines; they open this cart-style sheet (a scrolling MENU sign, about, projects, your cart → swaps to the cart, and the light / dark switch in its lower right — on phones the switch lives only here). Over an open case study its links fire `overlay:navigate` so the case study closes first
-  - `ProjectCard` → `ProjectOverlay` — tray with plastic-wrap peel; opens the "Nutrition Facts"
-    popup, which can expand to a full-screen case study (`?project=slug` restores it on refresh)
+  - `ProjectCard` → `ProjectOverlay` — tray with plastic-wrap peel; a click opens the full-screen
+    case study straight away (the old "Nutrition Facts" card preview was removed); `?project=slug`
+    restores it on refresh
   - `GrocersSelects` — poster shelf (display only: posters aren't clickable and don't go in the cart)
   - `cart/` — `CartContext` (sessionStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to check out: saves a receipt, empties the cart, goes to `/receipt`)
   - `Receipt` (Figma 146:168) + `Tilt` (card that tips under the pointer) — the receipt lists the basket, a Notes box the visitor types into, the thing they looked at longest (case study or sticker story) and their total time on the site (`lib/visit.ts`); visitors can draw on it with a marker (`useMarker`; red, mint `#00DBA4` in dark mode, the tilt lies flat while drawing; a clear icon fades in at the slip's top-right once there is ink, left out of the download); download (PNG via `html-to-image`) / share
