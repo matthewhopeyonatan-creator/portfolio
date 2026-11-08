@@ -718,16 +718,16 @@
 }
 
 .cvWin {
-  padding: calc(24 * var(--pu)) calc(32 * var(--pu));
+  padding: calc(24 * var(--pu)); /* same space all round */
   border: 2px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 
 .section .cvWin p {
   margin: 0;
-  font-size: max(18px, calc(32 * var(--pu)));
+  font-size: max(16px, calc(24 * var(--pu)));
   font-weight: 300;
-  line-height: 0.9722; /* 35 / 36 */
+  line-height: 1.25;
   letter-spacing: -0.03em;
 }
 
@@ -864,17 +864,17 @@
   display: flex;
   flex: none;
   flex-direction: column;
+  justify-content: center;
   gap: calc(24 * var(--pu));
   width: calc(571 / 1314 * 100%);
 }
 
+/* each card hugs its text with the same space all round (top / bottom = the sides) */
 .cvSketchCard {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  justify-content: center;
   gap: calc(12 * var(--pu));
-  padding: 0 calc(29 * var(--pu));
+  padding: calc(29 * var(--pu));
   border: 2px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
@@ -1146,9 +1146,11 @@
   .cvSketchCard {
     padding: 16px;
   }
-  .cvBox,
-  .cvWin {
+  .cvBox {
     padding: 16px 20px;
+  }
+  .cvWin {
+    padding: 16px;
   }
   .cvChips {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1183,7 +1185,6 @@
   .hero {
     border-radius: 24px;
   }
-  .section .cvWin p,
   .section .cvBlockerText,
   .section .cvSketchText,
   .section .cvBoxSolo {
@@ -1192,6 +1193,10 @@
   }
   .section .cvBoxText {
     font-size: 18px;
+  }
+  .section .cvWin p {
+    font-size: 16px;
+    line-height: 1.25;
   }
   .section .cvBlockers[data-small] .cvBlockerText {
     font-size: 16px;
