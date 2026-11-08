@@ -43,7 +43,7 @@
   border-radius: 0;
 }
 
-/* ── the team's pushback: red cards, white 28 ── */
+/* ── the team's pushback: red cards, white 24 ── */
 .reasons {
   display: flex;
   flex-direction: column;
@@ -58,7 +58,7 @@
 }
 
 .frame .reason p {
-  font-size: max(16px, calc(28 * var(--pu)));
+  font-size: max(16px, calc(24 * var(--pu)));
   font-weight: 400;
   line-height: 1.25;
   letter-spacing: -0.03em;
