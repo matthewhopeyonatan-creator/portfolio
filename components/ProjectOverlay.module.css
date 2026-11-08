@@ -408,8 +408,11 @@
   letter-spacing: -0.03em;
 }
 
+/* body copy: 20, a softer grey than the headings — #676767 on the light page (68% ink into the
+   page colour, so it follows the theme in dark mode) */
 .section .cvBody {
-  font-size: max(15px, calc(24 * var(--pu)));
+  font-size: max(15px, calc(20 * var(--pu)));
+  color: color-mix(in srgb, var(--color-ink) 68%, var(--color-bg));
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.03em;
