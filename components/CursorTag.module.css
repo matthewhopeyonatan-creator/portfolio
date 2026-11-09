@@ -1,5 +1,5 @@
-/* Figma 482:4673: Host Grotesk Regular 24, 24 / 8 in, page colour, corners 24 except the top
-   left (4), the corner tucked against the pointer. Scales with the page like the rest of it. */
+/* Figma 482:4673 at two-thirds: Host Grotesk Regular 16, 16 / 5 in, page colour, corners 16
+   except the top left (3), the corner tucked against the pointer. */
 .wrap {
   position: fixed;
   left: 0;
@@ -11,12 +11,11 @@
 
 .tag {
   display: block;
-  padding: max(5px, calc(8 * var(--u))) max(14px, calc(24 * var(--u)));
-  border-radius: max(4px, calc(4 * var(--u))) max(16px, calc(24 * var(--u)))
-    max(16px, calc(24 * var(--u))) max(16px, calc(24 * var(--u)));
+  padding: 5px 16px;
+  border-radius: 3px 16px 16px 16px;
   background: var(--color-bg);
   color: var(--color-ink);
-  font-size: max(16px, calc(24 * var(--u)));
+  font-size: 16px;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.03em;
