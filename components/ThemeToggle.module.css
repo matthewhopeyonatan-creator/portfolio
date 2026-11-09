@@ -4,7 +4,7 @@
    (ThemeToggle.tsx drives the turn). The sign stays white with ink letters in both themes, as in
    Figma; the string is in the ink so it reads on the light page and the dark one. */
 .toggle {
-  --s: var(--sign-s, max(0.55px, calc(0.75 * var(--u))));
+  --s: var(--sign-s, max(0.62px, calc(0.85 * var(--u))));
   --nail: calc(107.35 * var(--s));
   position: relative;
   display: block;
