@@ -97,7 +97,7 @@
 .social {
   display: block;
   font-size: max(14px, calc(20 * var(--u)));
-  font-weight: 600;
+  font-weight: 400; /* the navbar's weight */
 }
 
 .navLink::after,
@@ -149,12 +149,10 @@ a.social:focus-visible::after {
   }
 }
 
-/* Desktop: the socials match the nav links (24 Bold caps) so the footer reads as one set of
-   links, and with the same type they sit on the same baseline as the last nav link */
+/* Desktop: the socials match the nav links' size (24 caps, in the navbar's Regular weight), and with the same type they sit on the same baseline as the last nav link */
 @media (min-width: 768px) {
   .social {
     font-size: max(17px, calc(24 * var(--u)));
-    font-weight: 700;
   }
   .nav {
     margin-bottom: 0; /* same type now, so nav and socials share a baseline */
