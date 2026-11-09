@@ -197,7 +197,7 @@
 }
 
 .inner .toggle {
-  --tw: 76px; /* bigger than the pages' one: it's the only switch on a phone */
+  --sign-s: 0.6px; /* a touch bigger than the pages' one: it's the only switch on a phone */
   position: absolute;
   right: var(--gutter);
   bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));

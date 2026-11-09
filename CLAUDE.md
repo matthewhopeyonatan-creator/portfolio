@@ -65,8 +65,8 @@ implements his designs faithfully.
   - `CursorTag` — "add to cart" tag (Figma 482:4673) trailing the bottom right of the mouse pointer over anything marked `data-cursor="cart"` (project trays, hero stickers); mouse only
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|blur"` entrances (blur: about-page photos, same as the case-study figures), staggered by `--i`
 - Dark mode — `lib/theme.ts` (`useTheme`, `setTheme`) puts `<html data-theme="dark">` on every page (kept while browsing, never saved: every load/refresh starts light); the
-  switch (`ThemeToggle`, Figma 210:5291 at 80%) sits top right of the landing. Dark tokens in
-  `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f` (the switch's pill is the page colour); they're
+  switch (`ThemeToggle`) is the shop's hanging sign — Open (Figma 21:160) on the front, Closed (483:4699) on the back, shown small (`--s`) top right of the landing; a click turns it round on its nail (rotateY, `--ease-pop`; a crossfade with reduced motion). Sign art in `public/home/sign-*.svg`; the string and "tap to …" are in code, in the ink. Dark tokens in
+  `globals.css`: page `#141414`, ink `#edece9`, paper `#1f1f1f`; they're
   registered `@property` colours and the switch eases *them* once on `<html>`, so every colour
   changes in step — write see-through ink as `color-mix(in srgb, var(--color-ink) N%, transparent)`,
   never a hard-coded dark override. Single-colour icons (the cart) are CSS masks filled
