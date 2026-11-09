@@ -1030,10 +1030,6 @@
     line-height: 25px;
     letter-spacing: -0.04em;
   }
-  /* the switch lives in the menu sheet on phones */
-  .toggleSpot {
-    display: none;
-  }
   /* one column the full width (the tracker is hidden, so its column mustn't stay behind) */
   .study,
   .expanded .study {

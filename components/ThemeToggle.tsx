@@ -104,7 +104,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       <span className={styles.swing}>
         <span ref={card} className={styles.card} style={{ transform: pose(initial, 0) }}>
           <span className={`${styles.face} ${styles.open}`} aria-hidden="true">
-            <String_ d="M25 51L79 1L110 58" w={158} h={121.89} />
+            <String_ d="M25 51L79 1L141 68" w={158} h={121.89} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/home/sign-open-straight.svg" alt="" width={158} height={76} draggable={false} />
           </span>

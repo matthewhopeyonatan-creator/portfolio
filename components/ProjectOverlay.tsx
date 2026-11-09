@@ -15,7 +15,6 @@ import ReviewCheckboxes from "@/components/ReviewCheckboxes";
 import { caseStudySections, type Project } from "@/data/site";
 import { caseStudies, type CaseBlock } from "@/data/caseStudies";
 import SiteHeader from "@/components/SiteHeader";
-import { PageThemeToggle } from "@/components/ThemeToggle";
 import ShmoodScreens from "@/components/ShmoodScreens";
 import ShmoodDashboard from "@/components/ShmoodDashboard";
 import TicketmasterPhones from "@/components/TicketmasterPhones";
@@ -878,12 +877,6 @@ export default function ProjectOverlay({
               <SiteHeader />
             </div>
           ) : null}
-          {/* full screen reads as a page of its own, so it gets the page's light / dark switch */}
-          {expanded && (
-            <div className={styles.toggleSpot}>
-              <PageThemeToggle />
-            </div>
-          )}
 
           {/* title section — Figma: title 40 SemiBold, intro Light 24/25 (487 wide), four facts; image 860×532 r24 */}
           <section className={styles.intro}>
