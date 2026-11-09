@@ -8,7 +8,7 @@ import styles from "./GrocersSelects.module.css";
 
 /**
  * Grocer's Selects: the graphics shelf. Title row like Seasonal Picks, then just the posters,
- * four across, 40 apart.
+ * four across, 20 apart.
  */
 export default function GrocersSelects() {
   const gridRef = useRef<HTMLUListElement>(null);
