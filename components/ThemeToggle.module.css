@@ -1,15 +1,15 @@
-/* The shop sign switch — Figma 21:160 (Open, 169 × 129) and 483:4699 (Closed, 221 × 144), shown
-   small. 1 Figma px = --s. Both faces hang from the same nail (the string's peak: 71 across on
-   Open, 120 on Closed), which is also the line the sign turns round. The sign itself stays white
-   with ink letters in both themes, as in Figma; the string and "tap to …" are in the ink, so they
-   read on the light page (Open) and the dark one (Closed). */
+/* The shop sign switch — Figma 21:160 (Open) and 483:4699 (Closed), set straight and shown small.
+   1 Figma px = --s. Each side is its sign (158 × 76 / 215 × 80) under a string up to one nail,
+   46 above; the nails sit on the box's centre line, which is also the line the sign turns round
+   (ThemeToggle.tsx drives the turn). The sign stays white with ink letters in both themes, as in
+   Figma; the string is in the ink so it reads on the light page and the dark one. */
 .toggle {
   --s: var(--sign-s, max(0.55px, calc(0.75 * var(--u))));
-  --nail: calc(71 * var(--s));
+  --nail: calc(107.35 * var(--s));
   position: relative;
   display: block;
-  width: calc(172 * var(--s));
-  height: calc(144 * var(--s));
+  width: calc(214.7 * var(--s));
+  height: calc(126.3 * var(--s));
   padding: 0;
   border: 0;
   background: none;
@@ -31,7 +31,6 @@
   border-radius: 8px;
 }
 
-/* a gentle sway on its nail under the pointer */
 .swing,
 .card {
   position: absolute;
@@ -39,23 +38,19 @@
   transform-origin: var(--nail) 0;
 }
 
+/* a gentle sway on its nail under the pointer */
 .swing {
   transition: transform 500ms var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .toggle:hover .swing {
-    transform: rotate(-4deg);
+    transform: rotate(-3deg);
   }
 }
 
-/* the turn: half a turn per click, swinging a touch past and settling, like a hung sign */
 .card {
   transform-style: preserve-3d;
-}
-
-.ready .card {
-  transition: transform 900ms var(--ease-pop);
 }
 
 .face {
@@ -65,61 +60,46 @@
   -webkit-backface-visibility: hidden;
 }
 
-.face img,
 .string {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.face img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  width: 100%;
+  height: auto;
   max-width: none;
   pointer-events: none;
   user-select: none;
 }
 
 .open {
-  left: 0;
-  width: calc(169 * var(--s));
-  height: calc(129 * var(--s));
-  transform-origin: calc(71 * var(--s)) 0;
+  left: calc((214.7 - 158) / 2 * var(--s));
+  width: calc(158 * var(--s));
+  height: calc(121.89 * var(--s));
 }
 
-/* the back of the sign: turned away to start with, its nail on the same line as Open's */
+/* the back of the sign: turned away to start with */
 .closed {
-  left: calc((71 - 120) * var(--s));
-  width: calc(221 * var(--s));
-  height: calc(144 * var(--s));
-  transform-origin: calc(120 * var(--s)) 0;
+  left: 0;
+  width: calc(214.7 * var(--s));
+  height: calc(126.29 * var(--s));
   transform: rotateY(180deg);
-}
-
-/* "tap to close" / "tap to open", 12 in Figma, under the sign's right end */
-.hint {
-  position: absolute;
-  font-family: var(--font-sans), sans-serif;
-  font-size: max(9px, calc(12 * var(--s)));
-  line-height: 1.33;
-  white-space: nowrap;
-  letter-spacing: 0;
-}
-
-.open .hint {
-  left: calc(92 * var(--s));
-  top: calc(91 * var(--s));
-}
-
-.closed .hint {
-  left: calc(142 * var(--s));
-  top: calc(109.7 * var(--s));
 }
 
 /* reduced motion: no turning — the two sides crossfade */
 @media (prefers-reduced-motion: reduce) {
   .card {
     transform: none !important;
-  }
-  .ready .card {
-    transition: none;
   }
   .swing {
     transition: none;
