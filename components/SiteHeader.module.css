@@ -54,6 +54,7 @@
   font-size: clamp(14px, 1.05vw, 17px);
   line-height: 1.2;
   white-space: nowrap;
+  text-transform: uppercase; /* ABOUT · PROJECTS · YOUR CART */
 }
 
 .navLink::after {
