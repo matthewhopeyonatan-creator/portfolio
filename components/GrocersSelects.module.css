@@ -1,5 +1,6 @@
 /* Grocer's Selects — the posters as a stack in depth on a diagonal (near, bottom left → far, top
-   right), each turned away; the scroll glides the stack along, and a hovered poster turns flat.
+   right), each turned away, in a loop; scrolling over the posters glides it along, and a hovered
+   poster turns flat while the others make room.
    Poster 371 × 494. With reduced motion: four across, 20 apart, on the side margins. */
 .titleRow {
   padding-top: max(72px, calc(128 * var(--u)));
@@ -7,17 +8,17 @@
 }
 
 /* ── the stack ── */
-/* the run is the scroll the stack takes: a screen, plus a sixth of one per poster */
+/* a band about a screen tall, then a good gap before the footer */
 .run {
   position: relative;
-  height: calc(100svh + (var(--n) - 1) * 16svh);
+  padding-bottom: max(96px, calc(200 * var(--u)));
 }
 
 .stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
+  position: relative;
+  height: clamp(520px, 86svh, 880px);
   overflow: hidden;
+  touch-action: pan-y; /* sideways swipes move the stack; up and down scroll the page */
 }
 
 .stack {
@@ -33,8 +34,8 @@
 .card {
   --h: min(52svh, 30vw);
   position: absolute;
-  left: calc(50% - var(--h) * 371 / 494 / 2);
-  top: calc(50% - var(--h) / 2 + 4svh);
+  left: calc(42% - var(--h) * 371 / 494 / 2);
+  top: calc(50% - var(--h) / 2);
   width: calc(var(--h) * 371 / 494);
   height: var(--h);
   will-change: transform, opacity;
@@ -52,14 +53,14 @@
   box-shadow: 0 10px 30px rgba(40, 40, 40, 0.12);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .card:hover {
-    z-index: 100 !important;
-  }
-  .card:hover .turn {
-    transform: perspective(1400px) rotateY(0deg);
-    transition-duration: 700ms;
-  }
+/* the hovered poster (set from GrocersSelects.tsx, mouse only) */
+.flat {
+  z-index: 100 !important;
+}
+
+.flat .turn {
+  transform: perspective(1400px) rotateY(0deg);
+  transition-duration: 700ms;
 }
 
 .poster {
