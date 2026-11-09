@@ -59,9 +59,17 @@ export default function CursorTag() {
       } else if (!raf) raf = requestAnimationFrame(tick);
     };
 
+    // after a click on a tray / sticker the tag stays away until the pointer has left it: the case
+    // study (or sticker story) opening over it can still let moves through to the tray beneath
+    let spent = false;
+    const html = document.documentElement;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return;
-      const over = !!(e.target as Element | null)?.closest?.('[data-cursor="cart"]');
+      const hit = !!(e.target as Element | null)?.closest?.('[data-cursor="cart"]');
+      if (!hit) spent = false;
+      // never over an open case study or sticker story
+      const covered = html.classList.contains("project-open") || html.classList.contains("modal-open");
+      const over = hit && !spent && !covered;
       // a fresh appearance starts right at the pointer; after that it trails
       place(e.clientX, e.clientY, over && !shown);
       if (over !== shown) {
@@ -73,14 +81,18 @@ export default function CursorTag() {
       shown = false;
       setOn(false);
     };
+    const press = (e: PointerEvent) => {
+      if ((e.target as Element | null)?.closest?.('[data-cursor="cart"]')) spent = true;
+      hide();
+    };
     document.addEventListener("pointermove", onMove, { passive: true });
     // clicking opens the case study / sticker story over the page: get out of the way at once
-    document.addEventListener("pointerdown", hide, { passive: true });
+    document.addEventListener("pointerdown", press, { passive: true });
     document.documentElement.addEventListener("pointerleave", hide);
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("pointermove", onMove);
-      document.removeEventListener("pointerdown", hide);
+      document.removeEventListener("pointerdown", press);
       document.documentElement.removeEventListener("pointerleave", hide);
     };
   }, []);
