@@ -52,7 +52,7 @@ implements his designs faithfully.
   - `ProjectCard` → `ProjectOverlay` — tray with plastic-wrap peel; a click opens the full-screen
     case study straight away (the old "Nutrition Facts" card preview was removed); `?project=slug`
     restores it on refresh
-  - `GrocersSelects` — poster shelf as a 3D stack on a low diagonal (near bottom left → far right, each turned away), looping with no first or last. The wheel over a poster moves the stack (posters carry `data-lenis-prevent-wheel`); anywhere else the page scrolls; a sideways swipe on touch. Hovering a poster turns it flat and the others step aside (display only: no click, not in the cart); reduced motion gets a four-across grid
+  - `GrocersSelects` — poster shelf (display only: posters aren't clickable and don't go in the cart)
   - `cart/` — `CartContext` (sessionStorage) + `CartDrawer` + `SlideToCheckout` (drag the handle across to check out: saves a receipt, empties the cart, goes to `/receipt`)
   - `Receipt` (Figma 146:168) + `Tilt` (card that tips under the pointer) — the receipt lists the basket, a Notes box the visitor types into, the thing they looked at longest (case study or sticker story) and their total time on the site (`lib/visit.ts`); visitors can draw on it with a marker (`useMarker`; red, mint `#00DBA4` in dark mode, the tilt lies flat while drawing; a clear icon fades in at the slip's top-right once there is ink, left out of the download); download (PNG via `html-to-image`) / share
   - `TicketmasterPhones` — CrowdVolt's ticket-batching screens rebuilt in code for the case study's

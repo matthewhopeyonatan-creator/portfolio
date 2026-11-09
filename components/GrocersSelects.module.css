@@ -1,102 +1,57 @@
-/* Grocer's Selects — the posters as a stack in depth on a diagonal (near, bottom left → far, top
-   right), each turned away, in a loop; scrolling over the posters glides it along, and a hovered
-   poster turns flat while the others make room.
-   Poster 371 × 494. With reduced motion: four across, 20 apart, on the side margins. */
+/* Grocer's Selects — just the posters: four across, 20 apart both ways, on the side margins,
+   40 under the title (no rule under it here) and 40 above the footer. Poster 371 × 494, no
+   captions. */
 .titleRow {
   padding-top: max(72px, calc(128 * var(--u)));
   border-bottom: 0;
 }
 
-/* ── the stack ── */
-/* a band about a screen tall, then a good gap before the footer */
-.run {
-  position: relative;
-  padding-bottom: max(96px, calc(200 * var(--u)));
-}
-
-.stage {
-  position: relative;
-  height: clamp(520px, 86svh, 880px);
-  overflow: hidden;
-  touch-action: pan-y; /* sideways swipes move the stack; up and down scroll the page */
-}
-
-.stack {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* every poster sits at the stage's centre; the scroll moves it along the diagonal (its transform
-   and opacity are set on the poster itself, GrocersSelects.tsx) */
-.card {
-  --h: min(52svh, 30vw);
-  position: absolute;
-  left: calc(42% - var(--h) * 371 / 494 / 2);
-  top: calc(50% - var(--h) / 2);
-  width: calc(var(--h) * 371 / 494);
-  height: var(--h);
-  will-change: transform, opacity;
-  pointer-events: none; /* hit only where the turned poster actually is */
-}
-
-/* turned away, its right edge further off; hover brings it round to face you and to the front */
-.turn {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  transform: perspective(1400px) rotateY(-42deg);
-  transition: transform 600ms var(--ease-out);
-  pointer-events: auto;
-  box-shadow: 0 10px 30px rgba(40, 40, 40, 0.12);
-}
-
-/* the hovered poster (set from GrocersSelects.tsx, mouse only) */
-.flat {
-  z-index: 100 !important;
-}
-
-.flat .turn {
-  transform: perspective(1400px) rotateY(0deg);
-  transition-duration: 700ms;
-}
-
-.poster {
-  display: block;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 371 / 494;
-  object-fit: cover; /* videos fill the same 3:4 slot as the stills */
-}
-
-@media (max-width: 767px) {
-  .titleRow {
-    padding-top: 24px;
-  }
-  .card {
-    --h: min(46svh, 58vw);
-  }
-}
-
-/* ── reduced motion: the plain grid ── */
 .grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   margin: 0;
   padding: 0 var(--gutter) 40px;
   list-style: none;
+  background: var(--color-bg);
 }
 
 .cell {
   min-width: 0;
 }
 
+.item {
+  margin: 0;
+}
+
+.frame {
+  display: block;
+}
+
+.poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 371 / 494;
+  object-fit: cover; /* videos fill the same 3:4 slot as the stills */
+}
+
+/* tablets: two across */
 @media (max-width: 1023px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* phones: one a row on the 20 margins, the same space around the title as Seasonal picks */
+@media (max-width: 767px) {
+  .titleRow {
+    padding-top: 24px;
+  }
+  .grid {
+    padding: 0 var(--gutter) 40px;
   }
 }
 
