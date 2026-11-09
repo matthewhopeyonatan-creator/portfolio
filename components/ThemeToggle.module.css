@@ -134,7 +134,14 @@
   position: absolute;
   top: var(--gutter);
   right: var(--gutter);
-  animation: toggleIn 600ms var(--ease-out) both;
+  transform-origin: var(--nail) 0;
+  animation: signHang 1400ms 150ms backwards; /* drops onto its nail and swings to a stop */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onPage {
+    animation: toggleIn 400ms ease backwards;
+  }
 }
 
 @keyframes toggleIn {
@@ -147,5 +154,33 @@
 @media (max-width: 767px) {
   .pageRow {
     display: none;
+  }
+}
+
+/* the sign arriving: it drops onto its nail and swings to a stop, each swing smaller (the same
+   keyframes as Hero.module.css's; transform-origin is the nail). Fill backwards only, so its own
+   press / hover transforms take over once it has settled. */
+@keyframes signHang {
+  0% {
+    opacity: 0;
+    transform: translateY(-14px) rotate(9deg);
+    animation-timing-function: var(--ease-out);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) rotate(-5deg);
+    animation-timing-function: var(--ease-in-out);
+  }
+  55% {
+    transform: rotate(2.4deg);
+    animation-timing-function: var(--ease-in-out);
+  }
+  78% {
+    transform: rotate(-0.9deg);
+    animation-timing-function: var(--ease-in-out);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }
