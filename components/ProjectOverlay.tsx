@@ -164,6 +164,8 @@ function Embed({ b }: { b: { url: string; title: string; ratio: number } }) {
           title={b.title}
           loading="eager"
           referrerPolicy="no-referrer-when-downgrade"
+          scrolling="no"
+          tabIndex={-1}
         />
       </div>
     </div>
