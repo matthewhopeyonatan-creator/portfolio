@@ -270,7 +270,7 @@ function Sticker({
         />
       </span>
       {/* the clickable area — trimmed to the sticker's shape where neighbours overlap */}
-      <span className={styles.stickerHit} aria-hidden="true" />
+      <span className={styles.stickerHit} aria-hidden="true" data-cursor="cart" />
     </button>
   );
 }

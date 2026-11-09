@@ -62,6 +62,7 @@ implements his designs faithfully.
   - `ReviewCheckboxes` — CrowdVolt's review popup (Figma 295:2889) rebuilt in code over its screenshot so it stays sharp when zoomed; loops on screen: zoom in on the bid-warning checkboxes, tick both (Place Offer lights up), zoom out, clear
   - `PhillyForYou` — the Inquirer case study's Philly For You phones (Figma 316:1390): five made-up stories (Wikimedia photos, AI-generated writer faces; credits in `public/projects/inquirer/pfy/CREDITS.md`) swiping up in a loop beside the paywall. Barlow Condensed / Source Serif stand in for the Inquirer's own faces (`--font-inq-cond`, `--font-inq-head`)
   - `InquirerProcess` — the Inquirer's mid-fi screens (rebuilt in code) and final-ish story screen, with red pushback cards. Phone mock-ups in both shrink to ~68svh tall (`--pu-outer`)
+  - `CursorTag` — "add to cart" tag (Figma 482:4673) trailing the bottom right of the mouse pointer over anything marked `data-cursor="cart"` (project trays, hero stickers); mouse only
   - `RevealOnScroll` — `data-reveal="up|tray|swipe|blur"` entrances (blur: about-page photos, same as the case-study figures), staggered by `--i`
 - Dark mode — `lib/theme.ts` (`useTheme`, `setTheme`) puts `<html data-theme="dark">` on every page (kept while browsing, never saved: every load/refresh starts light); the
   switch (`ThemeToggle`, Figma 210:5291 at 80%) sits top right of the landing. Dark tokens in

@@ -140,7 +140,7 @@ function WrappedTray({
         </div>
       ) : null}
       {/* the only hover / click zone: the foam tray's own rounded shape */}
-      <span className={styles.trayHit} aria-hidden="true" />
+      <span className={styles.trayHit} aria-hidden="true" data-cursor={soldOut ? undefined : "cart"} />
     </div>
   );
 }
