@@ -57,6 +57,12 @@
   text-transform: uppercase; /* ABOUT · PROJECTS · YOUR CART */
 }
 
+/* ABOUT's "A" sits right on the side margin (pulled left by its side bearing), the same edge as
+   the landing's headline */
+.nav .navLink:first-child {
+  margin-left: -0.031em;
+}
+
 .navLink::after {
   content: "";
   position: absolute;

@@ -254,11 +254,12 @@
    steps through the phrases. ── */
 .headline {
   position: absolute;
-  left: var(--gutter);
-  /* the gap from the navbar rule to the top of the capitals always matches the side margin to
-     the "C" — at every window size. (0.07em = the cap's inset in its line box, 0.10em, minus
-     the C's side bearing, 0.03em.) */
-  top: calc(var(--gutter) - 0.07em);
+  /* the "C" itself sits on the side margin: pulled left by its side bearing (0.034em), which
+     grows with the type, so its edge lines up with the navbar's ABOUT at every window size */
+  left: calc(var(--gutter) - 0.034em);
+  /* and the gap from the navbar rule to the top of the capitals matches that margin (0.10em =
+     the cap's inset in its line box) */
+  top: calc(var(--gutter) - 0.1em);
   z-index: 2;
   margin: 0;
   font-size: max(20px, calc(64 * var(--hu)));
