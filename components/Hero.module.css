@@ -638,13 +638,13 @@
   display: none;
 }
 
-/* the sign arriving: it drops onto its nail and swings to a stop, each swing smaller (the same
+/* the sign arriving: it comes down from above onto its nail and swings to a stop, each swing smaller (the same
    keyframes as Hero.module.css's; transform-origin is the nail). Fill backwards only, so its own
    press / hover transforms take over once it has settled. */
 @keyframes signHang {
   0% {
     opacity: 0;
-    transform: translateY(-14px) rotate(9deg);
+    transform: translateY(-80%) rotate(9deg); /* comes down from above */
     animation-timing-function: var(--ease-out);
   }
   30% {
