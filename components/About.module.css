@@ -378,24 +378,28 @@
   white-space: nowrap;
 }
 
-/* each produce with its drawing above it; the drawing's soft edge reaches past the word's left
-   edge so the fruit itself lines up with it */
+/* each produce with its drawing centred above it; the drawing hangs above the word without
+   widening it, so the words keep their places on the margins */
 .produceArt {
-  align-items: flex-end;
+  --art: max(110px, calc(220 * var(--u)));
 }
 
 .produceArt li {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  position: relative;
+  justify-self: start; /* phones' grid: the item is only as wide as its word */
+  width: fit-content;
+  padding-top: calc(var(--art) + 4 * var(--u));
 }
 
 .produceImg {
+  position: absolute;
+  top: 0;
+  left: 50%;
   display: block;
-  width: max(110px, calc(220 * var(--u)));
-  height: max(110px, calc(220 * var(--u)));
+  width: var(--art);
+  height: var(--art);
   max-width: none;
-  margin: 0 0 calc(4 * var(--u)) calc(-0.14 * max(110px, calc(220 * var(--u))));
+  transform: translateX(-50%);
 }
 
 /* ── phones: one column, in reading order ── */
