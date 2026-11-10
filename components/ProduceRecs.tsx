@@ -43,12 +43,32 @@ export function RecsMonth({ initial, style }: { initial: number; style?: React.C
   );
 }
 
+// soft, blurred drawings in the homepage tomatoes' style, one per produce (public/about/produce/);
+// a month whose produce hasn't been drawn yet just shows the names
+const ART = new Set(["Cranberries", "Persimmons", "Pomegranates", "Sweet Potatoes", "Butternut Squash"]);
+const slug = (p: string) => p.toLowerCase().replace(/\s+/g, "-");
+
 export function RecsList({ initial }: { initial: number }) {
   const m = useMonth(initial);
+  const drawn = SEASON[m].some((p) => ART.has(p));
   return (
-    <ul className={styles.produce} data-reveal="up" aria-label={`In season in ${monthName(m)}`}>
+    <ul
+      className={`${styles.produce} ${drawn ? styles.produceArt : ""}`}
+      data-reveal="up"
+      aria-label={`In season in ${monthName(m)}`}
+    >
       {SEASON[m].map((p) => (
-        <li key={p}>{p}</li>
+        <li key={p}>
+          {drawn ? (
+            ART.has(p) ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className={styles.produceImg} src={`/about/produce/${slug(p)}.svg`} alt="" width={600} height={600} />
+            ) : (
+              <span className={styles.produceImg} aria-hidden="true" />
+            )
+          ) : null}
+          {p}
+        </li>
       ))}
     </ul>
   );

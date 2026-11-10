@@ -378,6 +378,26 @@
   white-space: nowrap;
 }
 
+/* each produce with its drawing above it; the drawing's soft edge reaches past the word's left
+   edge so the fruit itself lines up with it */
+.produceArt {
+  align-items: flex-end;
+}
+
+.produceArt li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.produceImg {
+  display: block;
+  width: max(110px, calc(220 * var(--u)));
+  height: max(110px, calc(220 * var(--u)));
+  max-width: none;
+  margin: 0 0 calc(4 * var(--u)) calc(-0.14 * max(110px, calc(220 * var(--u))));
+}
+
 /* ── phones: one column, in reading order ── */
 @media (max-width: 767px) {
   .page {
