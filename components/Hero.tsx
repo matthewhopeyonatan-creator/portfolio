@@ -190,6 +190,8 @@ const stickers: Record<
       story:
         "Design Meetup was founded by friends I had from college, and I was seeing the impact it could have on designers throughout the country. I joined events shortly after its conception, and I ended up joining as a graphic lead in hopes of contributing to this wonderful cause, helping creatives find their footing in big cities, just like how it helped me find my footing in the crazy world of design. Design Meetup has lead me to amazing people who anchor me as a creative and taught me that things are more achievable when done in unison.",
       lessons: ["Communication", "Collaboration", "Community"],
+      // the group photo is landscape: two copies stacked fill the card's portrait frame
+      photos: ["group", "crowd", "walk", "studio"].map((n) => `/cards/design-meetup-${n}.webp`),
     },
   ],
   mid: [
