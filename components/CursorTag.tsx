@@ -67,8 +67,12 @@ export default function CursorTag() {
       if (e.pointerType !== "mouse") return;
       const hit = !!(e.target as Element | null)?.closest?.('[data-cursor="cart"]');
       if (!hit) spent = false;
-      // never over an open case study or sticker story
-      const covered = html.classList.contains("project-open") || html.classList.contains("modal-open");
+      // never over an open case study or sticker story, and not until the landing's Open-sign
+      // intro has played (Hero marks <html data-intro="done">; the trays and stickers are only there)
+      const covered =
+        html.classList.contains("project-open") ||
+        html.classList.contains("modal-open") ||
+        html.dataset.intro !== "done";
       const over = hit && !spent && !covered;
       // a fresh appearance starts right at the pointer; after that it trails
       place(e.clientX, e.clientY, over && !shown);
