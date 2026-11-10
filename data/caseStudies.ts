@@ -55,7 +55,7 @@ export type CaseBlock =
   // phone screens built in code, in a bordered frame (components/TicketmasterPhones.tsx)
   | {
       type: "phones";
-      screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery")[];
+      screens: ("explore-4" | "explore-6" | "final-sell" | "final-delivery" | "status-one" | "status-batch")[];
     }
   // Shmood's onboarding screens rebuilt in code, two to a row (components/ShmoodScreens.tsx)
   | { type: "screens"; screens: ("welcome" | "story" | "aesthetic" | "designer")[] }
@@ -824,6 +824,13 @@ const crowdvolt: CaseSection[] = [
             body: "Preventing confusion and having a quick flow was the priority, so I had to give users just the right amount of autonomy and also use plain language that make the use feel assured and understood.",
           },
           { type: "phones", screens: ["final-sell", "final-delivery"] },
+          {
+            type: "callout",
+            text: "I created a post-listing feedback center which helps users understand and troubleshoot their ticket transfer status",
+            body: "This screen is necessary to put in a user’s listings page as users need to know if their transfers are successful, if they want to pick up the transfer process at a later time, or if they want to troubleshoot a transfer error. This reduces the traffic on our help center and increases a user’s sense of trust and security.",
+          },
+          // Figma 14873:1228 / 14886:3593 (CrowdVolt web file)
+          { type: "phones", screens: ["status-one", "status-batch"] },
         ],
       },
       {

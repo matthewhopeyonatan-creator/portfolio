@@ -12,10 +12,13 @@ import styles from "./TicketmasterPhones.module.css";
  *    batch 2, until they're even; then "−" sends them back up, and it repeats.
  * The final-design screens loop too: the choice screen clicks through its three choices, and the
  * delivery screen sends its ticket off. Everything is sized in --pu (1 Figma px in the popup).
- * Both loops only run while they're on screen; with reduced motion they hold their Figma frame.
+ * The post-listing feedback center (Figma 14873:1228, 14886:3593 in the CrowdVolt web file) shows
+ * a listing's transfer status ticket by ticket; its loop taps "Check status" and the tickets
+ * refresh. Both loops only run while they're on screen; with reduced motion they hold their Figma
+ * frame.
  */
 
-type Screen = "explore-4" | "explore-6" | "final-sell" | "final-delivery";
+type Screen = "explore-4" | "explore-6" | "final-sell" | "final-delivery" | "status-one" | "status-batch";
 
 // ── tickets ────────────────────────────────────────────────────────────────────────────────
 const NOTCHED =
@@ -473,6 +476,135 @@ function FinalDelivery() {
   );
 }
 
+// ── post-listing feedback center: 402 × 981 ─────────────────────────────────────────────
+const S = "/projects/crowdvolt/status";
+type Tone = "ok" | "err" | "dim";
+
+/** a ticket's transfer state: sent (green), failed (orange) or not reached yet (grey, faded) */
+function StatusTicket({ tone, n }: { tone: Tone; n: number }) {
+  const id = useId();
+  const stroke = tone === "ok" ? "#78CF9B" : tone === "err" ? "#FE7833" : "#767676";
+  return (
+    <span className={`${styles.sTicket} ${tone === "dim" ? styles.sDim : ""}`}>
+      <svg viewBox="0 0 42 52" aria-hidden="true">
+        <defs>
+          <clipPath id={id}>
+            <path d={ROUNDED} />
+          </clipPath>
+        </defs>
+        {tone === "ok" ? <path d={ROUNDED} fill="#111C20" /> : null}
+        <path
+          d={ROUNDED}
+          fill="none"
+          stroke={stroke}
+          strokeOpacity={tone === "ok" ? 0.5 : 1}
+          strokeWidth="2"
+          vectorEffect="non-scaling-stroke"
+          clipPath={`url(#${id})`}
+        />
+      </svg>
+      <span className={`${styles.sNum} ${tone === "ok" ? "" : styles.sNumMuted}`}>{n}</span>
+    </span>
+  );
+}
+
+/** Figma's information icon (orange on the Error pill, grey by "See what happened") */
+const Info = ({ orange }: { orange?: boolean }) => (
+  // eslint-disable-next-line @next/next/no-img-element
+  <img className={styles.sInfo} src={`${S}/info-${orange ? "orange" : "grey"}.svg`} alt="" width={13} height={13} />
+);
+
+/**
+ * The listing page's transfer status: the event, "Listing saved. Send your tickets to go live!",
+ * the plain-language note, How to transfer, and a card of the listing's tickets with their state.
+ * The loop taps Check status: its arrows turn once, the tickets dim while it checks, and they come
+ * back one after another.
+ */
+function StatusScreen({ tones }: { tones: Tone[] }) {
+  const [tap, setTap] = useState(0);
+  const [checking, setChecking] = useState(false);
+  const ref = useLoop(
+    (at) => {
+      at(2600, () => {
+        setTap((t) => t + 1);
+        setChecking(true);
+      });
+      at(3500, () => setChecking(false));
+      return 6000;
+    },
+    () => setChecking(false),
+  );
+  return (
+    <div ref={ref}>
+      <div className={`${styles.phone} ${styles.status}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.close} src={`${S}/close.svg`} alt="" width={22} height={22} />
+        <div className={styles.sEvent} aria-hidden="true">
+          <span className={styles.sThumb}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/projects/crowdvolt/tm-status-event.webp" alt="" width={61} height={61} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.sEye} src={`${S}/eye.svg`} alt="" width={22} height={22} />
+          </span>
+          <p className={styles.sName}>Omar+</p>
+          <p className={styles.sMeta}>Sat, April 18 • Superior Ingredients</p>
+          <p className={styles.sPrice}>1 GA for $200</p>
+        </div>
+        <div className={styles.sBody}>
+          <p className={styles.sTitle}>
+            Listing saved.<span> Send your tickets to go live!</span>
+          </p>
+          <p className={styles.sNote}>
+            To make your listing go live, transfer your tickets through Ticketmaster. Your tickets stay in your
+            account until they sell. Once sold, we’ll transfer them to the buyer automatically.
+          </p>
+          <div className={styles.sHow}>
+            <span>How to transfer</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`${S}/chevron.svg`} alt="" width={10} height={6} />
+          </div>
+          <div className={styles.sStatusRow}>
+            <p className={styles.sStatusLabel}>Transfer status</p>
+            <span className={styles.sCheck}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img key={tap} className={tap ? styles.sSpin : ""} src={`${S}/swap.svg`} alt="" width={22} height={22} />
+              Check status
+              {tap ? <span key={tap} className={styles.sTapRing} aria-hidden="true" /> : null}
+            </span>
+          </div>
+          <div className={styles.sCard}>
+            <div className={styles.sCardHead}>
+              <p className={styles.sCardLabel}>Tickets</p>
+              <span className={styles.sError}>
+                <Info orange />
+                Error
+              </span>
+            </div>
+            <div className={`${styles.sRow} ${checking ? styles.sChecking : ""}`}>
+              {tones.map((t, i) => (
+                <span key={i} className={styles.sCell} style={{ ["--i" as string]: i }}>
+                  <StatusTicket tone={t} n={i + 1} />
+                </span>
+              ))}
+            </div>
+            <p className={styles.sWhat}>
+              <Info />
+              See what happened
+            </p>
+          </div>
+        </div>
+        <div className={styles.sFooter} aria-hidden="true">
+          <span className={styles.sClose}>close</span>
+          <span className={styles.sDone}>Done</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const StatusOne = () => <StatusScreen tones={["ok", "ok", "ok", "ok", "ok", "err"]} />;
+const StatusBatch = () => <StatusScreen tones={["err", "err", "err", "err", "dim", "dim"]} />;
+
 const SCREENS: Record<Screen, { el: () => React.ReactElement; label: string }> = {
   "explore-4": {
     el: Explore4,
@@ -491,6 +623,16 @@ const SCREENS: Record<Screen, { el: () => React.ReactElement; label: string }> =
   "final-delivery": {
     el: FinalDelivery,
     label: "Final ticket delivery screen explaining the Ticketmaster transfer in plain language",
+  },
+  "status-one": {
+    el: StatusOne,
+    label:
+      "Post-listing feedback center: Listing saved, send your tickets to go live. Transfer status shows tickets 1 to 5 sent and ticket 6 with an error",
+  },
+  "status-batch": {
+    el: StatusBatch,
+    label:
+      "Post-listing feedback center: transfer status shows tickets 1 to 4 with an error and tickets 5 and 6 not yet transferred",
   },
 };
 
