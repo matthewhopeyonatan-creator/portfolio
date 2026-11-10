@@ -790,8 +790,8 @@ const crowdvolt: CaseSection[] = [
                 text: "Ease of comprehension",
               },
               {
-                title: "Users are protective to personal info",
-                text: "Trust built into flow",
+                title: "Users want the highest chances of their tickets being sold",
+                text: "Marketable tickets",
               },
             ],
           },
