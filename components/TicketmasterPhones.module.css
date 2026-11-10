@@ -640,6 +640,336 @@
   }
 }
 
+/* ── post-listing feedback center: 402 × 981 (Figma 14873:1228 / 14886:3593) ─────────── */
+.status {
+  display: block;
+  width: calc(402 * var(--pu));
+  height: calc(981 * var(--pu));
+}
+
+.status img {
+  display: block;
+  max-width: none;
+  border-radius: 0;
+}
+
+/* the event: a 373 × 82 card, the photo hidden behind a grey wash and a mustard closed eye */
+.sEvent {
+  position: absolute;
+  top: calc(45.99 * var(--pu));
+  left: calc(13.77 * var(--pu));
+  width: calc(373.45 * var(--pu));
+  height: calc(81.85 * var(--pu));
+  box-sizing: border-box;
+  border: calc(1.012 * var(--pu)) solid rgba(118, 118, 118, 0.15);
+  border-radius: calc(10.12 * var(--pu));
+  background: #0c0c0c;
+  box-shadow: inset 0 calc(4.05 * var(--pu)) calc(4.05 * var(--pu)) rgba(3, 3, 3, 0.25);
+}
+
+.sThumb {
+  position: absolute;
+  top: calc(9.55 * var(--pu));
+  left: calc(11.13 * var(--pu));
+  width: calc(60.72 * var(--pu));
+  height: calc(60.72 * var(--pu));
+  overflow: hidden;
+  border-radius: calc(8.1 * var(--pu));
+}
+
+.status .sThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Figma's eye drawn crisp over the photo's own copy of it */
+.status .sThumb .sEye {
+  position: absolute;
+  top: calc(19.43 * var(--pu));
+  left: calc(19.86 * var(--pu));
+  width: calc(22 * var(--pu));
+  height: calc(22 * var(--pu));
+}
+
+.frame .phone .sName,
+.frame .phone .sMeta,
+.frame .phone .sPrice {
+  position: absolute;
+  left: calc(93.2 * var(--pu));
+  width: calc(207 * var(--pu));
+  overflow: hidden;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.frame .phone .sName {
+  top: calc(10 * var(--pu));
+  font-size: calc(14.17 * var(--pu));
+  line-height: calc(20.24 * var(--pu));
+  letter-spacing: calc(-0.32 * var(--pu));
+}
+
+.frame .phone .sMeta,
+.frame .phone .sPrice {
+  font-size: calc(12.15 * var(--pu));
+  line-height: calc(16.19 * var(--pu));
+  letter-spacing: 0;
+}
+
+.frame .phone .sMeta {
+  top: calc(32.3 * var(--pu));
+  color: #e4e4e4;
+}
+
+.frame .phone .sPrice {
+  top: calc(50.5 * var(--pu));
+  color: #919191;
+}
+
+/* the column under it: 354 wide, 12 apart */
+.sBody {
+  position: absolute;
+  top: calc(158.42 * var(--pu));
+  left: calc(19.49 * var(--pu));
+  width: calc(354.26 * var(--pu));
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 * var(--pu));
+}
+
+.frame .phone .sTitle {
+  font-size: calc(16 * var(--pu));
+  font-weight: 700;
+  line-height: calc(28 * var(--pu));
+}
+
+.sTitle span {
+  color: #ffd989;
+}
+
+.frame .phone .sNote {
+  color: #adadad;
+  font-size: calc(14 * var(--pu));
+  line-height: calc(20 * var(--pu));
+}
+
+.sHow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(36 * var(--pu));
+  box-sizing: border-box;
+  padding: calc(8 * var(--pu)) calc(12 * var(--pu));
+  border: calc(0.5 * var(--pu)) solid #474747;
+  border-radius: calc(8 * var(--pu));
+  color: #adadad;
+  font-size: calc(14 * var(--pu));
+  line-height: calc(20 * var(--pu));
+}
+
+.status .sHow img {
+  width: calc(9.5 * var(--pu));
+  height: calc(5.5 * var(--pu));
+}
+
+.sStatusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.frame .phone .sStatusLabel {
+  font-size: calc(16 * var(--pu));
+  line-height: calc(24 * var(--pu));
+}
+
+.sCheck {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(4 * var(--pu));
+  padding: calc(2 * var(--pu)) calc(8 * var(--pu));
+  border: calc(0.5 * var(--pu)) solid #919191;
+  border-radius: calc(24 * var(--pu));
+  color: #919191;
+  font-size: calc(12 * var(--pu));
+  line-height: calc(16 * var(--pu));
+  white-space: nowrap;
+}
+
+.status .sCheck img {
+  width: calc(21.66 * var(--pu));
+  height: calc(21.52 * var(--pu));
+}
+
+/* tapped: the arrows turn once, and a soft ring blooms off the pill */
+.sSpin {
+  animation: sSpin 700ms var(--ease-in-out) both;
+}
+
+@keyframes sSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sTapRing {
+  position: absolute;
+  inset: calc(-3 * var(--pu));
+  border-radius: calc(24 * var(--pu));
+  background: rgba(145, 145, 145, 0.3);
+  pointer-events: none;
+  animation: sTap 600ms var(--ease-out) both;
+}
+
+@keyframes sTap {
+  from {
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+/* the tickets card: 1px gray-700, r12, 12 in */
+.sCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(8 * var(--pu));
+  height: calc(128 * var(--pu));
+  box-sizing: border-box;
+  padding: calc(12 * var(--pu));
+  border: calc(1 * var(--pu)) solid #474747;
+  border-radius: calc(12 * var(--pu));
+}
+
+.sCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.frame .phone .sCardLabel {
+  font-size: calc(14 * var(--pu));
+  line-height: calc(20 * var(--pu));
+}
+
+.sError {
+  display: flex;
+  align-items: center;
+  gap: calc(4 * var(--pu));
+  padding: calc(2 * var(--pu)) calc(8 * var(--pu));
+  border-radius: calc(24 * var(--pu));
+  background: #2f2f2f;
+  color: #fe7833;
+  font-size: calc(12 * var(--pu));
+  line-height: calc(16 * var(--pu));
+}
+
+.status .sInfo {
+  width: calc(13 * var(--pu));
+  height: calc(13 * var(--pu));
+}
+
+.sRow {
+  display: flex;
+  gap: calc(8 * var(--pu));
+  margin-top: calc(4 * var(--pu));
+}
+
+/* while it checks the tickets dim together; then they come back one after another */
+.sCell {
+  transition: opacity 360ms var(--ease-out) calc(var(--i) * 70ms);
+}
+
+.sChecking .sCell {
+  opacity: 0.25;
+  transition-duration: 240ms;
+  transition-delay: 0ms;
+}
+
+.sTicket {
+  position: relative;
+  display: block;
+  width: round(calc(42 * var(--pu)), 1px);
+  height: round(calc(52 * var(--pu)), 1px);
+}
+
+.sTicket svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sDim {
+  opacity: 0.5;
+}
+
+.sNum {
+  position: absolute;
+  top: calc(16 * var(--pu));
+  left: 0;
+  right: 0;
+  font-size: calc(14 * var(--pu));
+  line-height: calc(20 * var(--pu));
+  text-align: center;
+}
+
+.sNumMuted {
+  color: #767676;
+}
+
+.frame .phone .sWhat {
+  display: flex;
+  align-items: center;
+  gap: calc(4 * var(--pu));
+  color: #767676;
+  font-size: calc(12 * var(--pu));
+  line-height: calc(16 * var(--pu));
+}
+
+/* the bottom bar: a gray-500/50 rule, then close (outlined) and Done (white at 50%) */
+.sFooter {
+  position: absolute;
+  top: calc(904 * var(--pu));
+  left: 0;
+  right: 0;
+  height: calc(77.18 * var(--pu));
+  border-top: calc(1.07 * var(--pu)) solid rgba(107, 114, 128, 0.5);
+  font-size: calc(15 * var(--pu));
+  line-height: calc(21.44 * var(--pu));
+}
+
+.sClose,
+.sDone {
+  position: absolute;
+  top: calc(18.76 * var(--pu));
+  height: calc(38.59 * var(--pu));
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+}
+
+.sClose {
+  left: 6.4%;
+  right: 72.19%;
+  border: calc(1.07 * var(--pu)) solid #6b7280;
+  color: #fff;
+}
+
+.sDone {
+  left: 29.94%;
+  right: 6.4%;
+  background: #fff;
+  color: #050505;
+  opacity: 0.5;
+}
+
 /* phones: the two screens stack, each as wide as the column allows (402 + the frame's padding) */
 @media (max-width: 767px) {
   .frame {
@@ -656,10 +986,13 @@
   .pressed,
   .fOn,
   .fOn .fLift,
-  .sending {
+  .sending,
+  .sSpin,
+  .sTapRing {
     animation: none;
   }
-  .moving {
+  .moving,
+  .sCell {
     transition: none;
   }
 }
