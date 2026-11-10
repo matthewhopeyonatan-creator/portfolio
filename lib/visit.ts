@@ -1,3 +1,5 @@
+import { cartCatalog } from "@/data/site";
+
 /**
  * What the receipt knows about a visit: when it started, and how long each thing was looked at
  * (a project's case study or a sticker's story). Kept in sessionStorage, so it
@@ -5,6 +7,9 @@
  */
 const START = "hopes-grocer-visit-start";
 const VIEWS = "hopes-grocer-views";
+const VISIT_ID = "hopes-grocer-visit-id";
+const PAGES = "hopes-grocer-pages";
+const CART = "hopes-grocer-cart"; // CartContext's key
 export const RECEIPT = "hopes-grocer-receipt";
 
 export type Receipt = {
@@ -96,5 +101,54 @@ export function logReceipt(r: Receipt, image?: string, beacon = false) {
       body,
       keepalive: body.length < 60000,
     }).catch(() => {});
+  } catch {}
+}
+
+/** every page opened this visit, in order (a refresh of the same page isn't counted twice) */
+export function addPage(path: string) {
+  const pages = read<string[]>(PAGES, []);
+  if (pages[pages.length - 1] !== path) write(PAGES, [...pages, path].slice(-40));
+}
+
+/**
+ * Sends Matthew's log (/admin/receipts) a note of this visit, whether or not they ever check out:
+ * when it started, how long, the pages, what they looked at and for how long, what's in their
+ * cart, and whether they checked out. One record per visit (this tab), replaced each time it's
+ * sent — it goes when they leave or switch away. Visits to /admin itself aren't logged.
+ */
+export function logVisit() {
+  try {
+    const pages = read<string[]>(PAGES, []);
+    if (!pages.length || pages.every((p) => p.startsWith("/admin"))) return;
+    let id = read<string | null>(VISIT_ID, null);
+    if (!id) {
+      id = newId();
+      write(VISIT_ID, id);
+    }
+    const views = read<Record<string, number>>(VIEWS, {});
+    const inCart = read<Record<string, number>>(CART, {});
+    const cart = Object.entries(inCart).map(([key, qty]) => ({
+      name: cartCatalog.find((c) => c.key === key)?.name ?? key,
+      qty,
+    }));
+    const receipt = loadReceipt();
+    const body = JSON.stringify({
+      id,
+      start: read<number>(START, Date.now()),
+      minutes: visitMinutes(),
+      pages: pages.filter((p) => !p.startsWith("/admin")),
+      views: Object.entries(views)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 12)
+        .map(([name, ms]) => ({ name, seconds: Math.round(ms / 1000) })),
+      cart,
+      checkedOut: !!receipt?.id,
+      receiptId: receipt?.id ?? null,
+      referrer: document.referrer && !document.referrer.includes(location.host) ? document.referrer : "",
+    });
+    const blob = new Blob([body], { type: "application/json" });
+    if (!navigator.sendBeacon?.("/api/visits", blob)) {
+      fetch("/api/visits", { method: "POST", headers: { "content-type": "application/json" }, body, keepalive: true }).catch(() => {});
+    }
   } catch {}
 }

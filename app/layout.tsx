@@ -1,4 +1,5 @@
 import CursorTag from "@/components/CursorTag";
+import VisitLogger from "@/components/VisitLogger";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <MenuDrawer />
           <CartDrawer />
           <CursorTag />
+          <VisitLogger />
         </CartProvider>
       </body>
     </html>
