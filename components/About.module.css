@@ -378,6 +378,30 @@
   white-space: nowrap;
 }
 
+/* each produce with its drawing centred above it; the drawing hangs above the word without
+   widening it, so the words keep their places on the margins */
+.produceArt {
+  --art: max(110px, calc(220 * var(--u)));
+}
+
+.produceArt li {
+  position: relative;
+  justify-self: start; /* phones' grid: the item is only as wide as its word */
+  width: fit-content;
+  padding-top: calc(var(--art) + 4 * var(--u));
+}
+
+.produceImg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: block;
+  width: var(--art);
+  height: var(--art);
+  max-width: none;
+  transform: translateX(-50%);
+}
+
 /* ── phones: one column, in reading order ── */
 @media (max-width: 767px) {
   .page {

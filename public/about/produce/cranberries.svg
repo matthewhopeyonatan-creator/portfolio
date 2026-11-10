@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600"><defs>
+<filter id="c" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="30"/></filter>
+<filter id="cs" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter></defs>
+<radialGradient id="cb" cx="34%" cy="32%" r="78%"><stop offset="0" stop-color="#4f0013"/><stop offset=".4" stop-color="#8c0525"/><stop offset=".8" stop-color="#d0153f"/><stop offset="1" stop-color="#ef3a5c"/></radialGradient>
+<g filter="url(#c)">
+  <path fill="url(#cb)" d="M110 352 C 104 278 166 228 236 232 C 310 236 346 300 336 362 C 326 430 268 466 204 458 C 146 450 114 412 110 352 Z"/>
+  <path fill="url(#cb)" d="M292 330 C 290 262 342 218 400 222 C 462 228 500 282 492 340 C 484 400 434 428 384 422 C 330 416 294 384 292 330 Z"/>
+  <path fill="url(#cb)" d="M214 204 C 216 146 262 106 316 110 C 370 116 404 160 398 212 C 392 268 344 296 300 290 C 248 284 212 252 214 204 Z"/>
+</g></svg>

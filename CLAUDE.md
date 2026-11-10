@@ -76,6 +76,7 @@ implements his designs faithfully.
   the switch (nested text trailed behind). Tomatoes use `ThemedPair`: both versions stacked, crossfaded with opacity; the other
   theme's set loads once warmed (hovering the switch, or 2.5s after load with a mouse)
 - Receipt log (Matthew only) — `/admin/receipts`: every checked-out receipt (basket, note, slip picture with any drawing, most viewed, time, rough location, device). `lib/visit.ts` `logReceipt` posts to `app/api/receipts` → private Vercel Blob store `hopes-grocer-receipts` (`receipts/<id>.json` + `.png`); `proxy.ts` puts `/admin` and `/api/admin` behind a sign-in page (`/admin/login` → `app/api/admin-login` checks `ADMIN_PASSWORD` and sets a hashed cookie, `lib/adminAuth.ts`)
+- About page Produce Recs (`ProduceRecs.tsx`) — this month's five in season, each with a soft blurred drawing in the homepage tomatoes' style centred above its name (`public/about/produce/<slug>.svg`; blurred bodies and stems, no perfect circles, straight-edged leaves). Only November's five are drawn so far; a month without drawings shows just the names
 - `lib/intro.ts` — the Open-sign intro plays **only** on a first load/refresh of `/`; navigating
   back home skips it (`shouldSkipIntro`, `.skip` in Hero)
 

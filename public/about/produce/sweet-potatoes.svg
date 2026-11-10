@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600"><defs>
+<filter id="s" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="30"/></filter>
+<filter id="ss" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter></defs>
+<radialGradient id="sg" cx="46%" cy="34%" r="78%"><stop offset="0" stop-color="#5e1a1c"/><stop offset=".5" stop-color="#963a34"/><stop offset=".9" stop-color="#d0704f"/><stop offset="1" stop-color="#e8946a"/></radialGradient>
+<path filter="url(#s)" fill="url(#sg)" transform="rotate(-16 300 316)" d="M70 330 C 70 262 168 214 298 210 C 420 206 540 240 540 306 C 540 368 452 420 310 424 C 176 428 70 398 70 330 Z"/></svg>
