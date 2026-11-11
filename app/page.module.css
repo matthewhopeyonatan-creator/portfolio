@@ -23,12 +23,13 @@
 }
 
 /* Section heading with a line of description under it (Seasonal Picks, Grocer's Selects) —
-   Figma 210:4738 (title, Medium 24) + 495:4900 (subtext, Regular 24, centred), 40 apart, with
-   roomy space above and below like a shop's section sign */
+   Figma 210:4738 (title, Medium 24) + 495:4900 (subtext, Regular — set at 20 — centred, −2% tracking). Both are trimmed
+   to their letters, so the 40 between them and the equal space above and below are measured
+   from the type itself */
 .titleStack {
   flex-direction: column;
   gap: 40px;
-  padding: max(48px, calc(64 * var(--u))) var(--gutter) max(64px, calc(96 * var(--u)));
+  padding: max(48px, calc(80 * var(--u))) var(--gutter);
 }
 
 .titleSmall {
@@ -38,9 +39,10 @@
 
 .titleSub {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 400;
-  line-height: 2;
+  line-height: normal;
+  text-box: trim-both cap alphabetic;
   letter-spacing: -0.02em;
   text-align: center;
   text-transform: uppercase;
@@ -82,11 +84,10 @@
   /* phones: the description runs as one wrapping paragraph, a size down, on the margins */
   .titleStack {
     gap: 24px;
-    padding: 40px var(--gutter) 48px;
+    padding: 40px var(--gutter);
   }
   .titleSub {
     font-size: 16px;
-    line-height: 1.75;
   }
   .titleSub br {
     display: none;
