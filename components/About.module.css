@@ -516,4 +516,23 @@
     margin-top: 32px !important;
     line-height: 1.3;
   }
+  /* with drawings: one produce a line, its drawing filling the space between the margins and
+     the name under it on the left margin */
+  .produceArt {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .produceArt li {
+    justify-self: stretch;
+    width: auto;
+    padding-top: 0;
+  }
+  .produceImg {
+    position: static;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    margin-bottom: -12%; /* the drawing's soft padding: bring the name up to the fruit */
+    transform: none;
+  }
 }
