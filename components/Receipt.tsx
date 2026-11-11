@@ -234,7 +234,7 @@ export default function Receipt() {
                 </ul>
 
                 <div className={styles.notes}>
-                  <p className={styles.heading}>Notes</p>
+                  <p className={styles.heading}>Leave a message</p>
                   <textarea
                     className={styles.note}
                     value={note}
@@ -248,7 +248,7 @@ export default function Receipt() {
                     placeholder="Add a note…"
                     rows={1}
                     maxLength={280}
-                    aria-label="Notes"
+                    aria-label="Leave a message"
                   />
                 </div>
 
