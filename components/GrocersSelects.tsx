@@ -17,7 +17,7 @@ export default function GrocersSelects() {
   const gridRef = useRef<HTMLUListElement>(null);
 
   // Vertical scroll → horizontal slide, blended at both ends rather than switched: the row starts
-  // drifting left while it's still rising into place, pins and slides, then keeps drifting as it
+  // drifting left just before it's risen into place, pins and slides, then keeps drifting as it
   // rises away, so the page curves from down to sideways and back without a hard corner. The
   // slide picks up speed and settles over those overlaps; overall it moves about a pixel left
   // for each pixel scrolled.
@@ -28,21 +28,24 @@ export default function GrocersSelects() {
     if (!shelf || !pin || !grid) return;
     const wide = window.matchMedia("(min-width: 768px)");
     const html = document.documentElement;
-    const LEAD = 0.5; // of the window: how far before pinning / after releasing the drift runs
+    // of the window's height:
+    const LEAD_IN = 0.2; // the drift starts this far before the row pins…
+    const RAMP_IN = 0.45; // …and takes this long to come up to speed (on into the pin)
+    const LEAD_OUT = 0.5; // after the row lets go it drifts on this far, slowing to a stop
     let travel = 0; // how far the row moves
     let slide = 0; // how long it stays pinned
-    let lead = 0;
+    let leadIn = 0;
     let range = 0; // the whole stretch of scroll that moves it
-    let r = 0; // share of that stretch spent easing in (and out)
+    let rIn = 0; // share of that stretch spent speeding up
+    let rOut = 0; // …and slowing down
     let frame = 0;
 
     // eased progress: quadratic ramps over the overlaps, steady in between
     const ease = (t: number) => {
-      if (r <= 0) return t;
-      const m = 1 / (1 - r);
-      if (t < r) return (m / (2 * r)) * t * t;
-      if (t > 1 - r) return 1 - (m / (2 * r)) * (1 - t) * (1 - t);
-      return m * (t - r / 2);
+      const m = 1 / (1 - rIn / 2 - rOut / 2); // steady middle speed, so it still runs 0 → 1
+      if (rIn > 0 && t < rIn) return (m / (2 * rIn)) * t * t;
+      if (rOut > 0 && t > 1 - rOut) return 1 - (m / (2 * rOut)) * (1 - t) * (1 - t);
+      return m * (t - rIn / 2);
     };
 
     const place = () => {
@@ -52,7 +55,7 @@ export default function GrocersSelects() {
       // while the row is pinned the navbar stays away (SiteHeader); the mouse at the top brings it
       const pinned = top <= 0 && top > -slide;
       if (pinned !== html.hasAttribute("data-shelf-pinned")) html.toggleAttribute("data-shelf-pinned", pinned);
-      const t = range ? Math.min(1, Math.max(0, (lead - top) / range)) : 0;
+      const t = range ? Math.min(1, Math.max(0, (leadIn - top) / range)) : 0;
       grid.style.transform = `translate3d(${-travel * ease(t)}px, 0, 0)`;
     };
     const measure = () => {
@@ -64,10 +67,12 @@ export default function GrocersSelects() {
       }
       const vh = pin.clientHeight;
       travel = Math.max(0, grid.scrollWidth - pin.clientWidth);
-      lead = vh * LEAD;
-      slide = Math.max(travel - lead * 2, travel * 0.6);
-      range = slide + lead * 2;
-      r = Math.min(0.3, lead / range);
+      leadIn = vh * LEAD_IN;
+      const leadOut = vh * LEAD_OUT;
+      slide = Math.max(travel - leadIn - leadOut, travel * 0.6);
+      range = slide + leadIn + leadOut;
+      rIn = Math.min(0.3, (vh * RAMP_IN) / range);
+      rOut = Math.min(0.3, leadOut / range);
       shelf.style.height = `${vh + slide}px`;
       place();
     };
