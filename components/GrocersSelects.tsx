@@ -6,11 +6,61 @@ import { grocersSelects } from "@/data/site";
 import styles from "./GrocersSelects.module.css";
 
 /**
- * Grocer's Selects: the graphics shelf. No title, no rules: just the posters, three across,
- * 40 apart, starting 40 under the line that closes Seasonal Picks.
+ * Grocer's Selects: the graphics shelf. No title, no rules: one row of posters as tall as the
+ * window (40 above and below). On reaching it the row pins in place and scrolling slides it right
+ * to left; once the last poster reaches the right margin the page scrolls on down to the footer.
+ * Phones keep a plain vertical stack.
  */
 export default function GrocersSelects() {
+  const shelfRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLUListElement>(null);
+
+  // Vertical scroll → horizontal slide. The section is made as tall as the window plus however
+  // far the row has to travel; while it's pinned, every pixel scrolled down moves the row one
+  // pixel left.
+  useEffect(() => {
+    const shelf = shelfRef.current;
+    const pin = pinRef.current;
+    const grid = gridRef.current;
+    if (!shelf || !pin || !grid) return;
+    const wide = window.matchMedia("(min-width: 768px)");
+    let travel = 0;
+    let frame = 0;
+
+    const place = () => {
+      frame = 0;
+      if (!wide.matches) return;
+      const y = Math.min(travel, Math.max(0, -shelf.getBoundingClientRect().top));
+      grid.style.transform = `translate3d(${-y}px, 0, 0)`;
+    };
+    const measure = () => {
+      if (!wide.matches) {
+        shelf.style.height = "";
+        grid.style.transform = "";
+        return;
+      }
+      travel = Math.max(0, grid.scrollWidth - pin.clientWidth);
+      shelf.style.height = `${pin.clientHeight + travel}px`;
+      place();
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(place);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(pin);
+    ro.observe(grid);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    wide.addEventListener("change", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      wide.removeEventListener("change", measure);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
 
   // Each poster swipes in only once its art has loaded (no half-drawn image mid-animation), and
   // the moving posters only play while they're on screen.
@@ -55,12 +105,17 @@ export default function GrocersSelects() {
   }, []);
 
   return (
-    <section id="grocers-selects" aria-labelledby="grocers-selects-title">
+    <section
+      id="grocers-selects"
+      ref={shelfRef}
+      className={styles.shelf}
+      aria-labelledby="grocers-selects-title"
+    >
       {/* no title on the shelf: the name stays for screen readers only */}
       <h2 id="grocers-selects-title" className="visually-hidden">
         Grocer’s selects
       </h2>
-      <div>
+      <div ref={pinRef} className={styles.pin}>
         <ul ref={gridRef} className={styles.grid}>
           {grocersSelects.map((item) => (
             <li key={item.src} className={styles.cell}>
@@ -92,7 +147,7 @@ export default function GrocersSelects() {
                     alt={`${item.title} — ${item.source}`}
                     width={742}
                     height={988}
-                    sizes="(max-width: 599px) 90vw, (max-width: 1023px) 46vw, 31vw"
+                    sizes="(max-width: 767px) 90vw, 70vh"
                     loading="eager"
                     className={styles.poster}
                   />

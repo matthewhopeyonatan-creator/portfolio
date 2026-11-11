@@ -1,20 +1,42 @@
-/* Grocer's Selects — just the posters, no title, no rules: three across on the side margins, 40
-   apart both ways, 40 under the Seasonal Picks line and 40 above the footer. Poster 371 × 494. */
+/* Grocer's Selects — no title, no rules. Desktop: one row of posters as tall as the window
+   (40 above and below, so the first row sits 40 under the Seasonal Picks line), 40 apart, pinned
+   while scrolling slides it right to left (GrocersSelects.tsx sets the section's height and the
+   row's transform). Phones: one poster a row on the 20 margins. Poster 371 × 494. */
+.shelf {
+  position: relative;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: var(--color-bg);
+}
 
 .grid {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
   gap: 40px;
+  width: max-content;
   margin: 0;
-  padding: 40px var(--gutter);
+  padding: 0 var(--gutter);
   list-style: none;
-  background: var(--color-bg);
+  will-change: transform;
 }
 
 .cell {
-  min-width: 0;
+  flex: none;
+  height: calc(100svh - 80px);
+  aspect-ratio: 371 / 494;
+}
+
+.item,
+.frame {
+  height: 100%;
 }
 
 .item {
@@ -28,28 +50,31 @@
 .poster {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 371 / 494;
+  height: 100%;
   object-fit: cover; /* videos fill the same 3:4 slot as the stills */
 }
 
-/* tablets: two across */
-@media (max-width: 1023px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* phones: one a row on the 20 margins, 20 apart and 20 from the line above */
+/* phones: a plain vertical stack, 20 apart and 20 from the line above */
 @media (max-width: 767px) {
-  .grid {
-    gap: var(--gutter);
-    padding: var(--gutter);
+  .pin {
+    position: static;
+    height: auto;
+    overflow: visible;
+    display: block;
   }
-}
-
-@media (max-width: 599px) {
   .grid {
+    display: grid;
     grid-template-columns: 1fr;
+    gap: var(--gutter);
+    width: auto;
+    padding: var(--gutter);
+    will-change: auto;
+  }
+  .cell {
+    height: auto;
+  }
+  .poster {
+    height: auto;
+    aspect-ratio: 371 / 494;
   }
 }
