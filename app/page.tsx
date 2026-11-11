@@ -26,7 +26,7 @@ export default function Home() {
             <p className={styles.titleSub} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
               Projects selected to showcase my past works in product design
               <br />
-              Hope to convey care, versatility, and craft through them
+              I hope to convey care, versatility, and craft through them
             </p>
           </div>
           <ul className={styles.grid}>
