@@ -190,6 +190,8 @@ export const grocersSelects: {
   src: string;
   /** looping video for posters that move (the still is its poster frame) */
   video?: string;
+  /** a big one: two to a row instead of three */
+  wide?: boolean;
 }[] = [
   {
     title: "The Mood Room",
@@ -208,6 +210,21 @@ export const grocersSelects: {
     source: "Fatboy Supperclub",
     price: "$168.00",
     src: "/graphics/poster-15.webp",
+  },
+  // row 2: two big posters (copies for now — new posters are coming for the originals' spots)
+  {
+    title: "Solomun Special Event",
+    source: "CrowdVolt Socials",
+    price: "$102.00",
+    src: "/graphics/poster-02.webp",
+    wide: true,
+  },
+  {
+    title: "LA Design Cafe",
+    source: "Design Meetup Socials",
+    price: "$142.00",
+    src: "/graphics/poster-14.webp",
+    wide: true,
   },
   {
     title: "Solara Poster",

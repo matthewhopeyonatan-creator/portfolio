@@ -71,8 +71,8 @@ export default function GrocersSelects() {
       </div>
       <div>
         <ul ref={gridRef} className={styles.grid}>
-          {grocersSelects.map((item) => (
-            <li key={item.src} className={styles.cell}>
+          {grocersSelects.map((item, i) => (
+            <li key={`${i}-${item.src}`} className={styles.cell}>
               {/* each row rolls up together */}
               <figure className={styles.item} data-reveal="swipe">
                 {/* the poster's slot: it comes into focus here on entrance (globals.css) */}
