@@ -16,23 +16,37 @@ export default function GrocersSelects() {
   const pinRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLUListElement>(null);
 
-  // Vertical scroll → horizontal slide. The section is made as tall as the window plus however
-  // far the row has to travel; while it's pinned, every pixel scrolled down moves the row one
-  // pixel left.
+  // Vertical scroll → horizontal slide. The section is made as tall as the window, plus a pause
+  // when the row pins (HOLD of a window), plus the slide, plus another pause before it lets go.
+  // The slide eases in and out of motion over its first and last stretch (EASE of it), so the
+  // page doesn't switch from moving up to moving sideways (and back) in one frame.
   useEffect(() => {
     const shelf = shelfRef.current;
     const pin = pinRef.current;
     const grid = gridRef.current;
     if (!shelf || !pin || !grid) return;
     const wide = window.matchMedia("(min-width: 768px)");
+    const HOLD = 0.35; // of the window's height, before and after the slide
+    const EASE = 0.15; // share of the slide spent speeding up / slowing down at each end
     let travel = 0;
+    let hold = 0;
+    let slide = 0;
     let frame = 0;
+
+    // eased progress: gentle (quadratic) ramps at both ends, steady in the middle
+    const ease = (t: number) => {
+      const m = 1 / (1 - EASE); // middle speed, so the whole curve still runs 0 → 1
+      if (t < EASE) return (m / (2 * EASE)) * t * t;
+      if (t > 1 - EASE) return 1 - (m / (2 * EASE)) * (1 - t) * (1 - t);
+      return m * (t - EASE / 2);
+    };
 
     const place = () => {
       frame = 0;
       if (!wide.matches) return;
-      const y = Math.min(travel, Math.max(0, -shelf.getBoundingClientRect().top));
-      grid.style.transform = `translate3d(${-y}px, 0, 0)`;
+      const scrolled = -shelf.getBoundingClientRect().top - hold;
+      const t = slide ? Math.min(1, Math.max(0, scrolled / slide)) : 0;
+      grid.style.transform = `translate3d(${-travel * ease(t)}px, 0, 0)`;
     };
     const measure = () => {
       if (!wide.matches) {
@@ -41,7 +55,9 @@ export default function GrocersSelects() {
         return;
       }
       travel = Math.max(0, grid.scrollWidth - pin.clientWidth);
-      shelf.style.height = `${pin.clientHeight + travel}px`;
+      hold = pin.clientHeight * HOLD;
+      slide = travel;
+      shelf.style.height = `${pin.clientHeight + hold * 2 + slide}px`;
       place();
     };
     const onScroll = () => {
