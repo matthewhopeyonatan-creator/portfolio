@@ -7,9 +7,8 @@ import pageStyles from "@/app/page.module.css";
 import styles from "./GrocersSelects.module.css";
 
 /**
- * Grocer's Selects (Figma 111:697): the graphics shelf. Title row like Seasonal Picks, then the
- * screen split into three equal columns by 2px ink rules that run edge to edge and meet; each
- * poster sits with the same space on all four sides, its name and price under it.
+ * Grocer's Selects: the graphics shelf. Title row like Seasonal Picks, then just the posters,
+ * three across, 40 apart, no rules.
  */
 export default function GrocersSelects() {
   const gridRef = useRef<HTMLUListElement>(null);
@@ -99,7 +98,7 @@ export default function GrocersSelects() {
                     alt={`${item.title} — ${item.source}`}
                     width={742}
                     height={988}
-                    sizes="(max-width: 767px) 80vw, 22vw"
+                    sizes="(max-width: 599px) 90vw, (max-width: 1023px) 46vw, 31vw"
                     loading="eager"
                     className={styles.poster}
                   />
