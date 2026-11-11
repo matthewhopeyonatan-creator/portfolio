@@ -1,10 +1,5 @@
 /* Figma 111:697 — 3 equal columns, 2px ink rules · poster 3:4 (371 × 494), no captions.
    Enlarged: each poster sits 40 from the rules on every side. */
-/* title row: same space above and below the letters (the row is boxed by rules on both sides) */
-.titleRow {
-  padding-top: max(72px, calc(128 * var(--u)));
-}
-
 .grid {
   position: relative;
   z-index: 1;
@@ -83,9 +78,6 @@
 /* phones: one poster a row on the 20 margins, the same space around the title as Seasonal
    picks, and 20 around each poster */
 @media (max-width: 767px) {
-  .titleRow {
-    padding-top: 24px;
-  }
   .cell {
     padding: var(--gutter);
   }

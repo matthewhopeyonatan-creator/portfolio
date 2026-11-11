@@ -22,6 +22,31 @@
   color: var(--color-ink);
 }
 
+/* Section heading with a line of description under it (Seasonal Picks, Grocer's Selects) —
+   Figma 210:4738 (title, Medium 24) + 495:4900 (subtext, Regular 24, centred), 40 apart, with
+   roomy space above and below like a shop's section sign */
+.titleStack {
+  flex-direction: column;
+  gap: 40px;
+  padding: max(48px, calc(64 * var(--u))) var(--gutter) max(64px, calc(96 * var(--u)));
+}
+
+.titleSmall {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.titleSub {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
 .grid {
   position: relative;
   z-index: 1;
@@ -53,6 +78,18 @@
   }
   .sectionTitle {
     font-size: 24px;
+  }
+  /* phones: the description runs as one wrapping paragraph, a size down, on the margins */
+  .titleStack {
+    gap: 24px;
+    padding: 40px var(--gutter) 48px;
+  }
+  .titleSub {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .titleSub br {
+    display: none;
   }
   .grid {
     grid-template-columns: 1fr;

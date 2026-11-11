@@ -58,14 +58,17 @@ export default function GrocersSelects() {
 
   return (
     <section id="grocers-selects" aria-labelledby="grocers-selects-title">
-      <div className={`${pageStyles.sectionTitleRow} ${styles.titleRow}`}>
+      <div className={`${pageStyles.sectionTitleRow} ${pageStyles.titleStack}`}>
         <h2
           id="grocers-selects-title"
-          className={pageStyles.sectionTitle}
+          className={`${pageStyles.sectionTitle} ${pageStyles.titleSmall}`}
           data-reveal="up"
         >
           Grocer’s selects
         </h2>
+        <p className={pageStyles.titleSub} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
+          Some of my favourite graphic design pieces I created for play and for function
+        </p>
       </div>
       <div>
         <ul ref={gridRef} className={styles.grid}>

@@ -14,14 +14,20 @@ export default function Home() {
       <main>
         <Hero />
         <section id="seasonal-picks" aria-labelledby="seasonal-picks-title">
-          <div className={styles.sectionTitleRow}>
+          {/* Figma 210:4738 (title) + 495:4900 (subtext) */}
+          <div className={`${styles.sectionTitleRow} ${styles.titleStack}`}>
             <h2
               id="seasonal-picks-title"
-              className={styles.sectionTitle}
+              className={`${styles.sectionTitle} ${styles.titleSmall}`}
               data-reveal="up"
             >
               Seasonal picks
             </h2>
+            <p className={styles.titleSub} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
+              Projects selected to showcase my past works in product design
+              <br />
+              Hope to convey care, versatility, and craft through them
+            </p>
           </div>
           <ul className={styles.grid}>
             {projects.map((project, i) => (
