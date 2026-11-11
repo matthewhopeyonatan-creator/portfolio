@@ -3,12 +3,11 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { grocersSelects } from "@/data/site";
-import pageStyles from "@/app/page.module.css";
 import styles from "./GrocersSelects.module.css";
 
 /**
- * Grocer's Selects: the graphics shelf. Title row like Seasonal Picks, then just the posters,
- * three across, 40 apart, no rules.
+ * Grocer's Selects: the graphics shelf. No title, no rules: just the posters, three across,
+ * 40 apart, starting 40 under the line that closes Seasonal Picks.
  */
 export default function GrocersSelects() {
   const gridRef = useRef<HTMLUListElement>(null);
@@ -57,15 +56,10 @@ export default function GrocersSelects() {
 
   return (
     <section id="grocers-selects" aria-labelledby="grocers-selects-title">
-      <div className={`${pageStyles.sectionTitleRow} ${styles.titleRow}`}>
-        <h2
-          id="grocers-selects-title"
-          className={pageStyles.sectionTitle}
-          data-reveal="up"
-        >
-          Grocer’s selects
-        </h2>
-      </div>
+      {/* no title on the shelf: the name stays for screen readers only */}
+      <h2 id="grocers-selects-title" className="visually-hidden">
+        Grocer’s selects
+      </h2>
       <div>
         <ul ref={gridRef} className={styles.grid}>
           {grocersSelects.map((item) => (
