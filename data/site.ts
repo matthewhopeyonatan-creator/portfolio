@@ -263,6 +263,21 @@ export const grocersSelects: {
     price: "$173.00",
     src: "/graphics/poster-06.webp",
   },
+  // another row of two big posters
+  {
+    title: "Solara Poster",
+    source: "CrowdVolt Print",
+    price: "$90.00",
+    src: "/graphics/poster-01.webp",
+    wide: true,
+  },
+  {
+    title: "Head Trip Poster",
+    source: "CrowdVolt Socials",
+    price: "$178.00",
+    src: "/graphics/poster-03.webp",
+    wide: true,
+  },
   {
     title: "Spotify Event",
     source: "Design Meetup Socials",
