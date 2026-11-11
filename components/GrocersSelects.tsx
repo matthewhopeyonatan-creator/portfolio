@@ -54,12 +54,51 @@ export default function GrocersSelects() {
       if (pinned !== html.hasAttribute("data-shelf-pinned")) html.toggleAttribute("data-shelf-pinned", pinned);
       const t = range ? Math.min(1, Math.max(0, (lead - top) / range)) : 0;
       grid.style.transform = `translate3d(${-travel * ease(t)}px, 0, 0)`;
+      fold();
+    };
+
+    // Bookshelf: a poster lies flat at full size in the middle of the window and, the further it
+    // is to either side, turns on the edge nearest the middle like a book on a shelf showing its
+    // spine — so posters fold in as they arrive on the right and fold away as they leave on the
+    // left. A shade deepens on the turned face. Measured from the (unturned) cells.
+    const cells = Array.from(grid.children) as HTMLElement[];
+    const FLAT = 0.22; // half-width of the flat zone, as a share of half the window
+    const MAX = 62; // degrees at the window's edge
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const fold = () => {
+      if (still.matches) return;
+      const half = pin.clientWidth / 2;
+      for (const cell of cells) {
+        const fig = cell.firstElementChild as HTMLElement | null;
+        if (!fig) continue;
+        const r = cell.getBoundingClientRect();
+        if (r.right < -200 || r.left > pin.clientWidth + 200) continue; // off screen
+        const d = (r.left + r.width / 2 - half) / half; // −1 left edge … 0 middle … 1 right edge
+        const a = Math.min(1, Math.max(0, (Math.abs(d) - FLAT) / (1 - FLAT)));
+        const k = a * a * (3 - 2 * a); // smoothstep: eases off the flat and into the fold
+        const right = d > 0;
+        fig.style.transformOrigin = right ? "left center" : "right center";
+        fig.style.transform = k
+          ? `perspective(1400px) rotateY(${(right ? 1 : -1) * MAX * k}deg) scale(${1 - 0.06 * k})`
+          : "";
+        const shade = fig.querySelector<HTMLElement>("[data-shade]");
+        if (shade) {
+          shade.style.opacity = String(0.45 * k);
+          shade.dataset.side = right ? "right" : "left";
+        }
+      }
     };
     const measure = () => {
       if (!wide.matches) {
         html.removeAttribute("data-shelf-pinned");
         shelf.style.height = "";
         grid.style.transform = "";
+        for (const cell of cells) {
+          const fig = cell.firstElementChild as HTMLElement | null;
+          if (fig) fig.style.transform = "";
+          const shade = cell.querySelector<HTMLElement>("[data-shade]");
+          if (shade) shade.style.opacity = "0";
+        }
         return;
       }
       const vh = pin.clientHeight;
@@ -181,6 +220,7 @@ export default function GrocersSelects() {
                   />
                 )}
                 </span>
+                <span className={styles.shade} data-shade aria-hidden="true" />
               </figure>
             </li>
           ))}
