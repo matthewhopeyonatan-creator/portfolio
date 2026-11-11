@@ -233,10 +233,10 @@ export const grocersSelects: {
     src: "/graphics/poster-01.webp",
   },
   {
-    title: "Solomun Special Event",
+    title: "Carlita — Artist of the Month",
     source: "CrowdVolt Socials",
     price: "$102.00",
-    src: "/graphics/poster-02.webp",
+    src: "/graphics/poster-17.webp",
   },
   {
     title: "Head Trip Poster",
