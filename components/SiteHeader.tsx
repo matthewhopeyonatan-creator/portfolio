@@ -8,13 +8,21 @@ import { shouldSkipIntro } from "@/lib/intro";
 import { openMenu } from "@/components/MenuDrawer";
 import styles from "./SiteHeader.module.css";
 
-/** Hide on scroll down, show on scroll up — always visible near the top of the page. */
-function useHideOnScroll(threshold = 14) {
+/**
+ * Hide on scroll down, show on scroll up — always visible near the top of the page. While the
+ * poster shelf is pinned (GrocersSelects sets html[data-shelf-pinned]) scrolling never brings it
+ * back; only the mouse touching the top of the window does, and it leaves again once the mouse
+ * moves back down past it.
+ */
+function useHideOnScroll(headerRef: React.RefObject<HTMLElement | null>, threshold = 14) {
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
   const ticking = useRef(false);
+  const peeking = useRef(false);
 
   useEffect(() => {
+    const html = document.documentElement;
+    const pinned = () => html.hasAttribute("data-shelf-pinned");
     lastY.current = window.scrollY;
     const onScroll = () => {
       if (ticking.current) return;
@@ -22,16 +30,37 @@ function useHideOnScroll(threshold = 14) {
       requestAnimationFrame(() => {
         const y = Math.max(window.scrollY, 0);
         const delta = y - lastY.current;
-        if (y < 80) setHidden(false);
-        else if (delta > threshold) setHidden(true);
-        else if (delta < -threshold) setHidden(false);
-        if (Math.abs(delta) > threshold || y < 80) lastY.current = y;
+        if (pinned()) {
+          if (!peeking.current) setHidden(true);
+          lastY.current = y;
+        } else {
+          peeking.current = false;
+          if (y < 80) setHidden(false);
+          else if (delta > threshold) setHidden(true);
+          else if (delta < -threshold) setHidden(false);
+          if (Math.abs(delta) > threshold || y < 80) lastY.current = y;
+        }
         ticking.current = false;
       });
     };
+    const onPointer = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || !pinned()) return;
+      const h = headerRef.current?.offsetHeight ?? 60;
+      if (!peeking.current && e.clientY <= 24) {
+        peeking.current = true;
+        setHidden(false);
+      } else if (peeking.current && e.clientY > h + 24) {
+        peeking.current = false;
+        setHidden(true);
+      }
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [threshold]);
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointermove", onPointer);
+    };
+  }, [threshold, headerRef]);
 
   return [hidden, setHidden] as const;
 }
@@ -84,13 +113,15 @@ function CartButton() {
 }
 
 export default function SiteHeader({ intro = false }: { intro?: boolean }) {
-  const [hidden, setHidden] = useHideOnScroll();
+  const headerRef = useRef<HTMLElement>(null);
+  const [hidden, setHidden] = useHideOnScroll(headerRef);
   const [introPhase, finishIntro] = useIntro(intro);
   const introClass =
     introPhase === "waiting" ? styles.introWaiting : introPhase === "playing" ? styles.introPlaying : "";
 
   return (
     <header
+      ref={headerRef}
       className={`${styles.header} ${hidden ? styles.hidden : ""} ${introClass}`}
       onAnimationEnd={(e) => {
         if (e.target === e.currentTarget && introPhase === "playing") finishIntro();

@@ -26,6 +26,7 @@ export default function GrocersSelects() {
     const grid = gridRef.current;
     if (!shelf || !pin || !grid) return;
     const wide = window.matchMedia("(min-width: 768px)");
+    const html = document.documentElement;
     const HOLD = 0.35; // of the window's height, before and after the slide
     const EASE = 0.15; // share of the slide spent speeding up / slowing down at each end
     let travel = 0;
@@ -44,12 +45,17 @@ export default function GrocersSelects() {
     const place = () => {
       frame = 0;
       if (!wide.matches) return;
-      const scrolled = -shelf.getBoundingClientRect().top - hold;
+      const top = shelf.getBoundingClientRect().top;
+      // while the row is pinned the navbar stays away (SiteHeader); the mouse at the top brings it
+      const pinned = top <= 0 && top > -(hold * 2 + slide);
+      if (pinned !== html.hasAttribute("data-shelf-pinned")) html.toggleAttribute("data-shelf-pinned", pinned);
+      const scrolled = -top - hold;
       const t = slide ? Math.min(1, Math.max(0, scrolled / slide)) : 0;
       grid.style.transform = `translate3d(${-travel * ease(t)}px, 0, 0)`;
     };
     const measure = () => {
       if (!wide.matches) {
+        html.removeAttribute("data-shelf-pinned");
         shelf.style.height = "";
         grid.style.transform = "";
         return;
@@ -75,6 +81,7 @@ export default function GrocersSelects() {
       window.removeEventListener("scroll", onScroll);
       wide.removeEventListener("change", measure);
       cancelAnimationFrame(frame);
+      html.removeAttribute("data-shelf-pinned");
     };
   }, []);
 
