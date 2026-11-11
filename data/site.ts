@@ -200,10 +200,10 @@ export const grocersSelects: {
     src: "/graphics/poster-13.webp",
   },
   {
-    title: "LA Design Cafe",
-    source: "Design Meetup Socials",
+    title: "Sunday Coworking & Paper Engineering Workshop",
+    source: "Design Meetup NYC",
     price: "$142.00",
-    src: "/graphics/poster-14.webp",
+    src: "/graphics/poster-16.webp",
   },
   {
     title: "Land to Sea",
