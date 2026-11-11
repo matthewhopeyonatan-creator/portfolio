@@ -1,10 +1,19 @@
-/* Figma 111:697 — 3 equal columns, 2px ink rules · poster 3:4 (371 × 494), no captions.
-   Enlarged: each poster sits 40 from the rules on every side. */
+/* Figma 111:697 — columns split by 2px ink rules · poster 3:4 (371 × 494), no captions.
+   Enlarged: each poster sits 40 from the rules on every side. Rows of three, except "wide"
+   posters, which go two to a row (a 6-track grid: normal cells take 2 tracks, wide ones 3). */
+
+/* every cell has a rule on its right; the grid runs 2px past the window and that last rule is
+   clipped off, so every poster in a row is exactly the same size whatever the mix */
+.shelf {
+  overflow-x: clip;
+}
+
 .grid {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  width: calc(100% + 2px);
   /* the shelf is the last thing on the page: its bottom rule and the footer's top rule share the
      same 2px, rather than stacking into a 4px line */
   margin: 0 0 -2px;
@@ -14,12 +23,14 @@
 }
 
 .cell {
+  grid-column: span 2;
   padding: 40px;
+  border-right: var(--rule);
   border-bottom: var(--rule);
 }
 
-.cell:not(:nth-child(3n)) {
-  border-right: var(--rule);
+.wide {
+  grid-column: span 3;
 }
 
 .item {
@@ -38,45 +49,24 @@
   object-fit: cover; /* videos fill the same 3:4 slot as the stills */
 }
 
-/* tablets: two across */
+/* tablets: two across, wide or not */
 @media (max-width: 1023px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .cell:not(:nth-child(3n)) {
-    border-right: 0;
-  }
-  .cell:nth-child(odd) {
-    border-right: var(--rule);
-  }
-  .cell {
-    padding: 40px;
+  .cell,
+  .wide {
+    grid-column: span 1;
   }
 }
 
-/* phones: one per row */
+/* phones: one per row, on the 20 margins, 20 around each poster */
 @media (max-width: 599px) {
   .grid {
     grid-template-columns: 1fr;
   }
-  .cell:nth-child(odd) {
-    border-right: 0;
-  }
-  .cell {
-    padding: 40px 16px;
-  }
 }
 
-/* three across: the last column has no rule on its right, so give it an invisible one — every
-   poster is then exactly the same width/height across the row */
-@media (min-width: 1024px) {
-  .cell:nth-child(3n) {
-    border-right: 2px solid transparent;
-  }
-}
-
-/* phones: one poster a row on the 20 margins, the same space around the title as Seasonal
-   picks, and 20 around each poster */
 @media (max-width: 767px) {
   .cell {
     padding: var(--gutter);

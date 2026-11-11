@@ -70,10 +70,13 @@ export default function GrocersSelects() {
           Some of my favourite graphic design pieces I created for play and for function
         </p>
       </div>
-      <div>
+      <div className={styles.shelf}>
         <ul ref={gridRef} className={styles.grid}>
-          {grocersSelects.map((item) => (
-            <li key={item.src} className={styles.cell}>
+          {grocersSelects.map((item, i) => (
+            <li
+              key={`${i}-${item.src}`}
+              className={`${styles.cell} ${item.wide ? styles.wide : ""}`}
+            >
               {/* each row rolls up together */}
               <figure className={styles.item} data-reveal="swipe">
                 {/* the poster's slot: it comes into focus here on entrance (globals.css) */}
@@ -102,7 +105,7 @@ export default function GrocersSelects() {
                     alt={`${item.title} — ${item.source}`}
                     width={742}
                     height={988}
-                    sizes="(max-width: 767px) 90vw, 30vw"
+                    sizes={item.wide ? "(max-width: 767px) 90vw, 45vw" : "(max-width: 767px) 90vw, 30vw"}
                     loading="eager"
                     className={styles.poster}
                   />
