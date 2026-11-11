@@ -2,7 +2,6 @@
    40 under the title (no rule under it here) and 40 above the footer. Poster 371 × 494, no
    captions. */
 .titleRow {
-  padding-top: max(72px, calc(128 * var(--u)));
   border-bottom: 0;
 }
 
@@ -47,9 +46,6 @@
 
 /* phones: one a row on the 20 margins, the same space around the title as Seasonal picks */
 @media (max-width: 767px) {
-  .titleRow {
-    padding-top: 24px;
-  }
   .grid {
     padding: 0 var(--gutter) 40px;
   }
