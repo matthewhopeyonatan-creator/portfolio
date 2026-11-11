@@ -227,10 +227,10 @@ export const grocersSelects: {
     wide: true,
   },
   {
-    title: "Solara Poster",
-    source: "CrowdVolt Print",
+    title: "At Scale",
+    source: "Google × Design Meetup",
     price: "$90.00",
-    src: "/graphics/poster-01.webp",
+    src: "/graphics/poster-18.webp",
   },
   {
     title: "Carlita — Artist of the Month",
@@ -239,10 +239,10 @@ export const grocersSelects: {
     src: "/graphics/poster-17.webp",
   },
   {
-    title: "Head Trip Poster",
-    source: "CrowdVolt Socials",
+    title: "iDesignMeetup",
+    source: "Design Meetup Cupertino",
     price: "$178.00",
-    src: "/graphics/poster-03.webp",
+    src: "/graphics/poster-19.webp",
   },
   {
     title: "New Music Friday",
