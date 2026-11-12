@@ -11,10 +11,9 @@ import styles from "./ReceiptBack.module.css";
  * an upload — and prints it onto the slip like a thermal receipt: black and white, contrasty,
  * with fine noise and a little banding (receiptify). Below, the shop's name and a thank-you; two blurred
  * tomatoes peek in from the corners. It has its own marker, so people can draw on this side too.
- * The photo is kept for the visit (sessionStorage) so a refresh doesn't lose it.
+ * The photo lives only on the page: a reload starts with an empty square.
  */
 
-const PHOTO_KEY = "hg-receipt-photo";
 const N = 720; // the printed photo's resolution: fine enough that the noise reads as grain
 
 /** Print an image the way a receipt printer would: black and white, the levels stretched and
@@ -94,19 +93,17 @@ const ReceiptBack = forwardRef<
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
 
+  // photos are never kept: a reload starts with an empty square. (Clears what an earlier version
+  // of this page saved.)
   useEffect(() => {
     try {
-      const saved = window.sessionStorage.getItem(PHOTO_KEY);
-      if (saved) setPhoto(saved);
+      window.sessionStorage.removeItem("hg-receipt-photo");
     } catch {}
   }, []);
 
   const keep = (url: string) => {
     setPhoto(url);
     setFlash((f) => f + 1);
-    try {
-      window.sessionStorage.setItem(PHOTO_KEY, url);
-    } catch {}
   };
 
   const stop = useCallback(() => {
