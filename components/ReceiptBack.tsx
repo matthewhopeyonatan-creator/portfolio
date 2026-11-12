@@ -18,8 +18,8 @@ const PHOTO_KEY = "hg-receipt-photo";
 const N = 720; // the printed photo's resolution: fine enough that the noise reads as grain
 
 /** Print an image the way a receipt printer would: black and white, the levels stretched and
- *  the contrast pushed so faces read clearly, fine noise over the top and the odd faintly lighter
- *  or darker row where the print head bands. Ink is #282828 (never pure black), paper white. */
+ *  the contrast pushed so faces read clearly, noise over the top, the odd faintly lighter or
+ *  darker row where the print head bands, and a few thin white streaks where it skipped. Ink is #282828 (never pure black), paper white. */
 function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = false): string {
   const c = document.createElement("canvas");
   c.width = c.height = N;
@@ -53,14 +53,23 @@ function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = fal
   const lo = pick(0.01);
   const hi = Math.max(lo + 1, pick(0.99));
   const INK = 40; // #282828
+  // a few thin white lines where the print head skipped: rows (1–2px) printed almost blank
+  const skips = new Set<number>();
+  for (let k = 0, n = 4 + Math.floor(Math.random() * 4); k < n; k++) {
+    const r = Math.floor(Math.random() * N);
+    skips.add(r);
+    if (Math.random() < 0.4) skips.add(r + 1);
+  }
   for (let row = 0; row < N; row++) {
     const band = Math.random() < 0.06 ? (Math.random() - 0.5) * 18 : 0;
+    const skip = skips.has(row);
     for (let x = 0; x < N; x++) {
       const i = row * N + x;
       let v = Math.min(1, Math.max(0, (lum[i] - lo) / (hi - lo)));
       v = v < 0.5 ? 2 * v * v : 1 - 2 * (1 - v) * (1 - v); // S-curve: crisper blacks and whites
       let out = INK + v * (255 - INK);
-      out += (Math.random() - 0.5) * 34 + band; // noise
+      out += (Math.random() - 0.5) * 50 + band; // noise
+      if (skip) out = out + (255 - out) * 0.82; // a white streak
       out = Math.min(255, Math.max(INK, out));
       d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = out;
       d[i * 4 + 3] = 255;
