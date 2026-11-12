@@ -53,6 +53,7 @@ const inqHeadline = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://hopesgrocer.com"),
   title: "hope’s grocer - Matthew Hope Portfolio",
   description:
     "Matthew Hope is a product designer in New York. Science-trained mind, designer's hands.",
@@ -63,7 +64,9 @@ export const metadata: Metadata = {
       "Matthew Hope is a product designer in New York. Science-trained mind, designer's hands.",
     siteName: "hope’s grocer",
     type: "website",
+    // the picture is app/opengraph-image.png: a snapshot of the landing page
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
