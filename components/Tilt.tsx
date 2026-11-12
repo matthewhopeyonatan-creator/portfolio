@@ -70,7 +70,7 @@ export default function Tilt({
     // the paper doesn't swing out from under the pen
     let held = false;
     const down = (e: PointerEvent) => {
-      if ((e.target as HTMLElement).closest("textarea, button, a")) return;
+      if ((e.target as HTMLElement).closest("textarea, button, a, [data-no-draw]")) return;
       held = true;
       cancelAnimationFrame(raf);
       raf = 0;

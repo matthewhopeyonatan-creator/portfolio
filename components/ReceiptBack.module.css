@@ -1,0 +1,403 @@
+/* Figma 504:4934 — the back of the receipt: the same 522 × 791 white slip with a 2px ink border ·
+   a 474 grey square at (24, 29) for the photo, "Upload or take photo" Regular 16 in its middle ·
+   "hope's grocer" Atelier Fleur Bold 48, centred, top 571 · "Thank you for stopping by :) /
+   Come back anytime~" Regular 24 (−1.2 tracking), centred, top 654 · two blurred tomatoes cut at
+   the slip's edge, top-left and right. Positions are in --ru (1 Figma px, set on the page); the
+   slip's border is 2, so things inside sit 2 less than their Figma numbers. */
+.back {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(791 * var(--ru));
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* the marker's canvas, over everything; same blend as the front */
+.ink {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.88;
+}
+
+:global(html[data-theme="dark"]) .ink {
+  mix-blend-mode: screen;
+}
+
+/* ── the photo slot ── */
+.square {
+  position: absolute;
+  left: calc(22 * var(--ru));
+  top: calc(27 * var(--ru));
+  width: calc(474 * var(--ru));
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-ink) 18%, var(--color-paper));
+  transition: background-color 400ms var(--ease-out);
+}
+
+/* printed: the photo is ink on the slip's own paper, like a real receipt */
+.filled {
+  background: transparent;
+}
+
+.empty,
+.choice,
+.snap {
+  font: inherit;
+  color: var(--color-ink);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: max(13px, calc(16 * var(--ru)));
+  line-height: normal;
+}
+
+.empty:focus-visible,
+.choice:focus-visible,
+.snap:focus-visible,
+.retake:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: -6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .empty:hover,
+  .choice:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* with a mouse: webcam or upload */
+.choose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(16 * var(--ru));
+  height: 100%;
+  font-size: max(13px, calc(16 * var(--ru)));
+  animation: fadeIn 250ms var(--ease-out);
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: inherit;
+}
+
+.choice svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.choice:active,
+.snap:active,
+.retake:active,
+.empty:active {
+  transform: scale(0.97);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.or {
+  color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+}
+
+/* the webcam: a live preview already in black and white, a shutter, then 3-2-1 */
+.booth {
+  position: relative;
+  height: 100%;
+  cursor: default;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* a mirror, the way people expect to see themselves */
+  filter: grayscale(1) contrast(1.25);
+}
+
+.snap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(18 * var(--ru));
+  translate: -50% 0;
+  padding: 6px 18px;
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper);
+  font-size: max(14px, calc(18 * var(--ru)));
+}
+
+.count {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: calc(140 * var(--ru));
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  text-shadow: 0 2px 24px rgba(40, 40, 40, 0.35);
+  pointer-events: none;
+  animation: countIn 800ms var(--ease-out);
+}
+
+@keyframes countIn {
+  from {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+/* the printed photo: dark dots on clear, so the paper shows through */
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated; /* crisp printer dots, not a soft grey */
+  animation: printPhoto 900ms var(--ease-out);
+}
+
+/* dark slip: the dots turn to the light ink */
+:global(html[data-theme="dark"]) .photo {
+  filter: invert(1);
+}
+
+/* it prints top to bottom, like the head moving down the paper */
+@keyframes printPhoto {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* a camera flash as the photo lands */
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  opacity: 0;
+  animation: flash 500ms var(--ease-out);
+}
+
+@keyframes flash {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* another go: a small icon in the photo's bottom-left corner (the top-right is the clear-drawing
+   icon's, the bottom-right the tomato's) */
+.retake {
+  position: absolute;
+  left: calc(10 * var(--ru));
+  bottom: calc(10 * var(--ru));
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-paper); /* readable over a dark photo */
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.retake svg {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .retake:hover svg {
+    transform: rotate(90deg);
+  }
+}
+
+.file {
+  display: none;
+}
+
+/* ── type ── */
+.logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(569 * var(--ru));
+  margin: 0;
+  font-family: var(--font-display-stack);
+  font-size: calc(48 * var(--ru));
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.logoBold {
+  font-weight: 700;
+}
+
+/* the display font has no curly apostrophe (same as the front and the navbar) */
+.logoApostrophe {
+  font-weight: 400;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.15em;
+  position: relative;
+  top: -0.06em;
+  margin: 0 -0.05em 0 -0.03em;
+}
+
+.thanks {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(652 * var(--ru));
+  margin: 0;
+  font-size: calc(24 * var(--ru));
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── tomatoes: laid over the slip's outer edge (border included) and cut there ── */
+.tomatoes {
+  position: absolute;
+  inset: -2px;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tomato {
+  position: absolute;
+  height: auto;
+  max-width: none;
+  transition: opacity 450ms ease;
+}
+
+.dark {
+  opacity: 0;
+}
+
+:global(html[data-theme="dark"]) .light {
+  opacity: 0;
+}
+
+:global(html[data-theme="dark"]) .dark {
+  opacity: 1;
+}
+
+.tomatoLeft {
+  left: 0;
+  top: 0;
+  width: calc(183 * var(--ru));
+}
+
+/* its SVG is padded 110 above so the blur isn't cut off at the top */
+.tomatoRight {
+  left: calc(351.14 * var(--ru));
+  top: calc((276.75 - 110) * var(--ru));
+  width: calc(171 * var(--ru));
+}
+
+/* clear drawing (same as the front) */
+.clear {
+  position: absolute;
+  top: calc(14 * var(--ru));
+  right: calc(14 * var(--ru));
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9);
+  transition:
+    opacity var(--dur-exit) var(--ease-out),
+    transform var(--dur-exit) var(--ease-out),
+    visibility 0s linear var(--dur-exit);
+}
+
+.clear svg {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+.clearOn {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 350ms var(--ease-out),
+    transform 350ms var(--ease-out),
+    visibility 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .clearOn:hover svg {
+    transform: rotate(-60deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    animation: fadeIn 400ms ease;
+  }
+  .count {
+    animation: fadeIn 200ms ease;
+  }
+  .flash {
+    animation-duration: 250ms;
+  }
+  .clear,
+  .clearOn,
+  .clearOn:hover svg,
+  .retake:hover svg {
+    transform: none;
+  }
+}

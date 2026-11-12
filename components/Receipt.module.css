@@ -2,8 +2,8 @@
    Bold 36, centred, 37 from the top · "ORDERS" Regular 24 (−1.2 tracking) at (23, 102) ·
    a 474-wide 2px box from y150: the basket list (Regular 20, −1 tracking, rows 4 apart) · a NOTES
    band from y495 (label Regular 24, note Light 16/16) · a band from y610 with MOST VIEWED / TOTAL
-   (Regular 24, values right) · box ends 54 above the slip's bottom. Under it, 20 below: two 184 × 42
-   white buttons, 2px border, 14 apart, Regular 20. --ru is 1 Figma px, scaled so the whole slip
+   (Regular 24, values right) · box ends 54 above the slip's bottom. Under it, 20 below: "flip me!" (Regular 24),
+   which turns the slip over to its photobooth back (ReceiptBack). --ru is 1 Figma px, scaled so the whole slip
    and its buttons fit the screen under the navbar. */
 .page {
   --ru: max(0.5px, min(1px, (100vw - 32px) / 522, (100svh - var(--header-h) - 96px) / 873));
@@ -379,14 +379,128 @@
   text-align: right;
 }
 
-/* ── download / share ── */
+/* ── under the slip: "flip me!" (and, with an empty basket, a way back to the shelves) ── */
 .actions {
   display: flex;
-  gap: calc(14 * var(--ru));
+  align-items: center;
+  justify-content: center;
+  gap: calc(24 * var(--ru));
 }
 
-/* step 3: the buttons settle in last, a beat apart. `backwards` so the press scale still works after */
-.actions > .button {
+/* step 3: settles in last, after the tomatoes. `backwards` so the press scale still works after */
+.actions > * {
+  animation: actionsIn 450ms var(--ease-out) 4800ms backwards;
+}
+
+.actions > * + * {
+  animation-delay: 4880ms;
+}
+
+@keyframes actionsIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* "flip me!" — Host Grotesk Regular 24, just words */
+.flip {
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: max(18px, calc(24 * var(--ru)));
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.03em;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+  transition:
+    text-decoration-color var(--dur-hover) ease,
+    transform var(--dur-press) var(--ease-out);
+}
+
+.flip:active {
+  transform: scale(0.97);
+}
+
+.flip:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flip:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ── the flip: both faces share one grid cell (so they're the same size); the back starts turned
+   away, and the pair turns over on the spot like a card in the hand ── */
+.flipper {
+  display: grid;
+  transform: perspective(1600px) rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: transform 900ms var(--ease-in-out);
+}
+
+.flipped {
+  transform: perspective(1600px) rotateY(180deg);
+}
+
+.face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.backFace {
+  transform: rotateY(180deg);
+}
+
+/* download this side: a small icon in the slip's bottom-right corner, in the ink */
+.save {
+  position: absolute;
+  right: calc(12 * var(--ru));
+  bottom: calc(12 * var(--ru));
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.save svg {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+.save:active {
+  transform: scale(0.97);
+}
+
+.save:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .save:hover svg {
+    transform: translateY(2px);
+  }
+}
+
+.button {
   animation: actionsIn 450ms var(--ease-out) 4800ms backwards;
 }
 
@@ -454,8 +568,25 @@
   .clearOn:hover svg {
     transform: none;
   }
-  .actions > .button,
-  .actions > .button + .button {
+  .actions > *,
+  .actions > * + * {
     animation: printFade 300ms ease 400ms backwards;
+  }
+  /* no turning: the sides crossfade */
+  .flipper,
+  .flipped,
+  .backFace {
+    transform: none;
+    transition: none;
+  }
+  .face {
+    transition: opacity 300ms ease;
+  }
+  .flipped > .front,
+  .flipper:not(.flipped) > .backFace {
+    opacity: 0;
+  }
+  .save:hover svg {
+    transform: none;
   }
 }

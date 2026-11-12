@@ -77,7 +77,7 @@ export default function useMarker() {
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.button !== 0 || stroke.current || !cv.current) return;
-    if ((e.target as HTMLElement).closest("textarea, button, a")) return;
+    if ((e.target as HTMLElement).closest("textarea, button, a, [data-no-draw]")) return;
     e.preventDefault(); // no text selection while drawing
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     const c = cv.current;

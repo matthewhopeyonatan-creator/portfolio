@@ -2,20 +2,23 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RotateCcw } from "lucide-react";
+import { Download, RotateCcw } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
 import { loadReceipt, logReceipt, mostViewed, saveReceipt, visitMinutes, withId, type Receipt as R } from "@/lib/visit";
 import ThemedPair from "@/components/ThemedPair";
+import ReceiptBack from "@/components/ReceiptBack";
 import styles from "./Receipt.module.css";
 
 /**
  * The checkout receipt (Figma 146:168): a paper slip, centred on the page — the shop's name, a
  * "orders" box with everything that was in the basket, notes the visitor can type, the
- * thing they looked at longest and their total time on the site. It tilts under the pointer (Tilt), prints in on arrival, and can be downloaded
- * as an image or shared. With nothing checked out (someone landed here directly) it still prints,
- * with an empty basket and a way back to the shelves.
+ * thing they looked at longest and their total time on the site. It tilts under the pointer (Tilt) and prints in on arrival.
+ * "flip me!" turns it over on the spot to its back (ReceiptBack, Figma 504:4934): a photobooth that
+ * prints a photo onto the slip. Both sides can be drawn on and downloaded (the small icon in each
+ * one's bottom-right corner). With nothing checked out (someone landed here directly) it still
+ * prints, with an empty basket and a way back to the shelves.
  */
 // the checkout date as printed on the slip: MM/DD/YY (Figma 150:332)
 const stamp = (t: number) => {
@@ -27,9 +30,10 @@ const stamp = (t: number) => {
 export default function Receipt() {
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
+  const back = useRef<HTMLDivElement>(null);
+  const [flipped, setFlipped] = useState(false);
   const feed = useRef<HTMLDivElement>(null);
   const marker = useMarker();
-  const [shareNote, setShareNote] = useState("");
 
   useEffect(() => {
     const saved = loadReceipt();
@@ -105,54 +109,43 @@ export default function Receipt() {
     t.style.height = "auto";
     t.style.height = `${t.scrollHeight}px`;
   };
-  const snapshot = async () => {
-    const node = slip.current;
-    if (!node) return null;
+  // a picture of one side of the slip, as it looks (the back is turned over in place, so it's
+  // drawn face-on)
+  const download = async (node: HTMLElement | null, name: string) => {
+    if (!node) return;
     const { toBlob } = await import("html-to-image");
-    return toBlob(node, {
+    const blob = await toBlob(node, {
       pixelRatio: 2,
       // the slip's own paper colour, so a dark-mode receipt saves dark
       backgroundColor: getComputedStyle(node).backgroundColor || "#ffffff",
+      style: { transform: "none", backfaceVisibility: "visible" },
       filter: (n) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)),
     });
-  };
-
-  const download = async () => {
-    const blob = await snapshot();
     if (!blob) return;
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "hopes-grocer-receipt.png";
+    a.download = name;
     a.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
-
-  const share = async () => {
-    const site = window.location.origin;
-    const text = "My receipt from hope’s grocer — Matthew Hope’s portfolio";
-    try {
-      const blob = await snapshot();
-      const file = blob ? new File([blob], "hopes-grocer-receipt.png", { type: "image/png" }) : null;
-      if (file && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "hope’s grocer", text, url: site });
-        return;
+  const saveIcon = (side: "front" | "back") => (
+    <button
+      type="button"
+      className={styles.save}
+      onClick={() =>
+        download(
+          side === "front" ? slip.current : back.current,
+          side === "front" ? "hopes-grocer-receipt.png" : "hopes-grocer-photobooth.png",
+        )
       }
-      if (navigator.share) {
-        await navigator.share({ title: "hope’s grocer", text, url: site });
-        return;
-      }
-    } catch (e) {
-      if ((e as DOMException)?.name === "AbortError") return; // they closed the share sheet
-    }
-    try {
-      await navigator.clipboard.writeText(site);
-      setShareNote("link copied");
-    } catch {
-      setShareNote(site);
-    }
-    window.setTimeout(() => setShareNote(""), 2200);
-  };
+      aria-label="Download this side of the receipt"
+      title="Download"
+      data-no-snapshot
+    >
+      <Download aria-hidden="true" strokeWidth={2} />
+    </button>
+  );
 
   return (
     <main className={styles.page}>
@@ -190,7 +183,9 @@ export default function Receipt() {
         </div>
         <div ref={feed} className={styles.print}>
           <Tilt className={styles.tilt}>
-            <div ref={slip} className={styles.slip} {...marker.handlers}>
+            {/* turned over in place by "flip me!": both faces stacked, the back already facing away */}
+            <div className={`${styles.flipper} ${flipped ? styles.flipped : ""}`}>
+            <div ref={slip} className={`${styles.slip} ${styles.face} ${styles.front}`} {...marker.handlers} inert={flipped}>
               {/* the marker people can draw on the receipt with — red, mint in dark mode (useMarker) */}
               <canvas ref={marker.canvas} className={styles.ink} aria-hidden="true" />
               {/* start the drawing over — top-right of the slip, only once something's been drawn;
@@ -265,6 +260,9 @@ export default function Receipt() {
                   </div>
                 </dl>
               </div>
+              {saveIcon("front")}
+            </div>
+            <ReceiptBack ref={back} className={`${styles.face} ${styles.backFace}`} hidden={!flipped} download={saveIcon("back")} inert={!flipped} />
             </div>
           </Tilt>
         </div>
@@ -274,16 +272,15 @@ export default function Receipt() {
             <Link className={styles.button} href="/#seasonal-picks">
               start shopping
             </Link>
-          ) : (
-            <>
-              <button type="button" className={styles.button} onClick={download}>
-                download
-              </button>
-              <button type="button" className={styles.button} onClick={share}>
-                {shareNote || "share"}
-              </button>
-            </>
-          )}
+          ) : null}
+          <button
+            type="button"
+            className={styles.flip}
+            onClick={() => setFlipped((f) => !f)}
+            aria-pressed={flipped}
+          >
+            flip me!
+          </button>
         </div>
       </div>
     </main>
