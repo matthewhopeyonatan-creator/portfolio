@@ -24,7 +24,8 @@ export default function Home() {
               Seasonal picks
             </h2>
             <p className={styles.titleSub} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
-              Projects selected to showcase my past works in product design
+              Projects selected to showcase my past works in product design{" "}
+              {/* phones hide the break: the space keeps "design" and "I" apart */}
               <br />
               I hope to convey care, versatility, and craft through them
             </p>
