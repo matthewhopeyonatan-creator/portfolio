@@ -32,30 +32,34 @@
   mix-blend-mode: screen;
 }
 
-/* logo · photo · thank-you, a centred column: the gaps are Figma's (measured from the letters,
-   which are trimmed to their caps), and centring makes the top and bottom margins equal */
+/* logo · photo · thank-you, one column. The logo sits exactly where the front's does (same
+   padding, size and line height as .logo in Receipt.module.css), the photo starts the same
+   distance below the logo's letters as the letters are below the slip's top edge (--gap), and
+   the thank-you is centred in the space left under the photo. */
 .layout {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: calc(40 * var(--ru));
+  padding-top: calc(35 * var(--ru));
+  --gap: calc(30 * var(--ru)); /* logo baseline → photo ≈ slip top → top of the logo letters (~44) */
 }
 
 .footer {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: calc(12 * var(--ru));
-  margin-top: calc(24 * var(--ru)); /* 64 from the photo to the thank-you */
 }
 
 /* ── the photo slot ── */
 .square {
   position: relative;
   flex: none;
+  margin-top: var(--gap);
   width: calc(474 * var(--ru));
   aspect-ratio: 1;
   overflow: hidden;
@@ -230,10 +234,9 @@
 /* ── type ── */
 .logo {
   margin: 0;
-  text-box: trim-both cap alphabetic;
   font-family: var(--font-display-stack);
-  font-size: calc(40 * var(--ru));
-  line-height: normal;
+  font-size: calc(36 * var(--ru));
+  line-height: 1.25;
   text-align: center;
   white-space: nowrap;
 }
