@@ -81,6 +81,13 @@ function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = fal
 
 type Mode = "choose" | "camera" | "photo";
 
+// MM/DD/YY, as on the front of the slip
+const stamp = (t: number) => {
+  const d = new Date(t);
+  const two = (n: number) => String(n).padStart(2, "0");
+  return `${two(d.getMonth() + 1)}/${two(d.getDate())}/${two(d.getFullYear() % 100)}`;
+};
+
 const ReceiptBack = forwardRef<
   HTMLDivElement,
   { className?: string; hidden: boolean; download: React.ReactNode; inert?: boolean }
@@ -90,6 +97,21 @@ const ReceiptBack = forwardRef<
   // the square starts on its two choices: take a photo or upload one
   const [mode, setMode] = useState<Mode>("choose");
   const [flash, setFlash] = useState(0);
+  // printed under the thank-you: today's date and where they are (NYC if we can't tell)
+  const [today] = useState(() => Date.now());
+  const [city, setCity] = useState("NYC");
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/where")
+      .then((r) => r.json())
+      .then((d: { city?: string | null }) => {
+        if (alive && d?.city) setCity(d.city);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
   const file = useRef<HTMLInputElement>(null);
   const shoot = useRef<HTMLInputElement>(null); // phones: straight to the camera
   const video = useRef<HTMLVideoElement>(null);
@@ -236,10 +258,10 @@ const ReceiptBack = forwardRef<
         <span className={styles.logoApostrophe}>’</span>
         <span className={styles.logoBold}>s grocer</span>
       </p>
-      <p className={styles.thanks}>
-        Thank you for stopping by :)
-        <br />
-        Come back anytime~
+      <p className={styles.thanks}>Thanks for stopping by :)</p>
+      <p className={styles.stamp}>
+        <time dateTime={new Date(today).toISOString()}>{stamp(today)}</time>
+        <span>{city}</span>
       </p>
 
       {/* two blurred tomatoes peeking in from the corners, over the photo and the border (Figma,

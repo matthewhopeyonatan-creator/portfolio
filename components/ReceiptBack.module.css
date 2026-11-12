@@ -1,7 +1,7 @@
 /* Figma 504:4934 — the back of the receipt: the same 522 × 791 white slip with a 2px ink border ·
-   a 474 grey square at (24, 29) for the photo, "Upload or take photo" Regular 16 in its middle ·
-   "hope's grocer" Atelier Fleur Bold 48, centred, top 571 · "Thank you for stopping by :) /
-   Come back anytime~" Regular 24 (−1.2 tracking), centred, top 654 · two blurred tomatoes cut at
+   "hope's grocer" Atelier Fleur Bold 40, centred, top 45 · a 474 grey square at (24, 125) for the
+   photo, "Upload or take photo" Regular 16 in its middle · "THANKS FOR STOPPING BY :)" Regular 20
+   (−1 tracking), centred, top 660 · under it at 687 the date and the city, 34 apart · two blurred tomatoes cut at
    the slip's edge, top-left and right — printed black and white with noise, like the photo. Positions are in --ru (1 Figma px, set on the page); the
    slip's border is 2, so things inside sit 2 less than their Figma numbers. */
 .back {
@@ -36,7 +36,7 @@
 .square {
   position: absolute;
   left: calc(22 * var(--ru));
-  top: calc(27 * var(--ru));
+  top: calc(123 * var(--ru));
   width: calc(474 * var(--ru));
   aspect-ratio: 1;
   overflow: hidden;
@@ -213,10 +213,10 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(569 * var(--ru));
+  top: calc(43 * var(--ru));
   margin: 0;
   font-family: var(--font-display-stack);
-  font-size: calc(48 * var(--ru));
+  font-size: calc(40 * var(--ru));
   line-height: normal;
   text-align: center;
   white-space: nowrap;
@@ -236,18 +236,31 @@
   margin: 0 -0.05em 0 -0.03em;
 }
 
-.thanks {
+.thanks,
+.stamp {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(652 * var(--ru));
   margin: 0;
-  font-size: calc(24 * var(--ru));
+  font-size: calc(20 * var(--ru));
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.05em;
   text-align: center;
+  text-transform: uppercase;
   white-space: nowrap;
+}
+
+.thanks {
+  top: calc(658 * var(--ru));
+}
+
+.stamp {
+  top: calc(685 * var(--ru));
+  display: flex;
+  justify-content: center;
+  gap: calc(34 * var(--ru));
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── tomatoes: cut inside the border, so the black border runs over them ── */
