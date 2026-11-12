@@ -143,12 +143,12 @@
   }
 }
 
-/* clear drawing: an icon in the slip's top-right corner, above the ink; fades in once there's
-   something drawn */
+/* clear drawing: an icon in the slip's bottom-left corner (the download icon has the right), above
+   the ink; fades in once there's something drawn */
 .clear {
   position: absolute;
-  top: calc(14 * var(--ru));
-  right: calc(14 * var(--ru));
+  left: calc(14 * var(--ru));
+  bottom: calc(16 * var(--ru));
   z-index: 3;
   display: grid;
   place-items: center;

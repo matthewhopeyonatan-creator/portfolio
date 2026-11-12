@@ -49,7 +49,6 @@
   background: transparent;
 }
 
-.empty,
 .choice,
 .snap {
   font: inherit;
@@ -60,16 +59,7 @@
   cursor: pointer;
 }
 
-.empty {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  font-size: max(13px, calc(16 * var(--ru)));
-  line-height: normal;
-}
 
-.empty:focus-visible,
 .choice:focus-visible,
 .snap:focus-visible,
 .retake:focus-visible {
@@ -78,14 +68,13 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .empty:hover,
   .choice:hover {
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
 }
 
-/* with a mouse: webcam or upload */
+/* the square's two choices, there from the start: take a photo (webcam; phones: the camera) or upload */
 .choose {
   display: flex;
   align-items: center;
@@ -110,8 +99,7 @@
 
 .choice:active,
 .snap:active,
-.retake:active,
-.empty:active {
+.retake:active {
   transform: scale(0.97);
   transition: transform var(--dur-press) var(--ease-out);
 }
@@ -186,8 +174,7 @@
   }
 }
 
-/* another go: a small icon in the photo's bottom-left corner (the top-right is the clear-drawing
-   icon's, the bottom-right the tomato's) */
+/* another go: a small icon in the photo's bottom-left corner (the bottom-right is the tomato's) */
 .retake {
   position: absolute;
   left: calc(10 * var(--ru));
@@ -295,8 +282,8 @@
 /* clear drawing (same as the front) */
 .clear {
   position: absolute;
-  top: calc(14 * var(--ru));
-  right: calc(14 * var(--ru));
+  left: calc(14 * var(--ru));
+  bottom: calc(16 * var(--ru));
   z-index: 5;
   display: grid;
   place-items: center;

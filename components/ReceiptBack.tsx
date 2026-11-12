@@ -79,7 +79,7 @@ function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = fal
   return c.toDataURL("image/jpeg", 0.9);
 }
 
-type Mode = "idle" | "choose" | "camera";
+type Mode = "choose" | "camera" | "photo";
 
 const ReceiptBack = forwardRef<
   HTMLDivElement,
@@ -87,9 +87,11 @@ const ReceiptBack = forwardRef<
 >(function ReceiptBack({ className = "", hidden, download, inert }, ref) {
   const marker = useMarker();
   const [photo, setPhoto] = useState<string | null>(null);
-  const [mode, setMode] = useState<Mode>("idle");
+  // the square starts on its two choices: take a photo or upload one
+  const [mode, setMode] = useState<Mode>("choose");
   const [flash, setFlash] = useState(0);
   const file = useRef<HTMLInputElement>(null);
+  const shoot = useRef<HTMLInputElement>(null); // phones: straight to the camera
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
 
@@ -104,6 +106,7 @@ const ReceiptBack = forwardRef<
   const keep = (url: string) => {
     setPhoto(url);
     setFlash((f) => f + 1);
+    setMode("photo");
   };
 
   const stop = useCallback(() => {
@@ -115,20 +118,16 @@ const ReceiptBack = forwardRef<
   useEffect(() => {
     if (hidden) {
       stop();
-      setMode("idle");
+      setMode((m) => (m === "camera" ? "choose" : m));
     }
   }, [hidden, stop]);
 
   const upload = () => file.current?.click();
 
-  const start = async () => {
-    // phones (and anything without a camera API): the system picker already offers camera or library
-    const touch = window.matchMedia("(pointer: coarse)").matches;
-    if (touch || !navigator.mediaDevices?.getUserMedia) return upload();
-    setMode("choose");
-  };
-
   const openCamera = async () => {
+    // phones (and anything without a webcam API): the system camera
+    const touch = window.matchMedia("(pointer: coarse)").matches;
+    if (touch || !navigator.mediaDevices?.getUserMedia) return shoot.current?.click();
     try {
       const s = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 1280 } },
@@ -144,7 +143,7 @@ const ReceiptBack = forwardRef<
       });
     } catch {
       // no camera, or permission refused: fall back to picking a file
-      setMode("idle");
+      setMode("choose");
       upload();
     }
   };
@@ -152,9 +151,9 @@ const ReceiptBack = forwardRef<
   // snaps straight away (with the flash)
   const snap = () => {
     const v = video.current;
-    if (v && v.videoWidth) keep(receiptify(v, v.videoWidth, v.videoHeight, true));
     stop();
-    setMode("idle");
+    if (v && v.videoWidth) keep(receiptify(v, v.videoWidth, v.videoHeight, true));
+    else setMode("choose");
   };
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,15 +165,13 @@ const ReceiptBack = forwardRef<
     img.onload = () => {
       keep(receiptify(img, img.naturalWidth, img.naturalHeight));
       URL.revokeObjectURL(url);
-      setMode("idle");
     };
     img.src = url;
   };
 
   const retake = () => {
     stop();
-    setMode("idle");
-    start();
+    setMode("choose");
   };
 
   return (
@@ -194,8 +191,8 @@ const ReceiptBack = forwardRef<
       </button>
 
       {/* the photo slot */}
-      <div className={`${styles.square} ${photo && mode === "idle" ? styles.filled : ""}`}>
-        {photo && mode === "idle" ? (
+      <div className={`${styles.square} ${photo && mode === "photo" ? styles.filled : ""}`}>
+        {photo && mode === "photo" ? (
           <>
             {/* key: each new print fades in */}
             <img key={flash} className={styles.photo} src={photo} alt="Your photo, printed on the receipt" />
@@ -221,21 +218,18 @@ const ReceiptBack = forwardRef<
               Upload
             </button>
           </div>
-        ) : mode === "camera" ? (
+        ) : (
           <div className={styles.booth} data-no-draw>
             <video ref={video} className={styles.video} playsInline muted aria-label="Camera preview" />
             <button type="button" className={styles.snap} onClick={snap}>
               smile
             </button>
           </div>
-        ) : (
-          <button type="button" className={styles.empty} onClick={start}>
-            Upload or take photo
-          </button>
         )}
         {flash ? <span key={`f${flash}`} className={styles.flash} aria-hidden="true" data-no-snapshot /> : null}
       </div>
       <input ref={file} type="file" accept="image/*" className={styles.file} onChange={onFile} tabIndex={-1} aria-hidden="true" />
+      <input ref={shoot} type="file" accept="image/*" capture="user" className={styles.file} onChange={onFile} tabIndex={-1} aria-hidden="true" />
 
       <p className={styles.logo} aria-label="hope’s grocer">
         <span className={styles.logoBold}>hope</span>

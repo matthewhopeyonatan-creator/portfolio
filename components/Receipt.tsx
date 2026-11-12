@@ -189,7 +189,7 @@ export default function Receipt() {
             <div ref={slip} className={`${styles.slip} ${styles.face} ${styles.front}`} {...marker.handlers} inert={flipped}>
               {/* the marker people can draw on the receipt with — red, mint in dark mode (useMarker) */}
               <canvas ref={marker.canvas} className={styles.ink} aria-hidden="true" />
-              {/* start the drawing over — top-right of the slip, only once something's been drawn;
+              {/* start the drawing over — bottom-left of the slip, only once something's been drawn;
                   left out of the downloaded image */}
               <button
                 type="button"
