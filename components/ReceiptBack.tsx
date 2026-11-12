@@ -212,57 +212,62 @@ const ReceiptBack = forwardRef<
         <RotateCcw aria-hidden="true" strokeWidth={2} />
       </button>
 
-      {/* the photo slot */}
-      <div className={`${styles.square} ${photo && mode === "photo" ? styles.filled : ""}`}>
-        {photo && mode === "photo" ? (
-          <>
-            {/* key: each new print fades in */}
-            <img key={flash} className={styles.photo} src={photo} alt="Your photo, printed on the receipt" />
-            <button
-              type="button"
-              className={styles.retake}
-              onClick={retake}
-              aria-label="Take another photo"
-              title="Take another photo"
-              data-no-snapshot
-            >
-              <RefreshCw aria-hidden="true" strokeWidth={2} />
-            </button>
-          </>
-        ) : mode === "choose" ? (
-          <div className={styles.choose}>
-            <button type="button" className={styles.choice} onClick={openCamera}>
-              <Camera aria-hidden="true" strokeWidth={1.75} />
-              Take photo
-            </button>
-            <span className={styles.or}>or</span>
-            <button type="button" className={styles.choice} onClick={upload}>
-              Upload
-            </button>
-          </div>
-        ) : (
-          <div className={styles.booth} data-no-draw>
-            <video ref={video} className={styles.video} playsInline muted aria-label="Camera preview" />
-            <button type="button" className={styles.snap} onClick={snap}>
-              smile
-            </button>
-          </div>
-        )}
-        {flash ? <span key={`f${flash}`} className={styles.flash} aria-hidden="true" data-no-snapshot /> : null}
+      {/* logo, photo and thank-you stacked and centred, so the space above the logo and below the
+          last line is always the same */}
+      <div className={styles.layout}>
+        <p className={styles.logo} aria-label="hope’s grocer">
+          <span className={styles.logoBold}>hope</span>
+          <span className={styles.logoApostrophe}>’</span>
+          <span className={styles.logoBold}>s grocer</span>
+        </p>
+        {/* the photo slot */}
+        <div className={`${styles.square} ${photo && mode === "photo" ? styles.filled : ""}`}>
+          {photo && mode === "photo" ? (
+            <>
+              {/* key: each new print fades in */}
+              <img key={flash} className={styles.photo} src={photo} alt="Your photo, printed on the receipt" />
+              <button
+                type="button"
+                className={styles.retake}
+                onClick={retake}
+                aria-label="Take another photo"
+                title="Take another photo"
+                data-no-snapshot
+              >
+                <RefreshCw aria-hidden="true" strokeWidth={2} />
+              </button>
+            </>
+          ) : mode === "choose" ? (
+            <div className={styles.choose}>
+              <button type="button" className={styles.choice} onClick={openCamera}>
+                <Camera aria-hidden="true" strokeWidth={1.75} />
+                Take photo
+              </button>
+              <span className={styles.or}>or</span>
+              <button type="button" className={styles.choice} onClick={upload}>
+                Upload
+              </button>
+            </div>
+          ) : (
+            <div className={styles.booth} data-no-draw>
+              <video ref={video} className={styles.video} playsInline muted aria-label="Camera preview" />
+              <button type="button" className={styles.snap} onClick={snap}>
+                smile
+              </button>
+            </div>
+          )}
+          {flash ? <span key={`f${flash}`} className={styles.flash} aria-hidden="true" data-no-snapshot /> : null}
+        </div>
+        <div className={styles.footer}>
+          <p className={styles.thanks}>Thanks for stopping by :)</p>
+          <p className={styles.stamp}>
+            <time dateTime={new Date(today).toISOString()}>{stamp(today)}</time>
+            <span>{city}</span>
+          </p>
+        </div>
       </div>
       <input ref={file} type="file" accept="image/*" className={styles.file} onChange={onFile} tabIndex={-1} aria-hidden="true" />
       <input ref={shoot} type="file" accept="image/*" capture="user" className={styles.file} onChange={onFile} tabIndex={-1} aria-hidden="true" />
-
-      <p className={styles.logo} aria-label="hope’s grocer">
-        <span className={styles.logoBold}>hope</span>
-        <span className={styles.logoApostrophe}>’</span>
-        <span className={styles.logoBold}>s grocer</span>
-      </p>
-      <p className={styles.thanks}>Thanks for stopping by :)</p>
-      <p className={styles.stamp}>
-        <time dateTime={new Date(today).toISOString()}>{stamp(today)}</time>
-        <span>{city}</span>
-      </p>
 
       {/* two blurred tomatoes peeking in from the corners, over the photo and the border (Figma,
           cut at the slip's outer edge) */}

@@ -32,11 +32,30 @@
   mix-blend-mode: screen;
 }
 
+/* logo · photo · thank-you, a centred column: the gaps are Figma's (measured from the letters,
+   which are trimmed to their caps), and centring makes the top and bottom margins equal */
+.layout {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(40 * var(--ru));
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(12 * var(--ru));
+  margin-top: calc(24 * var(--ru)); /* 64 from the photo to the thank-you */
+}
+
 /* ── the photo slot ── */
 .square {
-  position: absolute;
-  left: calc(22 * var(--ru));
-  top: calc(123 * var(--ru));
+  position: relative;
+  flex: none;
   width: calc(474 * var(--ru));
   aspect-ratio: 1;
   overflow: hidden;
@@ -210,11 +229,8 @@
 
 /* ── type ── */
 .logo {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(43 * var(--ru));
   margin: 0;
+  text-box: trim-both cap alphabetic;
   font-family: var(--font-display-stack);
   font-size: calc(40 * var(--ru));
   line-height: normal;
@@ -238,10 +254,8 @@
 
 .thanks,
 .stamp {
-  position: absolute;
-  left: 0;
-  right: 0;
   margin: 0;
+  text-box: trim-both cap alphabetic;
   font-size: calc(20 * var(--ru));
   font-weight: 400;
   line-height: normal;
@@ -251,12 +265,7 @@
   white-space: nowrap;
 }
 
-.thanks {
-  top: calc(658 * var(--ru));
-}
-
 .stamp {
-  top: calc(685 * var(--ru));
   display: flex;
   justify-content: center;
   gap: calc(34 * var(--ru));
