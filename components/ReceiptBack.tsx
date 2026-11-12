@@ -7,7 +7,7 @@ import styles from "./ReceiptBack.module.css";
 
 /**
  * The back of the receipt (Figma 504:4934): a photobooth. The grey square takes a photo — on a
- * phone it opens the camera / photo library; with a mouse it offers the webcam (3-2-1, flash) or
+ * phone it opens the camera / photo library; with a mouse it offers the webcam (one press, a flash) or
  * an upload — and prints it onto the slip like a thermal receipt: black and white, contrasty,
  * with fine noise and a little banding (receiptify). Below, the shop's name and a thank-you; two blurred
  * tomatoes peek in from the corners. It has its own marker, so people can draw on this side too.
@@ -89,7 +89,6 @@ const ReceiptBack = forwardRef<
   const marker = useMarker();
   const [photo, setPhoto] = useState<string | null>(null);
   const [mode, setMode] = useState<Mode>("idle");
-  const [count, setCount] = useState(0); // the 3-2-1 before the webcam snaps
   const [flash, setFlash] = useState(0);
   const file = useRef<HTMLInputElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -120,7 +119,6 @@ const ReceiptBack = forwardRef<
     if (hidden) {
       stop();
       setMode("idle");
-      setCount(0);
     }
   }, [hidden, stop]);
 
@@ -154,20 +152,12 @@ const ReceiptBack = forwardRef<
     }
   };
 
+  // snaps straight away (with the flash)
   const snap = () => {
-    if (count) return;
-    let n = 3;
-    setCount(n);
-    const tick = window.setInterval(() => {
-      n -= 1;
-      if (n > 0) return setCount(n);
-      window.clearInterval(tick);
-      setCount(0);
-      const v = video.current;
-      if (v && v.videoWidth) keep(receiptify(v, v.videoWidth, v.videoHeight, true));
-      stop();
-      setMode("idle");
-    }, 800);
+    const v = video.current;
+    if (v && v.videoWidth) keep(receiptify(v, v.videoWidth, v.videoHeight, true));
+    stop();
+    setMode("idle");
   };
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -237,15 +227,9 @@ const ReceiptBack = forwardRef<
         ) : mode === "camera" ? (
           <div className={styles.booth} data-no-draw>
             <video ref={video} className={styles.video} playsInline muted aria-label="Camera preview" />
-            {count ? (
-              <span key={count} className={styles.count} aria-live="assertive">
-                {count}
-              </span>
-            ) : (
-              <button type="button" className={styles.snap} onClick={snap}>
-                snap
-              </button>
-            )}
+            <button type="button" className={styles.snap} onClick={snap}>
+              smile
+            </button>
           </div>
         ) : (
           <button type="button" className={styles.empty} onClick={start}>
@@ -270,11 +254,9 @@ const ReceiptBack = forwardRef<
       {/* two blurred tomatoes peeking in from the corners, over the photo and the border (Figma,
           cut at the slip's outer edge) */}
       <div className={styles.tomatoes} aria-hidden="true">
-        {/* light and dark (blue, Figma's gradient map) stacked; the theme crossfades them */}
-        <img className={`${styles.tomato} ${styles.tomatoLeft} ${styles.light}`} src="/receipt/back/tomato-left.svg" alt="" width={183} height={240} />
-        <img className={`${styles.tomato} ${styles.tomatoLeft} ${styles.dark}`} src="/receipt/back/dark/tomato-left.webp" alt="" width={183} height={240} loading="lazy" />
-        <img className={`${styles.tomato} ${styles.tomatoRight} ${styles.light}`} src="/receipt/back/tomato-right.svg" alt="" width={171} height={421} />
-        <img className={`${styles.tomato} ${styles.tomatoRight} ${styles.dark}`} src="/receipt/back/dark/tomato-right.webp" alt="" width={171} height={421} loading="lazy" />
+        {/* printed like the photo: black and white with noise (made from the Figma tomatoes) */}
+        <img className={`${styles.tomato} ${styles.tomatoLeft}`} src="/receipt/back/tomato-left-bw.webp" alt="" width={183} height={240} />
+        <img className={`${styles.tomato} ${styles.tomatoRight}`} src="/receipt/back/tomato-right-bw.webp" alt="" width={171} height={421} />
       </div>
 
       {download}

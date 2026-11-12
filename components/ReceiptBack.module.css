@@ -2,7 +2,7 @@
    a 474 grey square at (24, 29) for the photo, "Upload or take photo" Regular 16 in its middle ·
    "hope's grocer" Atelier Fleur Bold 48, centred, top 571 · "Thank you for stopping by :) /
    Come back anytime~" Regular 24 (−1.2 tracking), centred, top 654 · two blurred tomatoes cut at
-   the slip's edge, top-left and right. Positions are in --ru (1 Figma px, set on the page); the
+   the slip's edge, top-left and right — printed black and white with noise, like the photo. Positions are in --ru (1 Figma px, set on the page); the
    slip's border is 2, so things inside sit 2 less than their Figma numbers. */
 .back {
   position: relative;
@@ -120,7 +120,7 @@
   color: color-mix(in srgb, var(--color-ink) 50%, transparent);
 }
 
-/* the webcam: a live preview already in black and white, a shutter, then 3-2-1 */
+/* the webcam: a live preview already in black and white and a "smile" shutter */
 .booth {
   position: relative;
   height: 100%;
@@ -145,30 +145,6 @@
   border: 2px solid var(--color-ink);
   background: var(--color-paper);
   font-size: max(14px, calc(18 * var(--ru)));
-}
-
-.count {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-size: calc(140 * var(--ru));
-  font-weight: 500;
-  letter-spacing: -0.05em;
-  text-shadow: 0 2px 24px rgba(40, 40, 40, 0.35);
-  pointer-events: none;
-  animation: countIn 800ms var(--ease-out);
-}
-
-@keyframes countIn {
-  from {
-    opacity: 0;
-    transform: scale(1.25);
-  }
-  60% {
-    opacity: 1;
-  }
 }
 
 /* the printed photo: black and white on the slip's white paper */
@@ -300,19 +276,6 @@
   position: absolute;
   height: auto;
   max-width: none;
-  transition: opacity 450ms ease;
-}
-
-.dark {
-  opacity: 0;
-}
-
-:global(html[data-theme="dark"]) .light {
-  opacity: 0;
-}
-
-:global(html[data-theme="dark"]) .dark {
-  opacity: 1;
 }
 
 .tomatoLeft {
@@ -383,9 +346,6 @@
 @media (prefers-reduced-motion: reduce) {
   .photo {
     animation: fadeIn 400ms ease;
-  }
-  .count {
-    animation: fadeIn 200ms ease;
   }
   .flash {
     animation-duration: 250ms;
