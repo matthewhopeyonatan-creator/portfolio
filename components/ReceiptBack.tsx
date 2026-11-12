@@ -8,18 +8,18 @@ import styles from "./ReceiptBack.module.css";
 /**
  * The back of the receipt (Figma 504:4934): a photobooth. The grey square takes a photo — on a
  * phone it opens the camera / photo library; with a mouse it offers the webcam (3-2-1, flash) or
- * an upload — and prints it onto the slip like a thermal receipt: black and white, grainy,
- * dithered, with a little banding (receiptify). Below, the shop's name and a thank-you; two blurred
+ * an upload — and prints it onto the slip like a thermal receipt: black and white, contrasty,
+ * with fine noise and a little banding (receiptify). Below, the shop's name and a thank-you; two blurred
  * tomatoes peek in from the corners. It has its own marker, so people can draw on this side too.
  * The photo is kept for the visit (sessionStorage) so a refresh doesn't lose it.
  */
 
 const PHOTO_KEY = "hg-receipt-photo";
-const N = 400; // the printed photo's resolution: coarse enough that the dither reads as grain
+const N = 720; // the printed photo's resolution: fine enough that the noise reads as grain
 
-/** Print an image the way a receipt printer would: grey, levels stretched, grain, a little row
- *  banding, then Floyd–Steinberg dithered to one bit. Dark dots are the ink (#282828), the rest
- *  is left clear so the slip's paper shows through. */
+/** Print an image the way a receipt printer would: black and white, the levels stretched and
+ *  the contrast pushed so faces read clearly, fine noise over the top and the odd faintly lighter
+ *  or darker row where the print head bands. Ink is #282828 (never pure black), paper white. */
 function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = false): string {
   const c = document.createElement("canvas");
   c.width = c.height = N;
@@ -44,46 +44,31 @@ function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = fal
     lum[i] = y;
     hist[Math.round(y)]++;
   }
-  // stretch the levels between the 2nd and 98th percentile, so dim photos still print
+  // stretch the levels between the 1st and 99th percentile, so dim photos still print
   const pick = (p: number) => {
     let acc = 0;
     for (let v = 0; v < 256; v++) if ((acc += hist[v]) >= p * N * N) return v;
     return 255;
   };
-  const lo = pick(0.02);
-  const hi = Math.max(lo + 1, pick(0.98));
+  const lo = pick(0.01);
+  const hi = Math.max(lo + 1, pick(0.99));
+  const INK = 40; // #282828
   for (let row = 0; row < N; row++) {
-    // thermal heads band a little: the odd row prints a touch lighter or darker
-    const band = Math.random() < 0.08 ? (Math.random() - 0.5) * 40 : 0;
+    const band = Math.random() < 0.06 ? (Math.random() - 0.5) * 18 : 0;
     for (let x = 0; x < N; x++) {
       const i = row * N + x;
-      let v = ((lum[i] - lo) / (hi - lo)) * 255;
-      v = 255 * Math.pow(Math.min(1, Math.max(0, v / 255)), 0.8); // lift the mids so faces don't go muddy
-      v = (v - 128) * 1.15 + 128; // a little more contrast
-      v += (Math.random() - 0.5) * 60 + band; // grain
-      lum[i] = v;
-    }
-  }
-  // Floyd–Steinberg to one bit
-  for (let row = 0; row < N; row++) {
-    for (let x = 0; x < N; x++) {
-      const i = row * N + x;
-      const old = lum[i];
-      const on = old < 128; // ink
-      const err = old - (on ? 0 : 255);
-      if (x + 1 < N) lum[i + 1] += (err * 7) / 16;
-      if (row + 1 < N) {
-        if (x > 0) lum[i + N - 1] += (err * 3) / 16;
-        lum[i + N] += (err * 5) / 16;
-        if (x + 1 < N) lum[i + N + 1] += err / 16;
-      }
-      d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = 40;
-      d[i * 4 + 3] = on ? 255 : 0;
+      let v = Math.min(1, Math.max(0, (lum[i] - lo) / (hi - lo)));
+      v = v < 0.5 ? 2 * v * v : 1 - 2 * (1 - v) * (1 - v); // S-curve: crisper blacks and whites
+      let out = INK + v * (255 - INK);
+      out += (Math.random() - 0.5) * 34 + band; // noise
+      out = Math.min(255, Math.max(INK, out));
+      d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = out;
+      d[i * 4 + 3] = 255;
     }
   }
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.putImageData(img, 0, 0);
-  return c.toDataURL("image/png");
+  return c.toDataURL("image/jpeg", 0.9);
 }
 
 type Mode = "idle" | "choose" | "camera";

@@ -171,20 +171,15 @@
   }
 }
 
-/* the printed photo: dark dots on clear, so the paper shows through */
+/* the printed photo: black and white on the slip's white paper */
 .photo {
   display: block;
   width: 100%;
   height: 100%;
-  image-rendering: pixelated; /* crisp printer dots, not a soft grey */
   animation: printPhoto 900ms var(--ease-out);
 }
 
-/* dark slip: the photo isn't inverted — it stays a positive print, dark dots on a light square
-   (the light ink colour standing in for paper) */
-:global(html[data-theme="dark"]) .filled {
-  background: var(--color-ink);
-}
+/* dark slip: the photo isn't inverted — it stays a positive print on its own white */
 
 /* it prints top to bottom, like the head moving down the paper */
 @keyframes printPhoto {
