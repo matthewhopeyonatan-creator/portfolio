@@ -15,7 +15,7 @@ import styles from "./ReceiptBack.module.css";
  */
 
 const PHOTO_KEY = "hg-receipt-photo";
-const N = 300; // the printed photo's resolution: coarse enough that the dither reads as grain
+const N = 400; // the printed photo's resolution: coarse enough that the dither reads as grain
 
 /** Print an image the way a receipt printer would: grey, levels stretched, grain, a little row
  *  banding, then Floyd–Steinberg dithered to one bit. Dark dots are the ink (#282828), the rest
@@ -60,7 +60,7 @@ function receiptify(src: CanvasImageSource, sw: number, sh: number, mirror = fal
       let v = ((lum[i] - lo) / (hi - lo)) * 255;
       v = 255 * Math.pow(Math.min(1, Math.max(0, v / 255)), 0.8); // lift the mids so faces don't go muddy
       v = (v - 128) * 1.15 + 128; // a little more contrast
-      v += (Math.random() - 0.5) * 70 + band; // grain
+      v += (Math.random() - 0.5) * 60 + band; // grain
       lum[i] = v;
     }
   }

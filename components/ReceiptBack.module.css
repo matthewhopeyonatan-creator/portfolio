@@ -180,9 +180,10 @@
   animation: printPhoto 900ms var(--ease-out);
 }
 
-/* dark slip: the dots turn to the light ink */
-:global(html[data-theme="dark"]) .photo {
-  filter: invert(1);
+/* dark slip: the photo isn't inverted — it stays a positive print, dark dots on a light square
+   (the light ink colour standing in for paper) */
+:global(html[data-theme="dark"]) .filled {
+  background: var(--color-ink);
 }
 
 /* it prints top to bottom, like the head moving down the paper */

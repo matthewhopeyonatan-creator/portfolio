@@ -210,7 +210,8 @@
   box-sizing: border-box;
   width: 100%;
   min-height: calc(791 * var(--ru));
-  padding: calc(35 * var(--ru)) calc(22 * var(--ru)) calc(52 * var(--ru));
+  /* 76 at the bottom (Figma 52 + 24): room under the box for the download icon */
+  padding: calc(35 * var(--ru)) calc(22 * var(--ru)) calc(76 * var(--ru));
   border: 2px solid var(--color-ink);
   background: var(--color-paper);
 }
@@ -292,7 +293,7 @@
   display: flex;
   flex-direction: column;
   gap: calc(4 * var(--ru));
-  min-height: calc(343 * var(--ru));
+  min-height: calc(319 * var(--ru)); /* Figma 343, less the 24 given to the bottom margin */
   margin: 0;
   padding: calc(17 * var(--ru)) calc(21 * var(--ru)) calc(40 * var(--ru));
   box-sizing: border-box;
@@ -464,8 +465,8 @@
 /* download this side: a small icon in the slip's bottom-right corner, in the ink */
 .save {
   position: absolute;
-  right: calc(12 * var(--ru));
-  bottom: calc(12 * var(--ru));
+  right: calc(14 * var(--ru));
+  bottom: calc(16 * var(--ru));
   z-index: 6;
   display: grid;
   place-items: center;
