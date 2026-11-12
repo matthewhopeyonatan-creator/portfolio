@@ -31,7 +31,8 @@ export default function Receipt() {
   const [receipt, setReceipt] = useState<R | undefined>(undefined);
   const slip = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLDivElement>(null);
-  const [flipped, setFlipped] = useState(false);
+  // it prints photo side up (the photobooth); "flip me!" turns it to the order details
+  const [flipped, setFlipped] = useState(true);
   const feed = useRef<HTMLDivElement>(null);
   const marker = useMarker();
 
