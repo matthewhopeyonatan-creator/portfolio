@@ -1,11 +1,13 @@
-import { put } from "@vercel/blob";
+import { head, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 /**
  * Receipts sent from the receipt page (lib/visit.ts logReceipt) go into Matthew's private Blob
  * store: receipts/<id>.json (what was in the basket, the note, most viewed, time on site) and,
- * when sent, receipts/<id>.png (a picture of the slip, drawing and all). Each new copy of a
- * receipt replaces the last. Only /admin/receipts reads them back.
+ * when sent, receipts/<id>.png (a picture of the order side of the slip, drawing and all) and
+ * receipts/<id>-back.jpg (the photobooth side, photo and all). Each new copy of a receipt replaces
+ * the last; a copy sent without pictures (the one sent as the visitor leaves) keeps the ones
+ * already stored. Only /admin/receipts reads them back.
  */
 export const runtime = "nodejs";
 
@@ -44,10 +46,21 @@ export async function POST(req: Request) {
     country: req.headers.get("x-vercel-ip-country") ?? null,
     city: decodeURIComponent(req.headers.get("x-vercel-ip-city") ?? "") || null,
     hasImage: false,
+    hasBack: false,
   };
 
   const image = typeof body.image === "string" ? body.image : "";
   const png = image.startsWith("data:image/png;base64,") && image.length < MAX_IMAGE;
+  const back = typeof body.back === "string" ? body.back : "";
+  const jpg = back.startsWith("data:image/jpeg;base64,") && back.length < MAX_IMAGE;
+  const exists = async (path: string) => {
+    try {
+      await head(path);
+      return true;
+    } catch {
+      return false;
+    }
+  };
   try {
     if (png) {
       await put(`receipts/${id}.png`, Buffer.from(image.slice(22), "base64"), {
@@ -57,7 +70,16 @@ export async function POST(req: Request) {
         allowOverwrite: true,
       });
       record.hasImage = true;
-    }
+    } else record.hasImage = await exists(`receipts/${id}.png`);
+    if (jpg) {
+      await put(`receipts/${id}-back.jpg`, Buffer.from(back.slice(23), "base64"), {
+        access: "private",
+        contentType: "image/jpeg",
+        addRandomSuffix: false,
+        allowOverwrite: true,
+      });
+      record.hasBack = true;
+    } else record.hasBack = await exists(`receipts/${id}-back.jpg`);
     await put(`receipts/${id}.json`, JSON.stringify(record), {
       access: "private",
       contentType: "application/json",

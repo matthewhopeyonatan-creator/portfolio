@@ -81,10 +81,18 @@
 
 .row {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-columns: 372px minmax(0, 1fr);
   gap: 24px;
   padding: 24px 0;
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+/* the two sides of the slip, side by side */
+.shots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-self: start;
 }
 
 .shot {
@@ -164,8 +172,9 @@
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  /* phones: the two pictures on top, the details under them */
   .row {
-    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
 }

@@ -35,6 +35,9 @@ export default function Receipt() {
   const [flipped, setFlipped] = useState(true);
   const feed = useRef<HTMLDivElement>(null);
   const marker = useMarker();
+  // goes up when the photobooth side changes (a photo printed, a stroke drawn or cleared), so the
+  // log gets a fresh picture of that side too
+  const [backVersion, setBackVersion] = useState(0);
 
   useEffect(() => {
     const saved = loadReceipt();
@@ -57,8 +60,9 @@ export default function Receipt() {
   }, [ready]);
 
   // Matthew's receipt log: once the slip has printed, and again a moment after each change to the
-  // note or the drawing, a picture of the slip as it looks goes with the receipt (logReceipt);
-  // leaving the page sends the latest note too
+  // note, a drawing or the photo, pictures of both sides as they look go with the receipt
+  // (logReceipt: the order side as PNG, the photobooth side as JPEG — its photo is grainy and
+  // compresses far better that way); leaving the page sends the latest note too
   const latest = useRef(receipt);
   latest.current = receipt;
   const logged = !!receipt?.items.length;
@@ -70,26 +74,39 @@ export default function Receipt() {
         const r = latest.current;
         if (!r || !alive) return;
         let image: string | undefined;
+        let backImage: string | undefined;
+        const skip = (n: Node) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset));
         try {
-          const node = slip.current;
-          if (node) {
-            const { toPng } = await import("html-to-image");
-            image = await toPng(node, {
+          const { toPng, toJpeg } = await import("html-to-image");
+          const front = slip.current;
+          if (front) {
+            image = await toPng(front, {
               pixelRatio: 1,
-              backgroundColor: getComputedStyle(node).backgroundColor || "#ffffff",
-              filter: (n) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)),
+              backgroundColor: getComputedStyle(front).backgroundColor || "#ffffff",
+              filter: skip,
+            });
+          }
+          const side = back.current;
+          if (side) {
+            backImage = await toJpeg(side, {
+              pixelRatio: 1,
+              quality: 0.85,
+              backgroundColor: getComputedStyle(side).backgroundColor || "#ffffff",
+              // it's turned over in place; draw it face-on
+              style: { transform: "none", backfaceVisibility: "visible" },
+              filter: skip,
             });
           }
         } catch {}
-        if (alive) logReceipt(r, image);
+        if (alive) logReceipt(r, image, false, backImage);
       },
-      marker.version === 0 && !receipt?.note ? 6000 : 2500,
+      marker.version === 0 && backVersion === 0 && !receipt?.note ? 6000 : 2500,
     );
     return () => {
       alive = false;
       window.clearTimeout(t);
     };
-  }, [logged, receipt?.note, marker.version]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [logged, receipt?.note, marker.version, backVersion]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const leave = () => latest.current && logReceipt(latest.current, undefined, true);
     window.addEventListener("pagehide", leave);
@@ -263,7 +280,7 @@ export default function Receipt() {
               </div>
               {saveIcon("front")}
             </div>
-            <ReceiptBack ref={back} className={`${styles.face} ${styles.backFace}`} hidden={!flipped} download={saveIcon("back")} inert={!flipped} />
+            <ReceiptBack ref={back} className={`${styles.face} ${styles.backFace}`} hidden={!flipped} download={saveIcon("back")} inert={!flipped} onChange={setBackVersion} />
             </div>
           </Tilt>
         </div>

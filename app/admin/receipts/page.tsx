@@ -28,6 +28,7 @@ type Logged = {
   country: string | null;
   city: string | null;
   hasImage: boolean;
+  hasBack?: boolean;
 };
 
 type Visit = {
@@ -187,23 +188,43 @@ export default async function ReceiptLog({
         <ul className={styles.list}>
           {rows.map((r) => (
             <li key={r.id} className={styles.row}>
-              {r.hasImage ? (
-                <a
-                  className={styles.shot}
-                  href={`/api/admin/receipt-image?id=${r.id}&v=${r.updatedAt}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/api/admin/receipt-image?id=${r.id}&v=${r.updatedAt}`}
-                    alt="The visitor’s receipt slip"
-                    loading="lazy"
-                  />
-                </a>
-              ) : (
-                <div className={`${styles.shot} ${styles.noShot}`}>no picture</div>
-              )}
+              {/* both sides of the slip: the order side and the photobooth side */}
+              <div className={styles.shots}>
+                {r.hasImage ? (
+                  <a
+                    className={styles.shot}
+                    href={`/api/admin/receipt-image?id=${r.id}&v=${r.updatedAt}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/api/admin/receipt-image?id=${r.id}&v=${r.updatedAt}`}
+                      alt="The visitor’s receipt slip"
+                      loading="lazy"
+                    />
+                  </a>
+                ) : (
+                  <div className={`${styles.shot} ${styles.noShot}`}>no picture</div>
+                )}
+                {r.hasBack ? (
+                  <a
+                    className={styles.shot}
+                    href={`/api/admin/receipt-image?id=${r.id}&side=back&v=${r.updatedAt}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/api/admin/receipt-image?id=${r.id}&side=back&v=${r.updatedAt}`}
+                      alt="The photobooth side of the visitor’s receipt"
+                      loading="lazy"
+                    />
+                  </a>
+                ) : (
+                  <div className={`${styles.shot} ${styles.noShot}`}>no photo side</div>
+                )}
+              </div>
               <div className={styles.info}>
                 <p className={styles.meta}>
                   <b>{when(r.at)}</b>

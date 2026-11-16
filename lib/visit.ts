@@ -87,9 +87,10 @@ export function withId(r: Receipt): Receipt {
  * the basket, the note, most viewed, time on site — and, when given, a picture of the slip as it
  * looks (with any drawing on it). Best effort: if it fails, the visitor never notices.
  */
-export function logReceipt(r: Receipt, image?: string, beacon = false) {
+/** `image` is the order side of the slip, `back` the photobooth side (each a data URL, optional) */
+export function logReceipt(r: Receipt, image?: string, beacon = false, back?: string) {
   if (!r.id || !r.items.length) return;
-  const body = JSON.stringify({ ...r, image });
+  const body = JSON.stringify({ ...r, image, back });
   try {
     if (beacon && navigator.sendBeacon) {
       navigator.sendBeacon("/api/receipts", new Blob([body], { type: "application/json" }));

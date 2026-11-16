@@ -90,8 +90,15 @@ const stamp = (t: number) => {
 
 const ReceiptBack = forwardRef<
   HTMLDivElement,
-  { className?: string; hidden: boolean; download: React.ReactNode; inert?: boolean }
->(function ReceiptBack({ className = "", hidden, download, inert }, ref) {
+  {
+    className?: string;
+    hidden: boolean;
+    download: React.ReactNode;
+    inert?: boolean;
+    /** called with a count that goes up whenever this side changes (a photo, a stroke, a clear) */
+    onChange?: (version: number) => void;
+  }
+>(function ReceiptBack({ className = "", hidden, download, inert, onChange }, ref) {
   const marker = useMarker();
   const [photo, setPhoto] = useState<string | null>(null);
   // the square starts on its two choices: take a photo or upload one
@@ -124,6 +131,12 @@ const ReceiptBack = forwardRef<
       window.sessionStorage.removeItem("hg-receipt-photo");
     } catch {}
   }, []);
+
+  // tell the receipt this side changed, so the log takes a fresh picture of it
+  const version = flash + marker.version;
+  useEffect(() => {
+    if (version) onChange?.(version);
+  }, [version, onChange]);
 
   const keep = (url: string) => {
     setPhoto(url);
