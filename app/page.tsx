@@ -4,8 +4,32 @@ import ProjectCard from "@/components/ProjectCard";
 import GrocersSelects from "@/components/GrocersSelects";
 import SiteHeader from "@/components/SiteHeader";
 import RevealOnScroll from "@/components/RevealOnScroll";
+import type { Metadata } from "next";
 import { projects } from "@/data/site";
 import styles from "./page.module.css";
+
+/**
+ * A shared project link (/?project=slug, which opens that case study) gets its own link preview:
+ * the project's tray as the picture (public/og/<slug>.jpg, a still of the homepage tray) and the
+ * project's name. Any other link to the homepage keeps the site's own preview (layout.tsx).
+ */
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ project?: string }>;
+}): Promise<Metadata> {
+  const slug = (await searchParams).project;
+  const p = projects.find((x) => x.slug === slug);
+  if (!p) return {};
+  const title = `${p.title} — hope’s grocer`;
+  const image = { url: `/og/${p.slug}.jpg`, width: 1200, height: 630, alt: `${p.title}: ${p.subtitle}` };
+  return {
+    title,
+    description: p.subtitle,
+    openGraph: { title, description: p.subtitle, siteName: "hope’s grocer", type: "website", images: [image] },
+    twitter: { card: "summary_large_image", title, description: p.subtitle, images: [image] },
+  };
+}
 
 export default function Home() {
   return (
