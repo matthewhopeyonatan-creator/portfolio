@@ -10,7 +10,7 @@
   height: var(--header-h);
   padding: 0 var(--gutter);
   background: var(--color-bg);
-  border-bottom: var(--rule);
+  border-bottom: 2px solid var(--color-ink); /* the navbar keeps a 2px rule (every other line is --rule) */
   transform: translate3d(0, 0, 0);
   /* reveal: quick and decisive — this fires every time the scroll direction flips */
   transition: transform 240ms var(--ease-out);

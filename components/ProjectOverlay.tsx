@@ -187,7 +187,7 @@ function Figures({ b }: { b: Extract<CaseBlock, { type: "figures" }> }) {
       className={`${styles.cvFigures} ${styles.proto}`}
       data-count={b.items.length}
       data-row={b.rise ? "" : undefined}
-      style={{ "--n": b.items.length } as React.CSSProperties}
+      style={{ "--n": b.cols ?? b.items.length } as React.CSSProperties}
     >
       {b.items.map((f) => (
         <figure

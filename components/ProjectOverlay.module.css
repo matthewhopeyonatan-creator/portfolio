@@ -341,8 +341,10 @@
    height. ── */
 .proto {
   display: flex;
+  flex-wrap: wrap; /* more than --n: the rest wrap into rows underneath, 40 apart */
   align-items: flex-start;
   justify-content: space-evenly;
+  row-gap: 40px;
   padding: 40px 0;
   border-radius: calc(24 * var(--pu));
   background: var(--color-box);

@@ -77,7 +77,10 @@
   object-fit: cover;
 }
 
+/* the title, subtitle and tags open the case study too (the link is the whole card) */
 .info {
+  pointer-events: auto;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -249,7 +252,8 @@
   pointer-events: auto;
 }
 
-.static .trayHit {
+.static .trayHit,
+.static .info {
   pointer-events: none;
 }
 

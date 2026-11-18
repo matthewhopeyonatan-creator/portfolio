@@ -35,6 +35,8 @@ export type CaseBlock =
         live?: "review-checkboxes";
       }[];
       rise?: boolean;
+      /** how many sit in a row (the rest wrap underneath, in the same container); default: all */
+      cols?: number;
     }
   // a row of bordered cards: bold label + medium title over a big light line, centred (Figma 131:232)
   | {
@@ -1119,15 +1121,10 @@ const inquirer: CaseSection[] = [
               {
                 type: "figures",
                 rise: true,
+                cols: 2, // the four sketches, two by two in one container
                 items: [
                   { image: { src: "/projects/inquirer/process/lofi-1.webp", w: 1600, h: 1132, alt: "Lo-fi sketches 1 and 2: a home screen and a visuals-first article layout" } },
                   { image: { src: "/projects/inquirer/process/lofi-2.webp", w: 1600, h: 1132, alt: "Lo-fi sketch 3: a daily round-up you swipe through" } },
-                ],
-              },
-              {
-                type: "figures",
-                rise: true,
-                items: [
                   { image: { src: "/projects/inquirer/process/lofi-3.webp", w: 644, h: 455, alt: "Lo-fi sketch 4: a For You page with news for you, news categories and previously listened" } },
                   { image: { src: "/projects/inquirer/process/lofi-4.webp", w: 642, h: 455, alt: "Lo-fi sketch 5: entry points from a normal news page into a pop-up" } },
                 ],
