@@ -390,10 +390,7 @@ function Block({ b }: { b: CaseBlock }) {
             ])}
           </ul>
           <span className={styles.nfBig} aria-hidden="true" />
-          <p className={`${styles.nfHead} ${styles.nfHeadMore}`}>
-            <span>If I had more time</span>
-            {b.moreTimeValue ? <span className={styles.nfFigure}>{b.moreTimeValue}</span> : null}
-          </p>
+          <p className={styles.nfHead}>If I had more time</p>
           <span className={styles.nfMed} aria-hidden="true" />
           <ul className={styles.nfList}>
             {(b.moreTime.length ? b.moreTime : ["(coming soon)"]).map((t) => (

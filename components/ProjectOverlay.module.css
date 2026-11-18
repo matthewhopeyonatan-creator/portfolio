@@ -1261,8 +1261,8 @@
 }
 
 /* ── Impacts: a Nutrition Facts label (Figma 166:2457) ──────────────────────────────
-   6.556 ink border, 19.667 padding · "Nutrition Facts" Bold 45.889 over a 1.639 rule ·
-   serving size Regular / Bold 19.667 · dividers 16.389 (big) and 6.556 (medium) · "Impacts" and
+   3.278 ink border (half Figma's), 19.667 padding · "Nutrition Facts" Bold 45.889 over a 1.639 rule ·
+   serving size Regular / Bold 19.667 · dividers 8.194 (big) and 3.278 (medium), half Figma's · "Impacts" and
    "If I had more time" Bold 26.222, 12 above · rows 27.861 tall, 6.556 apart, each under a 0.819
    rule, Bold with a right-aligned Bold figure, sub-rows Regular 16.39 in · footnote 13.111 ·
    9.833 between parts. Set in Host Grotesk (the site's face) rather than Figma's Helvetica. */
@@ -1271,7 +1271,7 @@
   flex-direction: column;
   gap: 9.833px;
   padding: 19.667px;
-  border: 6.556px solid var(--color-ink);
+  border: 3.278px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans-stack);
@@ -1315,30 +1315,18 @@
 .nfBig,
 .nfMed {
   display: block;
-  height: 16.389px;
+  height: 8.194px;
   background: var(--color-ink);
 }
 
 .nfMed {
-  height: 6.556px;
+  height: 3.278px;
 }
 
 .section .nf .nfHead {
   padding-top: 12px;
   font-size: 26.222px;
   font-weight: 700;
-}
-
-.section .nf .nfHeadMore {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-}
-
-.nfFigure {
-  font-size: 39.333px;
-  line-height: 0.6; /* sits low, its bottom dipping into the gap like Figma's */
 }
 
 .nfList {
@@ -1378,7 +1366,7 @@
   .nf {
     gap: 7px;
     padding: 14px;
-    border-width: 5px;
+    border-width: 2.5px;
     font-size: 15px;
   }
   .section .nf .nfTitle {
@@ -1388,14 +1376,11 @@
     padding-top: 8px;
     font-size: 20px;
   }
-  .nfFigure {
-    font-size: 30px;
-  }
   .nfBig {
-    height: 12px;
+    height: 6px;
   }
   .nfMed {
-    height: 5px;
+    height: 2.5px;
   }
   .nfRow {
     flex-wrap: wrap;

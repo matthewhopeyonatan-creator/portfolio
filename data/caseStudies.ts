@@ -87,8 +87,6 @@ export type CaseBlock =
       servingSize?: string;
       impacts: NutritionRow[];
       moreTime: string[];
-      /** the big figure right of "If I had more time" */
-      moreTimeValue?: string;
       footnote?: string;
     }
   // a not-yet-written section
@@ -956,7 +954,6 @@ const crowdvolt: CaseSection[] = [
               "Create an internal tool to keep up with design system changes on code base",
               "Learn more about operations side and how more problems get identified",
             ],
-            moreTimeValue: "160",
             footnote:
               "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
           },
