@@ -571,7 +571,7 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "An EDM ticket marketplace backed by YC, that connects users to each other through a community-forward platform",
+            text: "An EDM ticket marketplace backed by YC that connects users to each other through a community-forward platform",
             body: "CrowdVolt is a peer-to-peer ticket marketplace. Rather than holding inventory, it connects buyers with verified sellers, and tickets move straight from the seller’s account to the buyer’s.",
           },
           {
@@ -606,7 +606,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "Once a buyer places a bid and a seller matches it, the transaction is automatically processed",
-            body: "Causes high user confusion since users are accustomed to secondary confirmation whether they want to buy the ticket or not",
+            body: "It causes high user confusion, since users are accustomed to secondary confirmation whether they want to buy the ticket or not",
           },
           { type: "flow", steps: bidSteps, skip: [2] },
         ],
@@ -617,8 +617,8 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "This was causing a lot of pressure on the operations team, there was not much time to conduct a full design process",
-            body: "After identifying the core part of the problem, I realize that there are 2 areas that friction can be added to",
+            text: "This was causing a lot of pressure on the operations team, and there was not much time to conduct a full design process",
+            body: "After identifying the core part of the problem, I realized there were two places to add friction",
           },
           { type: "flow", steps: bidSteps, frictionAfter: [0, 1] },
           {
@@ -635,7 +635,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "Should the friction be added as a separate page or embedded in the current flow?",
-            body: "After identifying the core part of the problem, I realize that there are 2 areas that friction can be added to",
+            body: "After identifying the core part of the problem, I realized there were two places to add friction",
           },
           {
             type: "figures",
@@ -645,7 +645,7 @@ const crowdvolt: CaseSection[] = [
                   "bid-warning-page",
                   "Bid warning as a separate page: You’re about to make an offer",
                 ),
-                caption: "Seperate warning page",
+                caption: "Separate warning page",
               },
               {
                 image: cv(
@@ -665,8 +665,8 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "Using Post Hog heat maps and recordings to see user behavior",
-            body: "Users currently spend no attention or time on checkboxes, adding another one adds basically no friction to the process.",
+            text: "Using PostHog heat maps and recordings to see user behavior",
+            body: "Users currently spend no attention or time on checkboxes, so adding another one adds basically no friction to the process.",
           },
           {
             type: "figures",
@@ -721,7 +721,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "Simplifying a complicated ticket transfer process that involves external systems",
-            body: "Since CrowdVolt connects users through their external wallets, the UX differs depending on where the user’s tickets live and how ticket transfers work on that platform. Ticketmaster has an especially complicated process since they do not allow auto-transfer of tickets in some scenarios.",
+            body: "Since CrowdVolt connects users through their external wallets, the UX differs depending on where the user’s tickets live and how ticket transfers work on that platform. Ticketmaster has an especially complicated process since it doesn’t allow auto-transfer of tickets in some scenarios.",
           },
         ],
       },
@@ -732,7 +732,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "The manual ticket transfer process is complicated, but we need it to be smooth for the user",
-            body: "The manual transfer process involves sending tickets to the CrowdVolt inventory and CrowdVolt sends it to the buyer",
+            body: "The manual transfer process involves sending tickets to the CrowdVolt inventory and CrowdVolt sends them to the buyer",
           },
           {
             type: "blockers",
@@ -783,7 +783,7 @@ const crowdvolt: CaseSection[] = [
                 text: "Efficient flow",
               },
               {
-                title: "Users do not read fine-print",
+                title: "Users do not read fine print",
                 text: "Ease of comprehension",
               },
               {
@@ -801,7 +801,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "The existing system used text-based instructions which conflicted with ease of comprehension and an efficient flow",
-            body: "I iterated on visual based artifacts to help users understand how the grouping of their tickets would affect their sales. My initial exploration included a comprehensive visual multiple choice system that gives the user full liberty on how they want to sell their tickets.",
+            body: "I iterated on visual artifacts to help users understand how the grouping of their tickets would affect their sales. My initial exploration included a comprehensive visual multiple choice system that gives the user full liberty on how they want to sell their tickets.",
           },
           { type: "phones", screens: ["explore-4", "explore-6"] },
           {
@@ -818,7 +818,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "The final design implementation includes predetermined choices and plain language",
-            body: "Preventing confusion and having a quick flow was the priority, so I had to give users just the right amount of autonomy and also use plain language that make the use feel assured and understood.",
+            body: "Preventing confusion and having a quick flow was the priority, so I had to give users just the right amount of autonomy and also use plain language that makes the user feel assured and understood.",
           },
           { type: "phones", screens: ["final-sell", "final-delivery"] },
           {
