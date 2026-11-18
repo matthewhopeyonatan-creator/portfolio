@@ -1,58 +1,10 @@
-/* Figma: title row between rules y1093–y1222 · "SEASONAL PICKS" 40px SemiBold · 2-col grid split by a rule at x864 */
-.sectionTitleRow {
-  position: relative;
-  z-index: 1; /* sits above the tomatoes' overflow */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 0 40px; /* 40px between the letters and the rule below */
-  border-bottom: var(--rule);
-}
-
-/* section titles: Host Grotesk Regular */
-.sectionTitle {
-  font-family: var(--font-sans-stack);
-  font-size: max(30px, calc(54 * var(--u)));
-  font-weight: 400;
-  line-height: 1;
-  /* trim the font's built-in leading so the 24px is measured from the letters themselves */
-  text-box: trim-both cap alphabetic;
-  text-transform: uppercase;
-  letter-spacing: -0.02em; /* a touch tighter */
-  color: var(--color-ink);
-}
-
-/* Section heading with a line of description under it (Seasonal Picks, Grocer's Selects) —
-   Figma 210:4738 (title, Medium 24) + 495:4900 (subtext, Regular — set at 20 — centred, −2% tracking). Both are trimmed
-   to their letters, so the 40 between them and the equal space above and below are measured
-   from the type itself */
-.titleStack {
-  flex-direction: column;
-  gap: 40px;
-  padding: max(48px, calc(80 * var(--u))) var(--gutter);
-}
-
-.titleSmall {
-  font-size: 24px;
-  font-weight: 500;
-}
-
-.titleSub {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: normal;
-  text-box: trim-both cap alphabetic;
-  letter-spacing: -0.02em;
-  text-align: center;
-  text-transform: uppercase;
-  color: var(--color-ink);
-}
-
+/* Seasonal picks: no title row (portfolio-v2) — the projects lead, straight under the hero, with
+   a rule across the top closing the hero off · 2-col grid split by a rule at x864 */
 .grid {
   position: relative;
   z-index: 1;
-  background: var(--color-bg); /* tomato overflow stops at the rule under the title */
+  background: var(--color-bg); /* tomato overflow stops at the rule on top */
+  border-top: var(--rule);
   display: grid;
   grid-template-columns: 1fr 1fr;
   /* the projects are the last thing on the page: their bottom rule and the footer's top rule
@@ -76,24 +28,6 @@
 }
 
 @media (max-width: 767px) {
-  /* 24 caps, centred, with the same 24 above and below the letters */
-  .sectionTitleRow {
-    padding: 24px 0;
-  }
-  .sectionTitle {
-    font-size: 24px;
-  }
-  /* phones: the description runs as one wrapping paragraph, a size down, on the margins */
-  .titleStack {
-    gap: 24px;
-    padding: 40px var(--gutter);
-  }
-  .titleSub {
-    font-size: 16px;
-  }
-  .titleSub br {
-    display: none;
-  }
   .grid {
     grid-template-columns: 1fr;
   }
