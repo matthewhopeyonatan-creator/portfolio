@@ -228,13 +228,13 @@
 .sections {
   display: flex;
   flex-direction: column;
-  gap: calc(110 * var(--pu)); /* between sections */
+  gap: 120px; /* between sections (the red-labelled parts) */
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: calc(20 * var(--pu));
+  gap: 20px;
 }
 
 .section p {
@@ -285,17 +285,17 @@
   border-radius: calc(8 * var(--pu));
 }
 
-/* ── CrowdVolt case study (Figma 64:381): label Host Grotesk Medium 20/25 (section openers
-   #F93636), 24 to the content · callout Regular 48/50 with a Regular 24 line 16 under it ·
-   blocks 24 apart · labelled groups 60 apart ───────────────────────────────────────────── */
+/* ── case-study type and spacing (portfolio-v2, all case studies): sections (red labels) 120
+   apart · subheadings (black labels) 60 apart · a heading to what's under it 24 · callout
+   Regular 40 with the body Regular 20 16 under it · inside widgets: subheadings 20, text 20 ── */
 .cvGroup {
   display: flex;
   flex-direction: column;
-  gap: calc(24 * var(--pu));
+  gap: 24px; /* a heading to what's under it */
 }
 
 .cvGroup + .cvGroup {
-  margin-top: calc(40 * var(--pu)); /* + the section's 20 = 60 */
+  margin-top: 40px; /* + the section's 20 = 60 between subheadings */
 }
 
 .section .cvLabel {
@@ -314,11 +314,11 @@
 .cvText {
   display: flex;
   flex-direction: column;
-  gap: calc(16 * var(--pu));
+  gap: 16px; /* big text to the small text under it */
 }
 
 .section .cvCallout {
-  font-size: max(24px, calc(40 * var(--pu)));
+  font-size: 40px;
   font-weight: 400;
   line-height: 1.0417; /* 50 / 48 */
   letter-spacing: -0.03em;
@@ -327,7 +327,7 @@
 /* body copy: a softer grey than the headings — #777675 on the light page (60% ink into the page
    colour, so it follows the theme in dark mode) */
 .section .cvBody {
-  font-size: max(15px, calc(24 * var(--pu)));
+  font-size: 20px;
   color: color-mix(in srgb, var(--color-ink) 60%, var(--color-bg));
   font-weight: 400;
   line-height: normal;
@@ -645,7 +645,7 @@
 
 .section .cvBoxTitle {
   margin: 0;
-  font-size: max(12px, calc(20 * var(--pu)));
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.03em;
@@ -654,7 +654,7 @@
 
 .section .cvBoxText {
   margin: 0;
-  font-size: max(15px, calc(24 * var(--pu)));
+  font-size: 20px;
   font-weight: 300;
   line-height: 1.25;
   letter-spacing: -0.03em;
@@ -709,7 +709,7 @@
   margin: 0;
   /* never wider than its card: 28 at full size, shrinking with the card (the longest label,
      "Transcript Highlights", is about 8.8em wide) */
-  font-size: max(13px, min(calc(28 * var(--pu)), 8.6cqi));
+  font-size: min(20px, 8.6cqi);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -735,7 +735,7 @@
 
 .section .cvWin p {
   margin: 0;
-  font-size: max(16px, calc(24 * var(--pu)));
+  font-size: 20px;
   font-weight: 300;
   line-height: 1.25;
   letter-spacing: -0.03em;
@@ -791,7 +791,7 @@
   align-items: center;
   gap: calc(19 * var(--pu));
   box-sizing: border-box;
-  min-height: calc(319 * var(--pu));
+  /* hugs its text now the text is 20 (the 319 Figma height was for 32/36 lines) */
   padding: calc(30 * var(--pu)) calc(20 * var(--pu));
   background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
@@ -813,7 +813,7 @@
   display: flex;
   flex-direction: column;
   margin: 0;
-  font-size: max(12px, calc(20 * var(--pu)));
+  font-size: 20px;
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -0.03em;
@@ -826,14 +826,14 @@
 
 .section .cvBlockerText {
   margin: 0;
-  font-size: max(18px, calc(32 * var(--pu)));
+  font-size: 20px;
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.25;
   letter-spacing: -0.03em;
 }
 
 .section .cvBlockers[data-small] .cvBlockerText {
-  font-size: max(15px, calc(24 * var(--pu)));
+  font-size: 20px;
   line-height: 1.25;
 }
 
@@ -891,7 +891,7 @@
 
 .section .cvSketchTitle {
   margin: 0;
-  font-size: max(12px, calc(20 * var(--pu)));
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.03em;
@@ -900,9 +900,9 @@
 
 .section .cvSketchText {
   margin: 0;
-  font-size: max(18px, calc(32 * var(--pu)));
+  font-size: 20px;
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.25;
   letter-spacing: -0.03em;
 }
 
