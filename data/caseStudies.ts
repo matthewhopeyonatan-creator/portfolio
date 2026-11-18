@@ -560,8 +560,8 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "At a startup, I designed product features from scratch and took over others partway through. I also made graphics, ran social media, and helped plan events",
-            body: "CrowdVolt is a peer-to-peer ticket marketplace. Rather than holding inventory, it connects buyers with verified sellers, and tickets move straight from the seller’s account to the buyer’s.",
+            text: "At CrowdVolt, I designed product features from scratch and took over others partway through. I also spearheaded graphics, social media, and event planning.",
+            body: "Working at a consumer-facing startup meant that I had to work across multiple flows and multiple functions at a rapid pace. The content that I am presenting in this case study are just 2 of many flows that I made, but I think it represents the scope of what I was creating over the 9 months.\n\nYou might notice that there is a lack of low fidelity and mid fidelity prototypes, and that is because CrowdVolt has an existing codebase and design system in which I built off of that because the flows had to be shipped at a very fast pace.",
           },
         ],
       },
