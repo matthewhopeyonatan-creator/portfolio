@@ -1,12 +1,18 @@
 /* The Inquirer's iteration frames (Figma 318:3380, 319:4006): a 2px ink frame, 40 / 24 in, the
-   screens 120 apart, 60 above the red cards. 1 Figma px = --pu. The mid-fi screens are light
+   screens 120 apart; the red cards sit outside under the box, three across. 1 Figma px = --pu. The mid-fi screens are light
    wireframes in both themes; their black is the site's ink, per its rule. Selectors are two
    classes deep so the case study's own paragraph and image styles don't reach in. */
+/* the box, then the team's pushback under it */
+.process {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .frame {
   display: flex;
   flex-direction: column;
-  gap: calc(60 * var(--pu));
-  padding: 40px; /* 40 all round (the red cards keep it at the sides) */
+  padding: 40px; /* 40 all round */
   background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
@@ -43,21 +49,23 @@
   border-radius: 0;
 }
 
-/* ── the team's pushback: red cards, white 24 ── */
+/* ── the team's pushback: dark red cards, white 24, three side by side under the box ── */
 .reasons {
-  display: flex;
-  flex-direction: column;
-  gap: calc(24 * var(--pu));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
 .reason {
   padding: calc(24 * var(--pu)) calc(32 * var(--pu));
   border-radius: calc(24 * var(--pu));
-  background: #f93636;
+  background: #8f1d00;
   color: #fff;
 }
 
-.frame .reason p {
+.reasons .reason p {
+  margin: 0;
+  color: #fff;
   font-size: max(16px, calc(24 * var(--pu)));
   font-weight: 400;
   line-height: 1.25;
@@ -228,7 +236,6 @@
 @media (max-width: 767px) {
   .frame {
     --pu: calc((100vw - 40px - 4px) / 460);
-    gap: 24px;
     padding: 24px 16px;
     border-radius: 16px;
   }
@@ -237,13 +244,14 @@
     gap: 24px;
   }
   .reasons {
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
   .reason {
     padding: 14px 16px;
     border-radius: 16px;
   }
-  .frame .reason p {
+  .reasons .reason p {
     font-size: 16px;
   }
 }
