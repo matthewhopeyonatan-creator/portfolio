@@ -186,7 +186,6 @@
   background: #fff;
   border-radius: calc(16 * var(--d));
   padding: calc(32 * var(--d)) calc(40 * var(--d));
-  box-shadow: 0 calc(6 * var(--d)) calc(12 * var(--d)) rgba(40, 40, 40, 0.06);
 }
 
 .cardHead {

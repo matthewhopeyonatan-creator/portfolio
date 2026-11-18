@@ -113,7 +113,6 @@ img.part {
   transform-origin: center;
   transition:
     transform 420ms var(--ease-out),
-    filter 420ms var(--ease-out),
     z-index 0s linear 420ms;
   z-index: 0;
 }
@@ -127,10 +126,8 @@ img.part {
 .card[data-on] {
   z-index: 5;
   transform: translate3d(0, calc(-22 * var(--s)), 0) scale(1.035);
-  filter: drop-shadow(0 calc(26 * var(--s)) calc(34 * var(--s)) rgba(40, 40, 40, 0.28));
   transition:
     transform 520ms var(--ease-pop),
-    filter 520ms var(--ease-out),
     z-index 0s;
 }
 
