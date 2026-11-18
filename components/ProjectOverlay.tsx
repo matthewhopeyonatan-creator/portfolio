@@ -136,8 +136,12 @@ function Dashboard() {
   const ref = useRef<HTMLDivElement>(null);
   useRowReveal(ref);
   return (
-    <div ref={ref} data-row="">
-      <div className={styles.cvRise} data-loaded="">
+    <div ref={ref} data-row="" className={styles.proto} style={{ "--n": 1 } as React.CSSProperties}>
+      <div
+        className={`${styles.protoItem} ${styles.cvRise}`}
+        data-loaded=""
+        style={{ "--ar": 1512 / 982 } as React.CSSProperties}
+      >
         <ShmoodDashboard />
       </div>
     </div>
@@ -153,11 +157,11 @@ function Embed({ b }: { b: { url: string; title: string; ratio: number } }) {
   useRowReveal(ref);
   preconnect(new URL(b.url).origin);
   return (
-    <div ref={ref} data-row="">
+    <div ref={ref} data-row="" className={styles.proto} style={{ "--n": 1 } as React.CSSProperties}>
       <div
-        className={`${styles.cvEmbed} ${styles.cvRise}`}
+        className={`${styles.protoItem} ${styles.cvEmbed} ${styles.cvRise}`}
         data-loaded=""
-        style={{ "--ratio": b.ratio } as React.CSSProperties}
+        style={{ "--ratio": b.ratio, "--ar": b.ratio } as React.CSSProperties}
       >
         <iframe
           src={b.url}
@@ -172,21 +176,28 @@ function Embed({ b }: { b: { url: string; title: string; ratio: number } }) {
   );
 }
 
-/** Images with captions side by side; with `rise`, the row comes in like the gallery's. */
+/** Images with captions side by side, in one filled container; with `rise`, the row comes in like
+ *  the gallery's. */
 function Figures({ b }: { b: Extract<CaseBlock, { type: "figures" }> }) {
   const ref = useRef<HTMLDivElement>(null);
   useRowReveal(ref, !!b.rise);
   return (
     <div
       ref={ref}
-      className={styles.cvFigures}
+      className={`${styles.cvFigures} ${styles.proto}`}
       data-count={b.items.length}
       data-row={b.rise ? "" : undefined}
+      style={{ "--n": b.items.length } as React.CSSProperties}
     >
       {b.items.map((f) => (
         <figure
           key={f.image.src}
-          className={`${styles.cvFigure} ${b.rise ? styles.cvRise : ""}`}
+          className={`${styles.cvFigure} ${styles.protoItem} ${b.rise ? styles.cvRise : ""}`}
+          style={
+            {
+              "--ar": f.live === "review-checkboxes" ? 1512 / 743 : f.image.w / f.image.h,
+            } as React.CSSProperties
+          }
         >
           {f.live === "review-checkboxes" ? (
             <ReviewCheckboxes alt={f.image.alt} />
@@ -331,7 +342,11 @@ function Block({ b }: { b: CaseBlock }) {
     case "phones":
       return <TicketmasterPhones screens={b.screens} />;
     case "screens":
-      return <ShmoodScreens screens={b.screens} />;
+      return (
+        <div className={styles.proto} style={{ "--n": b.screens.length } as React.CSSProperties}>
+          <ShmoodScreens screens={b.screens} />
+        </div>
+      );
     case "dashboard":
       return <Dashboard />;
     case "gallery":

@@ -37,7 +37,7 @@
 @property --color-box {
   syntax: "<color>";
   inherits: true;
-  initial-value: #d8d8d8;
+  initial-value: #e4e1d5;
 }
 
 /* the receipt's tilt shading (components/Tilt.tsx): shadow at full strength (Tilt scales it), the
@@ -65,7 +65,7 @@
   --color-ink: #282828;
   --color-accent: #91230a; /* deep tomato red — hero pill + footer */
   --color-paper: #fff;
-  --color-box: #d8d8d8;
+  --color-box: #e4e1d5;
   --tilt-shadow: rgba(40, 40, 40, 0.4);
   --tilt-dent: rgba(40, 40, 40, 0.08);
   --tilt-rim: rgba(255, 255, 255, 0.3);
@@ -113,7 +113,7 @@ html[data-theme="dark"] {
   --color-bg: #141414;
   --color-ink: #edece9;
   --color-paper: #1f1f1f;
-  --color-box: #2a2a2a; /* the case-study boxes: a step up from the page, like the light #d8d8d8 */
+  --color-box: #2a2a2a; /* the case-study boxes: a step up from the page, like the light #e4e1d5 */
   /* on a dark page a shadow has to be darker than the page, and a dark slip catches far less light */
   --tilt-shadow: rgba(6, 6, 6, 1);
   --tilt-dent: rgba(6, 6, 6, 0.22);

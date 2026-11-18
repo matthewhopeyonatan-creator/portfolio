@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: calc(60 * var(--pu));
-  padding: calc(40 * var(--pu)) calc(24 * var(--pu)); /* the cards keep 24 at the sides */
+  padding: 40px; /* 40 all round (the red cards keep it at the sides) */
   background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }

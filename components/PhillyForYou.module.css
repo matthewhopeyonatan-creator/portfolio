@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly; /* same space left, right and between */
-  padding: calc(40 * var(--pu)) 0;
+  padding: 40px 0;
   background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }

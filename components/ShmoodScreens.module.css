@@ -1,12 +1,15 @@
 /* Shmood's onboarding frames (2332 × 1433, #F3F1EB), side by side like the case study's figures:
    r24 corners, 24 apart. Inside, `--s` is one frame px at the screen's current width. */
+/* the screens sit straight in the case study's filled container (ProjectOverlay .proto), sized
+   like its items: as tall as a prototype may be, or as wide as the row allows */
 .row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  gap: calc(24 * var(--pu));
+  display: contents;
 }
 
 .screen {
+  flex: 0 1 calc(var(--proto-h) * 2332 / 1433);
+  min-width: 0;
+  max-width: calc((100% - (var(--n, 1) + 1) * 40px) / var(--n, 1));
   container-type: inline-size;
   position: relative;
   aspect-ratio: 2332 / 1433;
@@ -152,7 +155,8 @@ img.part {
 }
 
 @media (max-width: 767px) {
-  .row {
-    grid-template-columns: 1fr;
+  .screen {
+    flex: none;
+    max-width: none;
   }
 }

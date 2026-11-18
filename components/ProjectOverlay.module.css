@@ -334,12 +334,29 @@
   letter-spacing: -0.03em;
 }
 
+/* ── the filled container every prototype sits in (web screens, the live site, figures; the phone
+   frames have their own, alike): 40 above and below; the artifacts inside are as tall as they may
+   be (--proto-h) or as wide as the row allows, and spread so the space left, right and between
+   them is the same, never under 40. --n = how many sit side by side, --ar = each one's width ÷
+   height. ── */
+.proto {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  padding: 40px 0;
+  border-radius: calc(24 * var(--pu));
+  background: var(--color-box);
+}
+
+.protoItem {
+  flex: 0 1 calc(var(--proto-h) * var(--ar, 1.6));
+  min-width: 0;
+  max-width: calc((100% - (var(--n, 1) + 1) * 40px) / var(--n, 1));
+}
+
 /* the live site, in a rounded window (Figma: 1314 × 547, r24, #767676 while it loads) */
 .cvEmbed {
   overflow: hidden;
-  /* never taller than a prototype may be (--proto-h): narrower then, centred */
-  width: min(100%, var(--proto-h) * var(--ratio, 2.4));
-  margin-inline: auto;
   aspect-ratio: var(--ratio, 2.4);
   border-radius: calc(24 * var(--pu));
   background: #050505; /* CrowdVolt's page colour, so the site loading in doesn't flash grey */
@@ -521,12 +538,7 @@
   }
 }
 
-/* images r24 with a Regular 20/25 caption 12 under each; pairs sit 24 apart */
-.cvFigures {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  gap: calc(24 * var(--pu));
-}
+/* images r24 with a Regular 20/25 caption 12 under each, side by side in one container (.proto) */
 
 .cvFigure {
   display: flex;
@@ -1071,7 +1083,6 @@
     line-height: normal;
     letter-spacing: -0.03em;
   }
-  .cvFigures,
   .cvSketch,
   .cvWins,
   .cvBoxes {
@@ -1210,8 +1221,16 @@
   .toc {
     display: none;
   }
-  .cvFigures {
-    grid-template-columns: 1fr;
+  /* phones: the artifacts stack, 20 in from the container's sides and 24 apart */
+  .proto {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    padding: 24px 20px;
+  }
+  .protoItem {
+    flex: none;
+    max-width: none;
   }
   .cvBoxes {
     grid-auto-flow: row;
