@@ -1408,3 +1408,56 @@
     font-size: 11px;
   }
 }
+
+/* ── the end of every case study: three blurred tomatoes (the receipt's) in a band of their own
+   under the last section, so they never sit over text; cut off by the bottom of the page ── */
+.endTomatoes {
+  position: relative;
+  height: calc(620 * var(--pu));
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.endTomato {
+  position: absolute;
+  height: auto;
+  max-width: none;
+}
+
+.end-left {
+  left: calc(-260 * var(--pu));
+  top: calc(40 * var(--pu));
+  width: calc(903 * var(--pu));
+}
+
+.end-back {
+  left: calc(470 * var(--pu));
+  top: calc(-20 * var(--pu));
+  width: calc(622 * var(--pu));
+}
+
+.end-right {
+  left: calc(960 * var(--pu));
+  top: calc(60 * var(--pu));
+  width: calc(719 * var(--pu));
+}
+
+@media (max-width: 767px) {
+  .endTomatoes {
+    height: 320px;
+  }
+  /* two, side by side, so they read as tomatoes rather than one red blur */
+  .end-left {
+    left: -170px;
+    top: 40px;
+    width: 420px;
+  }
+  .end-back {
+    display: none;
+  }
+  .end-right {
+    left: 170px;
+    top: 30px;
+    width: 340px;
+  }
+}

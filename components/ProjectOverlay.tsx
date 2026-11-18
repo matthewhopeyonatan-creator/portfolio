@@ -19,6 +19,7 @@ import ShmoodScreens from "@/components/ShmoodScreens";
 import ShmoodDashboard from "@/components/ShmoodDashboard";
 import TicketmasterPhones from "@/components/TicketmasterPhones";
 import { addView } from "@/lib/visit";
+import ThemedPair from "@/components/ThemedPair";
 import styles from "./ProjectOverlay.module.css";
 
 const LOREM =
@@ -1033,9 +1034,50 @@ export default function ProjectOverlay({
               )}
             </div>
           </div>
+          {/* the case study ends on a bed of tomatoes, the page extended so they sit under the last
+              words rather than over them */}
+          {study && expanded ? <EndTomatoes /> : null}
         </div>
       </div>
     </div>,
     document.body,
+  );
+}
+
+// the receipt's three blurred tomatoes (light art + its blue dark-mode render), in a row
+const END_TOMATOES = [
+  { name: "left", w: 903, h: 815 },
+  { name: "back", w: 622, h: 645 },
+  { name: "right", w: 719, h: 674 },
+] as const;
+
+function EndTomatoes() {
+  return (
+    <div className={styles.endTomatoes} aria-hidden="true">
+      {END_TOMATOES.map((t) => (
+        <div key={t.name} className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
+          <ThemedPair
+            light={`/receipt/tomato-${t.name}.svg`}
+            dark={`/receipt/dark/tomato-${t.name}.webp`}
+            render={(v) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={v.className}
+                ref={v.imgRef}
+                onLoad={v.onLoad}
+                data-ready={v.ready ? "" : undefined}
+                className={`${styles.endTomato} ${styles[`end-${t.name}`]} ${v.className}`}
+                src={v.src}
+                alt=""
+                width={t.w}
+                height={t.h}
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          />
+        </div>
+      ))}
+    </div>
   );
 }
