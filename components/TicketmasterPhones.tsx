@@ -201,7 +201,7 @@ function Explore4() {
   );
   return (
     <div ref={ref} className={`${styles.phone} ${styles.explore}`} style={{ height: "calc(873 * var(--pu))" }}>
-      <p className={styles.qty}>Ticket Quantity Selected: 4</p>
+      <p className={styles.qty}>Ticket Quantity Selected: 6</p>
       <p className={styles.desc}>
         You’re able to batch these tickets to sell them independently of each other. You will need to
         transfer these batches when you sell your tickets.

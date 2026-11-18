@@ -64,9 +64,9 @@ export function MidFi({ reasons }: { reasons: string[] }) {
             <span className={`${styles.card} ${styles.cardTilt}`} />
             <span className={`${styles.card} ${styles.cardFront}`} />
             <p className={styles.tiltText}>
-              Cornell student blablabla
-              <br />
-              ablablabla lermdmke
+              Lorem ipsum dolor
+            <br />
+            sit amet consectetur
             </p>
             <p className={styles.today}>
               this is
@@ -74,7 +74,7 @@ export function MidFi({ reasons }: { reasons: string[] }) {
               philly today
             </p>
             <p className={styles.cardText}>
-              Philedalphian sdfjkdmndjfkdmnfvfmds
+              Lorem ipsum dolor sit amet adipiscing
             </p>
             <span className={styles.daily}>daily</span>
             <Chrome dotsLeft={351} />
