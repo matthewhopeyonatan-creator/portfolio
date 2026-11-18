@@ -9,7 +9,7 @@
   justify-content: center;
   gap: calc(120 * var(--pu));
   padding: calc(40 * var(--pu)) calc(24 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 

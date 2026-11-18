@@ -29,7 +29,7 @@
   position: relative;
   width: calc(998 * var(--c));
   height: calc(607 * var(--c));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
   animation: cardIn 520ms var(--ease-out) both;

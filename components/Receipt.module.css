@@ -212,7 +212,7 @@
   min-height: calc(791 * var(--ru));
   /* 76 at the bottom (Figma 52 + 24): room under the box for the download icon */
   padding: calc(35 * var(--ru)) calc(22 * var(--ru)) calc(76 * var(--ru));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-paper);
 }
 
@@ -286,7 +286,7 @@
 }
 
 .box {
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
 }
 
 .items {
@@ -318,7 +318,7 @@
   min-height: calc(115 * var(--ru));
   padding: calc(16 * var(--ru)) calc(21 * var(--ru)) calc(18 * var(--ru));
   box-sizing: border-box;
-  border-top: 2px solid var(--color-ink);
+  border-top: 1.5px solid var(--color-ink);
 }
 
 /* Notes: the visitor types here — set like the Figma note (Light 16/16) with no box of its own */
@@ -358,7 +358,7 @@
   gap: calc(11 * var(--ru));
   margin: 0;
   padding: calc(27 * var(--ru)) calc(21 * var(--ru)) calc(25 * var(--ru));
-  border-top: 2px solid var(--color-ink);
+  border-top: 1.5px solid var(--color-ink);
 }
 
 .line {
@@ -522,7 +522,7 @@
   width: calc(184 * var(--ru));
   height: max(36px, calc(42 * var(--ru)));
   padding: 0;
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-paper);
   color: var(--color-ink);
   font: inherit;

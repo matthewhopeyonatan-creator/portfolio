@@ -36,7 +36,7 @@
   bottom: 0;
   width: 88vw; /* leaves a strip of the page to tap to close */
   container-type: inline-size;
-  border-left: 2px solid var(--color-ink);
+  border-left: 1.5px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
   transform: translate3d(100%, 0, 0);
@@ -115,7 +115,7 @@
   top: 12px;
   right: 12px;
   padding: 8px 14px;
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-bg);
   color: inherit;
   font: inherit;

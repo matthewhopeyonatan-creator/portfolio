@@ -61,7 +61,7 @@
   --tilt-shadow: rgba(40, 40, 40, 0.4);
   --tilt-dent: rgba(40, 40, 40, 0.08);
   --tilt-rim: rgba(255, 255, 255, 0.3);
-  --rule: 2px solid var(--color-ink);
+  --rule: 1.5px solid var(--color-ink); /* every line on the site */
 
   /* 1 design pixel, scaled to the viewport (design frame = 1728px wide) */
   --u: calc(100vw / 1728);

@@ -9,7 +9,7 @@
 .track {
   position: relative;
   height: max(44px, calc(78 * var(--cu)));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
   overflow: hidden;

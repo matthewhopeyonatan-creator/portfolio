@@ -174,7 +174,7 @@
 
 .careerRule {
   width: calc(828 * var(--u));
-  height: 2px;
+  height: 1.5px;
   background: var(--color-ink);
 }
 

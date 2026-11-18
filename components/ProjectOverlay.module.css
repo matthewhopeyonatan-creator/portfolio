@@ -36,7 +36,7 @@
   /* keep vertical scroll inside, but let sideways overscroll through so the trackpad
      two-finger swipe (browser back) still works */
   overscroll-behavior: auto contain;
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-bg);
   color: var(--color-ink);
   outline: none;
@@ -151,7 +151,7 @@
   gap: calc(40 * var(--pu));
   /* runs the full width, 40 in from each edge */
   padding: calc(80 * var(--pu)) 40px calc(160 * var(--pu));
-  border-top: 2px solid var(--color-ink);
+  border-top: 1.5px solid var(--color-ink);
 }
 
 /* full screen: the tracker joins on the left */
@@ -368,7 +368,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: calc(89 * var(--pu)) calc(43.67 / 1314 * 100%) calc(93 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 
@@ -482,7 +482,7 @@
   bottom: calc(38.5 * var(--pu));
   transform: translate(50%, 50%);
   padding: calc(8 * var(--pu)) calc(12 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-bg);
   font-size: max(11px, calc(24 * var(--pu)));
   line-height: normal;
@@ -632,7 +632,7 @@
   justify-content: center;
   gap: calc(12 * var(--pu));
   padding: calc(30 * var(--pu)) calc(29 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 
@@ -689,7 +689,7 @@
   height: calc(100 * var(--pu));
   padding: 0 calc(29 * var(--pu));
   overflow: hidden;
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
   container-type: inline-size;
 }
@@ -716,13 +716,13 @@
 /* a statement in its own bordered card (Figma 316:340) */
 .cvBoxed {
   padding: calc(24 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 
 .cvWin {
   padding: calc(24 * var(--pu)); /* same space all round */
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 
@@ -786,7 +786,7 @@
   box-sizing: border-box;
   min-height: calc(319 * var(--pu));
   padding: calc(30 * var(--pu)) calc(20 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
   text-align: center;
 }
@@ -878,7 +878,7 @@
   flex-direction: column;
   gap: calc(12 * var(--pu));
   padding: calc(29 * var(--pu));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   border-radius: calc(24 * var(--pu));
 }
 
@@ -915,7 +915,7 @@
 .more {
   align-self: flex-start;
   padding-bottom: 2px;
-  border-bottom: 2px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
   font-size: max(16px, calc(24 * var(--pu)));
 }
 

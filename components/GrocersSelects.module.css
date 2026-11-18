@@ -1,8 +1,8 @@
-/* Figma 111:697 — columns split by 2px ink rules · poster 3:4 (371 × 494), no captions.
+/* Figma 111:697 — columns split by ink rules (--rule) · poster 3:4 (371 × 494), no captions.
    Enlarged: each poster sits 40 from the rules on every side. Rows of three, except "wide"
    posters, which go two to a row (a 6-track grid: normal cells take 2 tracks, wide ones 3). */
 
-/* every cell has a rule on its right; the grid runs 2px past the window and that last rule is
+/* every cell has a rule on its right; the grid runs 1.5px past the window and that last rule is
    clipped off, so every poster in a row is exactly the same size whatever the mix */
 .shelf {
   overflow-x: clip;
@@ -13,10 +13,10 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  width: calc(100% + 2px);
+  width: calc(100% + 1.5px);
   /* the shelf is the last thing on the page: its bottom rule and the footer's top rule share the
-     same 2px, rather than stacking into a 4px line */
-  margin: 0 0 -2px;
+     same 1.5px, rather than stacking into a 3px line */
+  margin: 0 0 -1.5px;
   padding: 0;
   list-style: none;
   background: var(--color-bg);

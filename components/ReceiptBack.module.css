@@ -9,7 +9,7 @@
   box-sizing: border-box;
   width: 100%;
   min-height: calc(791 * var(--ru));
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-paper);
   color: var(--color-ink);
   cursor: crosshair;
@@ -153,7 +153,7 @@
   bottom: calc(18 * var(--ru));
   translate: -50% 0;
   padding: 6px 18px;
-  border: 2px solid var(--color-ink);
+  border: 1.5px solid var(--color-ink);
   background: var(--color-paper);
   font-size: max(14px, calc(18 * var(--ru)));
 }
@@ -290,17 +290,17 @@
   max-width: none;
 }
 
-/* Figma positions are from the slip's outer edge; the 2px border is taken off */
+/* Figma positions are from the slip's outer edge; the border (1.5px) is taken off */
 .tomatoLeft {
-  left: -2px;
-  top: -2px;
+  left: -1.5px;
+  top: -1.5px;
   width: calc(183 * var(--ru));
 }
 
 /* its SVG is padded 110 above so the blur isn't cut off at the top */
 .tomatoRight {
-  left: calc(351.14 * var(--ru) - 2px);
-  top: calc((276.75 - 110) * var(--ru) - 2px);
+  left: calc(351.14 * var(--ru) - 1.5px);
+  top: calc((276.75 - 110) * var(--ru) - 1.5px);
   width: calc(171 * var(--ru));
 }
 

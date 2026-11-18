@@ -39,7 +39,7 @@ export default function Home() {
         <Hero />
         <section id="seasonal-picks" aria-labelledby="seasonal-picks-title">
           {/* Figma 210:4738 (title) + 495:4900 (subtext) */}
-          <div className={`${styles.sectionTitleRow} ${styles.titleStack} ${styles.picksRow}`}>
+          <div className={`${styles.sectionTitleRow} ${styles.titleStack}`}>
             <h2
               id="seasonal-picks-title"
               className={`${styles.sectionTitle} ${styles.titleSmall}`}

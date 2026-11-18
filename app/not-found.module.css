@@ -25,7 +25,7 @@
 .link {
   margin-top: 16px;
   padding-bottom: 2px;
-  border-bottom: 2px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
   font-size: max(18px, calc(24 * var(--u)));
   transition: opacity var(--dur-hover) var(--ease-out);
 }
