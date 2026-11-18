@@ -499,11 +499,12 @@ const shmood: CaseSection[] = [
             impacts: [
               {
                 label: "Validated for implementation",
-                value: "Lead engineer & CEO sign-off",
+                value: "Lead engineer & CEO validation",
                 sub: ["My designs and the team’s whole design ecosystem"],
               },
               {
                 label: "Decreased friction in understanding",
+                value: "CEO validation",
                 sub: ["New dashboard, tested by the internal design team"],
               },
               {
