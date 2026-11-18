@@ -500,7 +500,7 @@
   transform: translate(50%, 50%);
   padding: calc(8 * var(--pu)) calc(12 * var(--pu));
   border: 1.5px solid var(--color-ink);
-  background: var(--color-bg);
+  background: var(--color-box); /* the box it sits on */
   font-size: max(11px, calc(24 * var(--pu)));
   line-height: normal;
   letter-spacing: -0.03em;
@@ -782,7 +782,7 @@
 }
 
 /* Figma 131:232: three 425 × 319 cards, 2px ink r24, spread across · "BLOCKER n" Bold 20/25 over
-   its title Medium 20/25, centred ~30 down · then a Light 36/36 line, centred, ~19 under */
+   its title Medium 20/25, left- and top-aligned 30 in · then the line ~19 under */
 .cvBlockers {
   display: flex;
   justify-content: space-between;
@@ -793,14 +793,20 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: calc(19 * var(--pu));
   box-sizing: border-box;
-  /* hugs its text now the text is 20 (the 319 Figma height was for 32/36 lines) */
-  padding: calc(30 * var(--pu)) calc(20 * var(--pu));
+  /* hugs its text; left- and top-aligned, the same margin on every side */
+  padding: calc(30 * var(--pu));
   background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
-  text-align: center;
+  text-align: left;
+}
+
+/* left-aligned, so the text runs the card's full width */
+.section .cvBlocker .cvBlockerText {
+  max-width: none !important;
 }
 
 /* four (Shmood's research insights) sit two to a row */
