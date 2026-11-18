@@ -1,33 +1,32 @@
-/* Figma: cell 864×714 · image 681×466, 58 from top · text block 40 from left, 40 below image
+/* portfolio-v2: the project's preview fills the cell 40 in from its edges (the side margin, and the
+   same 40 above), at the shot's 487 × 274 shape; the text sits under it on the same left edge.
    title 32 SemiBold · subtitle 24 Regular (-4 overlap) · gap 8 · pills 16px, 1px border, r24, 4/8 pad, gap 4 */
-/* the card only reacts to the pointer over the foam tray (.trayHit) — not its whole cell, the
+/* the card only reacts to the pointer over the preview (.trayHit) — not its whole cell, the
    title or the tags (keyboard focus still works on the whole card) */
 .card {
   pointer-events: none;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: calc(712 * var(--u));
-  padding: calc(58 * var(--u)) var(--gutter) calc(50 * var(--u));
+  padding: var(--gutter) var(--gutter) calc(50 * var(--u));
   color: var(--color-ink);
 }
 
 .media {
   display: flex;
-  justify-content: center;
 }
 
-/* Tray stack — Figma 681×466 artboard; children positioned in % of it.
-   Container units (cqw) keep radius/shadow proportional at every size. */
+/* the preview: full width between the margins, the shot's shape. Container units (cqw) keep the
+   radius and the sold-out banner proportional at every size. */
 .tray {
   position: relative;
   container-type: inline-size;
-  width: calc(681 * var(--u));
-  aspect-ratio: 681 / 466;
+  width: 100%;
+  aspect-ratio: 487.111 / 274;
   transition: transform var(--dur-hover) var(--ease-out);
 }
 
-/* press: the tray gives a little under the finger */
+/* press: it gives a little under the finger */
 .card:not(.static):active .tray {
   transform: scale(0.98);
   transition-duration: var(--dur-press);
@@ -35,60 +34,33 @@
 
 @media (hover: hover) and (pointer: fine) {
   .card:not(.static):hover .tray {
-    transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg);
+    transform: translateY(calc(-10 * var(--u)));
   }
   .card:not(.static):hover:active .tray {
-    transform: translateY(calc(-10 * var(--u))) rotate(-0.6deg) scale(0.98);
+    transform: translateY(calc(-10 * var(--u))) scale(0.98);
   }
 }
 
-/* the foam tray and the shot in it grow a little as the plastic comes off */
-.goods {
-  position: absolute;
-  inset: 0;
-  transition: transform 650ms var(--ease-peel);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .card:not(.static):hover .goods {
-    transform: scale(1.035);
-  }
-}
-
-.trayBase {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* Figma "content placeholder": 487×274 at (92, 96), r24, shadow 4 4 12 3 rgba(40,40,40,.25) — ink-tinted, no pure black */
+/* r24 at the shot's 487 width, scaled with it */
 .content {
   position: absolute;
-  left: calc(92 / 681 * 100%);
-  top: calc(96 / 466 * 100%);
-  width: calc(487.111 / 681 * 100%);
-  height: calc(274 / 466 * 100%);
+  inset: 0;
   overflow: hidden;
-  border-radius: calc(24 / 681 * 100cqw);
+  border-radius: calc(24 / 487.111 * 100cqw);
   background: #f90000;
-  box-shadow: calc(4 / 681 * 100cqw) calc(4 / 681 * 100cqw)
-    calc(12 / 681 * 100cqw) calc(3 / 681 * 100cqw) rgba(40, 40, 40, 0.25);
 }
 
 .coverImage {
   object-fit: cover;
 }
 
-/* logo: a separate item in the tray, lying diagonally across the shot's lower-right corner
-   (shot edge: right 15%, bottom 20.6% of the tray), under the wrap. Two soft shadows — a
-   tight contact one and a wider fainter one — lift it off the shot. */
+/* a logo lying across the preview's lower-right corner */
 .badge {
   position: absolute;
-  right: calc(15% - 5%);
-  bottom: calc(20.6% - 9%);
+  right: -2%;
+  bottom: -6%;
   width: auto;
-  height: 24%;
+  height: 34%;
   max-width: none;
   user-select: none;
   transform: rotate(18deg);
@@ -96,85 +68,13 @@
     drop-shadow(0 8px 14px rgba(40, 40, 40, 0.25));
 }
 
-/* looping project video: fills the shot, cropped */
+/* looping project video: fills the preview, cropped */
 .coverVideo {
   position: absolute;
   inset: -1px; /* a hair past the edges so the red placeholder never peeks out */
   width: calc(100% + 2px);
   height: calc(100% + 2px);
   object-fit: cover;
-}
-
-/* Figma "PLASTIC TEXTURE - 10": 674×457 at (0, 4), r64, 80% (opacity baked into the render).
-   Unwrap on hover: the sheet is cut along a 45° fold line that travels in from the lower-right
-   corner (--wpeel), and the cut-off corner is mirrored back over the sheet as the folded flap —
-   the same fold as the hero stickers. */
-.wrap {
-  --wpeel: 0px;
-  position: absolute;
-  left: 0;
-  top: calc(4 / 466 * 100%);
-  width: calc(674 / 681 * 100%);
-  height: calc(457 / 466 * 100%);
-  pointer-events: none;
-  /* wrapping back up is quicker than the unwrap */
-  transition: --wpeel 420ms var(--ease-out);
-}
-
-/* touch: the same peel, while the tray is in view (ProjectCard) */
-.peeled .wrap {
-  --wpeel: 58cqw;
-  transition-duration: 900ms;
-  transition-timing-function: var(--ease-peel);
-}
-
-.peeled .goods {
-  transform: scale(1.035);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .card:not(.static):hover .wrap {
-    --wpeel: 58cqw;
-    transition-duration: 900ms;
-    transition-timing-function: var(--ease-peel);
-  }
-}
-
-.wrapFace,
-.wrapFlap {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-}
-
-.wrapFace {
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--wpeel)),
-    calc(100% - var(--wpeel)) 100%,
-    0 100%
-  );
-}
-
-.wrapFold {
-  position: absolute;
-  inset: 0;
-  transform-origin: 100% calc(100% - var(--wpeel));
-  transform: rotate(-45deg) scaleY(-1) rotate(45deg);
-  /* the folded-over plastic: a bit brighter where it catches the light, soft shadow under it */
-  filter: brightness(1.12) drop-shadow(2px 3px 5px rgba(40, 40, 40, 0.22));
-}
-
-.wrapFlap {
-  clip-path: polygon(
-    100% calc(100% - var(--wpeel)),
-    100% 100%,
-    calc(100% - var(--wpeel)) 100%
-  );
 }
 
 .info {
@@ -225,7 +125,7 @@
   white-space: nowrap;
 }
 
-/* Phones — Figma 231:1707: tray 343 wide, 26 under the rule · 18 to the text on the 20 margin ·
+/* Phones — Figma 231:1707 (preview now full width on the 20 margins) · 18 to the text ·
    title 24, subtitle 20/20, 12 to the tags · tags 13px, 0.8px border, 3/6.5 padding, two to a
    row (2 apart, rows 4 apart) · ~45 to the next rule */
 @media (max-width: 767px) {
@@ -233,10 +133,6 @@
     min-height: 0;
     /* the same 24 above the tray and below the tags, on the 20 margins */
     padding: 24px var(--gutter);
-  }
-
-  .tray {
-    width: calc(100vw * 343 / 393);
   }
 
   .info {
@@ -273,21 +169,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tray,
-  .goods,
-  .wrap {
+  .tray {
     transition: none;
   }
   .card:not(.static):hover .tray,
   .card:not(.static):active .tray,
-  .card:not(.static):hover:active .tray,
-  .card:not(.static):hover .goods,
-  .peeled .goods {
+  .card:not(.static):hover:active .tray {
     transform: none;
-  }
-  .card:not(.static):hover .wrap,
-  .peeled .wrap {
-    --wpeel: 0px;
   }
 }
 
@@ -299,17 +187,18 @@
   user-select: none;
 }
 
-/* "SOLD OUT" banner — Figma 78:2301: 378.78 × 80.38 at (144, 210.04) on the 681-wide tray,
-   turned 5.31° (rising to the right), r17.33, #F93636, clips its text. Text Host Grotesk
-   SemiBold Italic, uppercase, ink: 53.28 at (-10.11, -6.26) and 15.40 at (-4.81, 53.91). */
+/* "SOLD OUT" banner — Figma 78:2301, re-measured on the shot (it sat at (144, 210) on the tray,
+   whose shot starts at (92, 96)): 378.78 × 80.38 at (52, 114) of the 487 × 274 preview, turned
+   5.31° (rising to the right), r17.33, #F93636, clips its text. Text Host Grotesk SemiBold
+   Italic, uppercase, ink: 53.28 at (-10.11, -6.26) and 15.40 at (-4.81, 53.91). */
 .soldOut {
   position: absolute;
-  left: calc(144 / 681 * 100%);
-  top: calc(210.042 / 466 * 100%);
-  width: calc(378.783 / 681 * 100%);
-  height: calc(80.377 / 466 * 100%);
+  left: calc(52 / 487.111 * 100%);
+  top: calc(114.042 / 274 * 100%);
+  width: calc(378.783 / 487.111 * 100%);
+  height: calc(80.377 / 274 * 100%);
   overflow: hidden;
-  border-radius: calc(17.327 / 681 * 100cqw);
+  border-radius: calc(17.327 / 487.111 * 100cqw);
   background: #f93636;
   color: var(--color-ink);
   font-style: italic;
@@ -328,15 +217,15 @@
 }
 
 .soldOutBig {
-  left: calc(-10.107 / 681 * 100cqw);
-  top: calc(-6.257 / 681 * 100cqw);
-  font-size: calc(53.28 / 681 * 100cqw);
+  left: calc(-10.107 / 487.111 * 100cqw);
+  top: calc(-6.257 / 487.111 * 100cqw);
+  font-size: calc(53.28 / 487.111 * 100cqw);
 }
 
 .soldOutSmall {
-  left: calc(-4.813 / 681 * 100cqw);
-  top: calc(53.905 / 681 * 100cqw);
-  font-size: calc(15.402 / 681 * 100cqw);
+  left: calc(-4.813 / 487.111 * 100cqw);
+  top: calc(53.905 / 487.111 * 100cqw);
+  font-size: calc(15.402 / 487.111 * 100cqw);
 }
 
 .srOnly {
@@ -347,19 +236,16 @@
   clip-path: inset(50%);
 }
 
-/* coming-soon card: not clickable, no hover peel */
+/* coming-soon card: not clickable, no hover */
 .static {
   cursor: default;
 }
 
-/* foam tray outline (tray.webp: x 0.3%–99.3%, full height, corners ≈ 72 of 681) */
+/* the preview's own rounded shape */
 .trayHit {
   position: absolute;
-  left: 0.3%;
-  right: 0.7%;
-  top: 0;
-  bottom: 0;
-  border-radius: calc(72 / 681 * 100cqw);
+  inset: 0;
+  border-radius: calc(24 / 487.111 * 100cqw);
   pointer-events: auto;
 }
 

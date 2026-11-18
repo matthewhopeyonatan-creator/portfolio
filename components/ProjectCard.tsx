@@ -6,13 +6,17 @@ import { caseStudies } from "@/data/caseStudies";
 import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/site";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import ProjectOverlay from "@/components/ProjectOverlay";
 import styles from "./ProjectCard.module.css";
 
-/** Figma "… image": foam tray → project shot (or red placeholder) → plastic wrap on top. */
-function WrappedTray({
+/**
+ * The project's preview: its looping video (or cover / colour + artwork), filling the card
+ * between the side margins at the shot's 487 × 274 shape. (portfolio-v2: no foam tray or
+ * plastic wrap.)
+ */
+function Preview({
   cover,
   video,
   badge,
@@ -27,105 +31,52 @@ function WrappedTray({
   shotArt?: Project["shotArt"];
   soldOut?: boolean;
 }) {
-  // touch screens have no hover: there the plastic peels back on its own while the tray is in
-  // view, and wraps back up once it's scrolled away
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || soldOut) return;
-    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
-      rootMargin: "-25% 0px -25% 0px", // well into the screen, not just at its edge
-    });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [soldOut]);
   return (
-    <div ref={ref} className={`${styles.tray} ${inView ? styles.peeled : ""}`}>
-      {/* foam tray + shot: grow a touch on hover */}
-      <div className={styles.goods}>
-        <Image
-          src="/home/tray.webp"
-          alt=""
-          width={1362}
-          height={932}
-          sizes="(max-width: 767px) 88vw, 40vw"
-          className={styles.trayBase}
-        />
-        <div
-          className={styles.content}
-          style={shot ? { background: shot } : undefined}
-        >
-          {video ? (
-            <video
-              className={styles.coverVideo}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-            >
-              <source
-                src={video.replace(/\.mp4$/, ".webm")}
-                type="video/webm"
-              />
-              <source src={video} type="video/mp4" />
-            </video>
-          ) : cover ? (
-            <Image
-              src={cover.src}
-              alt={cover.alt}
-              fill
-              sizes="(max-width: 767px) 64vw, 29vw"
-              className={styles.coverImage}
-            />
-          ) : null}
-          {shotArt?.map((art) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={art.src}
-              src={art.src}
-              alt=""
-              draggable={false}
-              className={styles.shotArt}
-              style={{
-                left: `${(art.left / 487.111) * 100}%`,
-                top: `${(art.top / 274) * 100}%`,
-                width: `${(art.width / 487.111) * 100}%`,
-              }}
-            />
-          ))}
-        </div>
-        {/* the logo: its own item in the tray, lying across the shot's corner, under the wrap */}
-        {badge ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={badge} alt="" className={styles.badge} draggable={false} />
-        ) : null}
-      </div>
-      {/* plastic wrap: on hover it peels back from the lower-right corner, folding over itself */}
-      <div className={styles.wrap} aria-hidden="true">
-        <Image
-          src="/home/plastic-wrap.webp"
-          alt=""
-          width={1348}
-          height={914}
-          sizes="(max-width: 767px) 88vw, 40vw"
-          className={styles.wrapFace}
-        />
-        <span className={styles.wrapFold}>
+    <div className={styles.tray}>
+      <div className={styles.content} style={shot ? { background: shot } : undefined}>
+        {video ? (
+          <video
+            className={styles.coverVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          >
+            <source src={video.replace(/\.mp4$/, ".webm")} type="video/webm" />
+            <source src={video} type="video/mp4" />
+          </video>
+        ) : cover ? (
           <Image
-            src="/home/plastic-wrap.webp"
-            alt=""
-            width={1348}
-            height={914}
-            sizes="(max-width: 767px) 88vw, 40vw"
-            className={styles.wrapFlap}
+            src={cover.src}
+            alt={cover.alt}
+            fill
+            sizes="(max-width: 767px) 90vw, 46vw"
+            className={styles.coverImage}
           />
-        </span>
+        ) : null}
+        {shotArt?.map((art) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={art.src}
+            src={art.src}
+            alt=""
+            draggable={false}
+            className={styles.shotArt}
+            style={{
+              left: `${(art.left / 487.111) * 100}%`,
+              top: `${(art.top / 274) * 100}%`,
+              width: `${(art.width / 487.111) * 100}%`,
+            }}
+          />
+        ))}
       </div>
-      {/* Figma 78:2301: a price-gun style banner stuck across the pack, over the wrap */}
+      {badge ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={badge} alt="" className={styles.badge} draggable={false} />
+      ) : null}
+      {/* Figma 78:2301: a price-gun style banner stuck across the preview */}
       {soldOut ? (
         <div className={styles.soldOut}>
           <span className={styles.soldOutBig} aria-hidden="true">
@@ -134,12 +85,10 @@ function WrappedTray({
           <span className={styles.soldOutSmall} aria-hidden="true">
             on sale soon on sale soon on sale soon on sale soon
           </span>
-          <span className={styles.srOnly}>
-            Sold out, case study on sale soon
-          </span>
+          <span className={styles.srOnly}>Sold out, case study on sale soon</span>
         </div>
       ) : null}
-      {/* the only hover / click zone: the foam tray's own rounded shape */}
+      {/* the only hover / click zone: the preview itself */}
       <span className={styles.trayHit} aria-hidden="true" data-cursor={soldOut ? undefined : "cart"} />
     </div>
   );
@@ -165,7 +114,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const body = (
     <>
       <div className={styles.media}>
-        <WrappedTray
+        <Preview
           cover={project.cover}
           video={project.video}
           badge={project.badge}
