@@ -16,7 +16,7 @@ const WORK: CareerRow[] = [
     blurb: "Venture capital and investment firm incubating AI companies in legacy industries" },
   { org: "CrowdVolt (YC24)", role: "product design intern", dates: "dec 25 - aug 26", logo: "/about/logos/crowdvolt.webp",
     blurb: "YC-backed bid-ask marketplace for electronic music tickets, connecting buyers and sellers on a secure, community-driven platform" },
-  { org: "The Philadelphia Inquirer", role: "contract product designer", dates: "jan 25 - may 25", logo: "/about/logos/philadelphia-inquirer.webp",
+  { org: "The Philadelphia Inquirer", role: "contract product designer", dates: "feb 25 - may 25", logo: "/about/logos/philadelphia-inquirer.webp",
     blurb: "Philadelphia’s largest media outlet, with over 15 million unique monthly visitors and 180,000 active users" },
   { org: "Shmood (EF24)", role: "contract product designer", dates: "aug 24 - dec 24", logo: "/about/logos/shmood.webp",
     blurb: "Pre-seed creative tool backed by Entrepreneurs First, consolidating the feedback process between designers and their stakeholders" },
