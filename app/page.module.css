@@ -60,12 +60,17 @@
   list-style: none;
 }
 
+/* portfolio-v2: the project section's lines are 1px (the rule under its title too) */
 .cell {
-  border-bottom: var(--rule);
+  border-bottom: 1px solid var(--color-ink);
 }
 
 .cell:nth-child(odd) {
-  border-right: var(--rule);
+  border-right: 1px solid var(--color-ink);
+}
+
+.picksRow {
+  border-bottom-width: 1px;
 }
 
 /* Empty space below the grid, as in the frame (row 2 ends ~y2650, frame ends y3090) */
