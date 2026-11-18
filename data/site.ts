@@ -12,6 +12,15 @@ export const socialLinks = [
   { label: "X", href: "https://x.com/matthopeyy" },
 ];
 
+// the receipt page's contact icons (Figma 533:1601), in this order
+// TODO: LinkedIn — Matthew's profile URL still needed
+export const contactLinks = [
+  { label: "X", icon: "x", href: "https://x.com/matthopeyy" },
+  { label: "Instagram", icon: "instagram", href: "https://www.instagram.com/hopegoestoplay/" },
+  { label: "LinkedIn", icon: "linkedin", href: "https://www.linkedin.com/" },
+  { label: "Email", icon: "email", href: "mailto:matthew.hope.yonatan@gmail.com?subject=HOPES%20GROCER" },
+] as const;
+
 export type Project = {
   slug: string;
   title: string;

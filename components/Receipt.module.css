@@ -16,6 +16,13 @@
   overflow: clip;
 }
 
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
 .stage {
   position: relative;
   isolation: isolate;
@@ -519,7 +526,7 @@
 .button {
   display: grid;
   place-items: center;
-  width: calc(184 * var(--ru));
+  width: max(150px, calc(184 * var(--ru)));
   height: max(36px, calc(42 * var(--ru)));
   padding: 0;
   border: 1.5px solid var(--color-ink);
@@ -552,7 +559,189 @@
   }
 }
 
+/* ── the thank-you and contact links (Figma 533:1333): "THANKS FOR COMING" Bold 128/120 (−0.05em),
+   uppercase · 42 under it the lede, Regular 40/40 (−0.02em) · 40 to "Let's grow something
+   together" · 80 to the icons, 37 tall, 71.7 apart. Narrow screens: under the slip, a size down. ── */
+.copy {
+  width: calc(522 * var(--ru));
+  color: var(--color-ink);
+}
+
+.thanks {
+  margin: 0;
+  font-size: max(44px, calc(128 * var(--ru)));
+  font-weight: 700;
+  line-height: 0.9375; /* 120 / 128 */
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.lede {
+  margin: 0;
+  font-size: max(20px, calc(40 * var(--ru)));
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.thanks + .lede {
+  margin-top: max(20px, calc(42 * var(--ru)));
+}
+
+.grow {
+  margin-top: max(20px, calc(40 * var(--ru)));
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: max(20px, calc(34.7 * var(--ru)));
+  margin: max(36px, calc(80 * var(--ru))) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  height: max(28px, calc(37 * var(--ru)));
+  color: var(--color-ink);
+  transition:
+    opacity var(--dur-hover) ease,
+    transform var(--dur-press) var(--ease-out);
+}
+
+.social svg {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+/* the mail icon is 29.4 tall in its 37 row */
+.socials li:last-child .social svg {
+  height: 79.5%;
+}
+
+.social:active {
+  transform: scale(0.97);
+}
+
+.social:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .social:hover {
+    opacity: 0.6;
+  }
+}
+
+/* narrow screens: a size down, so "THANKS FOR" stays on one line */
+@media (max-width: 1023px) {
+  .thanks {
+    font-size: min(52px, calc(128 * var(--ru)));
+  }
+  .lede {
+    font-size: min(22px, calc(40 * var(--ru)));
+  }
+}
+
+/* narrow: the copy rises in under the slip once it has printed, with the buttons */
+.copy > * {
+  animation: actionsIn 450ms var(--ease-out) 4900ms backwards;
+}
+
+/* ── wide screens (Figma 533:1333): the slip on the left at 112, the copy from 736 — 102 apart,
+   112 in from each side of a 1728 frame. It prints in the middle of the window (--shift, set in
+   Receipt.tsx), slides over to the left once it's out, the copy sliding in from the right with it;
+   then the tomatoes fill in around them and "flip me!" settles last. ── */
+@media (min-width: 1024px) {
+  .page {
+    --ru: max(0.5px, min(1px, 100vw / 1728, (100svh - var(--header-h) - 96px) / 873));
+  }
+  .layout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: calc(102 * var(--ru));
+    width: calc(1504 * var(--ru));
+  }
+  .stage {
+    flex: none;
+    animation: slideOver 900ms var(--ease-in-out) 4200ms backwards;
+  }
+  .copy {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
+  .copy > * {
+    animation:
+      copyIn 900ms var(--ease-out) 4300ms backwards,
+      copyFade 600ms ease 4300ms backwards;
+  }
+  .copy > :nth-child(2) {
+    animation-delay: 4370ms;
+  }
+  .copy > :nth-child(3) {
+    animation-delay: 4440ms;
+  }
+  .copy > :nth-child(4) {
+    animation-delay: 4510ms;
+  }
+  /* the tomatoes come after the slide, around the slip and behind the copy (Figma positions,
+     from the slip's top-left) — largest first, as before */
+  .tomatoLeft {
+    left: calc(125 * var(--ru));
+    top: calc(423.4 * var(--ru));
+    --tomato-delay: 5100ms;
+  }
+  .tomatoRight {
+    left: calc(1146.8 * var(--ru));
+    top: calc(354.8 * var(--ru));
+    --tomato-delay: 5280ms;
+  }
+  .tomatoBack {
+    left: calc(1143.7 * var(--ru));
+    top: calc(82.7 * var(--ru));
+    --tomato-delay: 5460ms;
+  }
+  .actions > *,
+  .button {
+    animation-delay: 5700ms;
+  }
+  .actions > * + *,
+  .actions > .button + .button {
+    animation-delay: 5780ms;
+  }
+}
+
+@keyframes slideOver {
+  from {
+    transform: translateX(var(--shift, 0px));
+  }
+}
+
+@keyframes copyIn {
+  from {
+    transform: translateX(calc(160 * var(--ru)));
+  }
+}
+
+@keyframes copyFade {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .stage {
+    animation: none !important;
+  }
+  .copy > *,
+  .copy > :nth-child(n) {
+    animation: printFade 400ms ease 300ms backwards !important;
+  }
   .print {
     animation: printFade 300ms ease backwards;
   }
