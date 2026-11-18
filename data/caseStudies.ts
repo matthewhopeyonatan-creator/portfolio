@@ -867,6 +867,10 @@ const crowdvolt: CaseSection[] = [
           },
           // Figma 14873:1228 / 14886:3593 (CrowdVolt web file)
           { type: "phones", screens: ["status-one", "status-batch"] },
+          {
+            type: "callout",
+            body: "After prototyping most of these screens in Figma, I did the front-end code and prototyping in Claude Code, then handed it over to our engineer, and this feature launched in a day’s time. Because this flow was novel and we wanted to reinvent the way we did manual transfer within CrowdVolt, we needed to launch this feature as fast as we could.",
+          },
         ],
       },
       {
