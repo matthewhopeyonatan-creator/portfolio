@@ -682,19 +682,21 @@
     flex: 1;
     min-width: 0;
   }
+  /* the copy waits until the slip has nearly settled (the slide is 4200–5100), then eases in
+     from a short way right, line by line — so it never passes over the slip */
   .copy > * {
     animation:
-      copyIn 900ms var(--ease-out) 4300ms backwards,
-      copyFade 600ms ease 4300ms backwards;
+      copyIn 800ms var(--ease-out) 4950ms backwards,
+      copyFade 600ms var(--ease-out) 4950ms backwards;
   }
   .copy > :nth-child(2) {
-    animation-delay: 4370ms;
+    animation-delay: 5020ms;
   }
   .copy > :nth-child(3) {
-    animation-delay: 4440ms;
+    animation-delay: 5090ms;
   }
   .copy > :nth-child(4) {
-    animation-delay: 4510ms;
+    animation-delay: 5160ms;
   }
   /* the tomatoes come after the slide, behind the slip and the copy — largest first, as before.
      The slip sits 112 in from the left of the centred 1504 layout, its top about half the
@@ -707,25 +709,25 @@
     left: calc(-300 * var(--ru));
     top: auto;
     bottom: calc(-300 * var(--ru));
-    --tomato-delay: 5100ms;
+    --tomato-delay: 5400ms;
   }
   .tomatoRight {
     left: calc(var(--sx) + 1146.8 * var(--ru));
     top: calc(var(--sy) + 354.8 * var(--ru));
-    --tomato-delay: 5280ms;
+    --tomato-delay: 5580ms;
   }
   .tomatoBack {
     left: calc(var(--sx) + 1143.7 * var(--ru));
     top: calc(var(--sy) + 82.7 * var(--ru));
-    --tomato-delay: 5460ms;
+    --tomato-delay: 5760ms;
   }
   .actions > *,
   .button {
-    animation-delay: 5700ms;
+    animation-delay: 6000ms;
   }
   .actions > * + *,
   .actions > .button + .button {
-    animation-delay: 5780ms;
+    animation-delay: 6080ms;
   }
 }
 
@@ -737,7 +739,7 @@
 
 @keyframes copyIn {
   from {
-    transform: translateX(calc(160 * var(--ru)));
+    transform: translateX(calc(48 * var(--ru)));
   }
 }
 
