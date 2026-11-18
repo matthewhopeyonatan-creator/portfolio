@@ -277,16 +277,6 @@ function Sticker({
   );
 }
 
-// the headline's phrases, and which ones sit on each of its three lines (Figma line breaks)
-const phrases = [
-  "Consumer focused,",
-  "research driven,",
-  "visually expressive,",
-  "startup trained,",
-  "agile and versatile",
-];
-const headlineLines = [[0, 1], [2, 3], [4]];
-
 type TomatoKey = keyof typeof tomatoes;
 
 
@@ -420,23 +410,6 @@ export default function Hero() {
     const t = window.setTimeout(start, 1600);
     return () => window.clearTimeout(t);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // Headline: once its lines have risen in, the full-ink highlight steps through the phrases every 1s.
-  const [activePhrase, setActivePhrase] = useState(0);
-  useEffect(() => {
-    if (!ready) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let interval = 0;
-    const startAt = window.setTimeout(() => {
-      interval = window.setInterval(
-        () => setActivePhrase((i) => (i + 1) % phrases.length),
-        1000,
-      );
-    }, skip ? 2000 : 4200);
-    return () => {
-      window.clearTimeout(startAt);
-      window.clearInterval(interval);
-    };
-  }, [ready, skip]);
 
   // Let the header know the intro has started, so it can slide in after the hero has landed.
   useEffect(() => {
@@ -518,22 +491,14 @@ export default function Hero() {
       <h1 className="visually-hidden">
         hope’s grocer — the portfolio of Matthew Hope, product designer
       </h1>
-      {/* Figma 21:168 — 64px Regular, 60 leading. One phrase at a time is in full ink, the rest at 50%;
-          the highlight moves on every 1s. */}
+      {/* Figma 523:926 — the name (Host Grotesk Bold 128) and two lines under it (Regular 40 / 40);
+          each line rises in after the tomatoes */}
       <p className={styles.headline}>
-        {headlineLines.map((line, li) => (
-          <span key={li} className={styles.line}>
-            {line.map((pi, j) => (
-              <span
-                key={pi}
-                className={`${styles.phrase} ${pi === activePhrase ? styles.phraseOn : ""}`}
-              >
-                {phrases[pi]}
-                {j < line.length - 1 ? " " : ""}
-              </span>
-            ))}
-          </span>
-        ))}
+        <span className={`${styles.line} ${styles.nameLine}`}>Matthew Hope</span>
+        <span className={`${styles.line} ${styles.subLine}`}>Product &amp; visual designer based in NYC</span>
+        <span className={`${styles.line} ${styles.subLine}`}>
+          Designing from the roots up, for products users feel at home in
+        </span>
       </p>
 
       {/* Figma 210:5291 — light / dark switch, top right of the landing */}

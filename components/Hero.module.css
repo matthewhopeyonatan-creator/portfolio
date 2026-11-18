@@ -249,24 +249,31 @@
   }
 }
 
-/* ── Headline — Figma 21:168: Host Grotesk Regular 64 / 60, -1.28 tracking, 37 below the navbar
-   rule. On the page margin; each line rises in after the tomatoes, then the full-ink highlight
-   steps through the phrases. ── */
+/* ── Headline — Figma 523:926: "MATTHEW HOPE" Host Grotesk Bold 128 (−6.4 tracking, normal
+   leading), then two lines Regular 40 / 40 (−0.8 tracking); the block sits 6 below the navbar
+   rule, 37 from the left (Figma's x). Each line rises in after the tomatoes. ── */
 .headline {
   position: absolute;
-  /* the "C" itself sits on the side margin: pulled left by its side bearing (0.034em), which
-     grows with the type, so its edge lines up with the navbar's ABOUT at every window size */
-  left: calc(var(--gutter) - 0.034em);
-  /* and the gap from the navbar rule to the top of the capitals matches that margin (0.10em =
-     the cap's inset in its line box) */
-  top: calc(var(--gutter) - 0.1em);
+  left: calc(var(--gutter) - 3 * var(--hu));
+  top: calc(6 * var(--hu));
   z-index: 2;
   margin: 0;
-  font-size: max(20px, calc(64 * var(--hu)));
   font-weight: 400;
-  line-height: 0.9375; /* 60 / 64 */
-  letter-spacing: -0.02em;
   white-space: nowrap;
+}
+
+.nameLine {
+  font-size: max(48px, calc(128 * var(--hu)));
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.subLine {
+  font-size: max(17px, calc(40 * var(--hu)));
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .line {
@@ -289,15 +296,6 @@
   opacity: 1;
   transform-origin: var(--nail) 0;
   animation: signHang 1400ms var(--text-delay) backwards;
-}
-
-.phrase {
-  color: color-mix(in srgb, var(--color-ink) 50%, transparent);
-  transition: color 450ms ease;
-}
-
-.phraseOn {
-  color: var(--color-ink);
 }
 
 .play .line {
@@ -539,22 +537,22 @@
     height: calc(var(--mh) * var(--m));
     transform: rotate(var(--mr, 0deg));
   }
-  /* 40 / 40, 353 wide on the 20 margin, 20 under the navbar; it wraps between phrases */
+  /* the name across the 20 margins (353 wide), the two lines under it wrapping; 20 under the
+     navbar */
   .headline {
     left: calc(20 * var(--m));
     top: calc(20 * var(--m));
     width: calc(353 * var(--m));
-    font-size: calc(32 * var(--m));
-    line-height: 1;
     white-space: normal;
   }
-  .line {
-    white-space: normal;
+  .nameLine {
+    font-size: calc(46 * var(--m));
+    line-height: 1.1;
+    margin-bottom: calc(6 * var(--m));
   }
-  /* a phrase never splits; lines break between phrases */
-  .phrase {
-    display: inline-block;
-    white-space: pre;
+  .subLine {
+    font-size: calc(17 * var(--m));
+    line-height: 1.2;
   }
   /* the switch lives in the menu sheet on phones */
   .themeToggle {
@@ -611,16 +609,7 @@
   animation: none;
 }
 
-/* Desktop: the dimmed phrases sit at 56% ink — dimmed, but still 3.4:1 against the page
-   (large-text minimum is 3:1; 50% was 2.9:1). Phones to be handled separately. */
 @media (min-width: 768px) {
-  .phrase {
-    color: color-mix(in srgb, var(--color-ink) 56%, transparent);
-  }
-  /* (restated here so the highlight still wins over the dimmed colour above) */
-  .phraseOn {
-    color: var(--color-ink);
-  }
   .cue {
     font-size: max(14px, calc(18 * var(--hu)));
   }
