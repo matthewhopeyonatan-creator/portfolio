@@ -21,10 +21,10 @@ const PROJECTS = [
 ];
 
 const REVIEWS = [
-  { days: 1, tone: "red", title: "DCC FA24 Recruitment" },
-  { days: 2, tone: "yellow", title: "DCC Summer Spotlight" },
-  { days: 4, tone: "yellow", title: "DCC Final Showcase" },
-  { days: 14, tone: "grey", title: "DCC SP24 Newbie Spotlight" },
+  { days: 1, tone: "red", title: "DCC FA24 Recruitment", sent: "December 20, 2024 at 11:45AM" },
+  { days: 2, tone: "yellow", title: "DCC Summer Spotlight", sent: "December 19, 2024 at 3:10PM" },
+  { days: 4, tone: "yellow", title: "DCC Final Showcase", sent: "December 17, 2024 at 9:30AM" },
+  { days: 14, tone: "grey", title: "DCC SP24 Newbie Spotlight", sent: "December 7, 2024 at 2:05PM" },
 ] as const;
 
 const FILES = [
@@ -33,7 +33,14 @@ const FILES = [
   { icon: "file", name: "Promo Video" },
 ];
 
-const BOARDS = ["b1", "b2", "b3", "b4", "b2"];
+// each its own name and date; the fifth reuses the second's art, mirrored, so no two look alike
+const BOARDS = [
+  { src: "b1", name: "Blue Hour Moodboard", date: "04/19/24" },
+  { src: "b2", name: "Cosmic Rebrand", date: "04/02/24" },
+  { src: "b3", name: "Peach Sky Promo", date: "03/27/24" },
+  { src: "b4", name: "Showcase Posters", date: "03/14/24" },
+  { src: "b2", name: "Merch Explorations", date: "02/28/24", flip: true },
+];
 
 function Icon({ name, size }: { name: string; size: number }) {
   return (
@@ -190,7 +197,7 @@ export default function ShmoodDashboard() {
                     <div className={styles.stat}>
                       <div className={styles.statCap}>This week, you can review</div>
                       <div className={styles.statVal}>
-                        <b>10</b>
+                        <b>6</b>
                         <span>
                           Feedback
                           <br />
@@ -240,7 +247,7 @@ export default function ShmoodDashboard() {
                     </span>
                     <span className={styles.reviewText}>
                       <b>{r.title}</b>
-                      December 20, 2024 at 11:45AM
+                      {r.sent}
                     </span>
                   </div>
                 ))}
@@ -258,18 +265,23 @@ export default function ShmoodDashboard() {
               <Icon name="plus20" size={20} />
             </div>
             <div className={styles.boards}>
-              {BOARDS.map((b, i) => (
-                <div key={i} className={styles.board}>
+              {BOARDS.map((b) => (
+                <div key={b.name} className={styles.board}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={styles.boardArt} src={`${DIR}/${b}.webp`} alt="" />
+                  <img
+                    className={styles.boardArt}
+                    src={`${DIR}/${b.src}.webp`}
+                    alt=""
+                    style={b.flip ? { transform: "scaleX(-1)" } : undefined}
+                  />
                   <div className={styles.boardCard}>
                     <div className={styles.boardKind}>BOARD</div>
-                    <div className={styles.boardName}>Andromeda.computer</div>
+                    <div className={styles.boardName}>{b.name}</div>
                     <div className={styles.boardTools}>
                       <Icon name="pencil" size={20} />
                       <Icon name="trash" size={20} />
                       <Icon name="share" size={20} />
-                      <span>04/19/24</span>
+                      <span>{b.date}</span>
                     </div>
                   </div>
                 </div>
