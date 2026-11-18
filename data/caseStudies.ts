@@ -362,7 +362,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "A cohesive product story that makes early access users feel welcomed in a community",
-            body: "My objective for designing the onboarding flow was to communicate a cohesive product story for early access users to easily understand Shmood’s mission, features, differentiation, and impact, while making them feel welcomed in a community.\n\nAs observed through our user interviews and analysis of competing product onboarding flows, I needed to prioritize conciseness, creativity and wit in both the visual design, and UX. I also had to work within the constraints of what is feasible and realistic for the company at this scale.",
+            body: "My objective for designing the onboarding flow was to communicate a cohesive product story for early access users to easily understand Shmood’s mission, features, differentiation, and impact, while making them feel welcomed in a community.\n\nAs observed through our user interviews and analysis of competing product onboarding flows, I needed to prioritize conciseness, creativity and wit in both the visual design, and UX. I also had to work within the constraints of what is feasible and realistic for the company at this scale.\n\nMy onboarding experience was created in tandem with another teammate’s animated onboarding flow, and it connects the whole way to create a smooth onboarding flow that presents the value proposition to the user. After internal user testing within the Shmood team as well as with designers at Cornell University, we found that 34 out of 37 designers understood what the product was after we showed them the full onboarding flow.",
           },
         ],
       },
