@@ -51,7 +51,7 @@
 
 .navLink {
   position: relative;
-  font-size: clamp(14px, 1.05vw, 17px);
+  font-size: clamp(12px, 0.9vw, 15px); /* portfolio-v2: a size down (was 14–17) */
   line-height: 1.2;
   white-space: nowrap;
   text-transform: uppercase; /* ABOUT · PROJECTS · YOUR CART */
