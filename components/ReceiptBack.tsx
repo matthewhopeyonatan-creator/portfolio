@@ -272,7 +272,7 @@ const ReceiptBack = forwardRef<
           {flash ? <span key={`f${flash}`} className={styles.flash} aria-hidden="true" data-no-snapshot /> : null}
         </div>
         <div className={styles.footer}>
-          <p className={styles.thanks}>Thanks for stopping by :)</p>
+          <p className={styles.thanks}>Certified hopeful</p>
           <p className={styles.stamp}>
             <time dateTime={new Date(today).toISOString()}>{stamp(today)}</time>
             <span>{city}</span>

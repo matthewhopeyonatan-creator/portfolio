@@ -7,7 +7,15 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Tilt from "@/components/Tilt";
 import useMarker from "@/components/useMarker";
 import { contactLinks } from "@/data/site";
-import { loadReceipt, logReceipt, mostViewed, saveReceipt, visitMinutes, withId, type Receipt as R } from "@/lib/visit";
+import {
+  loadReceipt,
+  logReceipt,
+  mostViewed,
+  saveReceipt,
+  visitMinutes,
+  withId,
+  type Receipt as R,
+} from "@/lib/visit";
 import ThemedPair from "@/components/ThemedPair";
 import ReceiptBack from "@/components/ReceiptBack";
 import styles from "./Receipt.module.css";
@@ -50,8 +58,13 @@ export default function Receipt() {
       const r = saved.items.length ? withId(saved) : saved;
       if (r !== saved) saveReceipt(r);
       setReceipt(r);
-    }
-    else setReceipt({ items: [], minutes: visitMinutes(), mostViewed: mostViewed(), at: Date.now() });
+    } else
+      setReceipt({
+        items: [],
+        minutes: visitMinutes(),
+        mostViewed: mostViewed(),
+        at: Date.now(),
+      });
   }, []);
 
   // how far the slip has to start below its resting place to sit just under the bottom of the
@@ -61,13 +74,19 @@ export default function Receipt() {
     const el = feed.current;
     const stage = el?.parentElement;
     if (!el || !stage) return;
-    el.style.setProperty("--feed", `${Math.ceil(window.innerHeight - stage.getBoundingClientRect().top)}px`);
+    el.style.setProperty(
+      "--feed",
+      `${Math.ceil(window.innerHeight - stage.getBoundingClientRect().top)}px`,
+    );
     // wide screens: how far right of its resting place the slip prints (the middle of the window),
     // so it can slide over to the left once it's out (--shift)
     const st = stageRef.current;
     if (st) {
       const r = st.getBoundingClientRect();
-      st.style.setProperty("--shift", `${Math.round(window.innerWidth / 2 - (r.left + r.width / 2))}px`);
+      st.style.setProperty(
+        "--shift",
+        `${Math.round(window.innerWidth / 2 - (r.left + r.width / 2))}px`,
+      );
     }
   }, [ready]);
 
@@ -87,14 +106,19 @@ export default function Receipt() {
         if (!r || !alive) return;
         let image: string | undefined;
         let backImage: string | undefined;
-        const skip = (n: Node) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset));
+        const skip = (n: Node) =>
+          !(
+            n instanceof HTMLElement &&
+            ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)
+          );
         try {
           const { toPng, toJpeg } = await import("html-to-image");
           const front = slip.current;
           if (front) {
             image = await toPng(front, {
               pixelRatio: 1,
-              backgroundColor: getComputedStyle(front).backgroundColor || "#ffffff",
+              backgroundColor:
+                getComputedStyle(front).backgroundColor || "#ffffff",
               filter: skip,
             });
           }
@@ -103,7 +127,8 @@ export default function Receipt() {
             backImage = await toJpeg(side, {
               pixelRatio: 1,
               quality: 0.85,
-              backgroundColor: getComputedStyle(side).backgroundColor || "#ffffff",
+              backgroundColor:
+                getComputedStyle(side).backgroundColor || "#ffffff",
               // it's turned over in place; draw it face-on
               style: { transform: "none", backfaceVisibility: "visible" },
               filter: skip,
@@ -120,7 +145,8 @@ export default function Receipt() {
     };
   }, [logged, receipt?.note, marker.version, backVersion]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    const leave = () => latest.current && logReceipt(latest.current, undefined, true);
+    const leave = () =>
+      latest.current && logReceipt(latest.current, undefined, true);
     window.addEventListener("pagehide", leave);
     return () => window.removeEventListener("pagehide", leave);
   }, []);
@@ -149,7 +175,11 @@ export default function Receipt() {
       // the slip's own paper colour, so a dark-mode receipt saves dark
       backgroundColor: getComputedStyle(node).backgroundColor || "#ffffff",
       style: { transform: "none", backfaceVisibility: "visible" },
-      filter: (n) => !(n instanceof HTMLElement && ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)),
+      filter: (n) =>
+        !(
+          n instanceof HTMLElement &&
+          ("tiltSheen" in n.dataset || "noSnapshot" in n.dataset)
+        ),
     });
     if (!blob) return;
     const url = URL.createObjectURL(blob);
@@ -166,7 +196,9 @@ export default function Receipt() {
       onClick={() =>
         download(
           side === "front" ? slip.current : back.current,
-          side === "front" ? "hopes-grocer-receipt.png" : "hopes-grocer-photobooth.png",
+          side === "front"
+            ? "hopes-grocer-receipt.png"
+            : "hopes-grocer-photobooth.png",
         )
       }
       aria-label="Download this side of the receipt"
@@ -180,185 +212,273 @@ export default function Receipt() {
   return (
     <main className={styles.page}>
       <h1 className="visually-hidden">Your receipt</h1>
+      {/* blurred tomatoes behind everything on the page (Figma 146:168 / 533:1333) */}
+      <div className={styles.tomatoes} aria-hidden="true">
+        <div
+          className="theme-pair theme-pair-filter"
+          style={{ display: "contents" }}
+        >
+          <ThemedPair
+            light="/receipt/tomato-back.svg"
+            dark="/receipt/dark/tomato-back.webp"
+            render={(v) => (
+              <Image
+                key={v.className}
+                ref={v.imgRef}
+                onLoad={v.onLoad}
+                data-ready={v.ready ? "" : undefined}
+                className={`${styles.tomato} ${styles.tomatoBack} ${v.className}`}
+                src={v.src}
+                alt=""
+                width={622}
+                height={645}
+                unoptimized
+                priority={v.className === "theme-light"}
+              />
+            )}
+          />
+        </div>
+        <div
+          className="theme-pair theme-pair-filter"
+          style={{ display: "contents" }}
+        >
+          <ThemedPair
+            light="/receipt/tomato-right.svg"
+            dark="/receipt/dark/tomato-right.webp"
+            render={(v) => (
+              <Image
+                key={v.className}
+                ref={v.imgRef}
+                onLoad={v.onLoad}
+                data-ready={v.ready ? "" : undefined}
+                className={`${styles.tomato} ${styles.tomatoRight} ${v.className}`}
+                src={v.src}
+                alt=""
+                width={719}
+                height={674}
+                unoptimized
+                priority={v.className === "theme-light"}
+              />
+            )}
+          />
+        </div>
+        <div
+          className="theme-pair theme-pair-filter"
+          style={{ display: "contents" }}
+        >
+          <ThemedPair
+            light="/receipt/tomato-left.svg"
+            dark="/receipt/dark/tomato-left.webp"
+            render={(v) => (
+              <Image
+                key={v.className}
+                ref={v.imgRef}
+                onLoad={v.onLoad}
+                data-ready={v.ready ? "" : undefined}
+                className={`${styles.tomato} ${styles.tomatoLeft} ${v.className}`}
+                src={v.src}
+                alt=""
+                width={903}
+                height={815}
+                unoptimized
+                priority={v.className === "theme-light"}
+              />
+            )}
+          />
+        </div>
+      </div>
       <div className={styles.layout}>
-      <div ref={stageRef} className={styles.stage}>
-        {/* blurred tomatoes behind the slip (Figma 146:168), placed relative to it in receipt px */}
-        <div className={styles.tomatoes} aria-hidden="true">
-          <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
-            <ThemedPair
-              light="/receipt/tomato-back.svg"
-              dark="/receipt/dark/tomato-back.webp"
-              render={(v) => (
-                <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoBack} ${v.className}`} src={v.src} alt="" width={622} height={645} unoptimized priority={v.className === "theme-light"} />
-              )}
-            />
-          </div>
-          <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
-            <ThemedPair
-              light="/receipt/tomato-right.svg"
-              dark="/receipt/dark/tomato-right.webp"
-              render={(v) => (
-                <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoRight} ${v.className}`} src={v.src} alt="" width={719} height={674} unoptimized priority={v.className === "theme-light"} />
-              )}
-            />
-          </div>
-          <div className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
-            <ThemedPair
-              light="/receipt/tomato-left.svg"
-              dark="/receipt/dark/tomato-left.webp"
-              render={(v) => (
-                <Image key={v.className} ref={v.imgRef} onLoad={v.onLoad} data-ready={v.ready ? "" : undefined} className={`${styles.tomato} ${styles.tomatoLeft} ${v.className}`} src={v.src} alt="" width={903} height={815} unoptimized priority={v.className === "theme-light"} />
-              )}
-            />
-          </div>
-        </div>
-        <div ref={feed} className={styles.print}>
-          <Tilt className={styles.tilt}>
-            {/* turned over in place by "flip me!": both faces stacked, the back already facing away */}
-            <div className={`${styles.flipper} ${flipped ? styles.flipped : ""}`}>
-            <div ref={slip} className={`${styles.slip} ${styles.face} ${styles.front}`} {...marker.handlers} inert={flipped}>
-              {/* the marker people can draw on the receipt with — red, mint in dark mode (useMarker) */}
-              <canvas ref={marker.canvas} className={styles.ink} aria-hidden="true" />
-              {/* start the drawing over — bottom-left of the slip, only once something's been drawn;
-                  left out of the downloaded image */}
-              <button
-                type="button"
-                className={`${styles.clear} ${marker.drawn ? styles.clearOn : ""}`}
-                onClick={marker.clear}
-                tabIndex={marker.drawn ? 0 : -1}
-                aria-hidden={!marker.drawn}
-                aria-label="Clear drawing"
-                title="Clear drawing"
-                data-no-snapshot
+        <div ref={stageRef} className={styles.stage}>
+          <div ref={feed} className={styles.print}>
+            <Tilt className={styles.tilt}>
+              {/* turned over in place by "flip me!": both faces stacked, the back already facing away */}
+              <div
+                className={`${styles.flipper} ${flipped ? styles.flipped : ""}`}
               >
-                <RotateCcw aria-hidden="true" strokeWidth={2} />
-              </button>
-              <p className={styles.logo} aria-label="hope’s grocer">
-                <span className={styles.logoBold}>hope</span>
-                <span className={styles.logoApostrophe}>’</span>
-                <span className={styles.logoBold}>s grocer</span>
-              </p>
-              <div className={styles.orderRow}>
-                <p className={`${styles.heading} ${styles.orders}`}>Orders</p>
-                <p className={`${styles.heading} ${styles.date}`}>
-                  <time dateTime={new Date(receipt.at).toISOString()}>{stamp(receipt.at)}</time>
-                </p>
-              </div>
-
-              <div className={styles.box}>
-                <ul className={styles.items}>
-                  {empty ? (
-                    <li className={styles.item}>Your basket is empty</li>
-                  ) : (
-                    receipt.items.map((i) => (
-                      <li key={i.name} className={styles.item}>
-                        <span>{i.name}</span>
-                        <span className={styles.qty}>× {i.qty}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
-
-                <div className={styles.notes}>
-                  <p className={styles.heading}>Leave a message</p>
-                  <textarea
-                    className={styles.note}
-                    value={note}
-                    onChange={(e) => {
-                      setNote(e.target.value);
-                      fitNote(e.target);
-                    }}
-                    ref={(n) => {
-                      if (n) fitNote(n);
-                    }}
-                    placeholder="Add a note…"
-                    rows={1}
-                    maxLength={280}
-                    aria-label="Leave a message"
+                <div
+                  ref={slip}
+                  className={`${styles.slip} ${styles.face} ${styles.front}`}
+                  {...marker.handlers}
+                  inert={flipped}
+                >
+                  {/* the marker people can draw on the receipt with — red, mint in dark mode (useMarker) */}
+                  <canvas
+                    ref={marker.canvas}
+                    className={styles.ink}
+                    aria-hidden="true"
                   />
+                  {/* start the drawing over — bottom-left of the slip, only once something's been drawn;
+                  left out of the downloaded image */}
+                  <button
+                    type="button"
+                    className={`${styles.clear} ${marker.drawn ? styles.clearOn : ""}`}
+                    onClick={marker.clear}
+                    tabIndex={marker.drawn ? 0 : -1}
+                    aria-hidden={!marker.drawn}
+                    aria-label="Clear drawing"
+                    title="Clear drawing"
+                    data-no-snapshot
+                  >
+                    <RotateCcw aria-hidden="true" strokeWidth={2} />
+                  </button>
+                  <p className={styles.logo} aria-label="hope’s grocer">
+                    <span className={styles.logoBold}>hope</span>
+                    <span className={styles.logoApostrophe}>’</span>
+                    <span className={styles.logoBold}>s grocer</span>
+                  </p>
+                  <div className={styles.orderRow}>
+                    <p className={`${styles.heading} ${styles.orders}`}>
+                      Orders
+                    </p>
+                    <p className={`${styles.heading} ${styles.date}`}>
+                      <time dateTime={new Date(receipt.at).toISOString()}>
+                        {stamp(receipt.at)}
+                      </time>
+                    </p>
+                  </div>
+
+                  <div className={styles.box}>
+                    <ul className={styles.items}>
+                      {empty ? (
+                        <li className={styles.item}>Your basket is empty</li>
+                      ) : (
+                        receipt.items.map((i) => (
+                          <li key={i.name} className={styles.item}>
+                            <span>{i.name}</span>
+                            <span className={styles.qty}>× {i.qty}</span>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+
+                    <div className={styles.notes}>
+                      <p className={styles.heading}>Leave a message</p>
+                      <textarea
+                        className={styles.note}
+                        value={note}
+                        onChange={(e) => {
+                          setNote(e.target.value);
+                          fitNote(e.target);
+                        }}
+                        ref={(n) => {
+                          if (n) fitNote(n);
+                        }}
+                        placeholder="Add a note…"
+                        rows={1}
+                        maxLength={280}
+                        aria-label="Leave a message"
+                      />
+                    </div>
+
+                    <dl className={styles.summary}>
+                      <div className={styles.line}>
+                        <dt>Most viewed</dt>
+                        <dd>{receipt.mostViewed ?? "Just browsing"}</dd>
+                      </div>
+                      <div className={styles.line}>
+                        <dt>Total</dt>
+                        <dd>
+                          {receipt.minutes}{" "}
+                          {receipt.minutes === 1 ? "minute" : "minutes"}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                  {saveIcon("front")}
                 </div>
-
-                <dl className={styles.summary}>
-                  <div className={styles.line}>
-                    <dt>Most viewed</dt>
-                    <dd>{receipt.mostViewed ?? "Just browsing"}</dd>
-                  </div>
-                  <div className={styles.line}>
-                    <dt>Total</dt>
-                    <dd>
-                      {receipt.minutes} {receipt.minutes === 1 ? "minute" : "minutes"}
-                    </dd>
-                  </div>
-                </dl>
+                <ReceiptBack
+                  ref={back}
+                  className={`${styles.face} ${styles.backFace}`}
+                  hidden={!flipped}
+                  download={saveIcon("back")}
+                  inert={!flipped}
+                  onChange={setBackVersion}
+                />
               </div>
-              {saveIcon("front")}
-            </div>
-            <ReceiptBack ref={back} className={`${styles.face} ${styles.backFace}`} hidden={!flipped} download={saveIcon("back")} inert={!flipped} onChange={setBackVersion} />
-            </div>
-          </Tilt>
+            </Tilt>
+          </div>
+
+          <div className={styles.actions}>
+            {empty ? (
+              <Link className={styles.button} href="/#seasonal-picks">
+                start shopping
+              </Link>
+            ) : null}
+            <button
+              type="button"
+              className={styles.flip}
+              onClick={() => setFlipped((f) => !f)}
+              aria-pressed={flipped}
+            >
+              flip me!
+            </button>
+          </div>
         </div>
 
-        <div className={styles.actions}>
-          {empty ? (
-            <Link className={styles.button} href="/#seasonal-picks">
-              start shopping
-            </Link>
-          ) : null}
-          <button
-            type="button"
-            className={styles.flip}
-            onClick={() => setFlipped((f) => !f)}
-            aria-pressed={flipped}
-          >
-            flip me!
-          </button>
+        {/* Figma 533:1333: the thank-you and the contact links, right of the slip */}
+        <div className={styles.copy}>
+          <h2 className={styles.thanks}>
+            Thanks for
+            <br />
+            coming
+          </h2>
+          <p className={styles.lede}>
+            Take a picture and draw,
+            <br />
+            keep a memory from your time here!
+          </p>
+          <p className={`${styles.lede} ${styles.grow}`}>
+            Let’s grow something together
+          </p>
+          <ul className={styles.socials} aria-label="Find me elsewhere">
+            {contactLinks.map((l) => (
+              <li key={l.label}>
+                <a
+                  className={styles.social}
+                  href={l.href}
+                  aria-label={l.label}
+                  title={l.label}
+                  {...(l.href.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  <SocialIcon name={l.icon} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-
-      {/* Figma 533:1333: the thank-you and the contact links, right of the slip */}
-      <div className={styles.copy}>
-        <h2 className={styles.thanks}>
-          Thanks for
-          <br />
-          coming
-        </h2>
-        <p className={styles.lede}>
-          Take a picture and draw,
-          <br />
-          keep a memory from your time here!
-        </p>
-        <p className={`${styles.lede} ${styles.grow}`}>Let’s grow something together</p>
-        <ul className={styles.socials} aria-label="Find me elsewhere">
-          {contactLinks.map((l) => (
-            <li key={l.label}>
-              <a
-                className={styles.social}
-                href={l.href}
-                aria-label={l.label}
-                title={l.label}
-                {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                <SocialIcon name={l.icon} />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
       </div>
     </main>
   );
 }
 
 /** Figma 533:1601's icons (X, Instagram, LinkedIn, mail), filled with the ink */
-function SocialIcon({ name }: { name: "x" | "instagram" | "linkedin" | "email" }) {
+function SocialIcon({
+  name,
+}: {
+  name: "x" | "instagram" | "linkedin" | "email";
+}) {
   if (name === "email")
     return (
-      <svg viewBox="0 0 37 30" width="37" height="30" fill="currentColor" aria-hidden="true">
+      <svg
+        viewBox="0 0 37 30"
+        width="37"
+        height="30"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d="M7.36077 0C3.29578 0 0 3.29578 0 7.36075V22.0823C0 26.1472 3.29578 29.443 7.36077 29.443H29.4431C33.5081 29.443 36.8038 26.1472 36.8038 22.0823V7.36075C36.8038 3.29578 33.5081 0 29.4431 0H7.36077ZM7.36077 3.68038H29.4431C31.298 3.68038 32.8309 5.04213 33.0848 6.82711C31.3219 8.4704 28.7015 10.4872 26.9699 11.7312C22.9859 14.5927 19.4803 16.5617 18.4019 16.5617C17.3236 16.5617 13.818 14.5945 9.83398 11.7312C8.10236 10.4872 6.4002 9.14205 5.11759 8.05082C4.57105 7.58525 4.16618 7.20986 3.85335 6.9007C4.1073 5.11572 5.50586 3.68038 7.36077 3.68038ZM3.6988 11.6926C8.36921 15.4705 15.2129 20.22 18.4019 20.2421C20.4795 20.2568 24.0329 18.2731 27.6581 15.7686C29.5332 14.4712 31.62 12.931 33.1253 11.6668L33.1235 22.0823C33.1235 24.1157 31.4765 25.7626 29.4431 25.7626H7.36077C5.32736 25.7626 3.68038 24.1157 3.68038 22.0823L3.6988 11.6926Z" />
       </svg>
     );
   return (
-    <svg viewBox="0 0 38 38" width="38" height="38" fill="currentColor" aria-hidden="true">
+    <svg
+      viewBox="0 0 38 38"
+      width="38"
+      height="38"
+      fill="currentColor"
+      aria-hidden="true"
+    >
       {name === "x" ? (
         <path d="M28.2709 2.93701H33.4749L22.1057 15.9313L35.4807 33.6136H25.0082L16.8058 22.8894L7.42029 33.6136H2.21313L14.3736 19.7147L1.54297 2.93701H12.2813L19.6956 12.7394L28.2709 2.93701ZM26.4445 30.4987H29.3281L10.7145 5.88826H7.62008L26.4445 30.4987Z" />
       ) : name === "instagram" ? (

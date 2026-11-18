@@ -14,9 +14,13 @@
   color: var(--color-ink);
   /* the tomatoes spill past the window; never let them make it scroll sideways */
   overflow: clip;
+  position: relative;
+  isolation: isolate;
 }
 
 .layout {
+  position: relative;
+  z-index: 1; /* above the tomatoes */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,11 +36,14 @@
   width: calc(522 * var(--ru));
 }
 
-/* ── background tomatoes: Figma render boxes, measured from the slip's top-left (slip at 620,100) ── */
+/* ── background tomatoes, behind everything on the page: Figma render boxes, measured from the
+   slip's top-left (slip at 620,100), which sits centred, 48 down (--sx, --sy) ── */
 .tomatoes {
+  --sx: calc(50% - 261 * var(--ru));
+  --sy: 48px;
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -55,22 +62,22 @@
 
 .tomatoBack {
   --tomato-delay: 4610ms;
-  left: calc(328.68 * var(--ru));
-  top: calc(15.74 * var(--ru));
+  left: calc(var(--sx) + 328.68 * var(--ru));
+  top: calc(var(--sy) + 15.74 * var(--ru));
   width: calc(621.37 * var(--ru));
 }
 
 .tomatoRight {
-  left: calc(366.82 * var(--ru));
-  top: calc(228.84 * var(--ru));
+  left: calc(var(--sx) + 366.82 * var(--ru));
+  top: calc(var(--sy) + 228.84 * var(--ru));
   width: calc(718.91 * var(--ru));
   --tomato-delay: 4430ms;
 }
 
 /* padded 60 on the left so its blur isn't cut */
 .tomatoLeft {
-  left: calc(-680 * var(--ru));
-  top: calc(122.44 * var(--ru));
+  left: calc(var(--sx) - 680 * var(--ru));
+  top: calc(var(--sy) + 122.44 * var(--ru));
   width: calc(902.65 * var(--ru));
   --tomato-delay: 4250ms; /* largest, first */
 }
@@ -689,21 +696,27 @@
   .copy > :nth-child(4) {
     animation-delay: 4510ms;
   }
-  /* the tomatoes come after the slide, around the slip and behind the copy (Figma positions,
-     from the slip's top-left) — largest first, as before */
+  /* the tomatoes come after the slide, behind the slip and the copy — largest first, as before.
+     The slip sits 112 in from the left of the centred 1504 layout, its top about half the
+     layout's height (853) above the middle; the big one sits in the bottom-left corner of the page */
+  .tomatoes {
+    --sx: calc(50% - 752 * var(--ru));
+    --sy: calc(50% - 426 * var(--ru));
+  }
   .tomatoLeft {
-    left: calc(125 * var(--ru));
-    top: calc(423.4 * var(--ru));
+    left: calc(-300 * var(--ru));
+    top: auto;
+    bottom: calc(-300 * var(--ru));
     --tomato-delay: 5100ms;
   }
   .tomatoRight {
-    left: calc(1146.8 * var(--ru));
-    top: calc(354.8 * var(--ru));
+    left: calc(var(--sx) + 1146.8 * var(--ru));
+    top: calc(var(--sy) + 354.8 * var(--ru));
     --tomato-delay: 5280ms;
   }
   .tomatoBack {
-    left: calc(1143.7 * var(--ru));
-    top: calc(82.7 * var(--ru));
+    left: calc(var(--sx) + 1143.7 * var(--ru));
+    top: calc(var(--sy) + 82.7 * var(--ru));
     --tomato-delay: 5460ms;
   }
   .actions > *,
