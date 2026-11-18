@@ -298,7 +298,12 @@
 }
 
 .cvGroup + .cvGroup {
-  margin-top: 40px; /* + the section's 20 = 60 between subheadings */
+  margin-top: 60px; /* + the section's 20 = 80 above each subheading */
+}
+
+/* text that follows an artifact (a prototype, figure, cards, the label…) sits 60 below it */
+.cvGroup > :not(.cvText, .cvLabel) + :is(.cvText, .cvLabel) {
+  margin-top: 36px; /* + the group's 24 */
 }
 
 .section .cvLabel {
@@ -1078,6 +1083,9 @@
   }
   .cvGroup + .cvGroup {
     margin-top: 36px;
+  }
+  .cvGroup > :not(.cvText, .cvLabel) + :is(.cvText, .cvLabel) {
+    margin-top: 0;
   }
   .cvText {
     gap: 16px;
