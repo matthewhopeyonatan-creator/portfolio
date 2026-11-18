@@ -994,7 +994,7 @@ const inquirer: CaseSection[] = [
           {
             type: "callout",
             text: "Pennsylvania’s largest media outlet",
-            body: "The Philadelphia is the third longest running media outlet in the United States and the largest one in the Philadelphia Metropolitan Area and Pennsylvania. They have 170,000 active users and are constantly looking to keep up with the ever changing news landscape.",
+            body: "The Philadelphia Inquirer is the third-longest-running media outlet in the United States and the largest one in the Philadelphia Metropolitan Area and Pennsylvania. They have 170,000 active users and are constantly looking to keep up with the ever-changing news landscape.",
           },
         ],
       },
@@ -1013,7 +1013,7 @@ const inquirer: CaseSection[] = [
             type: "callout",
             boxed: true,
             text: "Falling behind in the news industry",
-            body: "Many news giants such as The NY Times, The Washington Post, and many more have started to incorporate audio and cross-device integration to keep up with the changing landscape of tech. This includes podcasts, text to speech, CarPlay, and many other forms of news that is outside the traditional text space. The Philadelphia Inquirer was falling behind and needed to keep up with this change.",
+            body: "Many news giants such as The New York Times, The Washington Post, and many more have started to incorporate audio and cross-device integration to keep up with the changing landscape of tech. This includes podcasts, text to speech, CarPlay, and many other forms of news that are outside the traditional text space. The Philadelphia Inquirer was falling behind and needed to keep up with this change.",
           },
           {
             type: "callout",
@@ -1042,8 +1042,8 @@ const inquirer: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "A daily feed of Philly news, cut down to swipeable stories picked for the user, limited through a pay-wall",
-            body: "I owned Philly For You, a swipeable short-form feed of each day’s stories, picked for each reader. It gives younger and overwhelmed readers an easy way into the news, and every story leads to the full article. Non subscribed users will get hit with a paywall as a way for nudging users to subscribe to access these premium features.",
+            text: "A daily feed of Philly news, cut down to swipeable stories picked for the user, limited through a paywall",
+            body: "I owned Philly For You, a swipeable short-form feed of each day’s stories, picked for each reader. It gives younger and overwhelmed readers an easy way into the news, and every story leads to the full article. Non-subscribers hit a paywall that nudges them to subscribe.",
           },
         ],
       },
@@ -1065,8 +1065,8 @@ const inquirer: CaseSection[] = [
             blocks: [
               {
                 type: "callout",
-                text: "Before I honed down on engagement, our team looked at 30+ competitors to understand industry standards",
-                body: "We found 9 features that were standard across the industry, and I honed down on personalized news, discovery, and content prioritization to drive my future iterations.",
+                text: "Before I honed in on engagement, our team looked at 30+ competitors to understand industry standards",
+                body: "We found 9 features that were standard across the industry, and I honed in on personalized news, discovery, and content prioritization to drive my future iterations.",
               },
               {
                 type: "chips",
@@ -1093,14 +1093,14 @@ const inquirer: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "We interviewed over 25 users of different age ranges to understand their perception on news consumption",
+            text: "We interviewed over 25 users of different age ranges to understand their perception of news consumption",
             body: "There were a plethora of insights that we found ranging from trust in AI to engagement, but these are the key findings that were core to my designs in personalization:",
           },
           {
             type: "wins",
             spaced: true,
             items: [
-              "Gen Z users are often experience choice paralysis",
+              "Gen Z users often experience choice paralysis",
               "Gen Z users want more visual-forward features",
               "Millennial+ users seek multitasking abilities",
               "Users want to stay informed without much effort",
@@ -1126,7 +1126,7 @@ const inquirer: CaseSection[] = [
               {
                 type: "callout",
                 text: "Exploration starts on paper",
-                body: "I started my process through sketches. At this point, the team was still figuring out what we needed to work on, so my iterations expanded beyond personalization. Pairing these lo-fi iterations with user research led me to spearhead the egagemtn layer.",
+                body: "I started my process through sketches. At this point, the team was still figuring out what we needed to work on, so my iterations expanded beyond personalization. Pairing these lo-fi iterations with user research led me to spearhead the engagement layer.",
               },
               {
                 type: "figures",
@@ -1164,8 +1164,8 @@ const inquirer: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "I removed the 2 prong navigation and stuck to a linear feed",
-            body: "News can feel overwhelming, so I wanted catching up to feel personal and familiar. I built on the short-form, swipe-through format most people already use regularly, so there’s nothing new to learn. There was on issue:",
+            text: "I removed the two-pronged navigation and stuck to a linear feed",
+            body: "News can feel overwhelming, so I wanted catching up to feel personal and familiar. I built on the short-form, swipe-through format most people already use regularly, so there’s nothing new to learn. There was one issue:",
           },
           {
             type: "inq-finalish",
@@ -1180,7 +1180,7 @@ const inquirer: CaseSection[] = [
           {
             type: "callout",
             text: "The final design touches on user needs of removing choice paralysis, being more visual, and being low effort",
-            body: "This design was validated by the Inquirer team by fitting business needs, feasibility, and user needs. The designs were created based on the iPhone 4 screens, to make handoff to engineers smoother according to the Inquirer workflow.",
+            body: "This design was validated by the Inquirer team by fitting business needs, feasibility, and user needs. The designs were created based on the iPhone 14 screens, to make handoff to engineers smoother according to the Inquirer workflow.",
           },
           { type: "philly" },
         ],
