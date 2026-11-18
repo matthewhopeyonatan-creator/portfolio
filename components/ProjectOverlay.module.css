@@ -79,15 +79,16 @@
 /* ── title section ──────────────────────────────────────────────────────────────── */
 .intro {
   display: grid;
-  grid-template-columns: calc(528 * var(--pu)) calc(860 * var(--pu));
-  justify-content: space-between;
+  /* portfolio-v2: thirds — the text takes 1/3, the preview 2/3, on the same columns as the
+     tracker and the case study below, so the preview's left edge lines up with the content's */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  column-gap: calc(40 * var(--pu));
   padding: calc(103 * var(--pu)) 40px calc(100 * var(--pu));
 }
 
 .introText {
   display: flex;
   flex-direction: column;
-  min-height: calc(532 * var(--pu));
 }
 
 .title {
@@ -129,7 +130,7 @@
 }
 
 .hero {
-  height: calc(532 * var(--pu));
+  aspect-ratio: 860 / 532;
   border-radius: calc(24 * var(--pu));
   background: #d9d9d9;
   overflow: hidden;
@@ -156,11 +157,12 @@
 
 /* full screen: the tracker joins on the left */
 .expanded .study {
-  grid-template-columns: calc(380 * var(--pu)) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  column-gap: calc(40 * var(--pu));
 }
 
 /* the section tracker — Figma 64:591, a size down for portfolio-v2 (and no "Aisle Directory"
-   label): "[n]" Regular 11 sitting 11 above each name · names Atelier Fleur 24 (current one 30,
+   label): "[n]" Regular 11 sitting 11 above each name · names Host Grotesk 24 (current one 30,
    #F93636) · rows 18 apart */
 .toc {
   position: sticky;
@@ -196,9 +198,10 @@
   padding: 0;
   border: 0;
   background: none;
-  font-family: var(--font-display-stack);
+  font-family: var(--font-sans-stack);
   font-size: 24px;
   line-height: 20px;
+  letter-spacing: -0.04em;
   white-space: nowrap;
   text-align: left;
   color: var(--color-ink);
@@ -1254,5 +1257,155 @@
   .study {
     animation-duration: 1ms;
     transition-duration: 1ms;
+  }
+}
+
+/* ── Impacts: a Nutrition Facts label (Figma 166:2457) ──────────────────────────────
+   6.556 ink border, 19.667 padding · "Nutrition Facts" Bold 45.889 over a 1.639 rule ·
+   serving size Regular / Bold 19.667 · dividers 16.389 (big) and 6.556 (medium) · "Impacts" and
+   "If I had more time" Bold 26.222, 12 above · rows 27.861 tall, 6.556 apart, each under a 0.819
+   rule, Bold with a right-aligned Bold figure, sub-rows Regular 16.39 in · footnote 13.111 ·
+   9.833 between parts. Set in Host Grotesk (the site's face) rather than Figma's Helvetica. */
+.nf {
+  display: flex;
+  flex-direction: column;
+  gap: 9.833px;
+  padding: 19.667px;
+  border: 6.556px solid var(--color-ink);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans-stack);
+  font-size: 19.667px;
+  line-height: normal;
+}
+
+.section .nf p {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+  color: inherit;
+}
+
+.nf b {
+  font-weight: 700;
+}
+
+.section .nf .nfTitle {
+  padding-bottom: 1px;
+  border-bottom: 1.639px solid var(--color-ink);
+  font-size: 45.889px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.nfServing {
+  display: flex;
+  flex-direction: column;
+  gap: 3.278px;
+}
+
+.section .nf .nfRow2 {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nfBig,
+.nfMed {
+  display: block;
+  height: 16.389px;
+  background: var(--color-ink);
+}
+
+.nfMed {
+  height: 6.556px;
+}
+
+.section .nf .nfHead {
+  padding-top: 12px;
+  font-size: 26.222px;
+  font-weight: 700;
+}
+
+.section .nf .nfHeadMore {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.nfFigure {
+  font-size: 39.333px;
+  line-height: 0.6; /* sits low, its bottom dipping into the gap like Figma's */
+}
+
+.nfList {
+  display: flex;
+  flex-direction: column;
+  gap: 6.556px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nfRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 4px 24px;
+  min-height: 27.861px;
+  padding-top: 4.9px;
+  box-sizing: border-box;
+  border-top: 0.819px solid var(--color-ink);
+}
+
+.nfValue {
+  text-align: right;
+}
+
+.nfSub {
+  padding-left: 16.39px;
+}
+
+.section .nf .nfFoot {
+  font-size: 13.111px;
+}
+
+/* phones: the label a size down, figures under their rows when they don't fit */
+@media (max-width: 767px) {
+  .nf {
+    gap: 7px;
+    padding: 14px;
+    border-width: 5px;
+    font-size: 15px;
+  }
+  .section .nf .nfTitle {
+    font-size: 34px;
+  }
+  .section .nf .nfHead {
+    padding-top: 8px;
+    font-size: 20px;
+  }
+  .nfFigure {
+    font-size: 30px;
+  }
+  .nfBig {
+    height: 12px;
+  }
+  .nfMed {
+    height: 5px;
+  }
+  .nfRow {
+    flex-wrap: wrap;
+    min-height: 22px;
+    padding-top: 3px;
+  }
+  .nfSub {
+    padding-left: 12px;
+  }
+  .section .nf .nfFoot {
+    font-size: 11px;
   }
 }

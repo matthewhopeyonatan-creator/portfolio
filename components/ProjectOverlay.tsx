@@ -362,6 +362,50 @@ function Block({ b }: { b: CaseBlock }) {
           ))}
         </div>
       );
+    case "nutrition":
+      return (
+        <div className={styles.nf}>
+          <p className={styles.nfTitle}>Nutrition Facts</p>
+          <div className={styles.nfServing}>
+            <p>1 Servings per container</p>
+            <p className={styles.nfRow2}>
+              <b>Serving size</b>
+              <b>{b.servingSize ?? "(project duration)"}</b>
+            </p>
+          </div>
+          <span className={styles.nfBig} aria-hidden="true" />
+          <p className={styles.nfHead}>Impacts</p>
+          <span className={styles.nfMed} aria-hidden="true" />
+          <ul className={styles.nfList}>
+            {b.impacts.flatMap((r) => [
+              <li key={r.label} className={styles.nfRow}>
+                <b>{r.label}</b>
+                {r.value ? <b className={styles.nfValue}>{r.value}</b> : null}
+              </li>,
+              ...(r.sub ?? []).map((t) => (
+                <li key={r.label + t} className={`${styles.nfRow} ${styles.nfSub}`}>
+                  <span>{t}</span>
+                </li>
+              )),
+            ])}
+          </ul>
+          <span className={styles.nfBig} aria-hidden="true" />
+          <p className={`${styles.nfHead} ${styles.nfHeadMore}`}>
+            <span>If I had more time</span>
+            {b.moreTimeValue ? <span className={styles.nfFigure}>{b.moreTimeValue}</span> : null}
+          </p>
+          <span className={styles.nfMed} aria-hidden="true" />
+          <ul className={styles.nfList}>
+            {(b.moreTime.length ? b.moreTime : ["(coming soon)"]).map((t) => (
+              <li key={t} className={styles.nfRow}>
+                <b>{t}</b>
+              </li>
+            ))}
+          </ul>
+          <span className={styles.nfBig} aria-hidden="true" />
+          {b.footnote ? <p className={styles.nfFoot}>{b.footnote}</p> : null}
+        </div>
+      );
     case "boxes":
       return (
         <div className={styles.cvBoxes}>

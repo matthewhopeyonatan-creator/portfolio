@@ -80,8 +80,21 @@ export type CaseBlock =
     }
   // The Inquirer's "Philly For You" feed and paywall rebuilt in code (components/PhillyForYou.tsx)
   | { type: "philly" }
+  // the Impacts as a Nutrition Facts label (Figma 166:2457): serving size, the impacts (bold rows
+  // with a right-aligned figure, indented sub-rows under them), "If I had more time", a footnote
+  | {
+      type: "nutrition";
+      servingSize?: string;
+      impacts: NutritionRow[];
+      moreTime: string[];
+      /** the big figure right of "If I had more time" */
+      moreTimeValue?: string;
+      footnote?: string;
+    }
   // a not-yet-written section
   | { type: "placeholder" };
+
+export type NutritionRow = { label: string; value?: string; sub?: string[] };
 
 export type CaseSection = {
   name: string;
@@ -484,38 +497,31 @@ const shmood: CaseSection[] = [
         accent: true,
         blocks: [
           {
-            type: "wins",
-            title: "Design Impacts",
-            items: [
-              "My designs along with the team's entire design ecosystem was validated by Shmood's lead engineer and CEO for further implementation.",
-              "Creation of dashboard decreased friction in understanding when tested by the internal design team.",
-              "The onboarding I created was received well by designers in Shmood and Cornell University and had 34/37 people understanding the value proposition of the platform.",
+            type: "nutrition",
+            impacts: [
+              {
+                label: "Validated for implementation",
+                value: "Lead engineer & CEO sign-off",
+                sub: ["My designs and the team’s whole design ecosystem"],
+              },
+              {
+                label: "Decreased friction in understanding",
+                sub: ["New dashboard, tested by the internal design team"],
+              },
+              {
+                label: "Onboarding understood",
+                value: "34/37 got the value proposition",
+                sub: ["Designers at Shmood and Cornell University"],
+              },
             ],
-          },
-        ],
-      },
-      {
-        type: "group",
-        blocks: [
-          {
-            type: "callout",
-            text: "Final Reflections",
-            body: "I was able to explore and soar through the world of creative expression, yet also ground myself with data driven designs. Through the features I have ownership over, I learned so much about the balance between aesthetics and functionality. If I had more time with this project, I would",
-          },
-          {
-            type: "wins",
-            items: [
-              "Measure the impacts through user testing.",
-              "Explore more of in the physical space to see how it can be done regardless of constraints.",
-              "Create for non traditional designers, especially for the onboarding as I want my onboarding experience to be effective and appealing to groups beyond who we interviewed.",
+            moreTime: [
+              "Measure the impacts through user testing",
+              "Explore more in the physical space, regardless of constraints",
+              "Create for non-traditional designers, beyond who we interviewed",
             ],
+            footnote:
+              "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
           },
-        ],
-      },
-      {
-        type: "statement",
-        lines: [
-          "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
         ],
       },
       {
@@ -927,33 +933,38 @@ const crowdvolt: CaseSection[] = [
         label: "Impacts",
         accent: true,
         blocks: [
+          // Figma 166:2457, Matthew's copy
           {
-            type: "wins",
-            title: "Personal Wins",
-            items: [
-              "My first design internship, extending all the way to 9 months",
-              "Learned how to deliver my designs through front-end code",
-              "Conquered my fear of motion graphics in After Effects and Figma Motion",
+            type: "nutrition",
+            impacts: [
+              {
+                label: "Decreased user confusion and errors",
+                value: "50% less complaints, 1-day eng turnaround",
+                sub: ["Owned 3 user flows end-to-end", "Analysis on PostHog"],
+              },
+              {
+                label: "Increased social media presence",
+                value: "10k follower, 1M engagement",
+                sub: ["100+ graphic assets", "300 person app launch event"],
+              },
+              { label: "Redesigned empty state UI", value: "50+ variations" },
+              { label: "Redesigned outdated UX flows", value: "10+ microflows" },
             ],
-          },
-          {
-            type: "wins",
-            title: "Impacts",
-            items: [
-              "Decreased user confusion through 3 different owned flows",
-              "Increased social media followers by 10,000 with over 1 million engagements",
-              "Redesigned the empty state UI for the entirety of the web and app product",
-              "Helped shape the flow of design critique and design workflows in the company",
+            moreTime: [
+              "Learn how to connect to back-end code",
+              "Conduct user interviews",
+              "Create an internal tool to keep up with design system changes on code base",
+              "Learn more about operations side and how more problems get identified",
             ],
+            moreTimeValue: "160",
+            footnote:
+              "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
           },
         ],
       },
       {
         type: "statement",
-        lines: [
-          "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
-          "EVERYONE DOWNLOAD THE APP!",
-        ],
+        lines: ["EVERYONE DOWNLOAD THE APP!"],
       },
     ],
   },
@@ -1188,30 +1199,28 @@ const inquirer: CaseSection[] = [
         accent: true,
         blocks: [
           {
-            type: "wins",
-            title: "Personal Wins",
-            items: [
-              "My first time using an established design system",
-              "The design was fully validated by the Inquirer team",
-              "I was able to be involved in creating a full case study for this project",
+            type: "nutrition",
+            impacts: [
+              {
+                label: "Inspired features on the Inquirer app",
+                value: "Now live",
+                sub: ["Design stored and used for later features"],
+              },
+              { label: "Design fully validated by the Inquirer team" },
+              {
+                label: "Ongoing involvement with the Inquirer team",
+                sub: ["Future design endeavors"],
+              },
             ],
-          },
-          {
-            type: "wins",
-            title: "Impacts",
-            items: [
-              "The design was stored and then used to inspire features that are live on the Inquirer mobile app",
-              "I still maintain conversation and involvement with the Inquirer team in future design endeavors",
-            ],
+            // to fill in
+            moreTime: [],
+            footnote: "Special thanks to the Inquirer team for a fulfilling project!",
           },
         ],
       },
       {
         type: "statement",
-        lines: [
-          "Special thanks to the Inquirer team for a fulfilling project!",
-          "See the full case study here",
-        ],
+        lines: ["See the full case study here"],
         link: { word: "here", href: "https://www.behance.net/gallery/229681591/Inquirer-x-DCC-SP25" },
       },
     ],
