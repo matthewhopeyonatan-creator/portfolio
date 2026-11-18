@@ -645,7 +645,7 @@ function Flow({ b }: { b: Extract<CaseBlock, { type: "flow" }> }) {
 
 /**
  * Project case study (Figma 64:317, full screen). Opening a project goes straight to its full-screen
- * case study, read as a page of its own (the site's navbar on top, the Aisle Directory tracker on
+ * case study, read as a page of its own (the site's navbar on top, the section tracker on
  * the left, ?project=slug in the address bar). Esc / back closes it.
  */
 export default function ProjectOverlay({
@@ -911,8 +911,8 @@ export default function ProjectOverlay({
           <div className={styles.study}>
             {expanded && (
               <nav className={styles.toc} aria-label="On this page">
-                {/* Figma 64:591 "Aisle Directory": [n] markers, serif names, the current one larger in red */}
-                <p className={styles.tocLabel}>Aisle Directory</p>
+                {/* Figma 64:591 (portfolio-v2: no "Aisle Directory" label, a size smaller): [n] markers,
+                    serif names, the current one larger in red */}
                 <ol>
                   {sectionNames.map((name, i) => (
                     <li key={name} className={styles.tocRow}>

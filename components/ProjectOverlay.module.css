@@ -159,8 +159,9 @@
   grid-template-columns: calc(380 * var(--pu)) minmax(0, 1fr);
 }
 
-/* "Aisle Directory" — Figma 64:591: label Host Grotesk Light 16 · rows 49 apart · "[n]" Regular 13
-   sitting 13 above each name · names Atelier Fleur 32 (current one 40, #F93636) */
+/* the section tracker — Figma 64:591, a size down for portfolio-v2 (and no "Aisle Directory"
+   label): "[n]" Regular 11 sitting 11 above each name · names Atelier Fleur 24 (current one 30,
+   #F93636) · rows 18 apart */
 .toc {
   position: sticky;
   top: calc(var(--header-h) + 48px);
@@ -168,34 +169,26 @@
   animation: fadeUp 600ms var(--ease-out) 300ms both;
 }
 
-.tocLabel {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 25px;
-  letter-spacing: -0.04em;
-}
-
 .toc ol {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin: 21px 0 0;
+  gap: 18px;
+  margin: 11px 0 0; /* room for the first row's [1] */
   padding: 0;
   list-style: none;
 }
 
 .tocRow {
   position: relative;
-  padding-left: 25px;
+  padding-left: 20px;
 }
 
 .tocNum {
   position: absolute;
   left: 0;
-  top: -13px;
-  font-size: 13px;
-  line-height: 25px;
+  top: -11px;
+  font-size: 11px;
+  line-height: 20px;
 }
 
 .tocItem {
@@ -204,13 +197,13 @@
   border: 0;
   background: none;
   font-family: var(--font-display-stack);
-  font-size: 32px;
-  line-height: 25px;
+  font-size: 24px;
+  line-height: 20px;
   white-space: nowrap;
   text-align: left;
   color: var(--color-ink);
   cursor: pointer;
-  /* the current aisle grows 32 → 40 with a scale, not font-size, so the text never re-lays out */
+  /* the current one grows 24 → 30 with a scale, not font-size, so the text never re-lays out */
   transform-origin: left center;
   transition:
     color var(--dur-hover) ease,
