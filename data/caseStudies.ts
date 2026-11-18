@@ -24,8 +24,6 @@ export type CaseBlock =
       frictionAfter?: number[];
       /** loop: dots start as outlines and fill in one by one; these steps turn red (skipped) */
       skip?: number[];
-      /** loop the ball along the steps even with none skipped */
-      loop?: boolean;
     }
   // images with captions under them, side by side when more than one
   | {
@@ -727,15 +725,6 @@ const crowdvolt: CaseSection[] = [
             type: "callout",
             text: "The manual ticket transfer process is complicated, but we need it to be smooth for the user",
             body: "The manual transfer process involves sending tickets to the CrowdVolt inventory and CrowdVolt sends it to the buyer",
-          },
-          {
-            type: "flow",
-            steps: [
-              "Seller’s Ticketmaster Account",
-              "CrowdVolt Inventory",
-              "Buyer’s Ticketmaster Account",
-            ],
-            loop: true,
           },
           {
             type: "blockers",
