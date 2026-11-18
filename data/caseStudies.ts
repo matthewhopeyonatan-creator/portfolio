@@ -879,8 +879,8 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "We launched a beta and watched how initial users navigated the new flow",
-            body: "This resulted in minor copy changes and changes in the actual ticket transfer instruction to increase trustability. Having post-launch iteration is super important to make sure our intentions come across the way we intended to.",
+            text: "We launched a beta and watched how 50 initial users navigated the new flow",
+            body: "This resulted in minor copy changes to increase trustability and clarity. The overall flow was kept the same because we saw that users were able to complete transactions and did not refer to the help center after completing a flow. Having post-launch iteration is super important to make sure our intentions come across the way we intended to.",
           },
         ],
       },
