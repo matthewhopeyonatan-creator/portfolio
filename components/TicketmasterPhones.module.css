@@ -2,15 +2,22 @@
    (set by the case-study popup). The screens are CrowdVolt's dark UI in Space Grotesk; their
    "black" is a hair off pure black, per the site's rule. */
 
-/* the 2px ink frame they sit in: 24 / 40 padding, phones 120 apart, centred */
+/* the filled frame they sit in, 40 above and below; the phones spread so the space left and right
+   of them and between them is the same */
 .frame {
+  --pu-outer: var(--pu);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: calc(120 * var(--pu));
-  padding: calc(40 * var(--pu)) calc(24 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  justify-content: space-evenly;
+  padding: calc(40 * var(--pu)) 0;
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
+}
+
+/* each screen shrinks so the whole of it fits on screen (--proto-h, globals.css); --h is its
+   height in Figma px (TicketmasterPhones.tsx) */
+.screen {
+  --pu: min(var(--pu-outer), calc(var(--proto-h) / var(--h)));
 }
 
 .phone {

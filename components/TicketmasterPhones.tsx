@@ -641,8 +641,10 @@ export default function TicketmasterPhones({ screens }: { screens: Screen[] }) {
     <div className={styles.frame}>
       {screens.map((s) => {
         const { el: El, label } = SCREENS[s];
+        // the screen's height in Figma px, so it can be scaled to fit the window
+        const h = s.startsWith("status") ? 981 : s.startsWith("final") ? 790 : 873;
         return (
-          <div key={s} role="img" aria-label={label}>
+          <div key={s} role="img" aria-label={label} className={styles.screen} style={{ "--h": h } as React.CSSProperties}>
             <El />
           </div>
         );

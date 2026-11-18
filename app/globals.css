@@ -33,6 +33,13 @@
   initial-value: #fff;
 }
 
+/* the filled boxes in the case studies (cards, step diagrams, the frames prototypes sit in) */
+@property --color-box {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d8d8d8;
+}
+
 /* the receipt's tilt shading (components/Tilt.tsx): shadow at full strength (Tilt scales it), the
    dent under the pointer, the rim of light at its mirror */
 @property --tilt-shadow {
@@ -58,6 +65,7 @@
   --color-ink: #282828;
   --color-accent: #91230a; /* deep tomato red — hero pill + footer */
   --color-paper: #fff;
+  --color-box: #d8d8d8;
   --tilt-shadow: rgba(40, 40, 40, 0.4);
   --tilt-dent: rgba(40, 40, 40, 0.08);
   --tilt-rim: rgba(255, 255, 255, 0.3);
@@ -68,6 +76,11 @@
 
   /* compact desktop header height, incl. 2px rule */
   --header-h: clamp(52px, 3.7vw, 64px);
+
+  /* the tallest a prototype screen (phone or web) may be in a case study, so the whole of it is on
+     screen at once under the navbar: two-thirds of the window, or the window less the navbar and
+     a little air, whichever is less */
+  --proto-h: min(68svh, 100svh - var(--header-h) - 160px);
 
   /* page side margins — everything lines up on these */
   --gutter: 40px;
@@ -100,6 +113,7 @@ html[data-theme="dark"] {
   --color-bg: #141414;
   --color-ink: #edece9;
   --color-paper: #1f1f1f;
+  --color-box: #2a2a2a; /* the case-study boxes: a step up from the page, like the light #d8d8d8 */
   /* on a dark page a shadow has to be darker than the page, and a dark slip catches far less light */
   --tilt-shadow: rgba(6, 6, 6, 1);
   --tilt-dent: rgba(6, 6, 6, 0.22);
@@ -116,6 +130,7 @@ html.theme-fade {
     --color-bg 450ms ease,
     --color-ink 450ms ease,
     --color-paper 450ms ease,
+    --color-box 450ms ease,
     --tilt-shadow 450ms ease,
     --tilt-dent 450ms ease,
     --tilt-rim 450ms ease;

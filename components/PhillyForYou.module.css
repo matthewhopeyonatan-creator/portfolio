@@ -6,20 +6,19 @@
 .frame {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: calc(120 * var(--pu));
-  padding: calc(40 * var(--pu)) calc(24 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  justify-content: space-evenly; /* same space left, right and between */
+  padding: calc(40 * var(--pu)) 0;
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 
-/* the phones shrink to stay about two-thirds of the window high */
+/* the phones shrink so the whole of each fits on screen (--proto-h, globals.css) */
 .frame {
   --pu-outer: var(--pu);
 }
 
 .phone {
-  --pu: min(var(--pu-outer), calc(68svh / 568));
+  --pu: min(var(--pu-outer), calc(var(--proto-h) / 568));
   position: relative;
   flex: none;
   width: calc(320 * var(--pu));

@@ -337,7 +337,9 @@
 /* the live site, in a rounded window (Figma: 1314 × 547, r24, #767676 while it loads) */
 .cvEmbed {
   overflow: hidden;
-  width: 100%;
+  /* never taller than a prototype may be (--proto-h): narrower then, centred */
+  width: min(100%, var(--proto-h) * var(--ratio, 2.4));
+  margin-inline: auto;
   aspect-ratio: var(--ratio, 2.4);
   border-radius: calc(24 * var(--pu));
   background: #050505; /* CrowdVolt's page colour, so the site loading in doesn't flash grey */
@@ -361,7 +363,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: calc(89 * var(--pu)) calc(43.67 / 1314 * 100%) calc(93 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 
@@ -625,7 +627,7 @@
   justify-content: center;
   gap: calc(12 * var(--pu));
   padding: calc(30 * var(--pu)) calc(29 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 
@@ -682,7 +684,7 @@
   height: calc(100 * var(--pu));
   padding: 0 calc(29 * var(--pu));
   overflow: hidden;
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
   container-type: inline-size;
 }
@@ -709,13 +711,13 @@
 /* a statement in its own bordered card (Figma 316:340) */
 .cvBoxed {
   padding: calc(24 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 
 .cvWin {
   padding: calc(24 * var(--pu)); /* same space all round */
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 
@@ -779,7 +781,7 @@
   box-sizing: border-box;
   min-height: calc(319 * var(--pu));
   padding: calc(30 * var(--pu)) calc(20 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
   text-align: center;
 }
@@ -871,7 +873,7 @@
   flex-direction: column;
   gap: calc(12 * var(--pu));
   padding: calc(29 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 

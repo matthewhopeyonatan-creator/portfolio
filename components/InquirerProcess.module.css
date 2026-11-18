@@ -6,16 +6,16 @@
   display: flex;
   flex-direction: column;
   gap: calc(60 * var(--pu));
-  padding: calc(40 * var(--pu)) calc(24 * var(--pu));
-  border: 1.5px solid var(--color-ink);
+  padding: calc(40 * var(--pu)) calc(24 * var(--pu)); /* the cards keep 24 at the sides */
+  background: var(--color-box); /* filled, no outline (portfolio-v2) */
   border-radius: calc(24 * var(--pu));
 }
 
+/* same space left, right and between the screens */
 .row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: calc(120 * var(--pu));
+  justify-content: space-evenly;
 }
 
 /* the screens are tall: they shrink to stay about two-thirds of the window high, so a whole one
@@ -25,11 +25,11 @@
 }
 
 .fitMid {
-  --pu: min(var(--pu-outer), calc(68svh / 874));
+  --pu: min(var(--pu-outer), calc(var(--proto-h) / 874));
 }
 
 .fitStory {
-  --pu: min(var(--pu-outer), calc(68svh / 1082));
+  --pu: min(var(--pu-outer), calc(var(--proto-h) / 1082));
 }
 
 .frame p {
