@@ -1,5 +1,5 @@
 /* The Inquirer's iteration frames (Figma 318:3380, 319:4006): a 2px ink frame, 40 / 24 in, the
-   screens 120 apart; the red cards sit outside under the box, three across. 1 Figma px = --pu. The mid-fi screens are light
+   screens 120 apart; the team's pushback sits under the box as a paragraph. 1 Figma px = --pu. The mid-fi screens are light
    wireframes in both themes; their black is the site's ink, per its rule. Selectors are two
    classes deep so the case study's own paragraph and image styles don't reach in. */
 /* the box, then the team's pushback under it */
@@ -49,27 +49,14 @@
   border-radius: 0;
 }
 
-/* ── the team's pushback: dark red cards, white 24, three side by side under the box ── */
-.reasons {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.reason {
-  padding: calc(24 * var(--pu)) calc(32 * var(--pu));
-  border-radius: calc(24 * var(--pu));
-  background: #8f1d00;
-  color: #fff;
-}
-
-.reasons .reason p {
+/* ── the team's pushback: a paragraph under the box, in the case study's body style ── */
+.process .why {
   margin: 0;
-  color: #fff;
-  font-size: max(16px, calc(24 * var(--pu)));
+  font-size: 20px;
   font-weight: 400;
-  line-height: 1.25;
+  line-height: normal;
   letter-spacing: -0.03em;
+  color: color-mix(in srgb, var(--color-ink) 60%, var(--color-bg));
 }
 
 /* ── mid-fi screens: 402 × 874, #f5f5f5, r24, Helvetica ── */
@@ -243,15 +230,7 @@
     flex-direction: column;
     gap: 24px;
   }
-  .reasons {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-  .reason {
-    padding: 14px 16px;
-    border-radius: 16px;
-  }
-  .reasons .reason p {
-    font-size: 16px;
+  .process .why {
+    font-size: 18px;
   }
 }

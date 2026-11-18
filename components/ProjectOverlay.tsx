@@ -445,9 +445,9 @@ function Block({ b }: { b: CaseBlock }) {
     case "philly":
       return <PhillyForYou />;
     case "inq-midfi":
-      return <MidFi reasons={b.reasons} />;
+      return <MidFi why={b.why} />;
     case "inq-finalish":
-      return <FinalIsh reasons={b.reasons} />;
+      return <FinalIsh why={b.why} />;
     case "chips":
       return (
         <div className={styles.cvChips}>

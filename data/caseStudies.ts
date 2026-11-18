@@ -68,7 +68,8 @@ export type CaseBlock =
   // three columns of bordered 36px cards, the picked ones filled in (Figma 318:3357)
   | { type: "chips"; items: { text: string; on?: boolean }[] }
   // The Inquirer's iteration frames, rebuilt in code (components/InquirerProcess.tsx)
-  | { type: "inq-midfi" | "inq-finalish"; reasons: string[] }
+  // with a paragraph under the box on why the team didn't take it forward
+  | { type: "inq-midfi" | "inq-finalish"; why: string }
   // a row of bordered cards: an optional bold uppercase title over a light line
   | { type: "boxes"; items: { title?: string; text: string }[] }
   // closing 48px lines, a blank line apart, 60 under what comes before (Figma 166:3336)
@@ -1153,11 +1154,7 @@ const inquirer: CaseSection[] = [
           },
           {
             type: "inq-midfi",
-            reasons: [
-              "The 2 pronged navigation was not familiar",
-              "They did not have enough articles daily to fuel this many options",
-              "Not visually appealing",
-            ],
+            why: "These are the reasons it wasn’t implemented: the two-pronged navigation wasn’t familiar to the Inquirer’s readers, they didn’t publish enough articles each day to fuel this many options, and the screens weren’t visually appealing enough yet.",
           },
         ],
       },
@@ -1170,7 +1167,10 @@ const inquirer: CaseSection[] = [
             text: "I removed the 2 prong navigation and stuck to a linear feed",
             body: "News can feel overwhelming, so I wanted catching up to feel personal and familiar. I built on the short-form, swipe-through format most people already use regularly, so there’s nothing new to learn. There was on issue:",
           },
-          { type: "inq-finalish", reasons: ["The Inquirer took only horizontal images"] },
+          {
+            type: "inq-finalish",
+            why: "That’s why this version wasn’t implemented: the Inquirer only takes horizontal images, so a full-height photo for every story wasn’t something their newsroom could supply.",
+          },
         ],
       },
       {

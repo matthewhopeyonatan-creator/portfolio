@@ -2,7 +2,7 @@ import styles from "./InquirerProcess.module.css";
 
 /**
  * The Inquirer case study's Iterations frames (Figma 316:3027), each in a box with the team's
- * pushback under it, outside the box, as three dark red cards side by side:
+ * pushback under it as a short paragraph:
  *  - MidFi (318:3380): the two greyscale mid-fi screens, rebuilt in code so they stay sharp.
  *  - FinalIsh (319:4006): the full-bleed story screen, its photo cropped from a horizontal shot.
  * Sized in --pu (1 Figma px in the popup).
@@ -10,17 +10,8 @@ import styles from "./InquirerProcess.module.css";
 
 const ART = "/projects/inquirer/process";
 
-function Reasons({ items }: { items: string[] }) {
-  return (
-    <div className={styles.reasons}>
-      {items.map((t) => (
-        <div key={t} className={styles.reason}>
-          <p>{t}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
+/** why the team didn't take it forward, as a paragraph under the box */
+const Why = ({ text }: { text: string }) => <p className={styles.why}>{text}</p>;
 
 /** the story-progress dashes across the top of both mid-fi screens */
 const Progress = () => (
@@ -50,7 +41,7 @@ const Chrome = ({ dotsLeft }: { dotsLeft: number }) => (
   </>
 );
 
-export function MidFi({ reasons }: { reasons: string[] }) {
+export function MidFi({ why }: { why: string }) {
   return (
     <div className={styles.process}>
       <div className={styles.frame}>
@@ -95,12 +86,12 @@ export function MidFi({ reasons }: { reasons: string[] }) {
           </div>
         </div>
       </div>
-      <Reasons items={reasons} />
+      <Why text={why} />
     </div>
   );
 }
 
-export function FinalIsh({ reasons }: { reasons: string[] }) {
+export function FinalIsh({ why }: { why: string }) {
   return (
     <div className={styles.process}>
       <div className={styles.frame}>
@@ -119,7 +110,7 @@ export function FinalIsh({ reasons }: { reasons: string[] }) {
           </div>
         </div>
       </div>
-      <Reasons items={reasons} />
+      <Why text={why} />
     </div>
   );
 }
