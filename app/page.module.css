@@ -55,7 +55,9 @@
   background: var(--color-bg); /* tomato overflow stops at the rule under the title */
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: 0;
+  /* the projects are the last thing on the page: their bottom rule and the footer's top rule
+     share one line rather than stacking into a double one */
+  margin: 0 0 -1.5px;
   padding: 0;
   list-style: none;
 }

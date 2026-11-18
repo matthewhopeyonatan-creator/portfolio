@@ -82,7 +82,7 @@ implements his designs faithfully.
 
 ## Navigation behaviour (keep working)
 
-- Navbar: about → `/about` · projects → `/#seasonal-picks` (the catalog page was removed)
+- Navbar: about → `/about` · projects → `/#seasonal-picks` · graphics → `/graphics` (the poster shelf, `app/graphics/page.tsx`; no longer on the homepage)
 - Logo on `/` scrolls to top; elsewhere it links home. Cross-page section links land on the section.
 
 ## Motion

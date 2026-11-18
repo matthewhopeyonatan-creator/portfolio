@@ -2,6 +2,7 @@
 export const navLinks = [
   { label: "about", href: "/about" },
   { label: "projects", href: "/#seasonal-picks" },
+  { label: "graphics", href: "/graphics" },
 ];
 
 // Footer social links. TODO: add the X handle.
