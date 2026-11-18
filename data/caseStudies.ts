@@ -1200,18 +1200,25 @@ const inquirer: CaseSection[] = [
             type: "nutrition",
             impacts: [
               {
-                label: "Inspired features on the Inquirer app",
-                value: "Now live",
-                sub: ["Design stored and used for later features"],
+                label: "Inspired features on the current Inquirer app",
+                value: "Live summer 2026",
+                sub: [
+                  "Design stored and used for later features",
+                  "Inspired feature launched in summer of 2026",
+                ],
               },
-              { label: "Design fully validated by the Inquirer team" },
+              { label: "Design was fully validated by the Inquirer team", value: "100% validation" },
               {
                 label: "Ongoing involvement with the Inquirer team",
-                sub: ["Future design endeavors"],
+                value: "2-year relationship",
+                sub: ["Continued design endeavors for another semester a year after this project"],
               },
             ],
-            // to fill in
-            moreTime: [],
+            moreTime: [
+              "Conduct user testing with external participants",
+              "Expand more of how this feeds into Inquirer’s existing ecosystem",
+              "Talk to the Inquirer’s engineering team to see how feasible this feature is",
+            ],
             footnote: "Special thanks to the Inquirer team for a fulfilling project!",
           },
         ],
