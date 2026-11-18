@@ -162,6 +162,18 @@ export default function ProjectCard({ project }: { project: Project }) {
       setOpen(true);
     }
   }, [project.slug, project.soldOut]);
+  // the header's "Currently … previously …" links open a case study the same way
+  useEffect(() => {
+    if (project.soldOut) return;
+    const onAsk = (e: Event) => {
+      const d = (e as CustomEvent<{ slug: string; handled: boolean }>).detail;
+      if (d?.slug !== project.slug) return;
+      d.handled = true;
+      setOpen(true);
+    };
+    window.addEventListener("project:open", onAsk);
+    return () => window.removeEventListener("project:open", onAsk);
+  }, [project.slug, project.soldOut]);
   const body = (
     <>
       <div className={styles.media}>

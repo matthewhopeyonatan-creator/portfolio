@@ -253,7 +253,7 @@
    rule. On the page margin; each line rises in after the tomatoes, then the full-ink highlight
    steps through the phrases. ── */
 /* Figma 64:125 (new header) — measured from the navbar rule (y130): the name's line box at 69,
-   [HOPE] 11 above it and 9 to the right of the name, the headline at 157, the aside at 301. All
+   [HOPE] 11 above it and 9 to the right of the name, the headline at 176, the aside 10 under it. All
    on the side margin (the first letter pulled left by its side bearing). */
 .name {
   position: absolute;
@@ -266,6 +266,36 @@
   margin: 0;
   white-space: nowrap;
   opacity: 0;
+}
+
+/* Figma 513:880: the places in Bold, underlined; "previously" Light */
+.aside b {
+  font-weight: 700;
+}
+
+.asideLight {
+  font-weight: 300;
+}
+
+.work {
+  color: inherit;
+  font-weight: 700;
+  white-space: nowrap; /* a place's name never splits across lines (phones) */
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  transition: opacity var(--dur-hover) ease;
+}
+
+.work:active {
+  opacity: 0.7;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work:hover {
+    opacity: 0.6;
+  }
 }
 
 .first {
@@ -284,16 +314,16 @@
   letter-spacing: -0.02em;
 }
 
-/* the headline and, 24 under its last line, the aside */
+/* the headline and, 10 under its last line, the "Currently … previously …" line */
 .lede {
   position: absolute;
   left: var(--gutter);
-  top: calc(157 * var(--hu));
+  top: calc(176 * var(--hu));
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: calc(24 * var(--hu));
+  gap: calc(10 * var(--hu));
 }
 
 .headline {
@@ -624,6 +654,7 @@
   .aside {
     font-size: calc(15 * var(--m));
     line-height: 1.6;
+    white-space: normal;
   }
   .line {
     white-space: normal;

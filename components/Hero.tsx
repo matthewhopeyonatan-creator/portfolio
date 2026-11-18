@@ -287,6 +287,29 @@ const phrases = [
 ];
 const headlineLines = [[0, 1], [2, 3], [4]];
 
+/**
+ * A place in the header's "Currently … previously …" line: opens that project's case study, the
+ * same as clicking its tray (ProjectCard listens for "project:open"); one without a case study yet
+ * (sold out) scrolls down to the trays instead. Cmd/ctrl-click opens the link itself.
+ */
+function WorkLink({ slug, children }: { slug: string; children: React.ReactNode }) {
+  return (
+    <a
+      className={styles.work}
+      href={`/?project=${slug}`}
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        const ask = new CustomEvent("project:open", { detail: { slug, handled: false } });
+        window.dispatchEvent(ask);
+        if (!ask.detail.handled) document.getElementById("seasonal-picks")?.scrollIntoView({ behavior: "smooth" });
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
 type TomatoKey = keyof typeof tomatoes;
 
 
@@ -545,7 +568,12 @@ export default function Hero() {
           </span>
         ))}
       </p>
-      <p className={styles.aside}>+I love food (if you can’t tell)</p>
+      <p className={styles.aside}>
+        Currently <WorkLink slug="25madison">25madison</WorkLink>,{" "}
+        <span className={styles.asideLight}>previously</span>{" "}
+        <WorkLink slug="crowdvolt">CrowdVolt</WorkLink> <b>,</b>{" "}
+        <WorkLink slug="inquirer">The Philadelphia Inquirer</WorkLink>
+      </p>
       </div>
 
       {/* Figma 210:5291 — light / dark switch, top right of the landing */}
