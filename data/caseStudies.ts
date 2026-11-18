@@ -125,6 +125,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "nutrition",
+            servingSize: "2 product features",
             impacts: [
               {
                 label: "Validated for implementation",
@@ -561,6 +562,7 @@ const crowdvolt: CaseSection[] = [
           // Figma 166:2457, Matthew's copy
           {
             type: "nutrition",
+            servingSize: "2 product flows",
             impacts: [
               {
                 label: "Decreased user confusion and errors",
@@ -986,6 +988,7 @@ const inquirer: CaseSection[] = [
         blocks: [
           {
             type: "nutrition",
+            servingSize: "1 product feature",
             impacts: [
               {
                 label: "Inspired features on the current Inquirer app",
