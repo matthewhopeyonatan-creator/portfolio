@@ -252,21 +252,67 @@
 /* ── Headline — Figma 21:168: Host Grotesk Regular 64 / 60, -1.28 tracking, 37 below the navbar
    rule. On the page margin; each line rises in after the tomatoes, then the full-ink highlight
    steps through the phrases. ── */
-.headline {
+/* Figma 64:125 (new header) — measured from the navbar rule (y130): the name's line box at 69,
+   [HOPE] 11 above it and 9 to the right of the name, the headline at 157, the aside at 301. All
+   on the side margin (the first letter pulled left by its side bearing). */
+.name {
   position: absolute;
-  /* the "C" itself sits on the side margin: pulled left by its side bearing (0.034em), which
-     grows with the type, so its edge lines up with the navbar's ABOUT at every window size */
-  left: calc(var(--gutter) - 0.034em);
-  /* and the gap from the navbar rule to the top of the capitals matches that margin (0.10em =
-     the cap's inset in its line box) */
-  top: calc(var(--gutter) - 0.1em);
+  left: calc(var(--gutter) - 0.02em);
+  top: calc(69 * var(--hu));
   z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  gap: calc(9 * var(--hu));
   margin: 0;
-  font-size: max(20px, calc(64 * var(--hu)));
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.first {
+  font-family: var(--font-display-stack);
+  font-size: max(40px, calc(96 * var(--hu)));
   font-weight: 400;
-  line-height: 0.9375; /* 60 / 64 */
+  line-height: 0.625; /* 60 / 96 */
+  letter-spacing: -0.02em;
+}
+
+.surname {
+  margin-top: calc(-11 * var(--hu));
+  font-size: max(14px, calc(32 * var(--hu)));
+  font-weight: 400;
+  line-height: 0.9375; /* 30 / 32 */
+  letter-spacing: -0.02em;
+}
+
+/* the headline and, 24 under its last line, the aside */
+.lede {
+  position: absolute;
+  left: var(--gutter);
+  top: calc(157 * var(--hu));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(24 * var(--hu));
+}
+
+.headline {
+  margin: 0 0 0 -0.034em;
+  font-size: max(20px, calc(48 * var(--hu)));
+  font-weight: 400;
+  line-height: 0.8333; /* 40 / 48 */
   letter-spacing: -0.02em;
   white-space: nowrap;
+}
+
+.aside {
+  margin: 0;
+  font-size: max(13px, calc(20 * var(--hu)));
+  font-weight: 400;
+  line-height: 2; /* 40 / 20 */
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  opacity: 0;
 }
 
 .line {
@@ -300,17 +346,28 @@
   color: var(--color-ink);
 }
 
-.play .line {
+/* the name rises first, then the headline's lines, then the aside */
+.play .name {
   animation: lineIn 1100ms var(--ease-intro) both;
   animation-delay: var(--text-delay);
 }
 
-.play .line:nth-child(2) {
+.play .line {
+  animation: lineIn 1100ms var(--ease-intro) both;
   animation-delay: calc(var(--text-delay) + 140ms);
 }
 
-.play .line:nth-child(3) {
+.play .line:nth-child(2) {
   animation-delay: calc(var(--text-delay) + 280ms);
+}
+
+.play .line:nth-child(3) {
+  animation-delay: calc(var(--text-delay) + 420ms);
+}
+
+.play .aside {
+  animation: lineIn 1100ms var(--ease-intro) both;
+  animation-delay: calc(var(--text-delay) + 560ms);
 }
 
 @keyframes lineIn {
@@ -539,14 +596,34 @@
     height: calc(var(--mh) * var(--m));
     transform: rotate(var(--mr, 0deg));
   }
-  /* 40 / 40, 353 wide on the 20 margin, 20 under the navbar; it wraps between phrases */
-  .headline {
+  /* the name, then the headline (32, 353 wide on the 20 margin, wrapping between phrases), then
+     the aside — the same order and proportions as the desktop header, stepped down */
+  .name {
+    left: calc(20 * var(--m) - 0.02em);
+    top: calc(30 * var(--m));
+    gap: calc(6 * var(--m));
+  }
+  .first {
+    font-size: calc(56 * var(--m));
+  }
+  .surname {
+    margin-top: calc(-7 * var(--m));
+    font-size: calc(18 * var(--m));
+  }
+  .lede {
     left: calc(20 * var(--m));
-    top: calc(20 * var(--m));
+    top: calc(84 * var(--m));
     width: calc(353 * var(--m));
+    gap: calc(10 * var(--m));
+  }
+  .headline {
     font-size: calc(32 * var(--m));
     line-height: 1;
     white-space: normal;
+  }
+  .aside {
+    font-size: calc(15 * var(--m));
+    line-height: 1.6;
   }
   .line {
     white-space: normal;
@@ -569,7 +646,9 @@
     visibility: hidden;
   }
   .play .cue,
-  .play .line {
+  .play .name,
+  .play .line,
+  .play .aside {
     animation: fadeIn 400ms ease both;
   }
   .play .tomato {

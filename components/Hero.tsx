@@ -279,7 +279,7 @@ function Sticker({
 
 // the headline's phrases, and which ones sit on each of its three lines (Figma line breaks)
 const phrases = [
-  "Consumer focused,",
+  "Consumer driven,",
   "research driven,",
   "visually expressive,",
   "startup trained,",
@@ -518,8 +518,18 @@ export default function Hero() {
       <h1 className="visually-hidden">
         hope’s grocer — the portfolio of Matthew Hope, product designer
       </h1>
-      {/* Figma 21:168 — 64px Regular, 60 leading. One phrase at a time is in full ink, the rest at 50%;
-          the highlight moves on every 1s. */}
+      {/* Figma 513:871 / 513:872 — the name, Atelier Fleur 96, with [HOPE] beside it, Host Grotesk 32 */}
+      <p className={styles.name} aria-label="Matthew Hope">
+        <span className={styles.first} aria-hidden="true">
+          Matthew
+        </span>
+        <span className={styles.surname} aria-hidden="true">
+          [HOPE]
+        </span>
+      </p>
+      {/* Figma 513:882 — 48px Regular, 40 leading. One phrase at a time is in full ink, the rest at
+          50%; the highlight moves on every 1s. The aside (513:880) follows it. */}
+      <div className={styles.lede}>
       <p className={styles.headline}>
         {headlineLines.map((line, li) => (
           <span key={li} className={styles.line}>
@@ -535,6 +545,8 @@ export default function Hero() {
           </span>
         ))}
       </p>
+      <p className={styles.aside}>+I love food (if you can’t tell)</p>
+      </div>
 
       {/* Figma 210:5291 — light / dark switch, top right of the landing */}
       <ThemeToggle className={styles.themeToggle} />
