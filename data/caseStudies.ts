@@ -115,6 +115,46 @@ const fig = (image: CaseImage, caption?: string) => ({ image, caption });
 
 const shmood: CaseSection[] = [
   {
+    name: "Impacts",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Impacts",
+        accent: true,
+        blocks: [
+          {
+            type: "nutrition",
+            impacts: [
+              {
+                label: "Validated for implementation",
+                value: "Lead engineer & CEO validation",
+                sub: ["My designs and the team’s whole design ecosystem"],
+              },
+              {
+                label: "Decreased friction in understanding",
+                value: "CEO validation",
+                sub: ["New dashboard, tested by the internal design team"],
+              },
+              {
+                label: "Onboarding understood",
+                value: "34/37 got the value proposition",
+                sub: ["Designers at Shmood and Cornell University"],
+              },
+            ],
+            moreTime: [
+              "Measure the impacts through user testing",
+              "Explore more in the physical space, regardless of constraints",
+              "Create for non-traditional designers, beyond who we interviewed",
+            ],
+            footnote:
+              "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
+          },
+        ],
+      },
+    ],
+  },
+  {
     name: "Context",
     ownLabel: true,
     blocks: [
@@ -484,46 +524,6 @@ const shmood: CaseSection[] = [
           { type: "dashboard" },
         ],
       },
-    ],
-  },
-  {
-    name: "Impacts",
-    ownLabel: true,
-    blocks: [
-      {
-        type: "group",
-        label: "Impacts",
-        accent: true,
-        blocks: [
-          {
-            type: "nutrition",
-            impacts: [
-              {
-                label: "Validated for implementation",
-                value: "Lead engineer & CEO validation",
-                sub: ["My designs and the team’s whole design ecosystem"],
-              },
-              {
-                label: "Decreased friction in understanding",
-                value: "CEO validation",
-                sub: ["New dashboard, tested by the internal design team"],
-              },
-              {
-                label: "Onboarding understood",
-                value: "34/37 got the value proposition",
-                sub: ["Designers at Shmood and Cornell University"],
-              },
-            ],
-            moreTime: [
-              "Measure the impacts through user testing",
-              "Explore more in the physical space, regardless of constraints",
-              "Create for non-traditional designers, beyond who we interviewed",
-            ],
-            footnote:
-              "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
-          },
-        ],
-      },
       {
         type: "link",
         text: "Check out the full case study on Behance ↗",
@@ -549,6 +549,45 @@ const bidSteps = [
 
 // Figma 64:381 — Matthew's copy, as written there
 const crowdvolt: CaseSection[] = [
+  {
+    name: "Impacts",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Impacts",
+        accent: true,
+        blocks: [
+          // Figma 166:2457, Matthew's copy
+          {
+            type: "nutrition",
+            impacts: [
+              {
+                label: "Decreased user confusion and errors",
+                value: "50% less complaints, 1-day eng turnaround",
+                sub: ["Owned 3 user flows end-to-end", "Analysis on PostHog"],
+              },
+              {
+                label: "Increased social media presence",
+                value: "10k follower, 1M engagement",
+                sub: ["100+ graphic assets", "300 person app launch event"],
+              },
+              { label: "Redesigned empty state UI", value: "50+ variations" },
+              { label: "Redesigned outdated UX flows", value: "10+ microflows" },
+            ],
+            moreTime: [
+              "Learn how to connect to back-end code",
+              "Conduct user interviews",
+              "Create an internal tool to keep up with design system changes on code base",
+              "Learn more about operations side and how more problems get identified",
+            ],
+            footnote:
+              "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
+          },
+        ],
+      },
+    ],
+  },
   {
     name: "Context",
     ownLabel: true,
@@ -922,45 +961,6 @@ const crowdvolt: CaseSection[] = [
           alt,
         })),
       },
-    ],
-  },
-  {
-    name: "Impacts",
-    ownLabel: true,
-    blocks: [
-      {
-        type: "group",
-        label: "Impacts",
-        accent: true,
-        blocks: [
-          // Figma 166:2457, Matthew's copy
-          {
-            type: "nutrition",
-            impacts: [
-              {
-                label: "Decreased user confusion and errors",
-                value: "50% less complaints, 1-day eng turnaround",
-                sub: ["Owned 3 user flows end-to-end", "Analysis on PostHog"],
-              },
-              {
-                label: "Increased social media presence",
-                value: "10k follower, 1M engagement",
-                sub: ["100+ graphic assets", "300 person app launch event"],
-              },
-              { label: "Redesigned empty state UI", value: "50+ variations" },
-              { label: "Redesigned outdated UX flows", value: "10+ microflows" },
-            ],
-            moreTime: [
-              "Learn how to connect to back-end code",
-              "Conduct user interviews",
-              "Create an internal tool to keep up with design system changes on code base",
-              "Learn more about operations side and how more problems get identified",
-            ],
-            footnote:
-              "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
-          },
-        ],
-      },
       {
         type: "statement",
         lines: ["EVERYONE DOWNLOAD THE APP!"],
@@ -971,6 +971,44 @@ const crowdvolt: CaseSection[] = [
 
 // Figma 316:264 — Matthew's copy, as written there
 const inquirer: CaseSection[] = [
+  {
+    name: "Impacts",
+    ownLabel: true,
+    blocks: [
+      {
+        type: "group",
+        label: "Impacts",
+        accent: true,
+        blocks: [
+          {
+            type: "nutrition",
+            impacts: [
+              {
+                label: "Inspired features on the current Inquirer app",
+                value: "Live summer 2026",
+                sub: [
+                  "Design stored and used for later features",
+                  "Inspired feature launched in summer of 2026",
+                ],
+              },
+              { label: "Design was fully validated by the Inquirer team", value: "100% validation" },
+              {
+                label: "Ongoing involvement with the Inquirer team",
+                value: "2-year relationship",
+                sub: ["Continued design endeavors for another semester a year after this project"],
+              },
+            ],
+            moreTime: [
+              "Conduct user testing with external participants",
+              "Expand more of how this feeds into Inquirer’s existing ecosystem",
+              "Talk to the Inquirer’s engineering team to see how feasible this feature is",
+            ],
+            footnote: "Special thanks to the Inquirer team for a fulfilling project!",
+          },
+        ],
+      },
+    ],
+  },
   {
     name: "Context",
     ownLabel: true,
@@ -1183,44 +1221,6 @@ const inquirer: CaseSection[] = [
             body: "This design was validated by the Inquirer team by fitting business needs, feasibility, and user needs. The designs were created based on the iPhone 14 screens, to make handoff to engineers smoother according to the Inquirer workflow.",
           },
           { type: "philly" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Impacts",
-    ownLabel: true,
-    blocks: [
-      {
-        type: "group",
-        label: "Impacts",
-        accent: true,
-        blocks: [
-          {
-            type: "nutrition",
-            impacts: [
-              {
-                label: "Inspired features on the current Inquirer app",
-                value: "Live summer 2026",
-                sub: [
-                  "Design stored and used for later features",
-                  "Inspired feature launched in summer of 2026",
-                ],
-              },
-              { label: "Design was fully validated by the Inquirer team", value: "100% validation" },
-              {
-                label: "Ongoing involvement with the Inquirer team",
-                value: "2-year relationship",
-                sub: ["Continued design endeavors for another semester a year after this project"],
-              },
-            ],
-            moreTime: [
-              "Conduct user testing with external participants",
-              "Expand more of how this feeds into Inquirer’s existing ecosystem",
-              "Talk to the Inquirer’s engineering team to see how feasible this feature is",
-            ],
-            footnote: "Special thanks to the Inquirer team for a fulfilling project!",
-          },
         ],
       },
       {
