@@ -149,7 +149,7 @@ const shmood: CaseSection[] = [
               "Create for non-traditional designers, beyond who we interviewed",
             ],
             footnote:
-              "Special thanks to Malvika, Jordan, and Daniel, as well as my team that has supported my growth as a product designer in this project :)",
+              "Special thanks to Malvika, Jordan, and Daniel, as well as my team, who supported my growth as a product designer in this project :)",
           },
         ],
       },
@@ -166,8 +166,8 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "How might we create a onboarding process that communicates high design standards and unify the platform's various products?",
-            body: "The main goal is streamlining and maximizing the startup’s features and value propositions, in a non-traditional way.",
+            text: "How might we create an onboarding process that communicates high design standards and unifies the platform's various products?",
+            body: "The main goal is streamlining and maximizing the startup’s features and value propositions in a non-traditional way.",
           },
           {
             type: "wins",
@@ -203,7 +203,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "We conducted interviews with 30 creatives in over 10 industries",
-            body: "We wanted to gain insights on the how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
+            body: "We wanted to gain insights into how visual designers work with their clients (What’s efficient? What’s not?), the pain points in seeking and receiving feedback, and designers’ comfort with AI in creative workflows.",
           },
           {
             type: "blockers",
@@ -218,7 +218,7 @@ const shmood: CaseSection[] = [
               {
                 label: "Insight 2",
                 title: "Communication is Key",
-                text: "“Can you make it pop?” a designer’s worst nightmare in the form of feedback. Clients often struggle articulating what they want.",
+                text: "“Can you make it pop?” a designer’s worst nightmare in the form of feedback. Clients often struggle to articulate what they want.",
                 w: 560,
               },
               {
@@ -255,11 +255,11 @@ const shmood: CaseSection[] = [
               },
               {
                 title: "Centralizing creative tools",
-                text: "Designers usually incorporate multiple digital tools into their workflow. With Shmood, they can centralize designs, collect feedback, manage their projects, and case their work all in one seamless platform.",
+                text: "Designers usually incorporate multiple digital tools into their workflow. With Shmood, they can centralize designs, collect feedback, manage their projects, and showcase their work all in one seamless platform.",
               },
               {
                 title: "Client and designer-friendly",
-                text: "Allowing easy and straightforward user experiences for both designers and their clients so that designers can focus on delivering high quality work, while clients can quickly leave helpful feedback and oversee progress.",
+                text: "Allowing easy and straightforward user experiences for both designers and their clients so that designers can focus on delivering high-quality work, while clients can quickly leave helpful feedback and oversee progress.",
               },
             ],
           },
@@ -279,7 +279,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "I took ownership over Shmood’s onboarding experience and user dashboard",
-            body: "I wanted to present Shmood’s creative and quirky energy to capture new and prospecting users. As our team was also able to create multitudes of new products for Shmood, I was also responsible for creating a centralized system that will house all of the products efficiently.",
+            body: "I wanted to present Shmood’s creative and quirky energy to capture new and prospective users. As our team created many new products for Shmood, I was also responsible for a centralized system that houses all of them efficiently.",
           },
         ],
       },
@@ -289,7 +289,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "From the team’s user research and ideation, I was able to identify 3 core value that the onboarding experience had to have",
+            text: "From the team’s user research and ideation, I was able to identify 3 core values that the onboarding experience had to have",
           },
           {
             type: "boxes",
@@ -308,7 +308,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "I started dreaming.*ੈ✩‧₊˚.. and ideating...",
-            body: "As I began ideating solutions to address user pain points and flow requirements, I was unafraid to challenge convention and aimed to push for creative solutions. This is how I created my low-fis.",
+            body: "As I began ideating solutions to address user pain points and flow requirements, I was unafraid to challenge convention and aimed to push for creative solutions. This is how I created my lo-fis.",
           },
           {
             type: "figures",
@@ -321,7 +321,7 @@ const shmood: CaseSection[] = [
                   2157,
                   "Lo-fi sketch: after-initial onboarding and a physical Shmood board",
                 ),
-                "Tell a story: physical cards with original designs or designs that is made by the Shmood community",
+                "Tell a story: physical cards with original designs or designs made by the Shmood community",
               ),
               fig(
                 img(
@@ -339,7 +339,7 @@ const shmood: CaseSection[] = [
                   2157,
                   "Lo-fi sketch: physical care package with merch, cards and stickers",
                 ),
-                "Personalization: adding customizable experiences through physical designer care package, cards, onboarding survey",
+                "Personalization: adding customizable experiences through a physical designer care package, cards, onboarding survey",
               ),
             ],
           },
@@ -363,7 +363,7 @@ const shmood: CaseSection[] = [
           {
             type: "callout",
             text: "A cohesive product story that makes early access users feel welcomed in a community",
-            body: "My objective for designing the onboarding flow was to communicate a cohesive product story for early access users to easily understand Shmood’s mission, features, differentiation, and impact, while making them feel welcomed in a community.\n\nAs observed through our user interviews and analysis of competing product onboarding flows, I needed to prioritize conciseness, creativity and wit in both the visual design, and UX. I also had to work within the constraints of what is feasible and realistic for the company at this scale.\n\nMy onboarding experience was created in tandem with another teammate’s animated onboarding flow, and it connects the whole way to create a smooth onboarding flow that presents the value proposition to the user. After internal user testing within the Shmood team as well as with designers at Cornell University, we found that 34 out of 37 designers understood what the product was after we showed them the full onboarding flow.",
+            body: "My objective for designing the onboarding flow was to communicate a cohesive product story for early access users to easily understand Shmood’s mission, features, differentiation, and impact, while making them feel welcomed in a community.\n\nAs observed through our user interviews and analysis of competing product onboarding flows, I needed to prioritize conciseness, creativity, and wit in both the visual design and UX. I also had to work within the constraints of what is feasible and realistic for the company at this scale.\n\nMy onboarding experience was created in tandem with another teammate’s animated onboarding flow, and it connects the whole way to create a smooth onboarding flow that presents the value proposition to the user. After internal user testing within the Shmood team as well as with designers at Cornell University, we found that 34 out of 37 designers understood what the product was after we showed them the full onboarding flow.",
           },
         ],
       },
@@ -373,7 +373,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            body: "After sign in, the animated onboarding flow is initiated with the user being welcomed into Shmood’s world. This flow is fully automated and made to welcome users.",
+            body: "After signing in, the animated onboarding flow is initiated with the user being welcomed into Shmood’s world. This flow is fully automated and made to welcome users.",
           },
           { type: "screens", screens: ["welcome", "story"] },
         ],
@@ -384,7 +384,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            body: "I elevated the generic questionnaire form into an interactive and compelling experience where users indicate their preferences and background in regards to creativity.",
+            body: "I elevated the generic questionnaire form into an interactive and compelling experience where users indicate their preferences and background with regard to creativity.",
           },
           { type: "screens", screens: ["aesthetic", "designer"] },
         ],
@@ -437,8 +437,8 @@ const shmood: CaseSection[] = [
           {
             type: "wins",
             items: [
-              "Providing a high level overview of project progress and key action items",
-              "Insuring streamlined access to all necessary resources, all in one place",
+              "Providing a high-level overview of project progress and key action items",
+              "Ensuring streamlined access to all necessary resources, all in one place",
             ],
           },
         ],
@@ -493,7 +493,7 @@ const shmood: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            body: "However, I realized that too many widgets on the dashboard can lead to a cognitive overload for the users, distracting users from the key tasks and Shmood’s value proposition: Feedback Forms and Shmood Boards.\n\nI decided to keep the relevant widgets and consolidate others to make a more impactful dashboard experience.",
+            body: "However, I realized that too many widgets on the dashboard can lead to cognitive overload, distracting users from the key tasks and Shmood’s value proposition: Feedback Forms and Shmood Boards.\n\nI decided to keep the relevant widgets and consolidate others to make a more impactful dashboard experience.",
           },
           {
             type: "boxes",
@@ -517,7 +517,7 @@ const shmood: CaseSection[] = [
               },
               {
                 title: "Your Boards",
-                text: "A space for designers to ideate, create Shmood boards, and case their work",
+                text: "A space for designers to ideate, create Shmood boards, and showcase their work",
               },
             ],
           },
@@ -566,12 +566,12 @@ const crowdvolt: CaseSection[] = [
             impacts: [
               {
                 label: "Decreased user confusion and errors",
-                value: "50% less complaints, 1-day eng turnaround",
+                value: "50% fewer complaints, 1-day eng turnaround",
                 sub: ["Owned 3 user flows end-to-end", "Analysis on PostHog"],
               },
               {
                 label: "Increased social media presence",
-                value: "10k follower, 1M engagement",
+                value: "10k followers, 1M engagement",
                 sub: ["100+ graphic assets", "300 person app launch event"],
               },
               { label: "Redesigned empty state UI", value: "50+ variations" },
@@ -580,8 +580,8 @@ const crowdvolt: CaseSection[] = [
             moreTime: [
               "Learn how to connect to back-end code",
               "Conduct user interviews",
-              "Create an internal tool to keep up with design system changes on code base",
-              "Learn more about operations side and how more problems get identified",
+              "Create an internal tool to keep up with design system changes in the codebase",
+              "Learn more about the operations side and how problems get identified",
             ],
             footnote:
               "If you’re reading this, special thanks to the CrowdVolt team and Sana for helping me grow so much.",
@@ -602,7 +602,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "At CrowdVolt, I designed product features from scratch and took over others partway through. I also spearheaded graphics, social media, and event planning.",
-            body: "Working at a consumer-facing startup meant that I had to work across multiple flows and multiple functions at a rapid pace. The content that I am presenting in this case study are just 2 of many flows that I made, but I think it represents the scope of what I was creating over the 9 months.\n\nYou might notice that there is a lack of low fidelity and mid fidelity prototypes, and that is because CrowdVolt has an existing codebase and design system in which I built off of that because the flows had to be shipped at a very fast pace.",
+            body: "Working at a consumer-facing startup meant that I had to work across multiple flows and multiple functions at a rapid pace. The flows I am presenting in this case study are just 2 of many that I made, but I think they represent the scope of what I was creating over the 9 months.\n\nYou might notice that there is a lack of low- and mid-fidelity prototypes. That is because CrowdVolt has an existing codebase and design system that I built on, since the flows had to be shipped at a very fast pace.",
           },
         ],
       },
@@ -647,7 +647,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "Once a buyer places a bid and a seller matches it, the transaction is automatically processed",
-            body: "It causes high user confusion, since users are accustomed to secondary confirmation whether they want to buy the ticket or not",
+            body: "It causes high user confusion, since users are accustomed to a second confirmation of whether they want to buy the ticket.",
           },
           { type: "flow", steps: bidSteps, skip: [2] },
         ],
@@ -664,7 +664,7 @@ const crowdvolt: CaseSection[] = [
           { type: "flow", steps: bidSteps, frictionAfter: [0, 1] },
           {
             type: "callout",
-            text: "Final decision was to add friction while buyer is placing the bid",
+            text: "The final decision was to add friction while the buyer is placing the bid",
             body: "Adding friction after the sale would make buyers come back to the platform to confirm it. That extra step could put them off, and some would drop off before finishing the purchase.",
           },
         ],
@@ -693,7 +693,7 @@ const crowdvolt: CaseSection[] = [
                   "bid-checkbox",
                   "Bid warning embedded in the review page as checkboxes",
                 ),
-                caption: "Embed to current page as checkbox",
+                caption: "Embedded in the current page as a checkbox",
                 // zooms in on the checkboxes, ticks them, zooms back out — on a loop
                 live: "review-checkboxes",
               },
@@ -773,7 +773,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "The manual ticket transfer process is complicated, but we need it to be smooth for the user",
-            body: "The manual transfer process involves sending tickets to the CrowdVolt inventory and CrowdVolt sends them to the buyer",
+            body: "The manual transfer process involves the seller sending tickets to CrowdVolt’s inventory, and CrowdVolt then sending them to the buyer.",
           },
           {
             type: "blockers",
@@ -787,13 +787,13 @@ const crowdvolt: CaseSection[] = [
               {
                 label: "Blocker 2",
                 title: "Send individual tickets",
-                text: "Each ticket can sell on its own, but every ticket needs its own email, which gets messy",
+                text: "Each ticket can sell on its own, but every ticket needs its own email, which gets messy.",
                 w: 293,
               },
               {
                 label: "Blocker 3",
                 title: "Make tickets sellable",
-                text: "Sells best, because buyers can pick how many they want, but it takes more steps",
+                text: "Sells best, because buyers can pick how many they want, but it takes more steps.",
                 w: 309,
               },
             ],
@@ -807,7 +807,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "I started mapping out the happy path to understand the optimal user flow",
-            body: "Our platform is used in many different real-world situations, so I prioritized the factors that matter most in each one",
+            body: "Our platform is used in many different real-world situations, so I prioritized the factors that matter most in each one.",
           },
           {
             type: "sketch",
@@ -841,14 +841,14 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "The existing system used text-based instructions which conflicted with ease of comprehension and an efficient flow",
-            body: "I iterated on visual artifacts to help users understand how the grouping of their tickets would affect their sales. My initial exploration included a comprehensive visual multiple choice system that gives the user full liberty on how they want to sell their tickets.",
+            text: "The existing system used text-based instructions that conflicted with ease of comprehension and an efficient flow",
+            body: "I iterated on visual artifacts to help users understand how the grouping of their tickets would affect their sales. My initial exploration included a comprehensive visual multiple-choice system that gives the user full freedom over how they want to sell their tickets.",
           },
           { type: "phones", screens: ["explore-4", "explore-6"] },
           {
             type: "callout",
             text: "The major problem:",
-            body: "Giving the users full liberty also means they would have to fully comprehend the system. This conflicts with ease of comprehension and a fast flow, which will cause users to inherently not trust the flow since they need to go through so much copy and decision making.",
+            body: "Giving users full freedom also means they would have to fully understand the system. This conflicts with ease of comprehension and a fast flow, and would make users distrust the flow, since they’d have to wade through so much copy and decision-making.",
           },
         ],
       },
@@ -865,7 +865,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "I created a post-listing feedback center which helps users understand and troubleshoot their ticket transfer status",
-            body: "This screen is necessary to put in a user’s listings page as users need to know if their transfers are successful, if they want to pick up the transfer process at a later time, or if they want to troubleshoot a transfer error. This reduces the traffic on our help center and increases a user’s sense of trust and security.",
+            body: "This screen belongs on a user’s listings page, as users need to know if their transfers are successful, if they want to pick up the transfer process at a later time, or if they want to troubleshoot a transfer error. This reduces the traffic on our help center and increases a user’s sense of trust and security.",
           },
           // Figma 14873:1228 / 14886:3593 (CrowdVolt web file)
           { type: "phones", screens: ["status-one", "status-batch"] },
@@ -882,7 +882,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "We launched a beta and watched how 50 initial users navigated the new flow",
-            body: "This resulted in minor copy changes to increase trustability and clarity. The overall flow was kept the same because we saw that users were able to complete transactions and did not refer to the help center after completing a flow. Having post-launch iteration is super important to make sure our intentions come across the way we intended to.",
+            body: "This resulted in minor copy changes to increase trustability and clarity. The overall flow was kept the same because we saw that users were able to complete transactions and did not refer to the help center after completing a flow. Having post-launch iteration is super important to make sure our designs come across the way we intended.",
           },
         ],
       },
@@ -901,7 +901,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "A collection of visual assets I created for CrowdVolt",
-            body: "Being at a startup means I have to take on multiple roles, one of which I had large ownership over was graphics and social media. The following are examples of visual assets I created for social media, print, and interface purposes.",
+            body: "Being at a startup meant taking on multiple roles, and one I had large ownership over was graphics and social media. The following are examples of visual assets I created for social media, print, and interface purposes.",
           },
         ],
       },
@@ -947,7 +947,7 @@ const crowdvolt: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "The design team, myself and my supervisor, spearheaded a 300 RSVP app launch party, from ideation to execution.",
+            text: "The design team (my supervisor and I) spearheaded a 300-RSVP app launch party, from ideation to execution.",
           },
         ],
       },
@@ -1028,7 +1028,7 @@ const inquirer: CaseSection[] = [
           {
             type: "callout",
             text: "The Philadelphia Inquirer wanted to expand readership, enhance engagement, and diversify content.",
-            body: "The Philadelphia Inquirer came to our team needing us to design a holistic experience for their new audio format news. This also came with the needs to appeal to users across different generations and comfortability with technology. Designing a holistic experience does not only mean slapping on an audio option on every article, but also thinking about other features that feed into it, including personalization.",
+            body: "The Philadelphia Inquirer came to our team needing us to design a holistic experience for their new audio format news. This also came with the need to appeal to users across different generations and levels of comfort with technology. Designing a holistic experience doesn’t only mean slapping an audio option on every article; it also means thinking about other features that feed into it, including personalization.",
           },
         ],
       },
@@ -1058,13 +1058,13 @@ const inquirer: CaseSection[] = [
             type: "callout",
             boxed: true,
             text: "Falling behind in the news industry",
-            body: "Many news giants such as The New York Times, The Washington Post, and many more have started to incorporate audio and cross-device integration to keep up with the changing landscape of tech. This includes podcasts, text to speech, CarPlay, and many other forms of news that are outside the traditional text space. The Philadelphia Inquirer was falling behind and needed to keep up with this change.",
+            body: "News giants such as The New York Times and The Washington Post have started to incorporate audio and cross-device integration to keep up with the changing landscape of tech. This includes podcasts, text-to-speech, CarPlay, and many other forms of news that are outside the traditional text space. The Philadelphia Inquirer was falling behind and needed to keep up with this change.",
           },
           {
             type: "callout",
             boxed: true,
             text: "A dying viewership in Gen Z audiences",
-            body: "A large percentage of their users fall in the age range of Millennial or older, with outdated systems and an overall reading crisis mainly to blame. They needed to re-engage with younger generations to maintain their spot as a Pennsylvania powerhouse.",
+            body: "A large percentage of their users are Millennials or older, with outdated systems and an overall reading crisis mainly to blame. They needed to re-engage with younger generations to maintain their spot as a Pennsylvania powerhouse.",
           },
           {
             type: "callout",
@@ -1139,7 +1139,7 @@ const inquirer: CaseSection[] = [
           {
             type: "callout",
             text: "We interviewed over 25 users of different age ranges to understand their perception of news consumption",
-            body: "There were a plethora of insights that we found ranging from trust in AI to engagement, but these are the key findings that were core to my designs in personalization:",
+            body: "We found a plethora of insights, ranging from trust in AI to engagement, but these are the key findings that were core to my designs in personalization:",
           },
           {
             type: "wins",
@@ -1171,7 +1171,7 @@ const inquirer: CaseSection[] = [
               {
                 type: "callout",
                 text: "Exploration starts on paper",
-                body: "I started my process through sketches. At this point, the team was still figuring out what we needed to work on, so my iterations expanded beyond personalization. Pairing these lo-fi iterations with user research led me to spearhead the engagement layer.",
+                body: "I started my process with sketches. At this point, the team was still figuring out what we needed to work on, so my iterations expanded beyond personalization. Pairing these lo-fi iterations with user research led me to spearhead the engagement layer.",
               },
               {
                 type: "figures",
@@ -1224,8 +1224,8 @@ const inquirer: CaseSection[] = [
         blocks: [
           {
             type: "callout",
-            text: "The final design touches on user needs of removing choice paralysis, being more visual, and being low effort",
-            body: "This design was validated by the Inquirer team by fitting business needs, feasibility, and user needs. The designs were created based on the iPhone 14 screens, to make handoff to engineers smoother according to the Inquirer workflow.",
+            text: "The final design addresses the user needs we found: less choice paralysis, more visuals, and low effort",
+            body: "The Inquirer team validated this design as meeting business needs, technical feasibility, and user needs. I designed it on iPhone 14 screens to make handoff to engineers smoother, following the Inquirer’s workflow.",
           },
           { type: "philly" },
         ],

@@ -73,7 +73,7 @@ export const projects: Project[] = [
     href: "https://www.behance.net/gallery/217571883/Shmood-x-DCC-FA24",
     video: "/projects/shmood.mp4",
     intro:
-      "Shmood is an AI-powered creative management tool: a project management platform that bridges the gap between designers and clients through centralized resources, smart communication, and AI-powered feedback synthesis. I owned its onboarding experience and user dashboard.",
+      "Shmood is a creative management tool: a project management platform that bridges the gap between designers and clients through centralized resources, smart communication, and AI-powered feedback synthesis. I owned its onboarding experience and user dashboard.",
     facts: {
       timeline: "Aug 2024 – Dec 2024",
       role: "Contract Product Designer",
@@ -94,7 +94,7 @@ export const projects: Project[] = [
     href: "/?project=inquirer",
     video: "/projects/inquirer.mp4",
     intro:
-      "The Philadelphia Inquirer is Pennsylvania’s largest daily newspaper and media outlet with over 170,000 active users. My team and I worked with them to achieve a holistic audio experience and its edge cases. I ultimately owned a new personalization feature.",
+      "The Philadelphia Inquirer is Pennsylvania’s largest daily newspaper and media outlet with over 170,000 active users. My team and I worked with them to design a holistic audio experience, edge cases included. I ultimately owned a new personalization feature.",
     facts: {
       timeline: "Feb 2025 – May 2025",
       role: "Contract Product Designer",
