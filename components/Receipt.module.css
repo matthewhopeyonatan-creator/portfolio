@@ -703,7 +703,15 @@
      layout's height (853) above the middle; the big one sits in the bottom-left corner of the page */
   .tomatoes {
     --sx: calc(50% - 752 * var(--ru));
-    --sy: calc(50% - 426 * var(--ru));
+    --sy: calc(50% - 395.5 * var(--ru)); /* the slip (791 tall) is centred on its own */
+  }
+  /* the slip alone is centred between the navbar and the bottom of the window (equal space above
+     and below it); "flip me!" hangs just under it, outside that */
+  .actions {
+    position: absolute;
+    top: calc(100% + 20 * var(--ru));
+    left: 0;
+    right: 0;
   }
   .tomatoLeft {
     left: calc(-300 * var(--ru));
