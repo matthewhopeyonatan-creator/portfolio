@@ -4,7 +4,6 @@ import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
 import ThemeToggle from "@/components/ThemeToggle";
-import FlapWord from "@/components/FlapWord";
 import ThemedPair from "@/components/ThemedPair";
 import { useCart } from "@/components/cart/CartContext";
 import { stickerItems } from "@/data/site";
@@ -565,11 +564,9 @@ export default function Hero() {
       <p ref={headlineRef} className={styles.headline}>
         <span className={`${styles.line} ${styles.nameLine}`}>
           Matthew Hope
-          {/* Figma 538:1620: the changing word at its top right; rolls in as the name rises (--text-delay) */}
-          <FlapWord className={styles.nameTag} startIn={skip ? 1050 : 3300} />
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
-          Evil scientist (jk lol) turned designer based in New Yawrkkkk
+          Evil scientist (muahaha) turned designer based in New Yawrkkkk
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
           Creating with the same rigor, for solutions people enjoy using
