@@ -1,11 +1,11 @@
-// Site-wide links. Placeholders point at the current Framer site until the new pages exist.
+// Site-wide links.
 export const navLinks = [
   { label: "about", href: "/about" },
   { label: "projects", href: "/#seasonal-picks" },
   { label: "graphics", href: "/graphics" },
 ];
 
-// Footer social links. TODO: add the X handle.
+// Footer social links.
 export const socialLinks = [
   { label: "Email", href: "mailto:matthew.hope.yonatan@gmail.com?subject=HOPES%20GROCER" },
   { label: "Instagram", href: "https://www.instagram.com/hopegoestoplay/" },
