@@ -297,7 +297,7 @@
 }
 
 /* ── Headline — Figma 523:926: "MATTHEW HOPE" Host Grotesk Bold 128 (−6.4 tracking, normal
-   leading), then two lines Regular 40 / 40 (−0.8 tracking); the block sits 6 below the navbar
+   leading), then two lines Regular 32/30 (−0.64 tracking), then the grey "currently" line; the block sits 6 below the navbar
    rule, 37 from the left (Figma's x). Each line rises in after the tomatoes. ── */
 .headline {
   position: absolute;
@@ -327,9 +327,34 @@
 }
 
 .subLine {
-  font-size: max(17px, calc(40 * var(--hu)));
-  line-height: 1;
+  font-size: max(15px, calc(32 * var(--hu)));
+  line-height: 0.9375; /* 30 / 32 */
   letter-spacing: -0.02em;
+}
+
+/* Figma 546:1666: 16 under the two lines, Regular 20/30 caps (−0.02em) in a mid grey (#6b6b6b in
+   light mode, made from the ink so dark mode follows), the places underlined and linking out */
+.nowLine {
+  margin-top: calc(16 * var(--hu));
+  font-size: max(12px, calc(20 * var(--hu)));
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ink) 65%, var(--color-bg));
+}
+
+.nowLine a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  transition: color var(--dur-hover) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nowLine a:hover {
+    color: var(--color-ink);
+  }
 }
 
 .line {
@@ -365,6 +390,10 @@
 
 .play .line:nth-child(3) {
   animation-delay: calc(var(--text-delay) + 280ms);
+}
+
+.play .line:nth-child(4) {
+  animation-delay: calc(var(--text-delay) + 420ms);
 }
 
 @keyframes lineIn {
@@ -614,6 +643,11 @@
     font-size: calc(17 * var(--m));
     line-height: 1.2;
     text-wrap: balance; /* a wrapped line breaks evenly, never leaving one word alone */
+  }
+  .nowLine {
+    margin-top: calc(10 * var(--m));
+    font-size: calc(12 * var(--m));
+    line-height: 1.4;
   }
   /* the switch lives in the menu sheet on phones */
   .themeToggle {

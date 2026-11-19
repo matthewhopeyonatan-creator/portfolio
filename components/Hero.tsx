@@ -506,6 +506,21 @@ export default function Hero() {
         <span className={`${styles.line} ${styles.subLine}`}>
           Creating with the same rigor, for solutions that people enjoy using
         </span>
+        {/* Figma 546:1666: where I am and have been, grey caps, each place linking out */}
+        <span className={`${styles.line} ${styles.nowLine}`}>
+          Currently{" "}
+          <a href="https://25madison.com" target="_blank" rel="noopener noreferrer">
+            25Madison
+          </a>
+          , prev{" "}
+          <a href="https://www.crowdvolt.com" target="_blank" rel="noopener noreferrer">
+            CrowdVolt (YC24)
+          </a>
+          ,{" "}
+          <a href="https://www.inquirer.com" target="_blank" rel="noopener noreferrer">
+            The Philadelphia Inquirer
+          </a>
+        </span>
       </p>
 
       {/* Figma 210:5291 — light / dark switch, top right of the landing */}
