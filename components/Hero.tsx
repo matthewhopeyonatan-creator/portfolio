@@ -569,10 +569,10 @@ export default function Hero() {
           <FlapWord className={styles.nameTag} startIn={skip ? 1050 : 3300} />
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
-          Agricultural scientist turned designer based in NYC
+          Agricultural scientist turned designer based in New Yawrkkkk
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
-          Creating with the same rigor, for solutions that people enjoy using
+          Creating with the same rigor, for solutions people enjoy using
         </span>
         {/* Figma 546:1666: where I am and have been, grey caps, each place linking out */}
         <span className={`${styles.line} ${styles.nowLine}`}>
