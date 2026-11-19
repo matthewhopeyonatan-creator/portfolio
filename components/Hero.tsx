@@ -569,7 +569,7 @@ export default function Hero() {
           <FlapWord className={styles.nameTag} startIn={skip ? 1050 : 3300} />
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
-          Agricultural scientist turned designer based in New Yawrkkkk
+          Evil scientist (jk lol) turned designer based in New Yawrkkkk
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
           Creating with the same rigor, for solutions people enjoy using
