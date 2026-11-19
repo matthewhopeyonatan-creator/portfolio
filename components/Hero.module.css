@@ -235,33 +235,33 @@
 
 /* as it lands, each tomato starts floating very slightly, its stickers riding along (they're
    inside it): it eases off its resting point to one end, then sways end to end on a sine curve
-   (eased in and out, so it never jolts). Each has its own pace around 2.5s a full up-and-down and
+   (eased in and out, so it never jolts). Each has its own pace, about 1s up and 1s down and
    neighbours set off in opposite directions (--bob-sign), so no two are ever at the same point. It
    runs on `translate`, separate from the drop's `transform`, and keeps going whatever the pointer
    does. --float-start: once the drop has all but settled (its long tail is barely moving). */
 .tomato {
-  --bob: max(3px, calc(4.5 * var(--hu)));
-  --bob-dur: 2.5s;
+  --bob: max(5px, calc(8 * var(--hu)));
+  --bob-dur: 2s;
   --bob-sign: 1;
   --ease-sine: cubic-bezier(0.37, 0, 0.63, 1); /* easeInOutSine */
   --float-start: calc(var(--tomato-delay, 0ms) + var(--tomato-dur, 1700ms) * 0.55);
 }
 
 .tomato:nth-child(1) {
-  --bob-dur: 2.4s;
+  --bob-dur: 1.9s;
 }
 
 .tomato:nth-child(2) {
-  --bob-dur: 2.65s;
+  --bob-dur: 2.1s;
   --bob-sign: -1;
 }
 
 .tomato:nth-child(3) {
-  --bob-dur: 2.5s;
+  --bob-dur: 2s;
 }
 
 .tomato:nth-child(4) {
-  --bob-dur: 2.8s;
+  --bob-dur: 2.2s;
   --bob-sign: -1;
 }
 
