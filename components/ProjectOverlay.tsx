@@ -20,6 +20,7 @@ import ShmoodDashboard from "@/components/ShmoodDashboard";
 import TicketmasterPhones from "@/components/TicketmasterPhones";
 import { addView } from "@/lib/visit";
 import ThemedPair from "@/components/ThemedPair";
+import SiteFooter from "@/components/SiteFooter";
 import styles from "./ProjectOverlay.module.css";
 
 const LOREM =
@@ -1037,6 +1038,20 @@ export default function ProjectOverlay({
                 last words rather than over them; inside the study so the tracker stays put */}
             {study && expanded ? <EndTomatoes /> : null}
           </div>
+          {/* the site footer closes every case study too; its page links close the case study first */}
+          {expanded ? (
+            <div
+              onClickCapture={(e) => {
+                const a = (e.target as HTMLElement).closest("a");
+                const href = a?.getAttribute("href");
+                if (!href || !href.startsWith("/") || e.metaKey || e.ctrlKey || e.shiftKey) return;
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent("overlay:navigate", { detail: href }));
+              }}
+            >
+              <SiteFooter />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>,

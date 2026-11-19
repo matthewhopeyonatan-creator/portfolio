@@ -280,7 +280,8 @@ html.modal-open {
 
 @media (max-width: 767px) {
   html.project-open main,
-  html.project-open footer {
+  html.project-open body > footer,
+  html.project-open main ~ footer {
     visibility: hidden;
   }
 }
