@@ -410,6 +410,12 @@
 }
 
 .cvStepLabel {
+  /* every label gets two lines' room and sits on its bottom, so the dots stay in one straight row
+     when a label wraps */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 2.6667em;
   font-size: max(12px, calc(24 * var(--pu)));
   line-height: 1.3333;
   letter-spacing: -0.03em;
