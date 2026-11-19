@@ -228,53 +228,58 @@
   animation:
     tomatoDrop var(--tomato-dur) cubic-bezier(0.22, 1, 0.32, 1) var(--tomato-delay) both,
     tomatoFade 800ms cubic-bezier(0.33, 0, 0.2, 1) var(--tomato-delay) both,
-    tomatoBob var(--bob-dur) linear calc(var(--tomato-delay) + var(--tomato-dur)) infinite var(--bob-dir);
+    tomatoFloatIn calc(var(--bob-dur) / 4) var(--ease-sine) var(--float-start) both,
+    tomatoFloat calc(var(--bob-dur) / 2) var(--ease-sine) calc(var(--float-start) + var(--bob-dur) / 4) infinite alternate;
   will-change: transform, opacity, translate;
 }
 
-/* once landed, each tomato floats very slightly, its stickers riding along (they're inside it).
-   Each has its own pace and neighbours set off in opposite directions (--bob-dir), so no two are
-   ever at the same point. It runs on `translate`, separate from the drop's `transform`, starts
-   from rest so nothing jumps, and keeps going whatever the pointer does. */
+/* as it lands, each tomato starts floating very slightly, its stickers riding along (they're
+   inside it): it eases off its resting point to one end, then sways end to end on a sine curve
+   (eased in and out, so it never jolts). Each has its own pace around 2.5s a full up-and-down and
+   neighbours set off in opposite directions (--bob-sign), so no two are ever at the same point. It
+   runs on `translate`, separate from the drop's `transform`, and keeps going whatever the pointer
+   does. --float-start: once the drop has all but settled (its long tail is barely moving). */
 .tomato {
   --bob: max(3px, calc(4.5 * var(--hu)));
-  --bob-dur: 5.6s;
-  --bob-dir: normal;
+  --bob-dur: 2.5s;
+  --bob-sign: 1;
+  --ease-sine: cubic-bezier(0.37, 0, 0.63, 1); /* easeInOutSine */
+  --float-start: calc(var(--tomato-delay, 0ms) + var(--tomato-dur, 1700ms) * 0.55);
 }
 
 .tomato:nth-child(1) {
-  --bob-dur: 5.2s;
+  --bob-dur: 2.4s;
 }
 
 .tomato:nth-child(2) {
-  --bob-dur: 6.3s;
-  --bob-dir: reverse;
+  --bob-dur: 2.65s;
+  --bob-sign: -1;
 }
 
 .tomato:nth-child(3) {
-  --bob-dur: 5.7s;
+  --bob-dur: 2.5s;
 }
 
 .tomato:nth-child(4) {
-  --bob-dur: 6.8s;
-  --bob-dir: reverse;
+  --bob-dur: 2.8s;
+  --bob-sign: -1;
 }
 
-@keyframes tomatoBob {
-  0% {
+@keyframes tomatoFloatIn {
+  from {
     translate: 0 0;
-    animation-timing-function: cubic-bezier(0.61, 1, 0.88, 1); /* sine out: eases into the top */
   }
-  25% {
-    translate: 0 calc(-1 * var(--bob));
-    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); /* sine in-out: top → bottom */
+  to {
+    translate: 0 calc(-1 * var(--bob-sign) * var(--bob));
   }
-  75% {
-    translate: 0 var(--bob);
-    animation-timing-function: cubic-bezier(0.12, 0, 0.39, 0); /* sine in: back to rest at speed */
+}
+
+@keyframes tomatoFloat {
+  from {
+    translate: 0 calc(-1 * var(--bob-sign) * var(--bob));
   }
-  100% {
-    translate: 0 0;
+  to {
+    translate: 0 calc(var(--bob-sign) * var(--bob));
   }
 }
 
