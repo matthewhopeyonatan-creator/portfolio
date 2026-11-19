@@ -13,11 +13,10 @@ export const socialLinks = [
 ];
 
 // the receipt page's contact icons (Figma 533:1601), in this order
-// TODO: LinkedIn — Matthew's profile URL still needed
 export const contactLinks = [
   { label: "X", icon: "x", href: "https://x.com/matthopeyy" },
   { label: "Instagram", icon: "instagram", href: "https://www.instagram.com/hopegoestoplay/" },
-  { label: "LinkedIn", icon: "linkedin", href: "https://www.linkedin.com/" },
+  { label: "LinkedIn", icon: "linkedin", href: "https://www.linkedin.com/in/matthewhope1/" },
   { label: "Email", icon: "email", href: "mailto:matthew.hope.yonatan@gmail.com?subject=HOPES%20GROCER" },
 ] as const;
 
@@ -103,7 +102,7 @@ export const projects: Project[] = [
     href: "/?project=inquirer",
     video: "/projects/inquirer.mp4",
     intro:
-      "The Philadelphia Inquirer is Pennsylvania’s largest daily newspaper and media outlet with over 170,000 active users. My team and I worked with them to design a holistic audio experience, edge cases included. I ultimately owned a new personalization feature.",
+      "The Philadelphia Inquirer is Pennsylvania’s largest daily newspaper and media outlet with over 180,000 active users. My team and I worked with them to design a holistic audio experience, edge cases included. I ultimately owned a new personalization feature.",
     facts: {
       timeline: "Feb 2025 – May 2025",
       role: "Contract Product Designer",

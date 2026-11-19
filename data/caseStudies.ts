@@ -676,7 +676,7 @@ const crowdvolt: CaseSection[] = [
           {
             type: "callout",
             text: "Should the friction be added as a separate page or embedded in the current flow?",
-            body: "After identifying the core part of the problem, I realized there were two places to add friction",
+            body: "After identifying where friction should be added, I created 2 iterations that have different ways of adding friction. The first one is to add a totally separate warning page, which adds a lot more friction than the second choice which is to just embed a secondary checkbox.",
           },
           {
             type: "figures",
@@ -1039,7 +1039,7 @@ const inquirer: CaseSection[] = [
           {
             type: "callout",
             text: "Pennsylvania’s largest media outlet",
-            body: "The Philadelphia Inquirer is the third-longest-running media outlet in the United States and the largest one in the Philadelphia Metropolitan Area and Pennsylvania. They have 170,000 active users and are constantly looking to keep up with the ever-changing news landscape.",
+            body: "The Philadelphia Inquirer is the third-longest-running media outlet in the United States and the largest one in the Philadelphia Metropolitan Area and Pennsylvania. They have 180,000 active users and are constantly looking to keep up with the ever-changing news landscape.",
           },
         ],
       },

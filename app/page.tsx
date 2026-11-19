@@ -9,7 +9,7 @@ import styles from "./page.module.css";
 
 /**
  * A shared project link (/?project=slug, which opens that case study) gets its own link preview:
- * the project's tray as the picture (public/og/<slug>.jpg, a still of the homepage tray) and the
+ * the project's tray as the picture (public/og/<slug>-v2.jpg, a still of the project preview on the homepage) and the
  * project's name. Any other link to the homepage keeps the site's own preview (layout.tsx).
  */
 export async function generateMetadata({
@@ -21,7 +21,7 @@ export async function generateMetadata({
   const p = projects.find((x) => x.slug === slug);
   if (!p) return {};
   const title = `${p.title} — hope’s grocer`;
-  const image = { url: `/og/${p.slug}.jpg`, width: 1200, height: 630, alt: `${p.title}: ${p.subtitle}` };
+  const image = { url: `/og/${p.slug}-v2.jpg`, width: 1200, height: 630, alt: `${p.title}: ${p.subtitle}` };
   return {
     title,
     description: p.subtitle,

@@ -644,19 +644,11 @@
   }
 }
 
-/* narrow screens: a size down, so "THANKS FOR" stays on one line */
+/* narrow screens keep the receipt page as it was: just the slip, no thank-you or links */
 @media (max-width: 1023px) {
-  .thanks {
-    font-size: min(52px, calc(128 * var(--ru)));
+  .copy {
+    display: none;
   }
-  .lede {
-    font-size: min(22px, calc(40 * var(--ru)));
-  }
-}
-
-/* narrow: the copy rises in under the slip once it has printed, with the buttons */
-.copy > * {
-  animation: actionsIn 450ms var(--ease-out) 4900ms backwards;
 }
 
 /* ── wide screens (Figma 533:1333): the slip on the left at 112, the copy from 736 — 102 apart,
