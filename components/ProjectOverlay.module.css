@@ -1411,14 +1411,12 @@
 
 /* ── the end of every case study: three blurred tomatoes (the receipt's) in a band of their own
    under the last section, spanning the full width and never over text; the page stops partway
-   down them (the footer follows), their soft tops left uncut. It lives inside the study, so the
-   sticky tracker stays where it is to the very end. Big one left, a slightly smaller one touching
-   the right edge, the see-through one behind it. ── */
+   down them (the footer follows), their soft tops left uncut. It comes after the study, so the
+   sticky tracker scrolls away with the last section and never meets them. Big one left, a
+   slightly smaller one cut by the right edge, the see-through one behind it. ── */
 .endTomatoes {
   position: relative;
-  grid-column: 1 / -1;
   height: calc(560 * var(--pu));
-  margin: calc(40 * var(--pu)) -40px calc(-160 * var(--pu)); /* edge to edge, to the study's end */
   clip-path: inset(-400px 0 0 0); /* cut at the sides and the bottom; the blur keeps its soft top */
   pointer-events: none;
 }
@@ -1436,26 +1434,21 @@
 }
 
 .end-back {
-  right: calc(150 * var(--pu));
+  right: calc(-20 * var(--pu));
   top: calc(-10 * var(--pu));
   width: calc(622 * var(--pu));
 }
 
-/* its body's right edge (the art's last 52 are blur) meets the right side of the page */
+/* well over to the right, the page's edge cutting into it */
 .end-right {
-  right: calc(-52 * var(--pu));
+  right: calc(-230 * var(--pu));
   top: calc(150 * var(--pu));
   width: calc(719 * var(--pu));
-}
-
-.toc {
-  z-index: 1; /* over the tomatoes as they pass under it */
 }
 
 @media (max-width: 767px) {
   .endTomatoes {
     height: 330px;
-    margin: 24px -20px -96px;
   }
   .end-left {
     left: -210px;

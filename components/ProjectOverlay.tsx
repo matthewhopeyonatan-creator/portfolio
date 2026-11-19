@@ -1034,10 +1034,10 @@ export default function ProjectOverlay({
                 </a>
               )}
             </div>
-            {/* the case study ends on a bed of tomatoes, the page extended so they sit under the
-                last words rather than over them; inside the study so the tracker stays put */}
-            {study && expanded ? <EndTomatoes /> : null}
           </div>
+          {/* the case study ends on a bed of tomatoes, the page extended so they sit under the last
+              words rather than over them; after the study, so the tracker leaves before they come */}
+          {study && expanded ? <EndTomatoes /> : null}
           {/* the site footer closes every case study too; its page links close the case study first */}
           {expanded ? (
             <div
