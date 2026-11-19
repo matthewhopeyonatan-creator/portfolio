@@ -232,17 +232,31 @@
   will-change: transform, opacity, translate;
 }
 
-/* once landed, each tomato bobs very slightly and slowly, its stickers riding along (they're inside
-   it); neighbours go opposite ways (--bob-dir), so they never all move together. It runs on
-   `translate`, separate from the drop's `transform`, starts from rest so nothing jumps, and keeps
-   going whatever the pointer does. */
+/* once landed, each tomato floats very slightly, its stickers riding along (they're inside it).
+   Each has its own pace and neighbours set off in opposite directions (--bob-dir), so no two are
+   ever at the same point. It runs on `translate`, separate from the drop's `transform`, starts
+   from rest so nothing jumps, and keeps going whatever the pointer does. */
 .tomato {
-  --bob: max(4px, calc(7 * var(--hu)));
-  --bob-dur: 9s;
+  --bob: max(3px, calc(4.5 * var(--hu)));
+  --bob-dur: 5.6s;
   --bob-dir: normal;
 }
 
-.tomato:nth-child(even) {
+.tomato:nth-child(1) {
+  --bob-dur: 5.2s;
+}
+
+.tomato:nth-child(2) {
+  --bob-dur: 6.3s;
+  --bob-dir: reverse;
+}
+
+.tomato:nth-child(3) {
+  --bob-dur: 5.7s;
+}
+
+.tomato:nth-child(4) {
+  --bob-dur: 6.8s;
   --bob-dir: reverse;
 }
 
