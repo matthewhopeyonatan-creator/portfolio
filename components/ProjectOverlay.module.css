@@ -509,10 +509,11 @@
   right: 0;
   bottom: calc(38.5 * var(--pu));
   transform: translate(50%, 50%);
-  padding: calc(8 * var(--pu)) calc(12 * var(--pu));
+  /* a size down (16, not 24) so it sits clear of the dots either side */
+  padding: calc(5 * var(--pu)) calc(9 * var(--pu));
   border: 1.5px solid var(--color-ink);
   background: var(--color-box); /* the box it sits on */
-  font-size: max(11px, calc(24 * var(--pu)));
+  font-size: max(11px, calc(16 * var(--pu)));
   line-height: normal;
   letter-spacing: -0.03em;
   white-space: nowrap;
