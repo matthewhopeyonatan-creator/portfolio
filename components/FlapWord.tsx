@@ -10,7 +10,7 @@ import styles from "./FlapWord.module.css";
  * no pause and nothing jumps. Letters are never cut. The first word rises in the moment the name
  * appears. Decorative (aria-hidden).
  */
-const WORDS = ["friend", "dancer", "hiker", "creative", "foodie", "traveller"];
+const WORDS = ["friend", "cook", "dancer", "hiker", "creative", "foodie", "traveller"];
 const HOLD = 2600; // ms each word stays up
 
 const Letters = ({ text, className }: { text: string; className: string }) => (
