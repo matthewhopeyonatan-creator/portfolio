@@ -227,8 +227,41 @@
   --tomato-delay: calc(var(--tomato-start) + var(--i) * var(--tomato-stagger));
   animation:
     tomatoDrop var(--tomato-dur) cubic-bezier(0.22, 1, 0.32, 1) var(--tomato-delay) both,
-    tomatoFade 800ms cubic-bezier(0.33, 0, 0.2, 1) var(--tomato-delay) both;
-  will-change: transform, opacity;
+    tomatoFade 800ms cubic-bezier(0.33, 0, 0.2, 1) var(--tomato-delay) both,
+    tomatoBob var(--bob-dur) linear calc(var(--tomato-delay) + var(--tomato-dur)) infinite var(--bob-dir);
+  will-change: transform, opacity, translate;
+}
+
+/* once landed, each tomato bobs very slightly and slowly, its stickers riding along (they're inside
+   it); neighbours go opposite ways (--bob-dir), so they never all move together. It runs on
+   `translate`, separate from the drop's `transform`, starts from rest so nothing jumps, and keeps
+   going whatever the pointer does. */
+.tomato {
+  --bob: max(4px, calc(7 * var(--hu)));
+  --bob-dur: 9s;
+  --bob-dir: normal;
+}
+
+.tomato:nth-child(even) {
+  --bob-dir: reverse;
+}
+
+@keyframes tomatoBob {
+  0% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.61, 1, 0.88, 1); /* sine out: eases into the top */
+  }
+  25% {
+    translate: 0 calc(-1 * var(--bob));
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); /* sine in-out: top → bottom */
+  }
+  75% {
+    translate: 0 var(--bob);
+    animation-timing-function: cubic-bezier(0.12, 0, 0.39, 0); /* sine in: back to rest at speed */
+  }
+  100% {
+    translate: 0 0;
+  }
 }
 
 @keyframes tomatoDrop {
@@ -572,7 +605,7 @@
     animation: fadeIn 400ms ease both;
   }
   .play .tomato {
-    animation: fadeInTomato 400ms ease both;
+    animation: fadeInTomato 400ms ease both; /* no bob with reduced motion */
   }
   .play .themeToggle {
     animation: fadeIn 400ms ease var(--text-delay) backwards;
