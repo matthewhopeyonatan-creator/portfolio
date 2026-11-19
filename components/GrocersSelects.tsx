@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { grocersSelects } from "@/data/site";
+import pageStyles from "@/app/page.module.css";
 import styles from "./GrocersSelects.module.css";
 
 /**
@@ -57,10 +58,18 @@ export default function GrocersSelects() {
 
   return (
     <section id="grocers-selects" aria-labelledby="grocers-selects-title">
-      {/* no title on the page: the posters lead (the name stays for screen readers) */}
-      <h2 id="grocers-selects-title" className="visually-hidden">
-        Grocer’s selects
-      </h2>
+      <div className={`${pageStyles.sectionTitleRow} ${pageStyles.titleStack}`}>
+        <h2
+          id="grocers-selects-title"
+          className={`${pageStyles.sectionTitle} ${pageStyles.titleSmall}`}
+          data-reveal="up"
+        >
+          Grocer’s selects
+        </h2>
+        <p className={pageStyles.titleSub} data-reveal="up" style={{ "--i": 1 } as React.CSSProperties}>
+          Some of my favourite graphic design pieces I created for play and for function
+        </p>
+      </div>
       <div className={styles.shelf}>
         <ul ref={gridRef} className={styles.grid}>
           {grocersSelects.map((item, i) => (

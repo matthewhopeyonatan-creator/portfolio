@@ -86,7 +86,7 @@ implements his designs faithfully.
 
 ## Navigation behaviour (keep working)
 
-- Navbar: about → `/about` · projects → `/#seasonal-picks` · graphics → `/graphics` (the poster shelf, `app/graphics/page.tsx`; no longer on the homepage)
+- Navbar: about → `/about` · projects → `/#seasonal-picks` · graphics → `/#grocers-selects` (the poster shelf, back on the homepage under the projects, with the Seasonal Picks and Grocer's Selects titles)
 - Logo on `/` scrolls to top; elsewhere it links home. Cross-page section links land on the section.
 
 ## Motion

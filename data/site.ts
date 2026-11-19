@@ -2,7 +2,7 @@
 export const navLinks = [
   { label: "about", href: "/about" },
   { label: "projects", href: "/#seasonal-picks" },
-  { label: "graphics", href: "/graphics" },
+  { label: "graphics", href: "/#grocers-selects" },
 ];
 
 // Footer social links.
