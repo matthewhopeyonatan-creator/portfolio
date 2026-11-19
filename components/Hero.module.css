@@ -300,9 +300,13 @@
    leading), then two lines Regular 28/30 (−0.02em), then the grey "currently" line; the block sits 6 below the navbar
    rule, 37 from the left (Figma's x). Each line rises in after the tomatoes. ── */
 .headline {
+  /* the name's ink sits exactly on the margins at every size: its "M" starts on the side margin
+     (the letter's own side bearing is 0.047em) and its capitals start the side margin's distance
+     below the navbar (the line box adds 0.297em above the cap height) */
+  --name-size: max(48px, calc(128 * var(--hu)));
   position: absolute;
-  left: calc(var(--gutter) - 3 * var(--hu));
-  top: calc(6 * var(--hu));
+  left: calc(var(--gutter) - 0.047 * var(--name-size));
+  top: calc(var(--gutter) - 0.297 * var(--name-size));
   z-index: 2;
   margin: 0;
   font-weight: 400;
@@ -310,7 +314,7 @@
 }
 
 .nameLine {
-  font-size: max(48px, calc(128 * var(--hu)));
+  font-size: var(--name-size);
   font-weight: 700;
   line-height: normal;
   letter-spacing: -0.05em;
@@ -625,8 +629,10 @@
   /* the name across the 20 margins (353 wide), the two lines under it wrapping; 20 under the
      navbar */
   .headline {
-    left: calc(20 * var(--m));
-    top: calc(20 * var(--m));
+    --name-size: calc(46 * var(--m));
+    /* same rule on the 20 margins (this line box adds 0.178em above the caps) */
+    left: calc(var(--gutter) - 0.047 * var(--name-size));
+    top: calc(var(--gutter) - 0.178 * var(--name-size));
     width: calc(353 * var(--m));
     white-space: normal;
   }
@@ -635,7 +641,7 @@
     display: none;
   }
   .nameLine {
-    font-size: calc(46 * var(--m));
+    font-size: var(--name-size);
     line-height: 1.1;
     margin-bottom: calc(6 * var(--m));
   }
