@@ -4,6 +4,7 @@ import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
 import { useEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
 import ThemeToggle from "@/components/ThemeToggle";
+import FlapWord from "@/components/FlapWord";
 import ThemedPair from "@/components/ThemedPair";
 import { useCart } from "@/components/cart/CartContext";
 import { stickerItems } from "@/data/site";
@@ -494,7 +495,11 @@ export default function Hero() {
       {/* Figma 523:926 — the name (Host Grotesk Bold 128) and two lines under it (Regular 40 / 40);
           each line rises in after the tomatoes */}
       <p className={styles.headline}>
-        <span className={`${styles.line} ${styles.nameLine}`}>Matthew Hope</span>
+        <span className={`${styles.line} ${styles.nameLine}`}>
+          Matthew Hope
+          {/* Figma 538:1620: the changing word at its top right; starts once the lines are up */}
+          <FlapWord className={styles.nameTag} startIn={skip ? 2600 : 5200} />
+        </span>
         <span className={`${styles.line} ${styles.subLine}`}>
           Agricultural scientist turned designer based in NYC
         </span>
