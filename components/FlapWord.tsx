@@ -1,24 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styles from "./FlapWord.module.css";
 
 /**
- * Figma 538:1620 — a small bracketed word at the top right of the name, changing like an old
- * split-flap departures board: every few seconds each letter rolls up through a couple of letters
- * to the next word, one letter just after another, left to right. The first word rolls in the
- * moment the name appears. Decorative (aria-hidden).
+ * Figma 538:1620 — a small bracketed word at the top right of the name that keeps changing: every
+ * few seconds the word's letters rise up and out one after another, left to right, while the next
+ * word's letters come up from below into place, the same way. Letters fade as they move and are
+ * never cut. The
+ * first word rises in the moment the name appears. Decorative (aria-hidden).
  */
 const WORDS = ["creative", "dancer", "hiker", "cook", "friend", "designer"];
-const GLYPHS = "abcdefghijklmnopqrstuvwxyz0123456789";
 const HOLD = 2600; // ms each word stays up
 
-// two in-between flaps per letter, picked from the letters themselves so it reads as a board
-const flap = (seed: number) => GLYPHS[(seed * 7 + 11) % GLYPHS.length];
+const Letters = ({ word, className }: { word: string; className: string }) => (
+  <span className={className}>
+    {[...word].map((ch, k) => (
+      <span key={k} className={styles.letter} style={{ "--k": k } as React.CSSProperties}>
+        {ch === " " ? " " : ch}
+      </span>
+    ))}
+  </span>
+);
 
 export default function FlapWord({ startIn, className = "" }: { startIn: number; className?: string }) {
-  // which word is up, the one it's rolling from (null: nothing to roll yet), and a counter that
-  // restarts the letters' animation on every change
+  // which word is up, the one leaving (null: none), and a counter that restarts the animation
   const [i, setI] = useState(0);
   const [prev, setPrev] = useState<string | null>(null);
   const [run, setRun] = useState(0);
@@ -26,9 +32,7 @@ export default function FlapWord({ startIn, className = "" }: { startIn: number;
   useEffect(() => {
     let timer: number | undefined;
     const start = window.setTimeout(() => {
-      // as the name appears, the first word rolls in from blank flaps
-      setPrev("");
-      setRun(1);
+      setRun(1); // the first word rises in as the name appears
       timer = window.setInterval(() => {
         setI((n) => {
           setPrev(WORDS[n % WORDS.length]);
@@ -43,28 +47,40 @@ export default function FlapWord({ startIn, className = "" }: { startIn: number;
     };
   }, [startIn]);
 
+  // once the old word is out, let it go (the window then fits the new word alone)
+  useEffect(() => {
+    if (!prev) return;
+    const t = window.setTimeout(() => setPrev(null), 480 + prev.length * 40 + 60);
+    return () => window.clearTimeout(t);
+  }, [prev, run]);
+
+  // the closing bracket glides to wherever the word's new width puts it (FLIP), never jumps
+  const win = useRef<HTMLSpanElement>(null);
+  const close = useRef<HTMLSpanElement>(null);
+  const lastW = useRef<number | null>(null);
+  useLayoutEffect(() => {
+    const w = win.current?.getBoundingClientRect().width ?? 0;
+    const was = lastW.current;
+    lastW.current = w;
+    if (was === null || Math.abs(was - w) < 0.5 || !close.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    close.current.animate([{ transform: `translateX(${was - w}px)` }, { transform: "none" }], {
+      duration: 420,
+      easing: "cubic-bezier(0.77, 0, 0.175, 1)", // --ease-in-out
+    });
+  });
+
   const word = WORDS[i % WORDS.length];
   return (
     <span className={`${styles.flapWord} ${className}`} aria-hidden="true">
       [
-      {[...word].map((ch, k) => {
-        const from = prev?.[k] ?? " ";
-        const strip = prev === null ? [ch] : [from, flap(run * 13 + k), flap(run * 5 + k * 3 + 1), ch];
-        return (
-          <span key={k} className={styles.cell} style={{ "--k": k } as React.CSSProperties}>
-            {/* the letter it lands on sizes the cell; the strip of flaps runs inside it */}
-            <span className={styles.sizer}>{ch === " " ? " " : ch}</span>
-            <span key={run} className={`${styles.strip} ${prev === null ? "" : styles.flip}`}>
-              {strip.map((c, j) => (
-                <span key={j} className={styles.face}>
-                  {c === " " ? " " : c}
-                </span>
-              ))}
-            </span>
-          </span>
-        );
-      })}
-      ]
+      <span ref={win} className={styles.window}>
+        {prev ? <Letters key={`out${run}`} word={prev} className={`${styles.word} ${styles.out}`} /> : null}
+        <Letters key={`in${run}`} word={word} className={`${styles.word} ${run ? styles.in : ""}`} />
+      </span>
+      <span ref={close} className={styles.close}>
+        ]
+      </span>
     </span>
   );
 }

@@ -9,52 +9,69 @@
   white-space: nowrap;
 }
 
-/* one letter's window: as wide as the letter it lands on, one line tall, flaps clipped inside */
-.cell {
-  position: relative;
-  display: inline-block;
-  height: 1.34em;
-  overflow: hidden;
+/* nothing is clipped: letters fade as they travel, so each one stays whole the whole way */
+.window {
+  display: inline-grid;
   vertical-align: top;
 }
 
-.sizer {
-  visibility: hidden;
+/* the leaving and incoming words share one cell, so while both are there the window is as wide
+   as the wider of them; the leaving one is dropped once it's out */
+.word {
+  grid-area: 1 / 1;
+  display: inline-block;
 }
 
-.strip {
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: flex;
-  flex-direction: column;
+.close {
+  display: inline-block;
 }
 
-.face {
-  display: block;
-  height: 1.34em;
+.letter {
+  display: inline-block;
 }
 
-/* each letter rolls up smoothly through its four faces — old, two in between, new (the strip is
-   four faces tall, so -75% rests on the last) — easing in and out so it glides rather than ticks,
-   each starting 45ms after the letter to its left */
-.flip {
-  animation: flap 560ms var(--ease-in-out) calc(var(--k) * 45ms) both;
+/* letters rise up and fade out, left to right, 40ms apart … */
+.out .letter {
+  animation: letterOut 480ms var(--ease-in-out) calc(var(--k) * 40ms) both;
 }
 
-@keyframes flap {
-  from {
-    transform: translateY(0);
-  }
+/* … and the next word's come up from below, fading in, the same way, just behind them */
+.in .letter {
+  animation: letterIn 560ms var(--ease-out) calc(120ms + var(--k) * 40ms) both;
+}
+
+@keyframes letterOut {
   to {
-    transform: translateY(-75%);
+    opacity: 0;
+    transform: translateY(-70%);
   }
 }
 
-/* reduced motion: the word still changes, without the flaps */
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    transform: translateY(70%);
+  }
+}
+
+/* reduced motion: the words swap with a short crossfade instead */
 @media (prefers-reduced-motion: reduce) {
-  .flip {
-    animation: none;
-    transform: translateY(-75%);
+  .out .letter {
+    animation: fadeOut 200ms ease both;
+  }
+  .in .letter {
+    animation: fadeIn 300ms ease 100ms both;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
 }
