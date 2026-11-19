@@ -553,6 +553,7 @@
   .subLine {
     font-size: calc(17 * var(--m));
     line-height: 1.2;
+    text-wrap: balance; /* a wrapped line breaks evenly, never leaving one word alone */
   }
   /* the switch lives in the menu sheet on phones */
   .themeToggle {

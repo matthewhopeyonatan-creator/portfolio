@@ -495,9 +495,11 @@ export default function Hero() {
           each line rises in after the tomatoes */}
       <p className={styles.headline}>
         <span className={`${styles.line} ${styles.nameLine}`}>Matthew Hope</span>
-        <span className={`${styles.line} ${styles.subLine}`}>Product &amp; visual designer based in NYC</span>
         <span className={`${styles.line} ${styles.subLine}`}>
-          Designing from the roots up, for products users feel at home in
+          Agricultural scientist turned designer based in NYC
+        </span>
+        <span className={`${styles.line} ${styles.subLine}`}>
+          Creating with the same rigor, for solutions that people enjoy using
         </span>
       </p>
 
