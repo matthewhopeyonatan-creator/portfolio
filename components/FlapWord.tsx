@@ -47,17 +47,20 @@ export default function FlapWord({ startIn, className = "" }: { startIn: number;
     };
   }, [startIn]);
 
-  // once the old word is out, let it go (the window then fits the new word alone)
+  // once the old word is out, let it go
   useEffect(() => {
     if (!prev) return;
     const t = window.setTimeout(() => setPrev(null), 480 + prev.length * 40 + 60);
     return () => window.clearTimeout(t);
   }, [prev, run]);
 
-  // the closing bracket glides to wherever the word's new width puts it (FLIP), never jumps
+  // the window is as wide as the incoming word; the closing bracket travels from where the old
+  // word ended to where the new one ends in step with the new letters rising in (same delay,
+  // same length, same curve), so it widens or narrows with the word rather than jumping
   const win = useRef<HTMLSpanElement>(null);
   const close = useRef<HTMLSpanElement>(null);
   const lastW = useRef<number | null>(null);
+  const word = WORDS[i % WORDS.length];
   useLayoutEffect(() => {
     const w = win.current?.getBoundingClientRect().width ?? 0;
     const was = lastW.current;
@@ -65,12 +68,13 @@ export default function FlapWord({ startIn, className = "" }: { startIn: number;
     if (was === null || Math.abs(was - w) < 0.5 || !close.current) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     close.current.animate([{ transform: `translateX(${was - w}px)` }, { transform: "none" }], {
-      duration: 420,
-      easing: "cubic-bezier(0.77, 0, 0.175, 1)", // --ease-in-out
+      delay: 120,
+      duration: 560 + (word.length - 1) * 40,
+      easing: "cubic-bezier(0.23, 1, 0.32, 1)", // --ease-out, like the letters coming in
+      fill: "backwards",
     });
-  });
+  }, [run, word]);
 
-  const word = WORDS[i % WORDS.length];
   return (
     <span className={`${styles.flapWord} ${className}`} aria-hidden="true">
       [

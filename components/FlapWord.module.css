@@ -11,15 +11,23 @@
 
 /* nothing is clipped: letters fade as they travel, so each one stays whole the whole way */
 .window {
-  display: inline-grid;
+  display: inline-block;
   vertical-align: top;
 }
 
-/* the leaving and incoming words share one cell, so while both are there the window is as wide
-   as the wider of them; the leaving one is dropped once it's out */
+/* the window is as wide as the incoming word; the leaving one lies over it without taking space */
+.window {
+  position: relative;
+}
+
 .word {
-  grid-area: 1 / 1;
   display: inline-block;
+}
+
+.out {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .close {
