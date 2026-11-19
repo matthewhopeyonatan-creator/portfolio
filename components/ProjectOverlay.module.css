@@ -83,7 +83,7 @@
      tracker and the case study below, so the preview's left edge lines up with the content's */
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   column-gap: calc(40 * var(--pu));
-  padding: calc(103 * var(--pu)) 40px calc(100 * var(--pu));
+  padding: 40px; /* the same 40 above and below as at the sides (the side margins) */
 }
 
 .introText {
