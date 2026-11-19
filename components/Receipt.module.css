@@ -711,8 +711,11 @@
     bottom: calc(-300 * var(--ru));
     --tomato-delay: 5400ms;
   }
+  /* the full-opacity one: its body's right edge just touches the right side of the window (the
+     art's last 52 are blur) */
   .tomatoRight {
-    left: calc(var(--sx) + 1146.8 * var(--ru));
+    left: auto;
+    right: calc(-52 * var(--ru));
     top: calc(var(--sy) + 354.8 * var(--ru));
     --tomato-delay: 5580ms;
   }
