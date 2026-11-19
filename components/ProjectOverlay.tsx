@@ -1073,8 +1073,8 @@ function EndTomatoes() {
       {END_TOMATOES.map((t) => (
         <div key={t.name} className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
           <ThemedPair
-            light={`/receipt/tomato-${t.name}.svg`}
-            dark={`/receipt/dark/tomato-${t.name}.webp`}
+            light={`/receipt/tomato-${t.name}-soft.svg`}
+            dark={`/receipt/dark/tomato-${t.name}-soft.webp`}
             render={(v) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img

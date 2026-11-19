@@ -1432,16 +1432,6 @@
   position: absolute;
   height: auto;
   max-width: none;
-  /* the blur hasn't quite faded to nothing at the art's own edges, which showed as faint straight
-     seams; feather every edge to clear */
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent, #fff 14%, #fff 86%, transparent),
-    linear-gradient(to right, transparent, #fff 12%, #fff 88%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, transparent, #fff 14%, #fff 86%, transparent),
-    linear-gradient(to right, transparent, #fff 12%, #fff 88%, transparent);
-  mask-composite: intersect;
 }
 
 .end-left {

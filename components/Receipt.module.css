@@ -567,7 +567,7 @@
 }
 
 /* ── the thank-you and contact links (Figma 533:1333): "THANKS FOR COMING" Bold 128/120 (−0.05em),
-   uppercase · 42 under it the lede, Regular 40/40 (−0.02em) · 40 to "Let's grow something
+   uppercase · 42 under it the lede, Light 40/40 (−0.02em) · 40 to "Let's grow something
    together" · 80 to the icons, 37 tall, 71.7 apart. Narrow screens: under the slip, a size down. ── */
 .copy {
   width: calc(522 * var(--ru));
@@ -586,7 +586,7 @@
 .lede {
   margin: 0;
   font-size: max(20px, calc(40 * var(--ru)));
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1;
   letter-spacing: -0.02em;
 }

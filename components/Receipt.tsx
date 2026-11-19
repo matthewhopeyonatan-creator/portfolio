@@ -219,8 +219,8 @@ export default function Receipt() {
           style={{ display: "contents" }}
         >
           <ThemedPair
-            light="/receipt/tomato-back.svg"
-            dark="/receipt/dark/tomato-back.webp"
+            light="/receipt/tomato-back-soft.svg"
+            dark="/receipt/dark/tomato-back-soft.webp"
             render={(v) => (
               <Image
                 key={v.className}
@@ -243,8 +243,8 @@ export default function Receipt() {
           style={{ display: "contents" }}
         >
           <ThemedPair
-            light="/receipt/tomato-right.svg"
-            dark="/receipt/dark/tomato-right.webp"
+            light="/receipt/tomato-right-soft.svg"
+            dark="/receipt/dark/tomato-right-soft.webp"
             render={(v) => (
               <Image
                 key={v.className}
@@ -267,8 +267,8 @@ export default function Receipt() {
           style={{ display: "contents" }}
         >
           <ThemedPair
-            light="/receipt/tomato-left.svg"
-            dark="/receipt/dark/tomato-left.webp"
+            light="/receipt/tomato-left-soft.svg"
+            dark="/receipt/dark/tomato-left-soft.webp"
             render={(v) => (
               <Image
                 key={v.className}
