@@ -497,8 +497,8 @@ export default function Hero() {
       <p className={styles.headline}>
         <span className={`${styles.line} ${styles.nameLine}`}>
           Matthew Hope
-          {/* Figma 538:1620: the changing word at its top right; starts once the lines are up */}
-          <FlapWord className={styles.nameTag} startIn={skip ? 2600 : 5200} />
+          {/* Figma 538:1620: the changing word at its top right; rolls in as the name rises (--text-delay) */}
+          <FlapWord className={styles.nameTag} startIn={skip ? 1050 : 3300} />
         </span>
         <span className={`${styles.line} ${styles.subLine}`}>
           Agricultural scientist turned designer based in NYC

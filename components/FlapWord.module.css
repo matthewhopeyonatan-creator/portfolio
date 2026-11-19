@@ -35,10 +35,11 @@
   height: 1.34em;
 }
 
-/* each letter clacks through its four flaps (the strip is four faces tall, so -75% shows the last) — old, two in between, new — 70ms apiece, in hard
-   steps like a real board, starting 45ms after the letter to its left; it rests on the last */
+/* each letter rolls up smoothly through its four faces — old, two in between, new (the strip is
+   four faces tall, so -75% rests on the last) — easing in and out so it glides rather than ticks,
+   each starting 45ms after the letter to its left */
 .flip {
-  animation: flap 280ms steps(4, jump-none) calc(var(--k) * 45ms) both;
+  animation: flap 560ms var(--ease-in-out) calc(var(--k) * 45ms) both;
 }
 
 @keyframes flap {
