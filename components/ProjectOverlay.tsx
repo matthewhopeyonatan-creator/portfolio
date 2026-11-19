@@ -1033,10 +1033,10 @@ export default function ProjectOverlay({
                 </a>
               )}
             </div>
+            {/* the case study ends on a bed of tomatoes, the page extended so they sit under the
+                last words rather than over them; inside the study so the tracker stays put */}
+            {study && expanded ? <EndTomatoes /> : null}
           </div>
-          {/* the case study ends on a bed of tomatoes, the page extended so they sit under the last
-              words rather than over them */}
-          {study && expanded ? <EndTomatoes /> : null}
         </div>
       </div>
     </div>,
@@ -1044,7 +1044,8 @@ export default function ProjectOverlay({
   );
 }
 
-// the receipt's three blurred tomatoes (light art + its blue dark-mode render), in a row
+// the receipt's three blurred tomatoes (light art + its blue dark-mode render): the big one on the
+// left, a slightly smaller one on the right, and the see-through one behind that (so drawn first)
 const END_TOMATOES = [
   { name: "left", w: 903, h: 815 },
   { name: "back", w: 622, h: 645 },

@@ -1410,11 +1410,16 @@
 }
 
 /* ── the end of every case study: three blurred tomatoes (the receipt's) in a band of their own
-   under the last section, so they never sit over text; cut off by the bottom of the page ── */
+   under the last section, spanning the full width, tall enough to hold them whole (their blur
+   fades out inside it, so nothing is cut off) and never over text. It lives inside the study, so
+   the sticky tracker stays where it is to the very end. Big one left, a slightly smaller one
+   touching the right edge, the see-through one behind it. ── */
 .endTomatoes {
   position: relative;
-  height: calc(620 * var(--pu));
-  overflow: hidden;
+  grid-column: 1 / -1;
+  height: calc(830 * var(--pu));
+  margin: calc(40 * var(--pu)) -40px calc(-160 * var(--pu)); /* edge to edge, to the very bottom */
+  overflow-x: clip; /* only sideways: the blur keeps its soft top */
   pointer-events: none;
 }
 
@@ -1425,39 +1430,46 @@
 }
 
 .end-left {
-  left: calc(-260 * var(--pu));
-  top: calc(40 * var(--pu));
+  left: calc(-220 * var(--pu));
+  top: calc(30 * var(--pu));
   width: calc(903 * var(--pu));
 }
 
 .end-back {
-  left: calc(470 * var(--pu));
-  top: calc(-20 * var(--pu));
+  right: calc(150 * var(--pu));
+  top: calc(-10 * var(--pu));
   width: calc(622 * var(--pu));
 }
 
+/* its body's right edge (the art's last 52 are blur) meets the right side of the page */
 .end-right {
-  left: calc(960 * var(--pu));
-  top: calc(60 * var(--pu));
+  right: calc(-52 * var(--pu));
+  top: calc(150 * var(--pu));
   width: calc(719 * var(--pu));
+}
+
+.toc {
+  z-index: 1; /* over the tomatoes as they pass under it */
 }
 
 @media (max-width: 767px) {
   .endTomatoes {
-    height: 320px;
+    height: 440px;
+    margin: 24px -20px -96px;
   }
-  /* two, side by side, so they read as tomatoes rather than one red blur */
   .end-left {
-    left: -170px;
-    top: 40px;
-    width: 420px;
+    left: -210px;
+    top: 30px;
+    width: 400px;
   }
   .end-back {
-    display: none;
+    right: 20px;
+    top: 0;
+    width: 250px;
   }
   .end-right {
-    left: 170px;
-    top: 30px;
-    width: 340px;
+    right: -24px;
+    top: 80px;
+    width: 300px;
   }
 }
