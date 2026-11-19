@@ -81,7 +81,7 @@
 /* ── Tomatoes (stickers are part of each tomato image) ─────────────────────────────── */
 .tomato {
   left: calc(var(--x) * var(--hu));
-  top: calc(var(--y) * var(--hu));
+  top: calc(var(--y) * var(--hu) + var(--push, 0px)); /* --push: kept clear of the headline (Hero.tsx) */
   width: calc(var(--w) * var(--hu));
   height: calc(var(--h) * var(--hu));
   user-select: none;
@@ -297,7 +297,7 @@
 }
 
 /* ── Headline — Figma 523:926: "MATTHEW HOPE" Host Grotesk Bold 128 (−6.4 tracking, normal
-   leading), then two lines Regular 32/30 (−0.64 tracking), then the grey "currently" line; the block sits 6 below the navbar
+   leading), then two lines Regular 28/30 (−0.02em), then the grey "currently" line; the block sits 6 below the navbar
    rule, 37 from the left (Figma's x). Each line rises in after the tomatoes. ── */
 .headline {
   position: absolute;
@@ -327,8 +327,8 @@
 }
 
 .subLine {
-  font-size: max(15px, calc(32 * var(--hu)));
-  line-height: 0.9375; /* 30 / 32 */
+  font-size: max(15px, calc(28 * var(--hu)));
+  line-height: 1.0714; /* 30 / 28 */
   letter-spacing: -0.02em;
 }
 
@@ -599,7 +599,7 @@
   }
   .tomato {
     left: calc(var(--mx) * var(--m));
-    top: calc(var(--my) * var(--m));
+    top: calc(var(--my) * var(--m) + var(--push, 0px));
     width: calc(var(--mw) * var(--m));
     height: calc(var(--mh) * var(--m));
   }
