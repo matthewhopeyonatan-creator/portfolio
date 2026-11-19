@@ -30,9 +30,6 @@
   top: 0;
 }
 
-.close {
-  display: inline-block;
-}
 
 .letter {
   display: inline-block;
@@ -45,7 +42,7 @@
 
 /* … and the next word's come up from below, fading in, the same way, just behind them */
 .in .letter {
-  animation: letterIn 560ms var(--ease-out) calc(120ms + var(--k) * 40ms) both;
+  animation: letterIn 560ms var(--ease-out) calc(60ms + var(--k) * 40ms) both;
 }
 
 @keyframes letterOut {
