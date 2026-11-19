@@ -1,7 +1,7 @@
 "use client";
 
 import { markIntroPlayed, shouldSkipIntro } from "@/lib/intro";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import StickerCard from "@/components/StickerCard";
 import ThemeToggle from "@/components/ThemeToggle";
 import FlapWord from "@/components/FlapWord";
@@ -295,6 +295,7 @@ function Tomato({
   const t = tomatoes[id];
   return (
     <div
+      data-tomato={id}
       className={`${styles.layer} ${styles.tomato} theme-pair ${t.m ? "" : styles.offPhone} ${t.m?.[5] === "bare" ? styles.bareOnPhone : ""}`}
       style={
         {
@@ -348,11 +349,63 @@ function Tomato({
   );
 }
 
+// how far down each tomato picture its solid body starts (the rest above is soft blur)
+const BODY_TOP: Record<string, number> = { small: 0.196, right: 0.127, mid: 0.1, left: 0.13 };
+
+/** an element's position on the page from its layout box, ignoring any transform it's animating */
+const layoutBox = (el: HTMLElement) => {
+  let top = 0;
+  let left = 0;
+  for (let n: HTMLElement | null = el; n; n = n.offsetParent as HTMLElement | null) {
+    top += n.offsetTop;
+    left += n.offsetLeft;
+  }
+  return { top, left, bottom: top + el.offsetHeight, right: left + el.offsetWidth };
+};
+
 export default function Hero() {
   const [loaded, setLoaded] = useState(0);
   const [ready, setReady] = useState(false);
   // arriving from another page via the logo: no intro, everything already in place
   const [skip, setSkip] = useState(false);
+
+  // the rule: a tomato's body never comes up over the headline — any tomato under the text column
+  // starting above the grey "currently" line (+ a little room) is lowered (--push) to sit below it
+  const headlineRef = useRef<HTMLParagraphElement>(null);
+  useLayoutEffect(() => {
+    const fit = () => {
+      const head = headlineRef.current;
+      const now = head?.lastElementChild as HTMLElement | null;
+      if (!head || !now) return;
+      // the text column: from the headline's left to the end of the longest line under the name
+      const box = layoutBox(head);
+      let width = 0;
+      for (const line of [...head.children].slice(1)) {
+        const r = document.createRange();
+        r.selectNodeContents(line);
+        width = Math.max(width, r.getBoundingClientRect().width);
+      }
+      const text = { left: box.left, right: box.left + width };
+      const floor = layoutBox(now).bottom + Math.max(12, head.offsetWidth * 0.016);
+      document.querySelectorAll<HTMLElement>("[data-tomato]").forEach((t) => {
+        t.style.setProperty("--push", "0px");
+        if (!t.offsetHeight || t.offsetHeight < 4) return; // not in this layout
+        const b = layoutBox(t);
+        const under = b.left < text.right && b.right > text.left;
+        const body = b.top + (BODY_TOP[t.dataset.tomato ?? ""] ?? 0.12) * t.offsetHeight;
+        if (under && body < floor) t.style.setProperty("--push", `${Math.ceil(floor - body)}px`);
+      });
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    if (headlineRef.current) ro.observe(headlineRef.current);
+    window.addEventListener("resize", fit);
+    document.fonts?.ready.then(fit).catch(() => {});
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", fit);
+    };
+  }, []);
   const total = Object.keys(tomatoes).length;
 
   // The sign's intro happens big and centred: measure its resting box, and hand CSS the offset +
@@ -494,7 +547,7 @@ export default function Hero() {
       </h1>
       {/* Figma 523:926 — the name (Host Grotesk Bold 128) and two lines under it (Regular 40 / 40);
           each line rises in after the tomatoes */}
-      <p className={styles.headline}>
+      <p ref={headlineRef} className={styles.headline}>
         <span className={`${styles.line} ${styles.nameLine}`}>
           Matthew Hope
           {/* Figma 538:1620: the changing word at its top right; rolls in as the name rises (--text-delay) */}
