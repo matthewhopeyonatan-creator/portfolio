@@ -321,15 +321,6 @@
   text-transform: uppercase;
 }
 
-/* the split-flap word beside the name (Figma 538:1620): its top 23 below the name's line box top,
-   a small gap after the last letter */
-.nameTag {
-  position: relative;
-  top: 0.77em; /* 23 / 29.878 (its own size) */
-  vertical-align: top;
-  margin-left: 0.65em; /* 19.5: Figma has it 930 from the name's left edge */
-}
-
 .subLine {
   font-size: max(15px, calc(28 * var(--hu)));
   line-height: 1.0714; /* 30 / 28 */
@@ -635,10 +626,6 @@
     top: calc(var(--gutter) - 0.178 * var(--name-size));
     width: calc(353 * var(--m));
     white-space: normal;
-  }
-  /* no room beside the name on a phone (it would drop to its own line) */
-  .nameTag {
-    display: none;
   }
   .nameLine {
     font-size: var(--name-size);
