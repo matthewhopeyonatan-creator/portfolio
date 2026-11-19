@@ -1062,9 +1062,9 @@ export default function ProjectOverlay({
 // the receipt's three blurred tomatoes (light art + its blue dark-mode render): the big one on the
 // left, a slightly smaller one on the right, and the see-through one behind that (so drawn first)
 const END_TOMATOES = [
-  { name: "left", w: 903, h: 815 },
-  { name: "back", w: 622, h: 645 },
-  { name: "right", w: 719, h: 674 },
+  { name: "left", w: 1383, h: 1295 },
+  { name: "back", w: 1102, h: 1125 },
+  { name: "right", w: 1199, h: 1154 },
 ] as const;
 
 function EndTomatoes() {
@@ -1073,8 +1073,8 @@ function EndTomatoes() {
       {END_TOMATOES.map((t) => (
         <div key={t.name} className="theme-pair theme-pair-filter" style={{ display: "contents" }}>
           <ThemedPair
-            light={`/receipt/tomato-${t.name}-soft.svg`}
-            dark={`/receipt/dark/tomato-${t.name}-soft.webp`}
+            light={`/receipt/tomato-${t.name}-pad.svg`}
+            dark={`/receipt/dark/tomato-${t.name}-pad.webp`}
             render={(v) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img

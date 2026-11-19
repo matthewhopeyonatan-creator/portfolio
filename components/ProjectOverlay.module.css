@@ -1429,28 +1429,30 @@
 }
 
 .endTomato {
+  /* the art is padded 240 all round (tomato-*-pad.svg) so the blur fades to nothing inside the
+     picture instead of being cut at its edge */
   position: absolute;
   height: auto;
   max-width: none;
 }
 
 .end-left {
-  left: calc(-220 * var(--pu));
-  top: calc(30 * var(--pu));
-  width: calc(903 * var(--pu));
+  left: calc(-460 * var(--pu));
+  top: calc(-210 * var(--pu));
+  width: calc(1383 * var(--pu));
 }
 
 .end-back {
-  right: calc(-20 * var(--pu));
-  top: calc(-10 * var(--pu));
-  width: calc(622 * var(--pu));
+  right: calc(-260 * var(--pu));
+  top: calc(-250 * var(--pu));
+  width: calc(1102 * var(--pu));
 }
 
 /* well over to the right, the page's edge cutting into it */
 .end-right {
-  right: calc(-230 * var(--pu));
-  top: calc(150 * var(--pu));
-  width: calc(719 * var(--pu));
+  right: calc(-470 * var(--pu));
+  top: calc(-90 * var(--pu));
+  width: calc(1199 * var(--pu));
 }
 
 @media (max-width: 767px) {
@@ -1458,18 +1460,18 @@
     height: 330px;
   }
   .end-left {
-    left: -210px;
-    top: 30px;
-    width: 400px;
+    left: -316px;
+    top: -76px;
+    width: 613px;
   }
   .end-back {
-    right: 20px;
-    top: 0;
-    width: 250px;
+    right: -76px;
+    top: -96px;
+    width: 443px;
   }
   .end-right {
-    right: -24px;
-    top: 80px;
-    width: 300px;
+    right: -124px;
+    top: -20px;
+    width: 500px;
   }
 }
