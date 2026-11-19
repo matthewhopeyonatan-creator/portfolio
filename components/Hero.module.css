@@ -332,11 +332,11 @@
   letter-spacing: -0.02em;
 }
 
-/* Figma 546:1666: 16 under the two lines, Regular 20/30 caps (−0.02em) in a mid grey (#6b6b6b in
+/* Figma 546:1666: 16 under the two lines, Regular caps (12px, his call) (−0.02em) in a mid grey (#6b6b6b in
    light mode, made from the ink so dark mode follows), the places underlined and linking out */
 .nowLine {
   margin-top: calc(16 * var(--hu));
-  font-size: max(12px, calc(20 * var(--hu)));
+  font-size: 12px;
   line-height: 1.5;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -646,7 +646,7 @@
   }
   .nowLine {
     margin-top: calc(10 * var(--m));
-    font-size: calc(12 * var(--m));
+    font-size: 12px;
     line-height: 1.4;
   }
   /* the switch lives in the menu sheet on phones */

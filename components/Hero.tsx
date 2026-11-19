@@ -349,8 +349,10 @@ function Tomato({
   );
 }
 
-// how far down each tomato picture its solid body starts (the rest above is soft blur)
+// how far down each tomato picture its solid body starts and ends (the rest is soft blur)
 const BODY_TOP: Record<string, number> = { small: 0.196, right: 0.127, mid: 0.1, left: 0.13 };
+// (bottoms: where it's still solid colour, before the soft fade at its foot)
+const BODY_BOTTOM: Record<string, number> = { small: 0.765, right: 0.869, mid: 0.875, left: 0.849 };
 
 /** an element's position on the page from its layout box, ignoring any transform it's animating */
 const layoutBox = (el: HTMLElement) => {
@@ -369,8 +371,11 @@ export default function Hero() {
   // arriving from another page via the logo: no intro, everything already in place
   const [skip, setSkip] = useState(false);
 
-  // the rule: a tomato's body never comes up over the headline — any tomato under the text column
-  // starting above the grey "currently" line (+ a little room) is lowered (--push) to sit below it
+  // two rules for where the tomatoes sit (--push lowers one, stickers riding along):
+  //  1. they always reach the bottom of the screen: if the lowest tomato's solid colour stops short
+  //     of it, all of them come down together until it runs just past the bottom edge;
+  //  2. a tomato's body never comes up over the headline: any tomato under the text column that
+  //     starts above the grey "currently" line (+ a little room) comes down further, below it.
   const headlineRef = useRef<HTMLParagraphElement>(null);
   useLayoutEffect(() => {
     const fit = () => {
@@ -387,13 +392,23 @@ export default function Hero() {
       }
       const text = { left: box.left, right: box.left + width };
       const floor = layoutBox(now).bottom + Math.max(12, head.offsetWidth * 0.016);
-      document.querySelectorAll<HTMLElement>("[data-tomato]").forEach((t) => {
+      const shown = [...document.querySelectorAll<HTMLElement>("[data-tomato]")].filter((t) => {
         t.style.setProperty("--push", "0px");
-        if (!t.offsetHeight || t.offsetHeight < 4) return; // not in this layout
+        return t.offsetHeight >= 4; // in this layout (not hidden / the phone's bare stand-in)
+      });
+      const body = (t: HTMLElement, at: Record<string, number>, fallback: number) => {
+        const b = layoutBox(t);
+        return b.top + (at[t.dataset.tomato ?? ""] ?? fallback) * t.offsetHeight;
+      };
+      // rule 1: the lowest solid body runs 16px past the bottom of the screen
+      const lowest = Math.max(...shown.filter((t) => t.dataset.tomato !== "small").map((t) => body(t, BODY_BOTTOM, 0.9)));
+      const all = Number.isFinite(lowest) ? Math.max(0, window.innerHeight + 16 - lowest) : 0;
+      shown.forEach((t) => {
         const b = layoutBox(t);
         const under = b.left < text.right && b.right > text.left;
-        const body = b.top + (BODY_TOP[t.dataset.tomato ?? ""] ?? 0.12) * t.offsetHeight;
-        if (under && body < floor) t.style.setProperty("--push", `${Math.ceil(floor - body)}px`);
+        const top = body(t, BODY_TOP, 0.12) + all;
+        const push = all + (under && top < floor ? floor - top : 0);
+        if (push) t.style.setProperty("--push", `${Math.ceil(push)}px`);
       });
     };
     fit();
