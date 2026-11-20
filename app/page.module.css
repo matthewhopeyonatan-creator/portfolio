@@ -33,13 +33,13 @@
 }
 
 .titleSmall {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
 }
 
 .titleSub {
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
   line-height: normal;
   text-box: trim-both cap alphabetic;
@@ -80,6 +80,9 @@
   }
   .sectionTitle {
     font-size: 24px;
+  }
+  .titleSmall {
+    font-size: 20px;
   }
   /* phones: the description runs as one wrapping paragraph, a size down, on the margins */
   .titleStack {
